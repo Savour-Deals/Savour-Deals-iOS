@@ -7,15 +7,45 @@
 //
 
 import UIKit
+import Firebase
+import FBSDKCoreKit
+import FirebaseDatabase
+import FirebaseStorage
+import FirebaseStorageUI
+
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let path = Bundle.main.path(forResource: "FavoritesFile", ofType: "plist")
+    var ref: DatabaseReference!
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        FirebaseApp.configure()
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as Array
+        let rootPath = directories[0] as String
+        let plistPath = rootPath.appending("/FavoritesFile.plist")
+        if let IDs = NSDictionary(contentsOfFile: plistPath) {
+            self.ref = Database.database().reference()
+            for member in IDs{
+                let id = member.value as! String
+                ref.child("Deals").child(id).observeSingleEvent(of: .value, with: { (snapshot) in
+                    // Get user value
+                        let snap = snapshot
+                        let temp = DealData(snap: snap) // convert my snapshot into my type
+                        favorites[temp.dealID!] = temp
+                
+                    
+                }) { (error) in
+                    print(error.localizedDescription)
+                }
+
+            }
+        }
         return true
     }
 
@@ -39,7 +69,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+            
+        
+            let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as Array
+            let rootPath = directories[0] as String
+            let plistPath = rootPath.appending("/FavoritesFile.plist")
+            let filemanager = FileManager.default
+            
+            if (!filemanager.fileExists(atPath: plistPath)){
+                do{
+                    try filemanager.copyItem(atPath: path!, toPath: plistPath)
+                }
+                catch{
+                    print("Copy Failure")
+                }
+            }
+            else{
+                do{
+                    try filemanager.removeItem(atPath: plistPath)
+                    try filemanager.copyItem(atPath: path!, toPath: plistPath)
+                }
+                catch{
+                    print("Failed to delete and recreate plist")
+                }
+                
+            }
+        if (!favorites.isEmpty){
+            let Dict = NSMutableDictionary()
+            for deal in favorites{
+                Dict.setValue(deal.value.dealID!, forKey: deal.value.dealID!)
+            }
+            if(Dict.write(toFile: plistPath, atomically: true)){
+                print("success")
+            }
+            else{
+                print("failed")
+            }
+        }
     }
+   
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String!, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        
+        return handled
+    }
+    
+    
+    
 
 
 }
