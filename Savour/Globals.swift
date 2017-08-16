@@ -1,0 +1,14 @@
+//
+//  Globals.swift
+//  Savour
+//
+//  Created by Chris Patterson on 8/13/17.
+//  Copyright © 2017 Chris Patterson. All rights reserved.
+//
+
+import Foundation
+
+
+
+var favorites: [String:DealData] = Dictionary<String, DealData>()
+
