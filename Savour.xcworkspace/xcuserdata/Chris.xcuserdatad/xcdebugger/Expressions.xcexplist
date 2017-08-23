@@ -3,12 +3,15 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "DealTableViewCell.FavoriteToggled(Any) -&gt; ():DealTableViewCell.swift">
+         contextName = "ViewController.loadFavorites(user : User) -&gt; ():ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "deal.dealID!">
+               value = "user.uid">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AppDelegate.(application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool).(closure #1):AppDelegate.swift">
       </ContextState>
       <ContextState
          contextName = "AppDelegate.application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool:AppDelegate.swift">
@@ -16,10 +19,81 @@
             <PersistentString
                value = "favorites">
             </PersistentString>
+            <PersistentString
+               value = "(Auth.auth().currentUser?.uid)!">
+            </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "LoginViewController.(loginButton(FBSDKLoginButton!, didCompleteWith : FBSDKLoginManagerLoginResult!, error : Error!) -&gt; ()).(closure #1):LoginViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "user?.displayName">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.(loadData() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "">
+            </PersistentString>
+            <PersistentString
+               value = "self.FavdealIDs[temp.dealID!]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "mach_msg_trap:(null)">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
+            </PersistentString>
+            <PersistentString
+               value = "user">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.(loadData(sender : String) -&gt; ()).(closure #1).(closure #1):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AccountViewController.viewDidLoad() -&gt; ():AccountViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "user.displayName">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.(loadFavs() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "AppDelegate.applicationWillTerminate(UIApplication) -&gt; ():AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(user?.uid)!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.ref.getter:ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DetailsViewController.previewingContext(UIViewControllerPreviewing, viewControllerForLocation : CGPoint) -&gt; UIViewController?:DetailsPreviewDelegate.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DealTableViewCell.FavoriteToggled(Any) -&gt; ():DealTableViewCell.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "deal.dealID!">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>

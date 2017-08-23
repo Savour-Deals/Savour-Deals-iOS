@@ -148,7 +148,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="DealsTable" destination="wMY-7U-MA6" id="no8-cl-Cbb"/>
+                        <outlet property="DealsTable" destination="wMY-7U-MA6" id="Gby-40-HuC"/>
                         <outlet property="RImg" destination="zNp-Yt-Dy1" id="hq7-MC-hVo"/>
                         <outlet property="rDesc" destination="d89-BY-axk" id="kVa-CO-awu"/>
                         <outlet property="rImg" destination="zNp-Yt-Dy1" id="2CO-NG-8KU"/>

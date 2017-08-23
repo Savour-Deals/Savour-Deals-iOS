@@ -20,6 +20,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
     var Deals = [DealData]()
+    var FavdealIDs: [String:String] = Dictionary<String, String>()
 
     
     @IBOutlet weak var DealsTable: UITableView!
@@ -38,8 +39,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if Auth.auth().currentUser != nil {
             // User is signed in.
             ref = Database.database().reference()
-            loadData()
-
+            GetFavs()
+            loadData(sender: "main")
+            
+            
+            if traitCollection.forceTouchCapability == .available {
+                registerForPreviewing(with: self, sourceView: view)
+            } else {
+                print("3D Touch Not Available")
+            }
         }
         else {
             // No user is signed in.
@@ -47,8 +55,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    func GetFavs()  {
+        let userid = Auth.auth().currentUser?.uid
+        let ref = Database.database().reference()
+        ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            for entry in snapshot.children {
+                let snap = entry as! DataSnapshot
+                let value = snap.key
+                self.FavdealIDs[value] = value
+            }
+            self.loadData(sender: "favs")
+        }){ (error) in
+            print(error.localizedDescription)
+        }
+        
+    }
+
+    
     func setupUI(){
         self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 73, green: 171, blue: 170, alpha: 1.0)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     
@@ -57,42 +85,54 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         if Auth.auth().currentUser != nil {
             // User is signed in.
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            self.tabBarController?.tabBar.isHidden = false
             setupUI()
+        }
+        else {
+            self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
     }
     override func viewWillAppear(_ animated: Bool) {
         DispatchQueue.main.async{
+            self.GetFavs()
             self.DealsTable.reloadData()
         }
     }
     
     
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+
         // [START remove_auth_listener]
         Auth.auth().removeStateDidChangeListener(handle!)
         // [END remove_auth_listener]
     }
 
-    func loadData(){
+    func loadData(sender: String){
         DispatchQueue.main.async{
-
             self.ref.child("Deals").observeSingleEvent(of: .value, with: { (snapshot) in
                 // Get user value
                 for entry in snapshot.children {
                     let snap = entry as! DataSnapshot
                     let temp = DealData(snap: snap) // convert my snapshot into my type
-                    self.Deals.append(temp)
+                    if sender == "main" {
+                        self.Deals.append(temp)
+                    }
+                    else{
+                        if self.FavdealIDs[temp.dealID!] != nil {
+                            favorites[temp.dealID!] = temp
+                        }
+                    }
                 }
                 self.DealsTable.reloadData()
-                
-            }) { (error) in
+            }){ (error) in
                 print(error.localizedDescription)
-        }
+            }
+            
         }
     }
+    
+        
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Deals.count
@@ -160,6 +200,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         VC.newImg = cell.rImg.image
         self.navigationController?.pushViewController(VC, animated: true)
     }
+    
+        
+    
     
    
 }

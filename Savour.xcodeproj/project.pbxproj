@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
 		8320E9811F3E213200D6A0DF /* RDealsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */; };
+		833B25CB1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */; };
+		833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */; };
+		833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */; };
 		83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */; };
 		83446AA21F3BDC6400CBE73E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AA11F3BDC6400CBE73E /* AccountViewController.swift */; };
 		83446AA91F3C06AB00CBE73E /* DealDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */; };
@@ -27,7 +30,6 @@
 		83802D7F1F2ED2B500E315FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83802D7E1F2ED2B500E315FB /* GoogleService-Info.plist */; };
 		83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
-		83DDDBBE1F42A19700B14FEB /* FavoritesFile.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83DDDBBD1F42A19700B14FEB /* FavoritesFile.plist */; };
 		CA5FE43E5E3B5DB4ABCCAEE3 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C36F5240C1A0D943772792 /* Pods_Savour.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +38,9 @@
 		6B6E32CD50DEA34BE596FD97 /* Pods-Savour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.debug.xcconfig"; sourceTree = "<group>"; };
 		8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RestaurantDetails.storyboard; sourceTree = "<group>"; };
 		8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDealsTableViewCell.swift; sourceTree = "<group>"; };
+		833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
+		833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsPreviewDelegate.swift; sourceTree = "<group>"; };
+		833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesPreviewDelegate.swift; sourceTree = "<group>"; };
 		83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		83446AA11F3BDC6400CBE73E /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DealDetails.storyboard; sourceTree = "<group>"; };
@@ -57,7 +62,6 @@
 		83B0F94D1F32C64C00759C34 /* Savour.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Savour.entitlements; sourceTree = "<group>"; };
 		83DDDBB41F4157EC00B14FEB /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		83DDDBB91F428CB100B14FEB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		83DDDBBD1F42A19700B14FEB /* FavoritesFile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = FavoritesFile.plist; sourceTree = "<group>"; };
 		C0416A1CC943A66191CB9F20 /* Pods-Savour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.release.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,6 +93,7 @@
 				83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */,
 				83446AAA1F3C130400CBE73E /* DealViewController.swift */,
 				83446AAC1F3C1D4200CBE73E /* DetailsViewController.swift */,
+				833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */,
 				8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */,
 				8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */,
 			);
@@ -137,9 +142,10 @@
 				834C1E131F3151A4002D7198 /* ViewController.swift */,
 				834C1E191F3187AA002D7198 /* DealData.swift */,
 				83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */,
+				833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */,
 				83802D781F2ED1FD00E315FB /* Info.plist */,
 				834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */,
-				83DDDBBD1F42A19700B14FEB /* FavoritesFile.plist */,
+				833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */,
 				83DDDBB41F4157EC00B14FEB /* Globals.swift */,
 				83802D7E1F2ED2B500E315FB /* GoogleService-Info.plist */,
 			);
@@ -224,7 +230,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83DDDBBE1F42A19700B14FEB /* FavoritesFile.plist in Resources */,
 				83802D771F2ED1FD00E315FB /* LaunchScreen.storyboard in Resources */,
 				834C1E121F31518F002D7198 /* Main.storyboard in Resources */,
 				83802D7F1F2ED2B500E315FB /* GoogleService-Info.plist in Resources */,
@@ -294,6 +299,8 @@
 				834C1E1C1F3194B6002D7198 /* DealTableViewCell.swift in Sources */,
 				83446AA21F3BDC6400CBE73E /* AccountViewController.swift in Sources */,
 				83446AAB1F3C130400CBE73E /* DealViewController.swift in Sources */,
+				833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */,
+				833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */,
 				8320E9811F3E213200D6A0DF /* RDealsTableViewCell.swift in Sources */,
 				83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */,
 				834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */,
@@ -302,6 +309,7 @@
 				83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */,
 				83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */,
 				83446AAD1F3C1D4200CBE73E /* DetailsViewController.swift in Sources */,
+				833B25CB1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

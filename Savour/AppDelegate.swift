@@ -9,49 +9,40 @@
 import UIKit
 import Firebase
 import FBSDKCoreKit
-import FirebaseDatabase
-import FirebaseStorage
-import FirebaseStorageUI
+
 
 
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var handle: AuthStateDidChangeListenerHandle?
+
     var window: UIWindow?
-    let path = Bundle.main.path(forResource: "FavoritesFile", ofType: "plist")
     var ref: DatabaseReference!
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as Array
-        let rootPath = directories[0] as String
-        let plistPath = rootPath.appending("/FavoritesFile.plist")
-        if let IDs = NSDictionary(contentsOfFile: plistPath) {
-            self.ref = Database.database().reference()
-            for member in IDs{
-                let id = member.value as! String
-                ref.child("Deals").child(id).observeSingleEvent(of: .value, with: { (snapshot) in
-                    // Get user value
-                        let snap = snapshot
-                        let temp = DealData(snap: snap) // convert my snapshot into my type
-                        favorites[temp.dealID!] = temp
-                
-                    
-                }) { (error) in
-                    print(error.localizedDescription)
-                }
 
-            }
-        }
-        return true
+        
+            return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+            let user = Auth.auth().currentUser?.uid
+            self.ref = Database.database().reference()
+            
+            var favs = Dictionary<String, String>()
+            for member in favorites{
+                favs[member.value.dealID!] = member.value.dealID
+            }
+            self.ref.child("Users").child(user!).child("Favorites").setValue(favs)
+        
+        
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -69,44 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        favorites.removeAll()
         
-            
-        
-            let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as Array
-            let rootPath = directories[0] as String
-            let plistPath = rootPath.appending("/FavoritesFile.plist")
-            let filemanager = FileManager.default
-            
-            if (!filemanager.fileExists(atPath: plistPath)){
-                do{
-                    try filemanager.copyItem(atPath: path!, toPath: plistPath)
-                }
-                catch{
-                    print("Copy Failure")
-                }
-            }
-            else{
-                do{
-                    try filemanager.removeItem(atPath: plistPath)
-                    try filemanager.copyItem(atPath: path!, toPath: plistPath)
-                }
-                catch{
-                    print("Failed to delete and recreate plist")
-                }
-                
-            }
-        if (!favorites.isEmpty){
-            let Dict = NSMutableDictionary()
-            for deal in favorites{
-                Dict.setValue(deal.value.dealID!, forKey: deal.value.dealID!)
-            }
-            if(Dict.write(toFile: plistPath, atomically: true)){
-                print("success")
-            }
-            else{
-                print("failed")
-            }
-        }
     }
    
     
