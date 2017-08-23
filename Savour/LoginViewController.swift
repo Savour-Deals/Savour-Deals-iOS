@@ -19,6 +19,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
 
     var handle: AuthStateDidChangeListenerHandle?
+    var ref: DatabaseReference!
 
     @IBOutlet weak var Const: UIView!
     @IBOutlet weak var LoginEmail: UITextField!
@@ -28,6 +29,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var FBLoginButton: FBSDKLoginButton!
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var LoginLabel: UILabel!
+    @IBOutlet weak var LoginView: UIView!
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -70,13 +73,34 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
         
     func setUpUI(){
+        LoginView.isHidden = true
+        LoginLabel.isHidden = true
         LoginButton.layer.cornerRadius = 5
         SignUpButton.layer.cornerRadius = 5
+        LoginView.layer.cornerRadius = 5
+        
+        
+    }
+    
+    func isLoggingin(){
+        loginIndicator.startAnimating()
+        LoginView.isHidden = false
+        LoginLabel.isHidden = false
+        FBLoginButton.isEnabled = false
+        LoginButton.isEnabled = false
+    }
+    
+    func endLoggingin(){
+        loginIndicator.stopAnimating()
+        LoginView.isHidden = true
+        LoginLabel.isHidden = true
+        FBLoginButton.isEnabled = true
+        LoginButton.isEnabled = true
     }
    
 
     @IBAction func LoginButtonPressed(_ sender: Any) {
-        loginIndicator.startAnimating()
+        isLoggingin()
         if let email = self.LoginEmail.text, let password = self.LoginPassword.text {
                 // [START headless_email_auth]
                 Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
@@ -100,7 +124,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
-        self.loginIndicator.stopAnimating()
+        endLoggingin()
     }
 
  
@@ -109,7 +133,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
-        loginIndicator.startAnimating()
+        isLoggingin()
 
         if error != nil {
             print(error)
@@ -127,8 +151,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             }
             // User is signed in
             self.performSegue(withIdentifier: "MainS", sender: self)
-            self.loginIndicator.stopAnimating()
-
+            
+            self.endLoggingin()
 
         }
     }

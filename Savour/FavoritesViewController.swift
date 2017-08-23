@@ -16,13 +16,17 @@ import FirebaseStorageUI
 class FavoritesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
 
     @IBOutlet weak var emptyView: UIView!
-    //@IBOutlet weak var menuButton: UIBarButtonItem!
     var ref: DatabaseReference!
     var deals = [DealData]()
     @IBOutlet weak var FavTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: view)
+        } else {
+            print("3D Touch Not Available")
+        }
 
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -93,14 +97,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
             cell.Countdown.text = "Starts in " + String(describing: Components.day!) + "days"
         }
-        if let _ = favorites[deal.dealID!]{
-            cell.FavButton.setTitle("Unfavorite", for: .normal )
-        }
-        else{
-            cell.FavButton.setTitle("Favorite", for: .normal )
-        }
+        cell.FavButton.isHidden = true
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
@@ -115,6 +113,25 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         self.navigationController?.pushViewController(VC, animated: true)
     }
 
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        let deal = deals[indexPath.row]
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            favorites.removeValue(forKey:  deal.dealID!)
+        }
+        tableView.reloadData()
+        if (favorites.isEmpty){
+            FavTable.isHidden = true
+            emptyView.isHidden = false
+        }
+        else{
+            FavTable.isHidden = false
+            emptyView.isHidden = true
+        }
+    }
 
    
 

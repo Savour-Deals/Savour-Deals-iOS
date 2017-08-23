@@ -52,11 +52,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="dealCell" rowHeight="143" id="ntf-fe-8r1" customClass="DealTableViewCell" customModule="Savour" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="dealCell" rowHeight="143" id="ntf-fe-8r1" customClass="DealTableViewCell" customModule="Savour" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="143"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ntf-fe-8r1" id="Nlc-tL-SM1">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="142.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="142.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p6q-Jz-7AR">
@@ -72,7 +72,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AH8-uO-fM4">
-                                                    <rect key="frame" x="271.5" y="104.5" width="95.5" height="30"/>
+                                                    <rect key="frame" x="238.5" y="104.5" width="95.5" height="30"/>
                                                     <color key="backgroundColor" red="0.28627450980000002" green="0.6705882353" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="95.5" id="geP-u8-aG8"/>
@@ -90,7 +90,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QFq-EZ-rJt">
-                                                    <rect key="frame" x="148" y="48" width="214" height="18"/>
+                                                    <rect key="frame" x="148" y="48" width="181" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -168,22 +168,34 @@
                                     <action selector="LogoutPressed:" destination="J9W-bJ-KVr" eventType="touchUpInside" id="SuC-Zy-wdb"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W1a-ka-sTo">
+                                <rect key="frame" x="0.0" y="50" width="375" height="0.0"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="W1a-ka-sTo" secondAttribute="trailing" id="C3L-ov-yfx"/>
+                            <constraint firstItem="W1a-ka-sTo" firstAttribute="top" secondItem="4Vq-r7-baU" secondAttribute="top" constant="50" id="NH3-29-d62"/>
+                            <constraint firstItem="W1a-ka-sTo" firstAttribute="centerX" secondItem="4Vq-r7-baU" secondAttribute="centerX" id="r1a-nX-cUS"/>
                             <constraint firstItem="gyz-F2-aaB" firstAttribute="centerX" secondItem="4Vq-r7-baU" secondAttribute="centerX" id="tYd-dg-nGr"/>
+                            <constraint firstItem="W1a-ka-sTo" firstAttribute="leading" secondItem="4Vq-r7-baU" secondAttribute="leading" id="vdJ-ay-S1M"/>
                             <constraint firstItem="gyz-F2-aaB" firstAttribute="centerY" secondItem="4Vq-r7-baU" secondAttribute="centerY" id="yRe-od-AaP"/>
+                            <constraint firstItem="W1a-ka-sTo" firstAttribute="centerX" secondItem="4Vq-r7-baU" secondAttribute="centerX" id="zV4-d8-ulQ"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Account" id="9Vd-We-Lt1"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="welcomeLabel" destination="W1a-ka-sTo" id="t5u-4G-2G9"/>
                         <segue destination="e4W-bi-89A" kind="show" identifier="OnboardingSegue" id="oVu-Ii-eWJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1oc-vg-X51" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-380" y="621"/>
+            <point key="canvasLocation" x="-380" y="620.23988005997012"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="XMb-hf-7US">
@@ -201,11 +213,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="dealCell" rowHeight="143" id="a4a-A2-k4d" customClass="DealTableViewCell" customModule="Savour" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="dealCell" rowHeight="143" id="a4a-A2-k4d" customClass="DealTableViewCell" customModule="Savour" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="143"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="a4a-A2-k4d" id="pj3-Eg-7hb">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="142.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="142.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KcL-DP-ck9">
@@ -221,9 +233,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ed-ni-KNu">
-                                                    <rect key="frame" x="271.5" y="104.5" width="95.5" height="30"/>
+                                                    <rect key="frame" x="273.5" y="94.5" width="95.5" height="40"/>
                                                     <color key="backgroundColor" red="0.28627450980000002" green="0.6705882353" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="U2K-mR-dgN"/>
                                                         <constraint firstAttribute="width" constant="95.5" id="vYl-kF-ojD"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
@@ -239,7 +252,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MfB-h8-rF4">
-                                                    <rect key="frame" x="148" y="48" width="214" height="18"/>
+                                                    <rect key="frame" x="148" y="48" width="181" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -254,7 +267,7 @@
                                                 <constraint firstItem="KcL-DP-ck9" firstAttribute="top" secondItem="pj3-Eg-7hb" secondAttribute="top" id="VrH-gp-ePD"/>
                                                 <constraint firstItem="x8u-R8-45H" firstAttribute="leading" secondItem="KcL-DP-ck9" secondAttribute="trailing" constant="8" id="dMT-EL-ZPE"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="MfB-h8-rF4" secondAttribute="trailing" constant="5" id="dj0-Hk-p1r"/>
-                                                <constraint firstItem="0ed-ni-KNu" firstAttribute="trailing" secondItem="pj3-Eg-7hb" secondAttribute="trailingMargin" id="fuM-tr-2Ty"/>
+                                                <constraint firstItem="0ed-ni-KNu" firstAttribute="trailing" secondItem="pj3-Eg-7hb" secondAttribute="trailingMargin" constant="35" id="fuM-tr-2Ty"/>
                                                 <constraint firstItem="KcL-DP-ck9" firstAttribute="leading" secondItem="pj3-Eg-7hb" secondAttribute="leading" id="sTO-Ya-jGY"/>
                                                 <constraint firstItem="DM5-pT-61I" firstAttribute="leading" secondItem="KcL-DP-ck9" secondAttribute="trailing" constant="5" id="xM5-tC-VjW"/>
                                                 <constraint firstItem="MfB-h8-rF4" firstAttribute="leading" secondItem="KcL-DP-ck9" secondAttribute="trailing" constant="5" id="zOn-Gz-ZuI"/>
@@ -305,6 +318,7 @@
         <scene sceneID="euF-su-jhR">
             <objects>
                 <tabBarController id="KlB-Ro-HJC" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="MWC-JW-i0y">
@@ -327,6 +341,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kgf-ES-PNn" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Deals" id="en6-6Q-rl3"/>
                     <toolbarItems/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="nxg-ZH-BDj">
@@ -350,6 +365,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Nm4-f1-tf6" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Favorites" id="aFg-SA-HGs"/>
                     <toolbarItems/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="oGb-IS-3r7">
@@ -368,6 +384,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wXP-pv-GBh"/>
+        <segue reference="het-DN-Jp4"/>
     </inferredMetricsTieBreakers>
 </document>

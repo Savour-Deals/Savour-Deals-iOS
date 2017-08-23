@@ -28,13 +28,17 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = true
         ref = Database.database().reference()
         loadData()
+        
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: view)
+        } else {
+            print("3D Touch Not Available")
+        }
     }
     override func viewDidAppear(_ animated: Bool) {
-        //self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = true
         self.DealsTable.reloadData()
     }

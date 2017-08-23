@@ -9,6 +9,8 @@
 import UIKit
 import Pulsator
 
+
+
 class DealViewController: UIViewController {
 
     var Deal: DealData?
@@ -24,13 +26,19 @@ class DealViewController: UIViewController {
     @IBOutlet var DealView: UIView!
     var newImg: UIImage!
     
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        pulsator.start()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         SetupUI()
+        
     }
     
     func SetupUI(){
@@ -48,7 +56,7 @@ class DealViewController: UIViewController {
         pulsator.numPulse = 4
         pulsator.radius = 230
         pulsator.backgroundColor = redeem.backgroundColor?.cgColor
-        pulsator.start()
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -63,9 +71,7 @@ class DealViewController: UIViewController {
         self.navigationController?.popToRootViewController(animated: true)
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
+    
 
 
 }

@@ -12,14 +12,17 @@ import Firebase
 
 class SignUpViewController: UIViewController {
 
-    @IBOutlet weak var PasswordField2: UITextField!
+    @IBOutlet weak var NameField: UITextField!
     @IBOutlet weak var EmailField: UITextField!
     @IBOutlet weak var SignupButton: UIButton!
     @IBOutlet weak var PasswordField: UITextField!
     
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var loadingView: UIView!
     
+    @IBOutlet weak var loadingLabel: UIView!
     var handle: AuthStateDidChangeListenerHandle?
-
+    var ref: DatabaseReference!
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -29,6 +32,19 @@ class SignUpViewController: UIViewController {
         
         SignupButton.addTarget(self, action: #selector(SignupPressed), for: .touchUpInside)
         SignupButton.layer.cornerRadius = 5
+    }
+    func isLoading(){
+        loadingIndicator.startAnimating()
+        loadingView.isHidden = false
+        loadingLabel.isHidden = false
+        SignupButton.isEnabled = false
+    }
+    
+    func doneLoading(){
+        loadingIndicator.stopAnimating()
+        loadingView.isHidden = true
+        loadingLabel.isHidden = true
+        SignupButton.isEnabled = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,18 +67,12 @@ class SignUpViewController: UIViewController {
         // [END remove_auth_listener]
     }
 
-    
-   
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+ 
 
     
     func SignupPressed(_ sender: Any) {
-        if let password = PasswordField.text, let email = EmailField.text {//let username = UsernameField.text {
+        isLoading()
+        if let password = PasswordField.text, let email = EmailField.text, let name = NameField.text {//let username = UsernameField.text {
             // [START create_user]
             //let userDict = ["Username": username]
             Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
@@ -73,10 +83,18 @@ class SignUpViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 return
             }
+                self.ref = Database.database().reference()
                 
-            print("\(user!.email!) created")
+                var favs = Dictionary<String, String>()
+                for member in favorites{
+                    favs[member.value.dealID!] = member.value.dealID
+                }
+                self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
+                user?.setValue(name, forKey: "displayName")
+            print("\(user!.displayName!) created")
             
-            self.navigationController!.popViewController(animated: true)
+                self.performSegue(withIdentifier: "signedUp", sender: self)
+
         }
         // [END_EXCLUDE]
     }
@@ -86,6 +104,8 @@ class SignUpViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
+        self.doneLoading()
+
     }
     
     @IBAction func backPressed(_ sender: Any) {
