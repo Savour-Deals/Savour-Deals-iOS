@@ -41,6 +41,7 @@ class SignUpViewController: UIViewController {
     }
     
     func doneLoading(){
+    
         loadingIndicator.stopAnimating()
         loadingView.isHidden = true
         loadingLabel.isHidden = true
@@ -90,9 +91,20 @@ class SignUpViewController: UIViewController {
                     favs[member.value.dealID!] = member.value.dealID
                 }
                 self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
-                user?.setValue(name, forKey: "displayName")
-            print("\(user!.displayName!) created")
-            
+                if let user = user {
+                    let changeRequest = user.createProfileChangeRequest()
+                    
+                    changeRequest.displayName = name
+                    //changeRequest.photoURL =
+                    changeRequest.commitChanges { error in
+                        if error != nil {
+                            // An error happened.
+                        } else {
+                            // Profile updated.
+                        }
+                    }
+                }
+                self.navigationController?.isNavigationBarHidden = true
                 self.performSegue(withIdentifier: "signedUp", sender: self)
 
         }
@@ -108,8 +120,6 @@ class SignUpViewController: UIViewController {
 
     }
     
-    @IBAction func backPressed(_ sender: Any) {
-        self.navigationController!.popToRootViewController(animated: true)
-    }
+   
     
 }

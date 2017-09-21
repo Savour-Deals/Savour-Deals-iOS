@@ -10,32 +10,98 @@ import UIKit
 import Firebase
 
 
-class AccountViewController: UIViewController {
+class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
 
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
 
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var welcomeLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-        let user = Auth.auth().currentUser
-        //welcomeLabel.text = "Welcome " + (
+    
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        tableView.tableFooterView = UIView()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
         }
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 4
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        if indexPath.row == 0{
+            return 160
+        }
+        else {
+            return 70
+        }
+    }
     
-    @IBAction func LogoutPressed(_ sender: Any) {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        var cell: UITableViewCell!
+
+        if indexPath.row == 0 {
+            var cell1: AccountCell!
+             cell1 = tableView.dequeueReusableCell(withIdentifier: "Welcome", for: indexPath) as! AccountCell
+            let user = Auth.auth().currentUser
+            // UIImageView in your ViewController#colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+            let imageView: UIImageView = cell1.Img
+            let imgURL = user?.photoURL
+            if imgURL != nil{
+                    // Placeholder image
+                    let placeholderImage = UIImage(named: "placeholder.jpg")
+            
+                    // Load the image using SDWebImage
+                    imageView.sd_setImage(with: imgURL, placeholderImage: placeholderImage)
+                    cell1.Img.layer.cornerRadius = cell1.Img.frame.size.width/2
+                    cell1.Img.clipsToBounds = true
+                
+            }
+            cell1.Welcome.text = "Welcome " + (user?.displayName)!
+            cell1.Img.image = #imageLiteral(resourceName: "logo")
+            return cell1
+        }
+        else if indexPath.row == 1 {
+             cell = tableView.dequeueReusableCell(withIdentifier: "Contact", for: indexPath)
+        }
+        else if indexPath.row == 2 {
+            cell = tableView.dequeueReusableCell(withIdentifier: "Payment", for: indexPath)
+        }
+        else if indexPath.row == 3 {
+            
+            cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
+            cell.backgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+        }
+        
+        
+        return cell
+        
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row == 3{
+            LogoutPressed()
+        }
+    }
+
+   
+    
+    
+     func LogoutPressed() {
         // [START signout]
         let firebaseAuth = Auth.auth()
        

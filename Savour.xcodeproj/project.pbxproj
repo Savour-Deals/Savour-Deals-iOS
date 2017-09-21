@@ -28,6 +28,9 @@
 		83802D741F2ED1FD00E315FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83802D731F2ED1FD00E315FB /* Assets.xcassets */; };
 		83802D771F2ED1FD00E315FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D751F2ED1FD00E315FB /* LaunchScreen.storyboard */; };
 		83802D7F1F2ED2B500E315FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83802D7E1F2ED2B500E315FB /* GoogleService-Info.plist */; };
+		83AD05E31F744EF0001B780E /* VendorHome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83AD05E21F744EF0001B780E /* VendorHome.storyboard */; };
+		83BA94861F648B3E00165064 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA94851F648B3D00165064 /* MenuViewController.swift */; };
+		83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA94891F64C3D800165064 /* AccountCell.swift */; };
 		83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
 		CA5FE43E5E3B5DB4ABCCAEE3 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C36F5240C1A0D943772792 /* Pods_Savour.framework */; };
@@ -49,7 +52,7 @@
 		834C1E111F31518F002D7198 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		834C1E131F3151A4002D7198 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		834C1E151F315BA8002D7198 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
-		834C1E191F3187AA002D7198 /* DealData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealData.swift; sourceTree = "<group>"; };
+		834C1E191F3187AA002D7198 /* DealData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DealData.swift; sourceTree = "<group>"; };
 		834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
 		83802D691F2ED1FD00E315FB /* Savour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Savour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -59,7 +62,10 @@
 		83802D761F2ED1FD00E315FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83802D781F2ED1FD00E315FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83802D7E1F2ED2B500E315FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		83AD05E21F744EF0001B780E /* VendorHome.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VendorHome.storyboard; sourceTree = "<group>"; };
 		83B0F94D1F32C64C00759C34 /* Savour.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Savour.entitlements; sourceTree = "<group>"; };
+		83BA94851F648B3D00165064 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		83BA94891F64C3D800165064 /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
 		83DDDBB41F4157EC00B14FEB /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		83DDDBB91F428CB100B14FEB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		C0416A1CC943A66191CB9F20 /* Pods-Savour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.release.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.release.xcconfig"; sourceTree = "<group>"; };
@@ -94,6 +100,7 @@
 				83446AAA1F3C130400CBE73E /* DealViewController.swift */,
 				83446AAC1F3C1D4200CBE73E /* DetailsViewController.swift */,
 				833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */,
+				83BA94851F648B3D00165064 /* MenuViewController.swift */,
 				8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */,
 				8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */,
 			);
@@ -135,21 +142,39 @@
 				83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */,
 				83446AA71F3C067900CBE73E /* DealDetails */,
 				834C1E101F315172002D7198 /* Onboarding */,
+				83AD05E11F744EB5001B780E /* MainUser */,
 				83802D731F2ED1FD00E315FB /* Assets.xcassets */,
+				83AD05E41F744EF6001B780E /* VendorPortal */,
 				83802D751F2ED1FD00E315FB /* LaunchScreen.storyboard */,
-				834C1E111F31518F002D7198 /* Main.storyboard */,
-				83446AA11F3BDC6400CBE73E /* AccountViewController.swift */,
-				834C1E131F3151A4002D7198 /* ViewController.swift */,
-				834C1E191F3187AA002D7198 /* DealData.swift */,
-				83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */,
-				833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */,
 				83802D781F2ED1FD00E315FB /* Info.plist */,
-				834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */,
-				833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */,
 				83DDDBB41F4157EC00B14FEB /* Globals.swift */,
 				83802D7E1F2ED2B500E315FB /* GoogleService-Info.plist */,
 			);
 			path = Savour;
+			sourceTree = "<group>";
+		};
+		83AD05E11F744EB5001B780E /* MainUser */ = {
+			isa = PBXGroup;
+			children = (
+				834C1E111F31518F002D7198 /* Main.storyboard */,
+				83446AA11F3BDC6400CBE73E /* AccountViewController.swift */,
+				83BA94891F64C3D800165064 /* AccountCell.swift */,
+				834C1E131F3151A4002D7198 /* ViewController.swift */,
+				834C1E191F3187AA002D7198 /* DealData.swift */,
+				83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */,
+				833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */,
+				834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */,
+				833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */,
+			);
+			name = MainUser;
+			sourceTree = "<group>";
+		};
+		83AD05E41F744EF6001B780E /* VendorPortal */ = {
+			isa = PBXGroup;
+			children = (
+				83AD05E21F744EF0001B780E /* VendorHome.storyboard */,
+			);
+			name = VendorPortal;
 			sourceTree = "<group>";
 		};
 		9843D2A17469187CACDB6A4C /* Frameworks */ = {
@@ -191,13 +216,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Chris Patterson";
 				TargetAttributes = {
 					83802D681F2ED1FD00E315FB = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = C5FUB5PT9S;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -233,6 +258,7 @@
 				83802D771F2ED1FD00E315FB /* LaunchScreen.storyboard in Resources */,
 				834C1E121F31518F002D7198 /* Main.storyboard in Resources */,
 				83802D7F1F2ED2B500E315FB /* GoogleService-Info.plist in Resources */,
+				83AD05E31F744EF0001B780E /* VendorHome.storyboard in Resources */,
 				83802D741F2ED1FD00E315FB /* Assets.xcassets in Resources */,
 				83802D721F2ED1FD00E315FB /* Onboarding.storyboard in Resources */,
 				8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */,
@@ -302,9 +328,11 @@
 				833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */,
 				833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */,
 				8320E9811F3E213200D6A0DF /* RDealsTableViewCell.swift in Sources */,
+				83BA94861F648B3E00165064 /* MenuViewController.swift in Sources */,
 				83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */,
 				834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */,
 				834C1E1A1F3187AA002D7198 /* DealData.swift in Sources */,
+				83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */,
 				83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */,
 				83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */,
 				83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */,
@@ -345,7 +373,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -353,7 +383,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -396,7 +430,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -404,7 +440,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -449,7 +489,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -471,7 +512,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

@@ -17,7 +17,7 @@ extension ViewController: 	UIViewControllerPreviewingDelegate {
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
-        VC.Deal = Deals[indexPath.row]
+        VC.Deal = filteredDeals[indexPath.row]
         VC.fromDetails = false
         VC.newImg = cell.rImg.image
         VC.preferredContentSize =

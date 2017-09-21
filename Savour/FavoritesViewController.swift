@@ -16,24 +16,30 @@ import FirebaseStorageUI
 class FavoritesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
 
     @IBOutlet weak var emptyView: UIView!
-    var ref: DatabaseReference!
     var deals = [DealData]()
+    var user: String!
     @IBOutlet weak var FavTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: view)
+            registerForPreviewing(with: self, sourceView: self.FavTable)
         } else {
             print("3D Touch Not Available")
         }
 
     }
     override func viewWillAppear(_ animated: Bool) {
-        ref = Database.database().reference()
+        
         deals.removeAll()
+        let expiredUnix = Date().timeIntervalSince1970 - 24*60*60
         for (_, deal) in favorites {
-            deals.append(deal)
+            if deal.endTime! > expiredUnix{
+                deals.append(deal)
+            }
+            else{
+                favorites.removeValue(forKey: deal.dealID!)
+            }
         }
         self.FavTable.reloadData()
         setupUI()
@@ -45,11 +51,12 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             FavTable.isHidden = false
             emptyView.isHidden = true
         }
+        FavTable.tableFooterView = UIView()
+
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
+    
+    
 
     
     func setupUI(){
@@ -80,24 +87,31 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
         cell.rName.text = deal.restrauntName
         cell.dealDesc.text = deal.dealDescription
-        let start = Date(timeIntervalSince1970: deal.startTime!)
-        let end = Date(timeIntervalSince1970: deal.endTime!)
-        let current = Date()
-        let interval  =  DateInterval(start: start as Date, end: end as Date)
-        if (interval.contains(current)){
-            let cal = Calendar.current
-            let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
-            cell.Countdown.text =  "Time left: " + String(describing: Components.day!) + "d " + String(describing: Components.hour!) + "h " + String(describing: Components.minute!) + "m"
+        if deal.redeemed! {
+            cell.Countdown.text = "Deal Already Redeemed!"
+            cell.Countdown.textColor = UIColor.red
         }
-        else if (current > end){
-            cell.Countdown.text = "Deal Ended"
+        else{
+            cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
+
+            let start = Date(timeIntervalSince1970: deal.startTime!)
+            let end = Date(timeIntervalSince1970: deal.endTime!)
+            let current = Date()
+            let interval  =  DateInterval(start: start as Date, end: end as Date)
+            if (interval.contains(current)){
+                let cal = Calendar.current
+                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
+                cell.Countdown.text =  "Time left: " + String(describing: Components.day!) + "d " + String(describing: Components.hour!) + "h " + String(describing: Components.minute!) + "m"
+            }
+            else if (current > end){
+                cell.Countdown.text = "Deal Ended"
+            }
+            else {
+                let cal = Calendar.current
+                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
+                cell.Countdown.text = "Starts in " + String(describing: Components.day!) + "days"
+            }
         }
-        else {
-            let cal = Calendar.current
-            let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
-            cell.Countdown.text = "Starts in " + String(describing: Components.day!) + "days"
-        }
-        cell.FavButton.isHidden = true
         return cell
     }
     
@@ -110,6 +124,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         VC.Deal = deals[indexPath.row]
         VC.fromDetails = false
         VC.newImg = cell.rImg.image
+        VC.index = FavMainIndex[deals[indexPath.row].dealID!]!
         self.navigationController?.pushViewController(VC, animated: true)
     }
 
@@ -120,9 +135,18 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         let deal = deals[indexPath.row]
         if (editingStyle == UITableViewCellEditingStyle.delete) {
+            
             favorites.removeValue(forKey:  deal.dealID!)
+            tableView.beginUpdates()
+            FavTable.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+
+            deals.removeAll()
+            for (_, deal) in favorites {
+                deals.append(deal)
+            }
+            //self.FavTable.reloadData()
         }
-        tableView.reloadData()
         if (favorites.isEmpty){
             FavTable.isHidden = true
             emptyView.isHidden = false

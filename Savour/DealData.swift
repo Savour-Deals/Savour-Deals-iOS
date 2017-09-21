@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 
 class DealData{
@@ -21,10 +22,14 @@ class DealData{
     var likes: Int?
     var filter: String?
     var dealID: String?
+    var fav: Bool?
+    var redeemed: Bool?
+    private var redeemBlock: Bool = false
+
     
     
-    
-     init(snap: DataSnapshot) {
+    init(snap: DataSnapshot, ID: String) {
+        redeemBlock = false
         let value = snap.value as! NSDictionary
         self.restrauntID = value["rID"] as? Int ?? 0
         self.likes = value["likes"] as? Int ?? 0
@@ -35,9 +40,9 @@ class DealData{
         self.startTime = value["StartTime"] as? Double
         self.filter = value["Filter"] as? String ?? ""
         self.dealID = snap.key
+        self.fav = false
+        
     }
- 
-    
   
     
 }

@@ -45,6 +45,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         else {
             // No user is signed in.
             setUpUI()
+            ref = Database.database().reference()
             FBSDKLoginManager().logOut()
             FBLoginButton.delegate = self
         }
@@ -78,16 +79,17 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginButton.layer.cornerRadius = 5
         SignUpButton.layer.cornerRadius = 5
         LoginView.layer.cornerRadius = 5
-        
-        
     }
     
     func isLoggingin(){
+        
         loginIndicator.startAnimating()
+        
         LoginView.isHidden = false
         LoginLabel.isHidden = false
         FBLoginButton.isEnabled = false
         LoginButton.isEnabled = false
+        SignUpButton.isEnabled = false
     }
     
     func endLoggingin(){
@@ -96,6 +98,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginLabel.isHidden = true
         FBLoginButton.isEnabled = true
         LoginButton.isEnabled = true
+        SignUpButton.isEnabled = true
     }
    
 
@@ -134,7 +137,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         isLoggingin()
-
+        var data:[String:AnyObject]!
         if error != nil {
             print(error)
             return
@@ -149,12 +152,28 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 print(error.debugDescription)
                 return
             }
+            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large)"])
+            
+            graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+                
+                if ((error) != nil)
+                {
+                    print("Error: \(String(describing: error))")
+                }
+                else
+                {
+                    
+                    data = result as! [String : AnyObject]
+                    let name = data["name"] as! String
+                    self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
+                }
+            })
+
+            
             // User is signed in
             self.performSegue(withIdentifier: "MainS", sender: self)
-            
-            self.endLoggingin()
-
         }
+        self.endLoggingin()
     }
 }
 
