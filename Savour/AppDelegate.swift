@@ -25,17 +25,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-
+        Database.database().isPersistenceEnabled = true
         
+        //Setup Searchbar UI
+        UISearchBar.appearance().barTintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        //UISearchBar.appearance().tintColor = .white
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
             return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        //Save Favorites in Firebase
             let user = Auth.auth().currentUser?.uid
             self.ref = Database.database().reference()
-            
             var favs = Dictionary<String, String>()
             for member in favorites{
                 favs[member.value.dealID!] = member.value.dealID
@@ -70,6 +72,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return handled
     }
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        //App entered through Forcetouch quick action
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
+        
+        switch (shortcutItem.localizedTitle){
+        case "Favorites" :
+            //Favorites was selected
+            tabVC.selectedIndex = 1
+            self.window!.rootViewController = tabVC
+        default:
+            break
+    }
+    completionHandler(true)
+}
     
     
     

@@ -12,13 +12,14 @@ import Firebase
 
 
 var favorites: [String:DealData] = Dictionary<String, DealData>()
+var FavMainIndex: [String:Int] = Dictionary<String, Int>()
+var mainVC: ViewController?
 
 
 class HelperFuncs{
     
     var ref: DatabaseReference!
     var handle: AuthStateDidChangeListenerHandle?
-
     
     func SaveFavs(){
         let user = Auth.auth().currentUser?.uid

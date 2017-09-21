@@ -24,6 +24,7 @@
 #include "shared_realm.hpp"
 #include "util/format.hpp"
 
+#include <realm/descriptor.hpp>
 #include <realm/group.hpp>
 #include <realm/table.hpp>
 #include <realm/table_view.hpp>
@@ -115,6 +116,12 @@ void insert_column(Group& group, Table& table, Property const& property, size_t 
         REALM_ASSERT(link_table);
         table.insert_column_link(col_ndx, is_array(property.type) ? type_LinkList : type_Link,
                                  property.name, *link_table);
+    }
+    else if (is_array(property.type)) {
+        DescriptorRef desc;
+        table.insert_column(col_ndx, type_Table, property.name, &desc);
+        desc->add_column(to_core_type(property.type & ~PropertyType::Flags), ObjectStore::ArrayColumnName,
+                         nullptr, is_nullable(property.type));
     }
     else {
         table.insert_column(col_ndx, to_core_type(property.type), property.name, is_nullable(property.type));
@@ -352,8 +359,8 @@ struct SchemaDifferenceExplainer {
     {
         errors.emplace_back("Property '%1.%2' has been changed from '%3' to '%4'.",
                             op.object->name, op.new_property->name,
-                            string_for_property_type(op.old_property->type),
-                            string_for_property_type(op.new_property->type));
+                            op.old_property->type_string(),
+                            op.new_property->type_string());
     }
 
     void operator()(schema_change::MakePropertyNullable op)
@@ -502,7 +509,7 @@ void ObjectStore::verify_valid_external_changes(std::vector<SchemaChange> const&
     verify_no_errors<InvalidSchemaChangeException>(verifier, changes);
 }
 
-void ObjectStore::verify_compatible_for_read_only(std::vector<SchemaChange> const& changes)
+void ObjectStore::verify_compatible_for_immutable_and_readonly(std::vector<SchemaChange> const& changes)
 {
     using namespace schema_change;
     struct Verifier : SchemaDifferenceExplainer {
@@ -689,19 +696,30 @@ void ObjectStore::apply_schema_changes(Group& group, uint64_t schema_version,
 {
     create_metadata_tables(group);
 
-    if (schema_version == ObjectStore::NotVersioned) {
-        create_initial_tables(group, changes);
-        set_schema_version(group, target_schema_version);
+    if (mode == SchemaMode::Additive) {
+        bool target_schema_is_newer = (schema_version < target_schema_version
+            || schema_version == ObjectStore::NotVersioned);
+
+#if REALM_HAVE_SYNC_STABLE_IDS
+        // With sync v2.x, indexes are no longer synced, so there's no reason to avoid creating them.
+        bool update_indexes = true;
+#else
+        // With sync v1.x, indexes are synced, so we only want to update them if the schema version number
+        // has been bumped. This prevents multiple clients with different opinions about indexes from fighting.
+        bool update_indexes = target_schema_is_newer;
+#endif
+        apply_additive_changes(group, changes, update_indexes);
+
+        if (target_schema_is_newer)
+            set_schema_version(group, target_schema_version);
+
         set_schema_columns(group, target_schema);
         return;
     }
 
-    if (mode == SchemaMode::Additive) {
-        apply_additive_changes(group, changes, schema_version < target_schema_version);
-
-        if (schema_version < target_schema_version)
-            set_schema_version(group, target_schema_version);
-
+    if (schema_version == ObjectStore::NotVersioned) {
+        create_initial_tables(group, changes);
+        set_schema_version(group, target_schema_version);
         set_schema_columns(group, target_schema);
         return;
     }

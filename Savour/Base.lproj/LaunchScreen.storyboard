@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="17A306f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="17A330h" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,10 +25,15 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="Mgc-Mg-chJ">
                                 <rect key="frame" x="18.5" y="229.5" width="337" height="207"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Mgc-Mg-chJ" secondAttribute="height" multiplier="337:207" id="oSB-cX-RPu"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Mgc-Mg-chJ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="2.5" id="6fk-Hn-LoD"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Mgc-Mg-chJ" secondAttribute="trailing" constant="3.5" id="E5e-do-mqt"/>
                             <constraint firstItem="Mgc-Mg-chJ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="QyG-Zg-D9L"/>
                             <constraint firstItem="Mgc-Mg-chJ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="mYd-09-DMd"/>
                         </constraints>
