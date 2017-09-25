@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import Firebase
-
+import FirebaseAuth
+import FirebaseDatabase
 
 class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
 

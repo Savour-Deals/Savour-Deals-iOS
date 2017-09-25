@@ -71,7 +71,7 @@ class SignUpViewController: UIViewController {
  
 
     
-    func SignupPressed(_ sender: Any) {
+    @objc func SignupPressed(_ sender: Any) {
         isLoading()
         if let password = PasswordField.text, let email = EmailField.text, let name = NameField.text {//let username = UsernameField.text {
             // [START create_user]

@@ -42,7 +42,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             for member in favorites{
                 favs[member.value.dealID!] = member.value.dealID
             }
+        if user != nil{
             self.ref.child("Users").child(user!).child("Favorites").setValue(favs)
+        }
         
         
     }

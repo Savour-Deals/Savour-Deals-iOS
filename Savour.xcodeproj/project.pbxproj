@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49689BA8B782F849971C1828 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F008C2ED196726BDF0D648B /* Pods_Savour.framework */; };
 		8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
 		8320E9811F3E213200D6A0DF /* RDealsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */; };
 		833B25CB1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */; };
@@ -33,12 +34,10 @@
 		83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA94891F64C3D800165064 /* AccountCell.swift */; };
 		83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
-		CA5FE43E5E3B5DB4ABCCAEE3 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C36F5240C1A0D943772792 /* Pods_Savour.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		17C36F5240C1A0D943772792 /* Pods_Savour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B6E32CD50DEA34BE596FD97 /* Pods-Savour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.debug.xcconfig"; sourceTree = "<group>"; };
+		43FED090A049FB64B8C14F33 /* Pods-Savour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.release.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.release.xcconfig"; sourceTree = "<group>"; };
 		8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RestaurantDetails.storyboard; sourceTree = "<group>"; };
 		8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDealsTableViewCell.swift; sourceTree = "<group>"; };
 		833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
@@ -66,9 +65,11 @@
 		83B0F94D1F32C64C00759C34 /* Savour.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Savour.entitlements; sourceTree = "<group>"; };
 		83BA94851F648B3D00165064 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		83BA94891F64C3D800165064 /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
+		83DBBE371F747945007B58DD /* leveldb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = leveldb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83DDDBB41F4157EC00B14FEB /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		83DDDBB91F428CB100B14FEB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		C0416A1CC943A66191CB9F20 /* Pods-Savour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.release.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.release.xcconfig"; sourceTree = "<group>"; };
+		9F008C2ED196726BDF0D648B /* Pods_Savour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C566E086F0130521161E075C /* Pods-Savour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,18 +78,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */,
-				CA5FE43E5E3B5DB4ABCCAEE3 /* Pods_Savour.framework in Frameworks */,
+				49689BA8B782F849971C1828 /* Pods_Savour.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		778D9DA8DE8A71B21A6F90DD /* Pods */ = {
+		5CBF6F273A63834FCBC1CF35 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6B6E32CD50DEA34BE596FD97 /* Pods-Savour.debug.xcconfig */,
-				C0416A1CC943A66191CB9F20 /* Pods-Savour.release.xcconfig */,
+				C566E086F0130521161E075C /* Pods-Savour.debug.xcconfig */,
+				43FED090A049FB64B8C14F33 /* Pods-Savour.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -122,8 +123,8 @@
 			children = (
 				83802D6B1F2ED1FD00E315FB /* Savour */,
 				83802D6A1F2ED1FD00E315FB /* Products */,
-				778D9DA8DE8A71B21A6F90DD /* Pods */,
 				9843D2A17469187CACDB6A4C /* Frameworks */,
+				5CBF6F273A63834FCBC1CF35 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -180,8 +181,9 @@
 		9843D2A17469187CACDB6A4C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83DBBE371F747945007B58DD /* leveldb.framework */,
 				83DDDBB91F428CB100B14FEB /* CoreData.framework */,
-				17C36F5240C1A0D943772792 /* Pods_Savour.framework */,
+				9F008C2ED196726BDF0D648B /* Pods_Savour.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -193,12 +195,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83802D7B1F2ED1FD00E315FB /* Build configuration list for PBXNativeTarget "Savour" */;
 			buildPhases = (
-				F95B19E9BFF69625B0677C1C /* [CP] Check Pods Manifest.lock */,
+				4AB13618CEDD2F4B8AA96A76 /* [CP] Check Pods Manifest.lock */,
 				83802D651F2ED1FD00E315FB /* Sources */,
 				83802D661F2ED1FD00E315FB /* Frameworks */,
 				83802D671F2ED1FD00E315FB /* Resources */,
-				64947C7A034CCE0DD9931E79 /* [CP] Embed Pods Frameworks */,
-				04C3DD9FFD919E3F6E316177 /* [CP] Copy Pods Resources */,
+				410198745A16A6472BB6FCD9 /* [CP] Embed Pods Frameworks */,
+				20F4C4FD2AF54B88F4FA16DC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -269,7 +271,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		04C3DD9FFD919E3F6E316177 /* [CP] Copy Pods Resources */ = {
+		20F4C4FD2AF54B88F4FA16DC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -284,34 +286,60 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		64947C7A034CCE0DD9931E79 /* [CP] Embed Pods Frameworks */ = {
+		410198745A16A6472BB6FCD9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Pulsator/Pulsator.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/libwebp/libwebp.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pulsator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libwebp.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F95B19E9BFF69625B0677C1C /* [CP] Check Pods Manifest.lock */ = {
+		4AB13618CEDD2F4B8AA96A76 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Savour-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -472,7 +500,7 @@
 		};
 		83802D7C1F2ED1FD00E315FB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6B6E32CD50DEA34BE596FD97 /* Pods-Savour.debug.xcconfig */;
+			baseConfigurationReference = C566E086F0130521161E075C /* Pods-Savour.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -484,19 +512,20 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Savour/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
 		83802D7D1F2ED1FD00E315FB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0416A1CC943A66191CB9F20 /* Pods-Savour.release.xcconfig */;
+			baseConfigurationReference = 43FED090A049FB64B8C14F33 /* Pods-Savour.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -508,11 +537,12 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Savour/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

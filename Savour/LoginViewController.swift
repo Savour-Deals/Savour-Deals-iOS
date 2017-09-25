@@ -140,9 +140,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         var data:[String:AnyObject]!
         if error != nil {
             print(error)
+            self.endLoggingin()
             return
         }
         if result.isCancelled {
+            self.endLoggingin()
             return
         }
         print("Successfully logged in with facebook...")

@@ -89,11 +89,6 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - Pulsator (0.3.0)
-  - Realm (2.10.1):
-    - Realm/Headers (= 2.10.1)
-  - Realm/Headers (2.10.1)
-  - RealmSwift (2.10.1):
-    - Realm (= 2.10.1)
   - SDWebImage (4.1.0):
     - SDWebImage/Core (= 4.1.0)
   - SDWebImage/Core (4.1.0)
@@ -102,7 +97,6 @@ PODS:
     - SDWebImage/Core
 
 DEPENDENCIES:
-  - Bolts
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
@@ -112,7 +106,6 @@ DEPENDENCIES:
   - Firebase/Storage
   - FirebaseUI/Storage
   - Pulsator
-  - RealmSwift
   - SDWebImage/WebP
 
 SPEC CHECKSUMS:
@@ -124,7 +117,7 @@ SPEC CHECKSUMS:
   FirebaseAnalytics: 76f754d37ca5b04f36856729b6af3ca0152d1069
   FirebaseAuth: 22f8a5170f31d1f111141950590f071f35df3229
   FirebaseCore: 9a6cc1e3eaf75905390f9220596ad4fd8f92faee
-  FirebaseDatabase: '03940adcac54ce30db06f1fc2136f8581734ce2c'
+  FirebaseDatabase: 03940adcac54ce30db06f1fc2136f8581734ce2c
   FirebaseInstanceID: a4fc702b5a026f7322964376047f1a3f1f7cc6ff
   FirebaseStorage: 0cca42d9b889a0227c3a50121f45a4469fc9eb27
   FirebaseUI: bf4905a1b80377d86d7c848525d623f05af34cca
@@ -133,11 +126,9 @@ SPEC CHECKSUMS:
   leveldb-library: 10fb39c39e243db4af1828441162405bbcec1404
   libwebp: 1d5a07c2eb97f9c31bd5f154bb82efc0ea67c6a2
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  Pulsator: '0191f14f7ab82d6dbde6fdbde42036f07a4450e3'
-  Realm: fc7a317a5c2c9ba91f5f235ede4e2ea76e9eba0c
-  RealmSwift: 505ed6c15942a2e76f5cfa78a8667cfa997ee75b
+  Pulsator: 0191f14f7ab82d6dbde6fdbde42036f07a4450e3
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
 
-PODFILE CHECKSUM: db8a1a04eaf925378cb88cfe821a935ceaab83b2
+PODFILE CHECKSUM: bb01bf16bc3b02cd4f2e69cc26eb4d489b83dd3b
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.1

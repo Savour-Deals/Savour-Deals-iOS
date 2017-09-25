@@ -47,6 +47,18 @@ class DealViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if #available(iOS 11, *) {
+            let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 1)
+            // activate the constraint
+            NSLayoutConstraint.activate([verticalSpace])
+        } else {
+            let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.view.superview, attribute: .bottom, multiplier: 1, constant:1)
+            // activate the constraint
+            NSLayoutConstraint.activate([verticalSpace])
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         if (Deal?.redeemed)!{
@@ -162,7 +174,7 @@ class DealViewController: UIViewController {
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
     }
-    func updateTimer() {
+    @objc func updateTimer() {
         seconds += 1     //This will decrement(count down)the seconds.
         timerLabel.text = timeString(time: TimeInterval(seconds)) //This will update the label.
         if seconds >= 3600 {

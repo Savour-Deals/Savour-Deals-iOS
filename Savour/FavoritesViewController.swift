@@ -60,7 +60,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
 
     
     func setupUI(){
-        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 73, green: 171, blue: 170, alpha: 1.0)
+        self.navigationController?.navigationBar.tintColor = UIColor(red: 73, green: 171, blue: 170, alpha: 1.0)
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
