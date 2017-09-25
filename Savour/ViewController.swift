@@ -7,11 +7,11 @@
 //
 
 import UIKit
-import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import SDWebImage
 import FirebaseStorageUI
+import FirebaseAuth
 
 
 
@@ -95,7 +95,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     
     func setupUI(){
-        self.navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 73, green: 171, blue: 170, alpha: 1.0)
+        self.navigationController?.navigationBar.tintColor = UIColor(red: 73, green: 171, blue: 170, alpha: 1.0)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
     }

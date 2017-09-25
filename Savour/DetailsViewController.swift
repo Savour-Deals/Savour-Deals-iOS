@@ -176,7 +176,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 
                 self.request = URLRequest(url: url!)
-                self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+                self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
                 self.performSegue(withIdentifier: "menu", sender: self)
                 
             }
