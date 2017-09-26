@@ -14,7 +14,7 @@ import FirebaseAuth
 
 class DealData{
     var restrauntName: String?
-    var restrauntID: Int?
+    var restrauntID: String?
     var restrauntPhoto: String?
     var dealDescription: String?
     var startTime: Double?
@@ -31,7 +31,9 @@ class DealData{
     init(snap: DataSnapshot, ID: String) {
         redeemBlock = false
         let value = snap.value as! NSDictionary
-        self.restrauntID = value["rID"] as? Int ?? 0
+        if let rID = value["rID"] {
+            self.restrauntID = "\(rID)"
+        }
         self.likes = value["likes"] as? Int ?? 0
         self.restrauntName = value["rName"] as? String ?? ""
         self.dealDescription = value["dealDesc"] as? String ?? ""

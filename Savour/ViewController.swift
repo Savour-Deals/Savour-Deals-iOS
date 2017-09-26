@@ -31,50 +31,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var DealsTable: UITableView!
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent    
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIApplication.shared.statusBarStyle = .lightContent
-
-        if Auth.auth().currentUser != nil {
-            // User is signed in.
-            mainVC = self
-        
-            ref = Database.database().reference()
-            ref.keepSynced(true)
-
-            GetFavs()
-            loadData(sender: "main")
-            //loadRedeemed()
-            
-            if traitCollection.forceTouchCapability == .available {
-                registerForPreviewing(with: self, sourceView: self.DealsTable)
-            } else {
-                print("3D Touch Not Available")
-            }
-            // Add Refresh Control to Table View
-            if #available(iOS 10.0, *) {
-                DealsTable.refreshControl = refreshControl
-            } else {
-                DealsTable.addSubview(refreshControl)
-            }
-            // Configure Refresh Control
-            refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals")
-            refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
-            setupSearchBar()
-            
-        }
-        else {
-            // No user is signed in.
-            self.performSegue(withIdentifier: "Onboarding", sender: self)
-        }
     }
-    
-   
-    
-    
     
     func GetFavs()  {
         let userid = Auth.auth().currentUser?.uid
@@ -98,6 +64,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73, green: 171, blue: 170, alpha: 1.0)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
+        mainVC = self
+        ref.keepSynced(true)
+        DealsTable.delegate = self
+        GetFavs()
+        loadData(sender: "main")
+        //Check if forcetouch is available
+        if traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: self.DealsTable)
+        } else {
+            print("3D Touch Not Available")
+        }
+        // Add Refresh Control to Table View
+        if #available(iOS 10.0, *) {
+            DealsTable.refreshControl = refreshControl
+        } else {
+            DealsTable.addSubview(refreshControl)
+        }
+        // Configure Refresh Control
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals")
+        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+        setupSearchBar()
     }
     
     
@@ -106,21 +93,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         if Auth.auth().currentUser != nil {
             // User is signed in.
-            setupUI()
         }
         else {
             self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
-        DispatchQueue.main.async{
-            if self.justOpened{
-                self.GetFavs()
-                self.justOpened = false
-            }
-            self.DealsTable.tableFooterView = UIView()
-
-            self.DealsTable.reloadData()
+        ref = Database.database().reference()
+        UIApplication.shared.statusBarStyle = .lightContent
+        let user = Auth.auth().currentUser
+        if user != nil {
+            // User is signed in.
+            self.ref.child("Users").child((user?.uid)!).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                let type = snapshot.value as? String ?? ""
+                if type == "Vendor"{
+                    self.navigationController?.navigationBar.isHidden = true
+                    self.tabBarController?.tabBar.isHidden = true
+                    self.performSegue(withIdentifier: "Vendor", sender: self)
+                }
+                else{
+                    if self.unfilteredDeals.isEmpty{
+                        self.setupUI()
+                    }
+                }
+                
+            })
+        }
+        else {
+            // No user is signed in.
+            self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
     }
     
@@ -128,7 +131,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
         // [START remove_auth_listener]
         Auth.auth().removeStateDidChangeListener(handle!)
         // [END remove_auth_listener]

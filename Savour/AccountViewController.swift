@@ -21,8 +21,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var welcomeLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,15 +41,19 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         if indexPath.row == 0{
             return 160
         }
-        else {
+        else if indexPath.row == 1{
+            return 70
+        }
+        else if indexPath.row == 2{
+            return 120
+        }
+        else{
             return 70
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         var cell: UITableViewCell!
-
         if indexPath.row == 0 {
             var cell1: AccountCell!
              cell1 = tableView.dequeueReusableCell(withIdentifier: "Welcome", for: indexPath) as! AccountCell
@@ -84,11 +86,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
             cell.backgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         }
-        
-        
         return cell
-        
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
@@ -97,11 +95,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             LogoutPressed()
         }
     }
-
-   
     
-    
-     func LogoutPressed() {
+    func LogoutPressed() {
         // [START signout]
         let firebaseAuth = Auth.auth()
        

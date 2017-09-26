@@ -114,8 +114,16 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                         self.present(alert, animated: true, completion: nil)
                         return
                     }
-                    self.performSegue(withIdentifier: "MainS", sender: self)
-
+                    self.ref.child("Users").child(user!.uid).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
+                        // Get user value
+                        let type = snapshot.value as! String
+                        if type == "Vendor"{
+                            self.performSegue(withIdentifier: "Vendor", sender: self)
+                        }
+                        else{
+                            self.performSegue(withIdentifier: "MainS", sender: self)
+                        }
+                    })
                 }
             // [END_EXCLUDE]
             }
@@ -173,9 +181,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
             
             // User is signed in
-            self.performSegue(withIdentifier: "MainS", sender: self)
-        }
+            
+        self.performSegue(withIdentifier: "MainS", sender: self)
         self.endLoggingin()
+    }
     }
 }
 
