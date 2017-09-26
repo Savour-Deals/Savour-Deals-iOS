@@ -8,11 +8,26 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseDatabase
 
 class VendorHomeViewController: UIViewController {
 
+    var handle: AuthStateDidChangeListenerHandle?
+    var ref: DatabaseReference!
+    var id: String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+    }
+    
+    func setupUI(){
+        id = Auth.auth().currentUser?.uid
+        ref = Database.database().reference()
+        ref.child("Restaurants").child(id!).observeSingleEvent(of: .value, with: { (snapshot) in
+            let value = snapshot.value as? NSDictionary
+            self.navigationItem.title = value?["Name"] as? String ?? ""
+        })
     }
 
     @IBAction func LogoutPressed(_ sender: Any) {

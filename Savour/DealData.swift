@@ -24,6 +24,7 @@ class DealData{
     var dealID: String?
     var fav: Bool?
     var redeemed: Bool?
+    var redeemedTime: Double?
     private var redeemBlock: Bool = false
 
     

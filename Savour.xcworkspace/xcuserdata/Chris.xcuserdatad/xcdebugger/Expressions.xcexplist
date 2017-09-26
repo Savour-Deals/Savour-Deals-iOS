@@ -3,15 +3,7 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "(self.Deal?.dealID)!">
-            </PersistentString>
-            <PersistentString
-               value = "mainVC">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "DetailsViewController.previewingContext(UIViewControllerPreviewing, viewControllerForLocation : CGPoint) -&gt; UIViewController?:DetailsPreviewDelegate.swift">
       </ContextState>
       <ContextState
          contextName = "mach_msg_trap:(null)">
@@ -87,6 +79,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "DealViewController.updateTimer():DealViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Date().timeIntervalSince1970">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ViewController.loadFavorites(user : User) -&gt; ():ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -115,6 +115,23 @@
       </ContextState>
       <ContextState
          contextName = "AppDelegate.(application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool).(closure #1):AppDelegate.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in ViewController.loadRedeemed():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(Auth.auth().currentUser?.uid)!">
+            </PersistentString>
+            <PersistentString
+               value = "redeemers">
+            </PersistentString>
+            <PersistentString
+               value = "redeemers.value(forKey: (Auth.auth().currentUser?.uid)!)">
+            </PersistentString>
+            <PersistentString
+               value = "snap.value">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "ViewController.(searchBarSearchButtonClicked(UISearchBar) -&gt; ()).(closure #1):ViewController.swift">
@@ -153,7 +170,15 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DetailsViewController.previewingContext(UIViewControllerPreviewing, viewControllerForLocation : CGPoint) -&gt; UIViewController?:DetailsPreviewDelegate.swift">
+         contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "mainVC">
+            </PersistentString>
+            <PersistentString
+               value = "(self.Deal?.dealID)!">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>
