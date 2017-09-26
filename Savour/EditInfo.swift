@@ -27,6 +27,7 @@ class EditInfoViewController: UIViewController {
     var tempName: String!
     var tempAddress: String!
     var tempDesc: String!
+    var keyboardShowing = false
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -39,8 +40,16 @@ class EditInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         editButton.layer.cornerRadius = 5
-    
+        cancelButton.layer.cornerRadius = 5
+        submitButton.layer.cornerRadius = 5
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         loadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
     
     func loadData(){
@@ -119,6 +128,29 @@ class EditInfoViewController: UIViewController {
             rName.borderStyle = UITextBorderStyle.none
             rAddress.borderStyle = UITextBorderStyle.none
             rDesc.backgroundColor = UIColor.white
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification){
+        if !keyboardShowing{
+            keyboardShowing = true
+            rImg.isHidden = true
+            self.navigationController?.navigationBar.isHidden = true
+            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+                if self.view.frame.origin.y == 0{
+                    self.view.frame.origin.y -= rImg.frame.height + (self.navigationController?.navigationBar.frame.height)!
+                }
+            }
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification){
+        keyboardShowing = false
+        rImg.isHidden = false
+        self.navigationController?.navigationBar.isHidden = false
+        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += rImg.frame.height + (self.navigationController?.navigationBar.frame.height)!
+            }
+        }
     }
     
    

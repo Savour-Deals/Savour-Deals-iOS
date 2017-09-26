@@ -117,7 +117,6 @@ class SignUpViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
         self.doneLoading()
-
     }
     
    

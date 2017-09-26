@@ -205,7 +205,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 let redeemedSnap = snapshot.childSnapshot(forPath: "Redeemed")
                 for i in 0 ... (self.unfilteredDeals.count-1){
                     if redeemedSnap.childSnapshot(forPath: self.unfilteredDeals[i].dealID!).hasChild((Auth.auth().currentUser?.uid)!){
+                        let snap = redeemedSnap.childSnapshot(forPath: self.unfilteredDeals[i].dealID!)
+                        let redeemers = snap.value as! NSDictionary
                         self.unfilteredDeals[i].redeemed = true
+                        let timeString = redeemers.value(forKey: (Auth.auth().currentUser?.uid)!) as! String
+                        self.unfilteredDeals[i].redeemedTime = Double(timeString)
                     }
                     else{
                         self.unfilteredDeals[i].redeemed = false
@@ -213,6 +217,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     let deal = self.unfilteredDeals[i]
                     if favorites[deal.dealID!] != nil{
                         favorites[deal.dealID!]?.redeemed = deal.redeemed
+                        favorites[deal.dealID!]?.redeemedTime = deal.redeemedTime
                     }
                 }
             }

@@ -74,6 +74,7 @@ class DealViewController: UIViewController {
             self.redeem.backgroundColor = UIColor.red
             self.redeem.setTitle("Already Redeemed!", for: .normal)
             self.redeem.alpha = 0.6
+            runTimer()
         }
         else{
             pulsator.start()
@@ -135,7 +136,6 @@ class DealViewController: UIViewController {
                 var userRedemption = Dictionary<String, String>()
                 userRedemption[uID!] = String(currTime)
                 ref.setValue(userRedemption)
-                
                 view?.frame = self.img.frame
                 view?.center = CGPoint(x: self.img.bounds.midX,
                                        y: self.img.bounds.midY);
@@ -151,9 +151,13 @@ class DealViewController: UIViewController {
                 self.redeem.alpha = 0.6
                 self.pulsator.stop()
                 mainVC?.filteredDeals[self.index].redeemed = true
+                mainVC?.filteredDeals[self.index].redeemedTime = currTime
+                self.Deal?.redeemedTime = currTime
+                self.Deal?.redeemed = true
                 if favorites[(mainVC?.filteredDeals[self.index].dealID)!] != nil{
                     favorites.removeValue(forKey: (mainVC?.filteredDeals[self.index].dealID)!)
                 }
+                self.runTimer()
             }
             alert.addAction(cancelAction)
             alert.addAction(approveAction)
@@ -170,9 +174,10 @@ class DealViewController: UIViewController {
     }
     
     @objc func updateTimer() {
-        seconds += 1     //This will decrement(count down)the seconds.
-        timerLabel.text = timeString(time: TimeInterval(seconds)) //This will update the label.
-        if seconds >= 3600 {
+        let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
+        
+        timerLabel.text = timeString(time: timeSince) //This will update the label.
+        if (timeSince) > 3600 {
             timerLabel.text = "Reedeemed over an hour ago"
             timer.invalidate()
         }
