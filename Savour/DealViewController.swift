@@ -39,10 +39,10 @@ class DealViewController: UIViewController {
     @IBOutlet var DealView: UIView!
     var newImg: UIImage!
     
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
     @IBAction func backSwipe(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -59,13 +59,16 @@ class DealViewController: UIViewController {
             NSLayoutConstraint.activate([verticalSpace])
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = Deal?.restrauntName
         if (Deal?.redeemed)!{
             let view = self.redeemedView
             view?.frame = self.img.frame
             view?.center = CGPoint(x: self.img.bounds.midX,
-                                   y: self.img.bounds.midY);
+                                   y: self.img.bounds.midY)
+            view?.layer.cornerRadius = self.img.frame.width / 2
             self.img.addSubview(view!)
             self.redeem.isEnabled = false
             self.redeem.backgroundColor = UIColor.red
@@ -79,15 +82,16 @@ class DealViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         SetupUI()
-        if (Deal?.redeemed)!{
-            
-        }
-        else {
+        if !(Deal?.redeemed)!{
             if !pulsator.isPulsating {
                 pulsator.start()
             }
         }
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        pulsator.stop()
     }
     
     func SetupUI(){
@@ -105,19 +109,16 @@ class DealViewController: UIViewController {
         pulsator.numPulse = 4
         pulsator.radius = 230
         pulsator.backgroundColor = redeem.backgroundColor?.cgColor
-
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RestaurantDetails" {
             let vc = segue.destination as! DetailsViewController
             vc.Deal = Deal
-            
         }
-
     }
     
-    @IBAction func authenticatePressed(_ sender: Any) {        let alert = UIAlertController(title: "Notice!", message: "You must use the Coupon on the day that you redeem it! By selecting Redeem below you aknowledge that you understand the discount must be used today. \n\nIf you do not want to use it today, but intend to use another day, simply favorite the discount and it will be saved under your Starred section. \n\nBe aware that even if you star a discount you must still redeem it and use it before the expiry time.", preferredStyle: .alert)
+    @IBAction func authenticatePressed(_ sender: Any) {        let alert = UIAlertController(title: "Notice!", message: "You must use the coupon on the day that you redeem it! By selecting Redeem below you aknowledge that you understand the discount must be used today. \n\nIf you do not want to use it today, but intend to use another day, simply favorite the discount and it will be saved under your Starred section. \n\nBe aware that even if you star a discount you must still redeem it and use it before the expiry time.", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (alert: UIAlertAction!) -> Void in
             
         }
@@ -154,26 +155,20 @@ class DealViewController: UIViewController {
                     favorites.removeValue(forKey: (mainVC?.filteredDeals[self.index].dealID)!)
                 }
             }
-            
             alert.addAction(cancelAction)
             alert.addAction(approveAction)
-            
-            
             self.present(alert, animated: true, completion:nil)
-
-          
         }
-        
         alert.addAction(cancelAction)
         alert.addAction(approveAction)
         present(alert, animated: true, completion:nil)
-        
     }
     
     //Timer functions
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
     }
+    
     @objc func updateTimer() {
         seconds += 1     //This will decrement(count down)the seconds.
         timerLabel.text = timeString(time: TimeInterval(seconds)) //This will update the label.
@@ -182,12 +177,11 @@ class DealViewController: UIViewController {
             timer.invalidate()
         }
     }
+    
     func timeString(time:TimeInterval)->String{
         let hours = Int(time) / 3600
         let minutes = Int(time) / 60 % 60
         let seconds = Int(time) % 60
         return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
     }
-
-
 }

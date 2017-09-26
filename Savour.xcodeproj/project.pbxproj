@@ -32,6 +32,8 @@
 		83AD05E31F744EF0001B780E /* VendorHome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83AD05E21F744EF0001B780E /* VendorHome.storyboard */; };
 		83BA94861F648B3E00165064 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA94851F648B3D00165064 /* MenuViewController.swift */; };
 		83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA94891F64C3D800165064 /* AccountCell.swift */; };
+		83DBBE391F7989CC007B58DD /* EditInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DBBE381F7989CC007B58DD /* EditInfo.swift */; };
+		83DBBE3B1F7AC872007B58DD /* VendorHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DBBE3A1F7AC872007B58DD /* VendorHomeViewController.swift */; };
 		83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
 /* End PBXBuildFile section */
@@ -66,6 +68,8 @@
 		83BA94851F648B3D00165064 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		83BA94891F64C3D800165064 /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
 		83DBBE371F747945007B58DD /* leveldb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = leveldb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		83DBBE381F7989CC007B58DD /* EditInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditInfo.swift; sourceTree = "<group>"; };
+		83DBBE3A1F7AC872007B58DD /* VendorHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorHomeViewController.swift; sourceTree = "<group>"; };
 		83DDDBB41F4157EC00B14FEB /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		83DDDBB91F428CB100B14FEB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		9F008C2ED196726BDF0D648B /* Pods_Savour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,6 +178,8 @@
 			isa = PBXGroup;
 			children = (
 				83AD05E21F744EF0001B780E /* VendorHome.storyboard */,
+				83DBBE3A1F7AC872007B58DD /* VendorHomeViewController.swift */,
+				83DBBE381F7989CC007B58DD /* EditInfo.swift */,
 			);
 			name = VendorPortal;
 			sourceTree = "<group>";
@@ -364,7 +370,9 @@
 				83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */,
 				83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */,
 				83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */,
+				83DBBE391F7989CC007B58DD /* EditInfo.swift in Sources */,
 				83446AAD1F3C1D4200CBE73E /* DetailsViewController.swift in Sources */,
+				83DBBE3B1F7AC872007B58DD /* VendorHomeViewController.swift in Sources */,
 				833B25CB1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -23,8 +23,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g2z-lR-J3D">
-                                <rect key="frame" x="0.0" y="634" width="375" height="33"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g2z-lR-J3D">
+                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                                 <color key="backgroundColor" red="0.28488636016845703" green="0.66983324289321899" blue="0.6656947135925293" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="hD5-0H-bdz"/>
@@ -37,8 +37,8 @@
                                     <action selector="authenticatePressed:" destination="U9a-dB-aq3" eventType="touchUpInside" id="6L1-pz-hNa"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YrQ-GR-Dun">
-                                <rect key="frame" x="0.0" y="601" width="375" height="33"/>
+                            <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YrQ-GR-Dun">
+                                <rect key="frame" x="0.0" y="567" width="375" height="50"/>
                                 <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="mIR-ha-yJR"/>
@@ -51,37 +51,37 @@
                                     <segue destination="h99-h6-GPh" kind="show" identifier="RestaurantDetails" id="onn-Si-JqZ"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zhn-Qz-hBb">
-                                <rect key="frame" x="0.0" y="20" width="375" height="581"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zhn-Qz-hBb">
+                                <rect key="frame" x="0.0" y="20" width="375" height="547"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hub-RY-SRs">
-                                        <rect key="frame" x="187" y="291" width="100" height="100"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hub-RY-SRs">
+                                        <rect key="frame" x="187" y="274" width="100" height="100"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="4e6-zO-WNw"/>
                                             <constraint firstAttribute="width" constant="100" id="qcO-yM-HXi"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-dk-vcz">
-                                        <rect key="frame" x="87" y="190" width="200" height="200"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-dk-vcz">
+                                        <rect key="frame" x="87" y="173" width="200" height="200"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="c50-Gn-ufj"/>
                                             <constraint firstAttribute="height" constant="200" id="ghU-ss-P3I"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Deal " textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPP-Jv-J2f">
-                                        <rect key="frame" x="10" y="140" width="355" height="30"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal " textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPP-Jv-J2f">
+                                        <rect key="frame" x="10" y="123" width="355" height="30"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="This deal is subject to vendor approval." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yC6-8d-Z5q">
-                                        <rect key="frame" x="0.0" y="555" width="375" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This deal is subject to vendor approval." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yC6-8d-Z5q">
+                                        <rect key="frame" x="0.0" y="521" width="375" height="16"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-v9-jhB">
-                                        <rect key="frame" x="187" y="456" width="0.0" height="27"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-v9-jhB">
+                                        <rect key="frame" x="187" y="422" width="0.0" height="27"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="27" id="gfY-fd-1vU"/>
                                         </constraints>
@@ -125,6 +125,7 @@
                             <constraint firstItem="SoG-GN-DXb" firstAttribute="trailing" secondItem="g2z-lR-J3D" secondAttribute="trailing" id="Wcg-jZ-9g5"/>
                             <constraint firstItem="g2z-lR-J3D" firstAttribute="centerX" secondItem="SoG-GN-DXb" secondAttribute="centerX" id="r2S-fb-wkM"/>
                             <constraint firstItem="zhn-Qz-hBb" firstAttribute="leading" secondItem="SoG-GN-DXb" secondAttribute="leading" id="sAd-NW-Rea"/>
+                            <constraint firstItem="g2z-lR-J3D" firstAttribute="bottom" secondItem="SoG-GN-DXb" secondAttribute="bottom" id="t8Q-Hn-sFI"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="SoG-GN-DXb"/>
                     </view>
