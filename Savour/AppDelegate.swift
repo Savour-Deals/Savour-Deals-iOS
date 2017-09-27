@@ -26,7 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         Database.database().isPersistenceEnabled = true
-        
+        UINavigationBar.appearance().barStyle = .blackOpaque
+
         //Setup Searchbar UI
         UISearchBar.appearance().barTintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         //UISearchBar.appearance().tintColor = .white

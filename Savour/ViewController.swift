@@ -32,7 +32,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var DealsTable: UITableView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent    
+        return .lightContent
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -68,7 +68,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         ref.keepSynced(true)
         DealsTable.delegate = self
         GetFavs()
-        loadData(sender: "main")
         //Check if forcetouch is available
         if traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: self.DealsTable)
@@ -101,6 +100,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewWillAppear(_ animated: Bool) {
         ref = Database.database().reference()
+        self.title = ""
         UIApplication.shared.statusBarStyle = .lightContent
         let user = Auth.auth().currentUser
         if user != nil {
@@ -118,8 +118,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         self.setupUI()
                     }
                 }
-                
             })
+            //unfilteredDeals.removeAll()
+            refreshData("main")
         }
         else {
             // No user is signed in.
@@ -172,7 +173,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                             }
                             self.unfilteredDeals.append(temp)
                         }
-
                         else if sender == "favs" {
                             if self.FavdealIDs[temp.dealID!] != nil {
                                 favorites[temp.dealID!] = temp
@@ -189,12 +189,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
                 self.loadRedeemed()
-                
-
             }){ (error) in
                 print(error.localizedDescription)
             }
-            
         }
     }
    

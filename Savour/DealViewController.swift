@@ -28,7 +28,8 @@ class DealViewController: UIViewController {
     var timer = Timer()
     var isTimerRunning = false
     var timerStartTime: Int!
-    
+    weak var shapeLayer: CAShapeLayer?
+
     
     @IBOutlet var redeemedView: UIView!
     @IBOutlet weak var redeem: UIButton!
@@ -58,23 +59,18 @@ class DealViewController: UIViewController {
             // activate the constraint
             NSLayoutConstraint.activate([verticalSpace])
         }
+    
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = Deal?.restrauntName
         if (Deal?.redeemed)!{
-            let view = self.redeemedView
-            view?.frame = self.img.frame
-            view?.center = CGPoint(x: self.img.bounds.midX,
-                                   y: self.img.bounds.midY)
-            view?.layer.cornerRadius = self.img.frame.width / 2
-            self.img.addSubview(view!)
             self.redeem.isEnabled = false
             self.redeem.backgroundColor = UIColor.red
             self.redeem.setTitle("Already Redeemed!", for: .normal)
             self.redeem.alpha = 0.6
-            runTimer()
+            
         }
         else{
             pulsator.start()
@@ -88,6 +84,19 @@ class DealViewController: UIViewController {
                 pulsator.start()
             }
         }
+        else{
+            if timerLabel.text == ""{
+                runTimer()
+                if timerLabel.text == "Reedeemed over an hour ago"{
+                    self.drawCheck(color: UIColor.red.cgColor)
+                }
+                else {
+                    self.drawCheck(color: UIColor.green.cgColor)
+                }
+            }
+          
+        }
+    
         
     }
     
@@ -96,6 +105,7 @@ class DealViewController: UIViewController {
     }
     
     func SetupUI(){
+        self.title = Deal?.restrauntName
         if (fromDetails)!{
             moreBtn.isHidden = true
         }
@@ -114,6 +124,7 @@ class DealViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RestaurantDetails" {
+            self.title = ""
             let vc = segue.destination as! DetailsViewController
             vc.Deal = Deal
         }
@@ -129,22 +140,16 @@ class DealViewController: UIViewController {
                 
             }
             let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
-                let view = self.redeemedView
                 let ref = Database.database().reference().child("Redeemed").child((self.Deal?.dealID)!)
                 let currTime = Date().timeIntervalSince1970
                 let uID = Auth.auth().currentUser?.uid
                 var userRedemption = Dictionary<String, String>()
                 userRedemption[uID!] = String(currTime)
                 ref.setValue(userRedemption)
-                view?.frame = self.img.frame
-                view?.center = CGPoint(x: self.img.bounds.midX,
-                                       y: self.img.bounds.midY);
-                view?.alpha = 0.0
                 
-                UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.transitionCurlDown, animations: {
-                    view?.alpha = 0.9
-                },completion: nil)
-                self.img.addSubview(view!)
+                //set and draw checkmark
+                self.drawCheckFix(color: UIColor.green.cgColor)
+                
                 self.redeem.isEnabled = false
                 self.redeem.backgroundColor = UIColor.red
                 self.redeem.setTitle("Already Redeemed!", for: .normal)
@@ -168,25 +173,80 @@ class DealViewController: UIViewController {
         present(alert, animated: true, completion:nil)
     }
     
+    
+    
     //Timer functions
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
+        let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
+        timerLabel.text = timeString(time: timeSince) //This will update the label
+        if (timeSince) > 3600 {
+            timerLabel.text = "Reedeemed over an hour ago"
+            self.shapeLayer?.strokeColor = UIColor.red.cgColor
+            timer.invalidate()
+        }
     }
+    
+    func drawCheck(color: CGColor){
+        //set and draw checkmark
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: self.img.frame.origin.x - 60, y: self.img.frame.origin.y - 60))
+        path.addLine(to: CGPoint(x: self.img.frame.origin.x , y: self.img.frame.origin.y + 10))
+        path.addLine(to: CGPoint(x: self.img.frame.origin.x + 80, y: self.img.frame.origin.y - 140))
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.fillColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor
+        shapeLayer.strokeColor = color
+        shapeLayer.lineWidth = 10
+        shapeLayer.path = path.cgPath
+        // animate it
+        self.img.layer.addSublayer(shapeLayer)
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.fromValue = 0
+        animation.duration = 1
+        shapeLayer.add(animation, forKey: "MyAnimation")
+        
+        // save shape layer
+        self.shapeLayer = shapeLayer
+        self.img.alpha = 0.6
+    }
+    
+    func drawCheckFix(color: CGColor){
+        //set and draw checkmark - This fixes problem with drawing initially after redemption
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: self.img.frame.origin.x - 80, y: self.img.frame.origin.y - 60))
+        path.addLine(to: CGPoint(x: self.img.frame.origin.x-20, y: self.img.frame.origin.y))
+        path.addLine(to: CGPoint(x: self.img.frame.origin.x + 60, y: self.img.frame.origin.y - 140))
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.fillColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor
+        shapeLayer.strokeColor = color
+        shapeLayer.lineWidth = 10
+        shapeLayer.path = path.cgPath
+        // animate it
+        self.img.layer.addSublayer(shapeLayer)
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.fromValue = 0
+        animation.duration = 1
+        shapeLayer.add(animation, forKey: "MyAnimation")
+        
+        // save shape layer
+        self.shapeLayer = shapeLayer
+        self.img.alpha = 0.6
+    }
+
     
     @objc func updateTimer() {
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
-        
         timerLabel.text = timeString(time: timeSince) //This will update the label.
         if (timeSince) > 3600 {
             timerLabel.text = "Reedeemed over an hour ago"
+            self.shapeLayer?.strokeColor = UIColor.red.cgColor
             timer.invalidate()
         }
     }
     
     func timeString(time:TimeInterval)->String{
-        let hours = Int(time) / 3600
         let minutes = Int(time) / 60 % 60
         let seconds = Int(time) % 60
-        return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+        return String(format:"Redeemed %02i minutes %02i seconds ago", minutes, seconds)
     }
 }

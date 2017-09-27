@@ -81,11 +81,11 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-v9-jhB">
-                                        <rect key="frame" x="187" y="422" width="0.0" height="27"/>
+                                        <rect key="frame" x="187" y="484" width="0.0" height="27"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="27" id="gfY-fd-1vU"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -102,7 +102,7 @@
                                     <constraint firstAttribute="trailing" secondItem="yC6-8d-Z5q" secondAttribute="trailing" id="SwG-v0-RK6"/>
                                     <constraint firstItem="qlh-dk-vcz" firstAttribute="centerY" secondItem="zhn-Qz-hBb" secondAttribute="centerY" id="Uu9-oa-zuu"/>
                                     <constraint firstItem="hub-RY-SRs" firstAttribute="leading" secondItem="qlh-dk-vcz" secondAttribute="trailing" constant="-100" id="YKf-rm-oni"/>
-                                    <constraint firstItem="yC6-8d-Z5q" firstAttribute="top" secondItem="KvV-v9-jhB" secondAttribute="bottom" constant="72" id="hro-I2-wBh"/>
+                                    <constraint firstItem="yC6-8d-Z5q" firstAttribute="top" secondItem="KvV-v9-jhB" secondAttribute="bottom" constant="10" id="hro-I2-wBh"/>
                                     <constraint firstAttribute="trailing" secondItem="dPP-Jv-J2f" secondAttribute="trailing" constant="10" id="mLT-hN-AbG"/>
                                     <constraint firstItem="qlh-dk-vcz" firstAttribute="centerX" secondItem="zhn-Qz-hBb" secondAttribute="centerX" id="pwV-dj-iC4"/>
                                 </constraints>
