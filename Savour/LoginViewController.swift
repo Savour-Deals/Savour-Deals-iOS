@@ -12,12 +12,6 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 
 class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
-    /**
-     Sent to the delegate when the button was used to logout.
-     - Parameter loginButton: The button that was clicked.
-     */
-
-
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
 
@@ -28,7 +22,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var SignUpButton: UIButton!
     @IBOutlet weak var FBLoginButton: FBSDKLoginButton!
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
-    
+    var keyboardShowing = false
     @IBOutlet weak var LoginLabel: UILabel!
     @IBOutlet weak var LoginView: UIView!
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -48,6 +42,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             ref = Database.database().reference()
             FBSDKLoginManager().logOut()
             FBLoginButton.delegate = self
+            NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         }
        
     }
@@ -185,6 +181,30 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         self.performSegue(withIdentifier: "MainS", sender: self)
         self.endLoggingin()
     }
+    }
+    @objc func keyboardWillShow(notification: NSNotification){
+        if !keyboardShowing{
+            keyboardShowing = true
+            //self.navigationController?.navigationBar.isHidden = true
+            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+                if self.view.frame.origin.y == 0{
+                    let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+                    let keyboardHeight = keyboardRectValue?.height
+                    self.view.frame.origin.y -= keyboardHeight!
+                }
+            }
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification){
+        keyboardShowing = false
+        //self.navigationController?.navigationBar.isHidden = false
+        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if self.view.frame.origin.y != 0{
+                let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+                let keyboardHeight = keyboardRectValue?.height
+                self.view.frame.origin.y += keyboardHeight!
+            }
+        }
     }
 }
 

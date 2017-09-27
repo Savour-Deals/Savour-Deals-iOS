@@ -12,9 +12,10 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class EditInfoViewController: UIViewController {
+class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
+    var storageRef: StorageReference!
     var id: String!
     var menu: String!
     @IBOutlet weak var rImg: UIImageView!
@@ -28,6 +29,7 @@ class EditInfoViewController: UIViewController {
     var tempAddress: String!
     var tempDesc: String!
     var keyboardShowing = false
+    let imagePicker = UIImagePickerController()
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -39,12 +41,14 @@ class EditInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        storageRef = StorageReference()
         editButton.layer.cornerRadius = 5
         cancelButton.layer.cornerRadius = 5
         submitButton.layer.cornerRadius = 5
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         loadData()
+        imagePicker.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -66,9 +70,9 @@ class EditInfoViewController: UIViewController {
             let photo = value?["Photo"] as? String ?? ""
             // Reference to an image file in Firebase Storage
             let storage = Storage.storage()
-            let storageref = storage.reference()
+            let storageref = storage.reference(forURL: photo)
             // Reference to an image file in Firebase Storage
-            let reference = storageref.child("rPhotos/" + photo)
+            let reference = storageref
             
             // UIImageView in your ViewController
             let imageView: UIImageView = self.rImg
@@ -153,5 +157,66 @@ class EditInfoViewController: UIViewController {
         }
     }
     
-   
+    @IBAction func selectNewImgPressed(_ sender: Any) {
+        imagePicker.allowsEditing = false
+        imagePicker.sourceType = .photoLibrary
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+  
+    private func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            rImg.contentMode = .scaleAspectFit
+            rImg.image = pickedImage
+        }
+        dismiss(animated: true, completion: nil)
+        var data = NSData()
+        data = UIImageJPEGRepresentation(rImg.image!, 0.8)! as NSData
+        // set upload path
+        let filePath = "\(Auth.auth().currentUser!.uid)/Photos/\("restrauntPhoto")"
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+        self.storageRef.child(filePath).putData(data as Data, metadata: metaData){(metaData,error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }else{
+                //store downloadURL
+                let downloadURL = metaData!.downloadURL()!.absoluteString
+                //store downloadURL at database
+                self.ref.child("Restaurants").child(Auth.auth().currentUser!.uid).updateChildValues(["Photo": downloadURL])
+            }
+        }
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            rImg.contentMode = .scaleToFill
+            rImg.image = image
+        }
+        dismiss(animated: true, completion: nil)
+        var data = NSData()
+        data = UIImageJPEGRepresentation(rImg.image!, 0.8)! as NSData
+        // set upload path
+        let filePath = "Restaurants/\(Auth.auth().currentUser!.uid)/Photos/\("restrauntPhoto")"
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+        self.storageRef.child(filePath).putData(data as Data, metadata: metaData){(metaData,error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }else{
+                //store downloadURL
+                let downloadURL = metaData!.downloadURL()!.absoluteString
+                //store downloadURL at database
+                self.ref.child("Restaurants").child(Auth.auth().currentUser!.uid).updateChildValues(["Photo": downloadURL])
+            }
+        }
+    }
+
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
 }
