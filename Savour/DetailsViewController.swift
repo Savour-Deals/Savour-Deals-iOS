@@ -32,6 +32,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     var menu: String!
     var request: URLRequest?
 
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +48,10 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         DealsTable.rowHeight = UITableViewAutomaticDimension
         DealsTable.estimatedRowHeight = 45
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.title = Deal?.restrauntName
     }
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = true
@@ -150,6 +155,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         VC.newImg = rImg.image
         VC.fromDetails = true
         VC.index = indices[indexPath.row]
+        self.title = ""
         self.navigationController?.pushViewController(VC, animated: true)
     }
   
@@ -185,6 +191,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.title = ""
         if segue.identifier == "menu" {
             if let pdfVC = segue.destination as? MenuViewController {
                 pdfVC.title = self.rName.text! + " Menu"
@@ -192,6 +199,11 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
 
             }
         }
+    }
+    
+    func preferredStatusBarStyle() -> UIStatusBarStyle {
+        
+        return UIStatusBarStyle.lightContent
     }
 
 }

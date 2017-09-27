@@ -79,6 +79,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "DealViewController.viewWillAppear(_:):DealViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "timerLabel.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "DealViewController.updateTimer():DealViewController.swift">
          <PersistentStrings>
             <PersistentString

@@ -298,11 +298,11 @@
             <objects>
                 <viewController id="Pjj-6M-8kj" customClass="ViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UUF-li-GGe">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="143" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Pvf-em-B2G">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="143" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pvf-em-B2G">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -368,40 +368,22 @@
                             <constraint firstItem="Pvf-em-B2G" firstAttribute="leading" secondItem="bLe-Za-ecQ" secondAttribute="leading" id="9Jr-JB-4yH"/>
                             <constraint firstItem="bLe-Za-ecQ" firstAttribute="trailing" secondItem="Pvf-em-B2G" secondAttribute="trailing" id="GcU-S9-e9V"/>
                             <constraint firstAttribute="bottomMargin" secondItem="Pvf-em-B2G" secondAttribute="bottom" id="Qa7-CT-8MG"/>
-                            <constraint firstItem="Pvf-em-B2G" firstAttribute="top" secondItem="bLe-Za-ecQ" secondAttribute="top" constant="-64" id="ikL-Dh-oHj"/>
+                            <constraint firstItem="bLe-Za-ecQ" firstAttribute="top" secondItem="Pvf-em-B2G" secondAttribute="top" id="hAj-c3-JFd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bLe-Za-ecQ"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="eJJ-AE-kGC"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="DealsTable" destination="Pvf-em-B2G" id="T1B-bO-OJc"/>
-                        <outlet property="redeemedView" destination="JGn-yR-LmH" id="7ls-4N-FTB"/>
                         <segue destination="Fle-Ct-C9b" kind="show" identifier="DealDetails" id="het-DN-Jp4"/>
                         <segue destination="xDg-UL-Y2d" kind="show" identifier="Vendor" animates="NO" id="IGF-Gw-aWr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qog-LA-tMO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view alpha="0.90000000000000002" contentMode="scaleToFill" id="JGn-yR-LmH">
-                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Redeemed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7D7-dI-sKS">
-                            <rect key="frame" x="50.5" y="46.5" width="140" height="36"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                            <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstItem="7D7-dI-sKS" firstAttribute="centerX" secondItem="JGn-yR-LmH" secondAttribute="centerX" id="PFr-Dl-ca5"/>
-                        <constraint firstItem="7D7-dI-sKS" firstAttribute="centerY" secondItem="JGn-yR-LmH" secondAttribute="centerY" id="VLH-ZZ-HVh"/>
-                    </constraints>
-                    <viewLayoutGuide key="safeArea" id="9C4-lp-U7o"/>
-                </view>
             </objects>
-            <point key="canvasLocation" x="422" y="-1057"/>
+            <point key="canvasLocation" x="421.60000000000002" y="-1057.4212893553224"/>
         </scene>
         <!--VendorHome-->
         <scene sceneID="Ogz-LZ-Qvi">

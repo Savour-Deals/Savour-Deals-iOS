@@ -20,7 +20,7 @@
         <scene sceneID="870-dM-SAT">
             <objects>
                 <viewController storyboardIdentifier="RestaurantDetails" hidesBottomBarWhenPushed="YES" id="YsH-Pc-PQ5" customClass="DetailsViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" clipsSubviews="YES" contentMode="scaleAspectFit" id="GBq-fA-UYC">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" id="GBq-fA-UYC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -29,6 +29,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="211" id="Asg-Ga-Dxn"/>
                                 </constraints>
+                                <viewLayoutGuide key="safeArea" id="hCp-Ke-58h"/>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Description" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="d89-BY-axk">
                                 <rect key="frame" x="10" y="261" width="355" height="34"/>
@@ -140,28 +141,28 @@
                             <constraint firstItem="d89-BY-axk" firstAttribute="top" secondItem="H4W-rf-jk7" secondAttribute="bottom" constant="-5" id="4UO-dU-YUs"/>
                             <constraint firstItem="Zun-OQ-Chs" firstAttribute="height" secondItem="t2g-oo-vU5" secondAttribute="height" id="70x-A6-UZi"/>
                             <constraint firstItem="H4W-rf-jk7" firstAttribute="top" secondItem="zNp-Yt-Dy1" secondAttribute="bottom" constant="5" id="7JD-9i-VhM"/>
-                            <constraint firstItem="d89-BY-axk" firstAttribute="leading" secondItem="QR5-92-f80" secondAttribute="leading" constant="10" id="9Ug-ca-4BB"/>
-                            <constraint firstItem="wMY-7U-MA6" firstAttribute="leading" secondItem="QR5-92-f80" secondAttribute="leading" id="9ck-bm-997"/>
+                            <constraint firstItem="d89-BY-axk" firstAttribute="leading" secondItem="GBq-fA-UYC" secondAttribute="leading" constant="10" id="9Ug-ca-4BB"/>
+                            <constraint firstItem="wMY-7U-MA6" firstAttribute="leading" secondItem="GBq-fA-UYC" secondAttribute="leading" id="9ck-bm-997"/>
                             <constraint firstItem="rNk-hc-PcT" firstAttribute="top" secondItem="t2g-oo-vU5" secondAttribute="bottom" constant="10" id="AIx-xe-sv2"/>
                             <constraint firstItem="H4W-rf-jk7" firstAttribute="centerX" secondItem="zNp-Yt-Dy1" secondAttribute="centerX" id="AkR-Ro-mEd"/>
-                            <constraint firstItem="zNp-Yt-Dy1" firstAttribute="top" secondItem="QR5-92-f80" secondAttribute="top" id="ExT-TC-HCK"/>
-                            <constraint firstItem="t2g-oo-vU5" firstAttribute="leading" secondItem="QR5-92-f80" secondAttribute="leading" constant="2" id="HBb-8j-kkf"/>
+                            <constraint firstItem="t2g-oo-vU5" firstAttribute="leading" secondItem="GBq-fA-UYC" secondAttribute="leading" constant="2" id="HBb-8j-kkf"/>
                             <constraint firstItem="Zun-OQ-Chs" firstAttribute="width" secondItem="t2g-oo-vU5" secondAttribute="width" id="HCj-w2-6Dg"/>
                             <constraint firstItem="Zun-OQ-Chs" firstAttribute="leading" secondItem="t2g-oo-vU5" secondAttribute="trailing" constant="2" id="Ida-Pz-WTp"/>
-                            <constraint firstItem="QR5-92-f80" firstAttribute="trailing" secondItem="Zun-OQ-Chs" secondAttribute="trailing" constant="2" id="NvQ-4v-e4P"/>
-                            <constraint firstItem="zNp-Yt-Dy1" firstAttribute="leading" secondItem="QR5-92-f80" secondAttribute="leading" id="X5k-hM-YdS"/>
-                            <constraint firstAttribute="trailing" secondItem="zNp-Yt-Dy1" secondAttribute="trailing" id="Zzc-Tf-CI8"/>
+                            <constraint firstAttribute="trailing" secondItem="Zun-OQ-Chs" secondAttribute="trailing" constant="2" id="NvQ-4v-e4P"/>
+                            <constraint firstItem="zNp-Yt-Dy1" firstAttribute="leading" secondItem="ZIq-oK-kKx" secondAttribute="leading" id="TCN-iE-NHN"/>
+                            <constraint firstItem="ZIq-oK-kKx" firstAttribute="trailing" secondItem="zNp-Yt-Dy1" secondAttribute="trailing" id="Tuz-ZE-cPH"/>
                             <constraint firstItem="wMY-7U-MA6" firstAttribute="top" secondItem="rNk-hc-PcT" secondAttribute="bottom" constant="10" id="gmB-kA-bxh"/>
-                            <constraint firstItem="H4W-rf-jk7" firstAttribute="leading" secondItem="QR5-92-f80" secondAttribute="leading" constant="5" id="loe-LB-lCC"/>
-                            <constraint firstItem="QR5-92-f80" firstAttribute="trailing" secondItem="d89-BY-axk" secondAttribute="trailing" constant="10" id="mRj-xr-e22"/>
+                            <constraint firstItem="ZIq-oK-kKx" firstAttribute="top" secondItem="zNp-Yt-Dy1" secondAttribute="top" id="hDf-aR-N7j"/>
+                            <constraint firstItem="H4W-rf-jk7" firstAttribute="leading" secondItem="GBq-fA-UYC" secondAttribute="leading" constant="5" id="loe-LB-lCC"/>
+                            <constraint firstAttribute="trailing" secondItem="d89-BY-axk" secondAttribute="trailing" constant="10" id="mRj-xr-e22"/>
                             <constraint firstItem="Zun-OQ-Chs" firstAttribute="top" secondItem="t2g-oo-vU5" secondAttribute="top" id="mqP-d3-hy8"/>
-                            <constraint firstItem="QR5-92-f80" firstAttribute="bottom" secondItem="wMY-7U-MA6" secondAttribute="bottom" id="n6Y-Bj-Kbj"/>
-                            <constraint firstItem="QR5-92-f80" firstAttribute="trailing" secondItem="wMY-7U-MA6" secondAttribute="trailing" id="nQa-Nx-m8E"/>
-                            <constraint firstItem="QR5-92-f80" firstAttribute="trailing" secondItem="H4W-rf-jk7" secondAttribute="trailing" constant="5" id="o0p-wv-icT"/>
-                            <constraint firstItem="QR5-92-f80" firstAttribute="trailing" secondItem="rNk-hc-PcT" secondAttribute="trailing" constant="256" id="tKe-EQ-yF7"/>
-                            <constraint firstItem="rNk-hc-PcT" firstAttribute="leading" secondItem="QR5-92-f80" secondAttribute="leading" constant="5" id="yzc-z4-zWa"/>
+                            <constraint firstAttribute="bottom" secondItem="wMY-7U-MA6" secondAttribute="bottom" id="n6Y-Bj-Kbj"/>
+                            <constraint firstAttribute="trailing" secondItem="wMY-7U-MA6" secondAttribute="trailing" id="nQa-Nx-m8E"/>
+                            <constraint firstAttribute="trailing" secondItem="H4W-rf-jk7" secondAttribute="trailing" constant="5" id="o0p-wv-icT"/>
+                            <constraint firstAttribute="trailing" secondItem="rNk-hc-PcT" secondAttribute="trailing" constant="256" id="tKe-EQ-yF7"/>
+                            <constraint firstItem="rNk-hc-PcT" firstAttribute="leading" secondItem="GBq-fA-UYC" secondAttribute="leading" constant="5" id="yzc-z4-zWa"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="QR5-92-f80"/>
+                        <viewLayoutGuide key="safeArea" id="ZIq-oK-kKx"/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="y6d-zR-5OP" appends="YES" id="FOA-hh-fQh"/>
                         </connections>
