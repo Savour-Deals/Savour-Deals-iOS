@@ -76,9 +76,9 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 let photo = value?["Photo"] as? String ?? ""
                 // Reference to an image file in Firebase Storage
                 let storage = Storage.storage()
-                let storageref = storage.reference()
+                let storageref = storage.reference(forURL: photo)
                 // Reference to an image file in Firebase Storage
-                let reference = storageref.child("rPhotos/" + photo)
+                let reference = storageref
                 
                 // UIImageView in your ViewController
                 let imageView: UIImageView = self.rImg
@@ -135,7 +135,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
                 cell.Countdown.text = "Starts in " + String(describing: Components.day!) + "days"
             }
-            if favorites[deal.dealID!] != nil{
+            if favorites[deal.dealID!] != nil{ 
                 cell.FavButton.setTitle("Unfavorite", for: .normal )
             }
             else{
@@ -173,22 +173,8 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
 
     @IBAction func openMenu(_ sender: Any) {
         menuButton.isEnabled = false
-        // Create a reference to the file you want to download
-        let PDFRef = storage.reference(withPath: "Menus/" + menu)
-        // Fetch the download URL
-        PDFRef.downloadURL { url, error in
-            if error != nil {
-                // Handle any errors
-            } else {
-                
-                self.request = URLRequest(url: url!)
-                self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
-                self.performSegue(withIdentifier: "menu", sender: self)
-                
-            }
-        }
-
-        
+        UIApplication.shared.open(URL(string: menu)!, options: [:], completionHandler: nil)
+        menuButton.isEnabled = true
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         self.title = ""

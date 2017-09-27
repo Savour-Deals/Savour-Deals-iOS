@@ -10,6 +10,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseDatabase
 
+
 class VendorHomeViewController: UIViewController {
 
     var handle: AuthStateDidChangeListenerHandle?
@@ -42,8 +43,28 @@ class VendorHomeViewController: UIViewController {
         // [END signout]
     }
     
+    @IBAction func menuPressed(_ sender: Any) {
+        //1. Create the alert controller.
+        let alert = UIAlertController(title: "Link Menu", message: "Enter a URL to your menu", preferredStyle: .alert)
+        
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextField { (textField) in
+            textField.placeholder = "Paste Menu URL"
+        }
+        
+        // 3. Grab the value from the text field, and print it when the user clicks OK.
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            if let field = alert?.textFields?[0] {
+                let menuText = field
+                self.ref.child("Restaurants").child(self.id!).child("Menu").setValue(menuText.text)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        
+        // 4. Present the alert.
+        self.present(alert, animated: true, completion: nil)
+    }
     
-
    
 
 }

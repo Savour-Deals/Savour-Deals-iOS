@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -27,7 +28,7 @@
                             <imageView autoresizesSubviews="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zNp-Yt-Dy1">
                                 <rect key="frame" x="0.0" y="20" width="375" height="211"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="211" id="Asg-Ga-Dxn"/>
+                                    <constraint firstAttribute="width" secondItem="zNp-Yt-Dy1" secondAttribute="height" multiplier="375:211" id="6Q4-Q8-kBm"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="hCp-Ke-58h"/>
                             </imageView>
@@ -38,7 +39,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4W-rf-jk7">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4W-rf-jk7">
                                 <rect key="frame" x="5" y="236" width="365" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
                                 <nil key="textColor"/>
@@ -105,7 +106,7 @@
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Offers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rNk-hc-PcT">
-                                <rect key="frame" x="5" y="350" width="114" height="20"/>
+                                <rect key="frame" x="5" y="350" width="365" height="20"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -159,7 +160,7 @@
                             <constraint firstAttribute="bottom" secondItem="wMY-7U-MA6" secondAttribute="bottom" id="n6Y-Bj-Kbj"/>
                             <constraint firstAttribute="trailing" secondItem="wMY-7U-MA6" secondAttribute="trailing" id="nQa-Nx-m8E"/>
                             <constraint firstAttribute="trailing" secondItem="H4W-rf-jk7" secondAttribute="trailing" constant="5" id="o0p-wv-icT"/>
-                            <constraint firstAttribute="trailing" secondItem="rNk-hc-PcT" secondAttribute="trailing" constant="256" id="tKe-EQ-yF7"/>
+                            <constraint firstItem="ZIq-oK-kKx" firstAttribute="trailing" secondItem="rNk-hc-PcT" secondAttribute="trailing" constant="5" id="uS0-dY-4gC"/>
                             <constraint firstItem="rNk-hc-PcT" firstAttribute="leading" secondItem="GBq-fA-UYC" secondAttribute="leading" constant="5" id="yzc-z4-zWa"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ZIq-oK-kKx"/>
