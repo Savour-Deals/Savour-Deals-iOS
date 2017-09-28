@@ -47,7 +47,7 @@
                 <viewControllerPlaceholder storyboardName="VendorHome" id="KTa-cg-07q" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kv7-UE-mwI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="162" y="-655"/>
+            <point key="canvasLocation" x="548" y="9"/>
         </scene>
         <!--Main-->
         <scene sceneID="uG0-7V-f1X">
@@ -55,7 +55,7 @@
                 <viewControllerPlaceholder storyboardName="Main" id="B3h-fo-0gj" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0mI-Ik-SLm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="899" y="-520"/>
+            <point key="canvasLocation" x="547" y="615"/>
         </scene>
         <!--Login-->
         <scene sceneID="tne-QT-ifu">
@@ -72,7 +72,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="continue"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="continue" textContentType="email"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="foZ-Wy-xls">
                                 <rect key="frame" x="25" y="410.66666666666669" width="364" height="45"/>
@@ -204,6 +204,7 @@
                         <outlet property="LoginPassword" destination="foZ-Wy-xls" id="kPm-AZ-bjT"/>
                         <outlet property="LoginView" destination="AWa-Ba-E2q" id="yaR-c2-8ij"/>
                         <outlet property="SignUpButton" destination="0Wl-8z-U6T" id="MVB-yx-KHz"/>
+                        <outlet property="img" destination="Oq3-pT-xly" id="jxe-2x-Z01"/>
                         <outlet property="loginIndicator" destination="7md-wY-E04" id="o0b-oF-Ot3"/>
                         <segue destination="B3h-fo-0gj" kind="show" identifier="MainS" id="cpY-ps-fjg"/>
                         <segue destination="B3h-fo-0gj" kind="show" identifier="Main" animates="NO" id="5XM-XU-AuX"/>
@@ -229,13 +230,13 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="continue"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="continue" textContentType="name"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="94Q-Pp-QG0">
                                 <rect key="frame" x="25" y="410.66666666666669" width="364" height="45"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="continue" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="continue" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4b2-tq-rZE">
                                 <rect key="frame" x="25.333333333333343" y="473.66666666666663" width="364" height="44.999999999999886"/>
@@ -336,6 +337,7 @@
                         <outlet property="NameField" destination="ReI-29-vTf" id="mKl-kz-Scf"/>
                         <outlet property="PasswordField" destination="4b2-tq-rZE" id="ngf-IJ-ch7"/>
                         <outlet property="SignupButton" destination="WFf-be-ZF7" id="l6E-dE-Tt2"/>
+                        <outlet property="img" destination="a1Q-ut-G5R" id="QyL-FD-e5n"/>
                         <outlet property="loadingIndicator" destination="t61-D5-8nm" id="MiJ-xa-C9P"/>
                         <outlet property="loadingLabel" destination="9BN-PA-Pwg" id="mdg-ZH-oNS"/>
                         <outlet property="loadingView" destination="9BN-PA-Pwg" id="027-hX-DKm"/>
@@ -344,7 +346,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qq-Ej-lGI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="955" y="40"/>
+            <point key="canvasLocation" x="953" y="65"/>
         </scene>
     </scenes>
     <resources>

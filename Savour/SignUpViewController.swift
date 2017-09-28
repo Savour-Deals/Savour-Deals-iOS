@@ -12,11 +12,13 @@ import Firebase
 
 class SignUpViewController: UIViewController {
 
+    @IBOutlet weak var img: UIImageView!
     @IBOutlet weak var NameField: UITextField!
     @IBOutlet weak var EmailField: UITextField!
     @IBOutlet weak var SignupButton: UIButton!
     @IBOutlet weak var PasswordField: UITextField!
-    
+    var keyboardShowing = false
+
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loadingView: UIView!
     
@@ -32,6 +34,8 @@ class SignUpViewController: UIViewController {
         
         SignupButton.addTarget(self, action: #selector(SignupPressed), for: .touchUpInside)
         SignupButton.layer.cornerRadius = 5
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     func isLoading(){
         loadingIndicator.startAnimating()
@@ -104,8 +108,11 @@ class SignUpViewController: UIViewController {
                         }
                     }
                 }
+                
                 self.navigationController?.isNavigationBarHidden = true
                 self.performSegue(withIdentifier: "signedUp", sender: self)
+                //self.dismiss(animated: true, completion: nil)
+
 
         }
         // [END_EXCLUDE]
@@ -118,7 +125,30 @@ class SignUpViewController: UIViewController {
         }
         self.doneLoading()
     }
-    
+    @objc func keyboardWillShow(notification: NSNotification){
+        if !keyboardShowing{
+            keyboardShowing = true
+            img.isHidden = true
+            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+                if self.view.frame.origin.y == 0{
+                    let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+                    let keyboardHeight = keyboardRectValue?.height
+                    self.view.frame.origin.y -= keyboardHeight!
+                }
+            }
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification){
+        keyboardShowing = false
+        img.isHidden = false
+        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if self.view.frame.origin.y != 0{
+                let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+                let keyboardHeight = keyboardRectValue?.height
+                self.view.frame.origin.y += keyboardHeight!
+            }
+        }
+    }
    
     
 }

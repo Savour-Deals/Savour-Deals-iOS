@@ -36,6 +36,8 @@
 		83DBBE3B1F7AC872007B58DD /* VendorHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DBBE3A1F7AC872007B58DD /* VendorHomeViewController.swift */; };
 		83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
+		83EE29621F7C6DF700E89CE1 /* DealTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EE29611F7C6DF700E89CE1 /* DealTypeViewController.swift */; };
+		83EE29641F7CA09F00E89CE1 /* DiscountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EE29631F7CA09F00E89CE1 /* DiscountViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +74,8 @@
 		83DBBE3A1F7AC872007B58DD /* VendorHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorHomeViewController.swift; sourceTree = "<group>"; };
 		83DDDBB41F4157EC00B14FEB /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		83DDDBB91F428CB100B14FEB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		83EE29611F7C6DF700E89CE1 /* DealTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealTypeViewController.swift; sourceTree = "<group>"; };
+		83EE29631F7CA09F00E89CE1 /* DiscountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscountViewController.swift; sourceTree = "<group>"; };
 		9F008C2ED196726BDF0D648B /* Pods_Savour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C566E086F0130521161E075C /* Pods-Savour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -179,7 +183,9 @@
 			children = (
 				83AD05E21F744EF0001B780E /* VendorHome.storyboard */,
 				83DBBE3A1F7AC872007B58DD /* VendorHomeViewController.swift */,
+				83EE29631F7CA09F00E89CE1 /* DiscountViewController.swift */,
 				83DBBE381F7989CC007B58DD /* EditInfo.swift */,
+				83EE29611F7C6DF700E89CE1 /* DealTypeViewController.swift */,
 			);
 			name = VendorPortal;
 			sourceTree = "<group>";
@@ -362,6 +368,7 @@
 				833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */,
 				833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */,
 				8320E9811F3E213200D6A0DF /* RDealsTableViewCell.swift in Sources */,
+				83EE29641F7CA09F00E89CE1 /* DiscountViewController.swift in Sources */,
 				83BA94861F648B3E00165064 /* MenuViewController.swift in Sources */,
 				83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */,
 				834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */,
@@ -369,6 +376,7 @@
 				83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */,
 				83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */,
 				83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */,
+				83EE29621F7C6DF700E89CE1 /* DealTypeViewController.swift in Sources */,
 				83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */,
 				83DBBE391F7989CC007B58DD /* EditInfo.swift in Sources */,
 				83446AAD1F3C1D4200CBE73E /* DetailsViewController.swift in Sources */,
