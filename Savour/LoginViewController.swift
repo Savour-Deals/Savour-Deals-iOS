@@ -15,6 +15,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
 
+    @IBOutlet weak var img: UIImageView!
     @IBOutlet weak var Const: UIView!
     @IBOutlet weak var LoginEmail: UITextField!
     @IBOutlet weak var LoginPassword: UITextField!
@@ -112,7 +113,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     }
                     self.ref.child("Users").child(user!.uid).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
                         // Get user value
-                        let type = snapshot.value as! String
+                        let type = snapshot.value as? String ?? ""
                         if type == "Vendor"{
                             self.performSegue(withIdentifier: "Vendor", sender: self)
                         }
@@ -175,17 +176,24 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 }
             })
 
+            self.ref.child("Users").child(user!.uid).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                let type = snapshot.value as? String ?? ""
+                if type == "Vendor"{
+                    self.performSegue(withIdentifier: "Vendor", sender: self)
+                }
+                else{
+                    self.performSegue(withIdentifier: "MainS", sender: self)
+                }
+            })
             
-            // User is signed in
-            
-        self.performSegue(withIdentifier: "MainS", sender: self)
         self.endLoggingin()
     }
     }
     @objc func keyboardWillShow(notification: NSNotification){
         if !keyboardShowing{
             keyboardShowing = true
-            //self.navigationController?.navigationBar.isHidden = true
+            img.isHidden = true
             if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 if self.view.frame.origin.y == 0{
                     let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
@@ -197,7 +205,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     @objc func keyboardWillHide(notification: NSNotification){
         keyboardShowing = false
-        //self.navigationController?.navigationBar.isHidden = false
+        img.isHidden = false
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y != 0{
                 let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue

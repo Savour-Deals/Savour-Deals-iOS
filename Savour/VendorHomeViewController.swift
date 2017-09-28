@@ -68,3 +68,9 @@ class VendorHomeViewController: UIViewController {
    
 
 }
+
+class CustomNavBar: UINavigationController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+}
