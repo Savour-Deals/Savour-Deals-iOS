@@ -30,6 +30,10 @@ class VendorHomeViewController: UIViewController {
             self.navigationItem.title = value?["Name"] as? String ?? ""
         })
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+            setupUI()
+    }
 
     @IBAction func LogoutPressed(_ sender: Any) {
         // [START signout]
@@ -41,6 +45,13 @@ class VendorHomeViewController: UIViewController {
             print ("Error signing out: %@", signOutError)
         }
         // [END signout]
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "newDeal" {
+            let VC = segue.destination as! CustomNavBar
+                VC.resName = self.navigationItem.title
+        }
     }
     
     @IBAction func menuPressed(_ sender: Any) {
@@ -70,6 +81,7 @@ class VendorHomeViewController: UIViewController {
 }
 
 class CustomNavBar: UINavigationController {
+    var resName: String!
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .default
     }

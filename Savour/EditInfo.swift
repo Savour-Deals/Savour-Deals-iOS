@@ -49,6 +49,7 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         loadData()
         imagePicker.delegate = self
+        self.imagePicker.allowsEditing = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -166,10 +167,17 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
     
   
     private func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+        
+        if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage
+        {
             rImg.contentMode = .scaleAspectFit
             rImg.image = pickedImage
         }
+        else if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            rImg.contentMode = .scaleAspectFit
+            rImg.image = pickedImage
+        }
+
         dismiss(animated: true, completion: nil)
         var data = NSData()
         data = UIImageJPEGRepresentation(rImg.image!, 0.8)! as NSData
