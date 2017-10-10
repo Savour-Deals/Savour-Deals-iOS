@@ -79,9 +79,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     func isLoggingin(){
-        
         loginIndicator.startAnimating()
-        
         LoginView.isHidden = false
         LoginLabel.isHidden = false
         FBLoginButton.isEnabled = false
@@ -100,7 +98,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
    
 
     @IBAction func LoginButtonPressed(_ sender: Any) {
+        FBLoginButton.isEnabled = false
+        LoginButton.isEnabled = false
+        SignUpButton.isEnabled = false
         isLoggingin()
+        
         if let email = self.LoginEmail.text, let password = self.LoginPassword.text {
                 // [START headless_email_auth]
                 Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
@@ -116,9 +118,13 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                         let type = snapshot.value as? String ?? ""
                         if type == "Vendor"{
                             self.performSegue(withIdentifier: "Vendor", sender: self)
+                            self.endLoggingin()
+
                         }
                         else{
                             self.performSegue(withIdentifier: "MainS", sender: self)
+                            self.endLoggingin()
+
                         }
                     })
                 }
@@ -127,20 +133,22 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 // [END headless_email_auth]
         else {
             loginIndicator.stopAnimating()
-
+            self.endLoggingin()
             let alert = UIAlertController(title: "Alert", message: "email/password can't be empty", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
-        endLoggingin()
     }
 
- 
+    @IBAction func FBLoginPressed(_ sender: Any) {
+       
+    }
+    
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         print("Did log out of facebook")
     }
     
-    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!){
         isLoggingin()
         var data:[String:AnyObject]!
         if error != nil {
@@ -181,15 +189,27 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 let type = snapshot.value as? String ?? ""
                 if type == "Vendor"{
                     self.performSegue(withIdentifier: "Vendor", sender: self)
+                    self.endLoggingin()
                 }
                 else{
-                    self.performSegue(withIdentifier: "MainS", sender: self)
+                    self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
+                            let boarded = snapshot.value as? String ?? ""
+                        if boarded == "true"{
+                            self.performSegue(withIdentifier: "MainS", sender: self)
+                            self.endLoggingin()
+
+                        }
+                        else{
+                            self.performSegue(withIdentifier: "tutorial", sender: self)
+                            self.endLoggingin()
+
+                        }
+                    })
                 }
             })
-            
-        self.endLoggingin()
+        }
     }
-    }
+                
     @objc func keyboardWillShow(notification: NSNotification){
         if !keyboardShowing{
             keyboardShowing = true

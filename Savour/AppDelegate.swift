@@ -25,14 +25,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        Database.database().isPersistenceEnabled = true
+        //Database.database().isPersistenceEnabled = true
         UINavigationBar.appearance().barStyle = .blackOpaque
 
         //Setup Searchbar UI
         UISearchBar.appearance().barTintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         //UISearchBar.appearance().tintColor = .white
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-            return true
+        handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
+        if Auth.auth().currentUser != nil {
+            // User is signed in.
+            let user = Auth.auth().currentUser
+            self.ref = Database.database().reference()
+            self.ref.child("Users").child((user?.uid)!).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                let type = snapshot.value as? String ?? ""
+                if type == "Vendor"{
+                    let storyboard = UIStoryboard(name: "VendorHome", bundle: nil)
+                    let VenVC = storyboard.instantiateViewController(withIdentifier: "VenNav") as! UINavigationController
+                    self.window!.rootViewController = VenVC
+                }
+                else{
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
+                    tabVC.selectedIndex = 0
+                    self.window!.rootViewController = tabVC
+                }
+            })
+        
+        }
+        else {
+            let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
+            let OnboardVC = storyboard.instantiateViewController(withIdentifier: "OnNav") as! UINavigationController
+            self.window!.rootViewController = OnboardVC
+
+        }
+    
+        return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

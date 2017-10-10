@@ -110,9 +110,8 @@ class SignUpViewController: UIViewController {
                 }
                 
                 self.navigationController?.isNavigationBarHidden = true
-                self.performSegue(withIdentifier: "signedUp", sender: self)
-                //self.dismiss(animated: true, completion: nil)
-
+                self.ref.child("Users").child(user!.uid).child("Onboarded").setValue("true")
+                self.performSegue(withIdentifier: "tutorial", sender: self)
 
         }
         // [END_EXCLUDE]

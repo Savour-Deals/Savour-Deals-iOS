@@ -16,6 +16,8 @@ import FirebaseStorageUI
 
 class DetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet weak var followButton: UIButton!
+    @IBOutlet weak var directionsButton: UIButton!
     @IBOutlet weak var menuButton: UIButton!
     var Deal: DealData?
     var handle: AuthStateDidChangeListenerHandle?
@@ -48,6 +50,12 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         DealsTable.rowHeight = UITableViewAutomaticDimension
         DealsTable.estimatedRowHeight = 45
+        followButton.layer.borderWidth = 1.0
+        followButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        directionsButton.layer.borderWidth = 1.0
+        directionsButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        menuButton.layer.borderWidth = 1.0
+        menuButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,32 +77,40 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         ref.child("Restaurants").child(id!).observeSingleEvent(of: .value, with: { (snapshot) in
             
             let value = snapshot.value as? NSDictionary
+            if snapshot.childSnapshot(forPath: "Followers").hasChild((Auth.auth().currentUser?.uid)!){
+                self.followButton.setTitle("Unfollow", for: .normal)
+            }
+            else{
+                self.followButton.setTitle("Follow", for: .normal)
+
+            }
                 self.menu = value?["Menu"] as? String ?? ""
                 self.rName.text = value?["Name"] as? String ?? ""
                 self.rAddress = value?["Address"] as? String ?? ""
                 self.rDesc.text = value?["Desc"] as? String ?? ""
                 let photo = value?["Photo"] as? String ?? ""
-                // Reference to an image file in Firebase Storage
-                let storage = Storage.storage()
-                let storageref = storage.reference(forURL: photo)
-                // Reference to an image file in Firebase Storage
-                let reference = storageref
-                
-                // UIImageView in your ViewController
-                let imageView: UIImageView = self.rImg
-                
-                // Placeholder image
-                let placeholderImage = UIImage(named: "placeholder.jpg")
-                
-                // Load the image using SDWebImage
-                imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
+                if photo != ""{
+                    // Reference to an image file in Firebase Storage
+                    let storage = Storage.storage()
+                    let storageref = storage.reference(forURL: photo)
+                    // Reference to an image file in Firebase Storage
+                    let reference = storageref
             
+                    // UIImageView in your ViewController
+                    let imageView: UIImageView = self.rImg
+            
+                    // Placeholder image
+                    let placeholderImage = UIImage(named: "placeholder.jpg")
+            
+                    // Load the image using SDWebImage
+                    imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
+            }
         }){ (error) in
             print(error.localizedDescription)
         }
-        for i in 0 ... ((mainVC?.unfilteredDeals.count)!-1){
-            if self.Deal?.restrauntID == mainVC?.unfilteredDeals[i].restrauntID{
-                self.Deals.append((mainVC?.unfilteredDeals[i])!)
+        for i in 0 ... (UnfilteredDeals.count-1){
+            if self.Deal?.restrauntID == UnfilteredDeals[i].restrauntID{
+                self.Deals.append((UnfilteredDeals[i]))
                 self.indices.append(i)
             }
         }
@@ -191,5 +207,25 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         
         return UIStatusBarStyle.lightContent
     }
+    
+    @IBAction func followPressed(_ sender: Any) {
+        followButton.isEnabled = false
+        if self.followButton.currentTitle == "Follow"{
+            let currTime = Date().timeIntervalSince1970
+            let uID = Auth.auth().currentUser?.uid
+            let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
+            followRef.setValue(currTime)
+            self.followButton.setTitle("Unfollow", for: .normal)
+        }
+        else{
+            let uID = Auth.auth().currentUser?.uid
+            let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
+            followRef.removeValue()
+            self.followButton.setTitle("Follow", for: .normal)
+
+        }
+        followButton.isEnabled = true
+    }
+    
 
 }

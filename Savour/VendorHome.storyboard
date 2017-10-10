@@ -13,6 +13,7 @@
     </dependencies>
     <customFonts key="customFonts">
         <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
             <string>HelveticaNeue-Bold</string>
         </array>
     </customFonts>
@@ -24,6 +25,90 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BjH-l5-jcy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="828" y="121"/>
+        </scene>
+        <!--Deals View Controller-->
+        <scene sceneID="fSK-OR-9EC">
+            <objects>
+                <viewController id="Cg9-g7-jhr" customClass="DealsViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5vU-gu-biV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FwC-tP-idR">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="dealCell" rowHeight="143" id="wS2-5r-5Wb" customClass="DealTableViewCell" customModule="Savour" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="1" width="375" height="143"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wS2-5r-5Wb" id="5dG-aQ-2lX">
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="142.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time Left for deal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qFY-8d-byY">
+                                                    <rect key="frame" x="151" y="63" width="93" height="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <color key="textColor" red="0.94432973860000002" green="0.50646102429999995" blue="0.3838719726" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Restaurant Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWm-8Y-2AL">
+                                                    <rect key="frame" x="148" y="5" width="195" height="30"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NvX-2o-EGw">
+                                                    <rect key="frame" x="148" y="40" width="113.5" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eSr-NK-z0R">
+                                                    <rect key="frame" x="0.0" y="0.0" width="143" height="143"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="eSr-NK-z0R" secondAttribute="height" multiplier="1:1" id="aFe-fy-7L9"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="qFY-8d-byY" firstAttribute="top" secondItem="NvX-2o-EGw" secondAttribute="bottom" constant="5" id="38K-jg-snj"/>
+                                                <constraint firstItem="dWm-8Y-2AL" firstAttribute="leading" secondItem="eSr-NK-z0R" secondAttribute="trailing" constant="5" id="BSb-r1-Xo4"/>
+                                                <constraint firstItem="eSr-NK-z0R" firstAttribute="leading" secondItem="5dG-aQ-2lX" secondAttribute="leading" id="DJk-Xy-BhL"/>
+                                                <constraint firstAttribute="bottom" secondItem="eSr-NK-z0R" secondAttribute="bottom" id="NAh-WT-KEc"/>
+                                                <constraint firstItem="eSr-NK-z0R" firstAttribute="top" secondItem="5dG-aQ-2lX" secondAttribute="top" id="T98-ch-KJd"/>
+                                                <constraint firstItem="NvX-2o-EGw" firstAttribute="leading" secondItem="eSr-NK-z0R" secondAttribute="trailing" constant="5" id="ZFP-NA-bFi"/>
+                                                <constraint firstItem="NvX-2o-EGw" firstAttribute="top" secondItem="dWm-8Y-2AL" secondAttribute="bottom" constant="5" id="drH-WD-dEf"/>
+                                                <constraint firstItem="dWm-8Y-2AL" firstAttribute="top" secondItem="5dG-aQ-2lX" secondAttribute="top" constant="5" id="qgG-v8-rwN"/>
+                                                <constraint firstItem="qFY-8d-byY" firstAttribute="leading" secondItem="eSr-NK-z0R" secondAttribute="trailing" constant="8" id="vrX-SY-b9B"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="Countdown" destination="qFY-8d-byY" id="2fZ-PF-AXF"/>
+                                            <outlet property="dealDesc" destination="NvX-2o-EGw" id="q2g-jQ-KnW"/>
+                                            <outlet property="rImg" destination="eSr-NK-z0R" id="BbO-X3-cuM"/>
+                                            <outlet property="rName" destination="dWm-8Y-2AL" id="Q5Y-hn-ep7"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="FwC-tP-idR" firstAttribute="leading" secondItem="hQq-xx-9jf" secondAttribute="leading" id="8KU-PN-naS"/>
+                            <constraint firstItem="FwC-tP-idR" firstAttribute="top" secondItem="hQq-xx-9jf" secondAttribute="top" constant="-64" id="cY3-iV-FiJ"/>
+                            <constraint firstItem="hQq-xx-9jf" firstAttribute="trailing" secondItem="FwC-tP-idR" secondAttribute="trailing" id="qqo-tg-4by"/>
+                            <constraint firstItem="hQq-xx-9jf" firstAttribute="bottom" secondItem="FwC-tP-idR" secondAttribute="bottom" id="uIp-Uq-FMq"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="hQq-xx-9jf"/>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="FwC-tP-idR" id="pFm-s8-tUu"/>
+                        <segue destination="5PX-un-bSz" kind="show" identifier="DealInfo" id="6Wa-Wy-C3T"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G4s-j1-I4A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="232.80000000000001" y="886.50674662668678"/>
         </scene>
         <!--Deal Type View Controller-->
         <scene sceneID="JdP-Cw-vpC">
@@ -247,7 +332,9 @@
                     <connections>
                         <outlet property="BOGOContainer" destination="wPw-e5-61V" id="02q-tQ-O6F"/>
                         <outlet property="dollarContainer" destination="nYI-OF-DHZ" id="eRh-AX-Wzd"/>
+                        <outlet property="nextButton" destination="gwd-3Y-q2E" id="Mfl-xe-Jvz"/>
                         <outlet property="percentContainer" destination="u8F-7a-mq7" id="NpS-aJ-8Ox"/>
+                        <outlet property="prevButton" destination="amd-Jc-ngi" id="ZzW-yV-mX5"/>
                         <outlet property="segmentCont" destination="55f-O8-50A" id="3Kd-3h-wQM"/>
                         <segue destination="USR-U9-b5t" kind="show" identifier="datePick" id="V05-ai-tCw"/>
                     </connections>
@@ -264,7 +351,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="2fh-xw-ok8">
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="30" translatesAutoresizingMaskIntoConstraints="NO" id="2fh-xw-ok8">
                                 <rect key="frame" x="0.0" y="411" width="375" height="216"/>
                                 <date key="date" timeIntervalSinceReferenceDate="528317710.78461403">
                                     <!--2017-09-28 18:55:10 +0000-->
@@ -329,6 +416,79 @@
             </objects>
             <point key="canvasLocation" x="3664.8000000000002" y="160.56971514242881"/>
         </scene>
+        <!--Chart View-->
+        <scene sceneID="ckh-CQ-aY2">
+            <objects>
+                <viewController id="5PX-un-bSz" customClass="ChartView" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nU9-63-KTc">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cB9-4F-jgC">
+                                <rect key="frame" x="5" y="124.5" width="180" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="4yV-yJ-NB9"/>
+                                </constraints>
+                                <state key="normal" title="Edit Deal">
+                                    <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="editPressed:" destination="5PX-un-bSz" eventType="touchUpInside" id="Gsb-Br-gZ4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDm-4A-5RY">
+                                <rect key="frame" x="190" y="124.5" width="180" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="JlQ-AT-O0b"/>
+                                </constraints>
+                                <state key="normal" title="Delete Deal">
+                                    <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="deletePressed:" destination="5PX-un-bSz" eventType="touchUpInside" id="iha-SY-Kf0"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal Description" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fep-gL-GkX">
+                                <rect key="frame" x="0.0" y="84" width="375" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lda-uc-IJV" customClass="LineChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="175" width="375" height="492"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="cB9-4F-jgC" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" constant="5" id="37M-PV-bcu"/>
+                            <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="Lda-uc-IJV" secondAttribute="trailing" id="5yJ-ah-Uxc"/>
+                            <constraint firstItem="Lda-uc-IJV" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" id="7jX-tE-cKu"/>
+                            <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="Fep-gL-GkX" secondAttribute="trailing" id="Exg-JS-ms8"/>
+                            <constraint firstItem="UDm-4A-5RY" firstAttribute="leading" secondItem="cB9-4F-jgC" secondAttribute="trailing" constant="5" id="LTX-uR-yBT"/>
+                            <constraint firstItem="cB9-4F-jgC" firstAttribute="width" secondItem="UDm-4A-5RY" secondAttribute="width" id="LUg-mF-4Cm"/>
+                            <constraint firstItem="Fep-gL-GkX" firstAttribute="top" secondItem="J3F-Ic-ea7" secondAttribute="top" constant="20" id="Spb-z2-V9d"/>
+                            <constraint firstItem="Lda-uc-IJV" firstAttribute="top" secondItem="cB9-4F-jgC" secondAttribute="bottom" constant="10" id="TdQ-FT-Wke"/>
+                            <constraint firstItem="cB9-4F-jgC" firstAttribute="top" secondItem="Fep-gL-GkX" secondAttribute="bottom" constant="20" id="UqR-Dp-qOC"/>
+                            <constraint firstItem="J3F-Ic-ea7" firstAttribute="bottom" secondItem="Lda-uc-IJV" secondAttribute="bottom" id="bbm-6m-uwj"/>
+                            <constraint firstItem="UDm-4A-5RY" firstAttribute="top" secondItem="Fep-gL-GkX" secondAttribute="bottom" constant="20" id="ffl-2b-iu1"/>
+                            <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="UDm-4A-5RY" secondAttribute="trailing" constant="5" id="xk6-0Z-JTe"/>
+                            <constraint firstItem="Fep-gL-GkX" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" id="ykk-wi-eeF"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="J3F-Ic-ea7"/>
+                    </view>
+                    <connections>
+                        <outlet property="chart" destination="Lda-uc-IJV" id="vq4-b2-hyf"/>
+                        <outlet property="dealDesc" destination="Fep-gL-GkX" id="Bhy-yg-o6t"/>
+                        <outlet property="delete" destination="UDm-4A-5RY" id="Dhy-Mf-uX1"/>
+                        <outlet property="edit" destination="cB9-4F-jgC" id="Kgq-Nj-jvJ"/>
+                        <segue destination="7rA-dd-j70" kind="show" identifier="editSegue" id="03q-bu-c35"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2uD-DD-JOu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="181.59999999999999" y="1698.8005997001501"/>
+        </scene>
         <!--Vendor Home View Controller-->
         <scene sceneID="NM1-7s-Kmp">
             <objects>
@@ -337,11 +497,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Emo-T4-8QJ">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Emo-T4-8QJ">
                                 <rect key="frame" x="20" y="104" width="335" height="72.5"/>
-                                <color key="backgroundColor" red="0.28627450980000002" green="0.6705882353" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Update Information">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <segue destination="rGf-5g-BXj" kind="show" id="QIF-ck-kIo"/>
@@ -360,9 +519,8 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lbf-hM-YSv">
                                 <rect key="frame" x="20" y="216.5" width="335" height="72.5"/>
-                                <color key="backgroundColor" red="0.28627450980000002" green="0.6705882353" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Upload Menu">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Add/Update Menu">
+                                    <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="menuPressed:" destination="773-z1-MQJ" eventType="touchUpInside" id="48a-II-Lwc"/>
@@ -370,20 +528,21 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRv-Db-jiO">
                                 <rect key="frame" x="20" y="442" width="335" height="72.5"/>
-                                <color key="backgroundColor" red="0.28627450980000002" green="0.6705882353" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Create Deal">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <segue destination="Y5c-gE-Ir0" kind="presentation" identifier="newDeal" id="lpk-zz-rX1"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VuN-Ul-Kzn">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VuN-Ul-Kzn">
                                 <rect key="frame" x="20" y="329" width="335" height="73"/>
-                                <color key="backgroundColor" red="0.28627450980000002" green="0.6705882353" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="View Active Deals">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="View Deals">
+                                    <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <segue destination="Cg9-g7-jhr" kind="show" id="OeA-YV-nOM"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -413,6 +572,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="yBF-xI-JzL"/>
                     <connections>
+                        <outlet property="btn1" destination="Emo-T4-8QJ" id="pRi-ZO-2Jw"/>
+                        <outlet property="btn2" destination="Lbf-hM-YSv" id="vVZ-3l-tvH"/>
+                        <outlet property="btn3" destination="VuN-Ul-Kzn" id="6Nn-hI-4bO"/>
+                        <outlet property="btn4" destination="bRv-Db-jiO" id="ztP-Yi-wdG"/>
+                        <outlet property="logoutBtn" destination="uEc-21-1gK" id="pt0-wa-qgm"/>
                         <segue destination="TG2-gn-fs1" kind="show" identifier="OnboardingSegue" id="fHg-2O-kWl"/>
                     </connections>
                 </viewController>
@@ -572,10 +736,10 @@
             </objects>
             <point key="canvasLocation" x="1612" y="-743.47826086956525"/>
         </scene>
-        <!--Item-->
+        <!--VenNav-->
         <scene sceneID="rdA-GT-csz">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2y7-L6-SMD" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="VenNav" title="VenNav" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2y7-L6-SMD" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="PDp-Y0-7N3"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="3BC-tA-6cd">
@@ -793,7 +957,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="IQ3-da-mFd">
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="30" translatesAutoresizingMaskIntoConstraints="NO" id="IQ3-da-mFd">
                                 <rect key="frame" x="0.0" y="411" width="375" height="216"/>
                                 <date key="date" timeIntervalSinceReferenceDate="528317710.78461403">
                                     <!--2017-09-28 18:55:10 +0000-->
@@ -1057,4 +1221,7 @@
             <point key="canvasLocation" x="5382" y="161"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="03q-bu-c35"/>
+    </inferredMetricsTieBreakers>
 </document>

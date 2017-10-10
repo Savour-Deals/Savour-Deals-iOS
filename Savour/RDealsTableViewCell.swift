@@ -18,6 +18,9 @@ class RDealsTableViewCell: UITableViewCell {
         override func awakeFromNib() {
             super.awakeFromNib()
             FavButton.layer.cornerRadius = 5
+            FavButton.layer.borderWidth = 1
+            FavButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+
     }
         
         override func setSelected(_ selected: Bool, animated: Bool) {

@@ -446,8 +446,8 @@
         <!--Deals-->
         <scene sceneID="Sr4-bb-xta">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" id="3rf-Nz-MSc" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Deals" image="icons8-price_tag" selectedImage="icons8-price_tag_filled" id="Fvg-So-u1L"/>
+                <navigationController hidesBottomBarWhenPushed="YES" id="3rf-Nz-MSc" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Deals" image="icons8-price_tag" largeContentSizeImage="icons8-price_tag" selectedImage="icons8-price_tag_filled" id="Fvg-So-u1L"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="XYb-YT-doD">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -480,6 +480,6 @@
         <image name="logo" width="337" height="207"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="het-DN-Jp4"/>
+        <segue reference="wXP-pv-GBh"/>
     </inferredMetricsTieBreakers>
 </document>

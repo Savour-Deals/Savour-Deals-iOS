@@ -29,7 +29,6 @@ class DealViewController: UIViewController {
     var isTimerRunning = false
     var timerStartTime: Int!
     weak var shapeLayer: CAShapeLayer?
-
     
     @IBOutlet var redeemedView: UIView!
     @IBOutlet weak var redeem: UIButton!
@@ -47,38 +46,40 @@ class DealViewController: UIViewController {
     @IBAction func backSwipe(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        if #available(iOS 11, *) {
-            let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 1)
-            // activate the constraint
-            NSLayoutConstraint.activate([verticalSpace])
-        } else {
-            let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.view.superview, attribute: .bottom, multiplier: 1, constant:1)
-            // activate the constraint
-            NSLayoutConstraint.activate([verticalSpace])
-        }
-    
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 11, *) {
+            let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.DealView.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1.0, constant: -10.0)
+            // activate the constraint
+            NSLayoutConstraint.activate([verticalSpace])
+        } else {
+            
+            let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.redeem.superview, attribute: .bottom, multiplier: 1.0, constant: -10.0)
+            // activate the constraint
+            NSLayoutConstraint.activate([verticalSpace])
+        }
         self.navigationItem.title = Deal?.restrauntName
+        moreBtn.layer.borderWidth = 1.0
+        moreBtn.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         if (Deal?.redeemed)!{
             self.redeem.isEnabled = false
-            self.redeem.backgroundColor = UIColor.red
+            redeem.layer.borderWidth = 1.0
+            redeem.layer.borderColor = UIColor.red.cgColor
+            redeem.setTitleColor(UIColor.red, for: .normal)
             self.redeem.setTitle("Already Redeemed!", for: .normal)
-            self.redeem.alpha = 0.6
-            
         }
         else{
             pulsator.start()
+            redeem.layer.borderWidth = 1.0
+            redeem.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         }
+        SetupUI()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        SetupUI()
         if !(Deal?.redeemed)!{
             if !pulsator.isPulsating {
                 pulsator.start()
@@ -94,10 +95,8 @@ class DealViewController: UIViewController {
                     self.drawCheck(color: UIColor.green.cgColor)
                 }
             }
-          
         }
-    
-        
+        SetupUI()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -117,9 +116,9 @@ class DealViewController: UIViewController {
         self.img.layer.cornerRadius = img.frame.size.width / 2
         moreBtn.setTitle("See More From " + (Deal?.restrauntName)!, for: .normal)
         imgbound.layer.insertSublayer(pulsator, below: img.layer)
-        pulsator.numPulse = 4
+        pulsator.numPulse = 6
         pulsator.radius = 230
-        pulsator.backgroundColor = redeem.backgroundColor?.cgColor
+        pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -140,27 +139,25 @@ class DealViewController: UIViewController {
                 
             }
             let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
-                let ref = Database.database().reference().child("Redeemed").child((self.Deal?.dealID)!)
                 let currTime = Date().timeIntervalSince1970
                 let uID = Auth.auth().currentUser?.uid
-                var userRedemption = Dictionary<String, String>()
-                userRedemption[uID!] = String(currTime)
-                ref.setValue(userRedemption)
-                
+                let ref = Database.database().reference().child("Redeemed").child((self.Deal?.dealID)!).child(uID!)
+                ref.setValue(currTime)
+                let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
+                followRef.setValue(currTime)
                 //set and draw checkmark
-                self.drawCheckFix(color: UIColor.green.cgColor)
+                self.redeemIndicator(color: UIColor.green.cgColor)
                 
                 self.redeem.isEnabled = false
-                self.redeem.backgroundColor = UIColor.red
                 self.redeem.setTitle("Already Redeemed!", for: .normal)
-                self.redeem.alpha = 0.6
-                self.pulsator.stop()
-                mainVC?.filteredDeals[self.index].redeemed = true
-                mainVC?.filteredDeals[self.index].redeemedTime = currTime
+                self.redeem.layer.borderColor = UIColor.red.cgColor
+                self.redeem.setTitleColor(UIColor.red, for: .normal)
+                filteredDeals[self.index].redeemed = true
+                filteredDeals[self.index].redeemedTime = currTime
                 self.Deal?.redeemedTime = currTime
                 self.Deal?.redeemed = true
-                if favorites[(mainVC?.filteredDeals[self.index].dealID)!] != nil{
-                    favorites.removeValue(forKey: (mainVC?.filteredDeals[self.index].dealID)!)
+                if favorites[(filteredDeals[self.index].dealID)!] != nil{
+                    favorites.removeValue(forKey: (filteredDeals[self.index].dealID)!)
                 }
                 self.runTimer()
             }
@@ -182,7 +179,12 @@ class DealViewController: UIViewController {
         timerLabel.text = timeString(time: timeSince) //This will update the label
         if (timeSince) > 3600 {
             timerLabel.text = "Reedeemed over an hour ago"
-            self.shapeLayer?.strokeColor = UIColor.red.cgColor
+            if self.shapeLayer != nil{
+                self.shapeLayer?.strokeColor = UIColor.red.cgColor
+            }
+            else{
+                redeemIndicator(color: UIColor.green.cgColor)
+            }
             timer.invalidate()
         }
     }
@@ -192,7 +194,7 @@ class DealViewController: UIViewController {
         let path = UIBezierPath()
         path.move(to: CGPoint(x: self.img.frame.origin.x - 60, y: self.img.frame.origin.y - 60))
         path.addLine(to: CGPoint(x: self.img.frame.origin.x , y: self.img.frame.origin.y + 10))
-        path.addLine(to: CGPoint(x: self.img.frame.origin.x + 80, y: self.img.frame.origin.y - 140))
+        path.addLine(to: CGPoint(x: self.img.frame.origin.x + 80, y: self.img.frame.origin.y - 120))
         let shapeLayer = CAShapeLayer()
         shapeLayer.fillColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor
         shapeLayer.strokeColor = color
@@ -210,27 +212,9 @@ class DealViewController: UIViewController {
         self.img.alpha = 0.6
     }
     
-    func drawCheckFix(color: CGColor){
-        //set and draw checkmark - This fixes problem with drawing initially after redemption
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: self.img.frame.origin.x - 80, y: self.img.frame.origin.y - 60))
-        path.addLine(to: CGPoint(x: self.img.frame.origin.x-20, y: self.img.frame.origin.y))
-        path.addLine(to: CGPoint(x: self.img.frame.origin.x + 60, y: self.img.frame.origin.y - 140))
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.fillColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor
-        shapeLayer.strokeColor = color
-        shapeLayer.lineWidth = 10
-        shapeLayer.path = path.cgPath
-        // animate it
-        self.img.layer.addSublayer(shapeLayer)
-        let animation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.fromValue = 0
-        animation.duration = 1
-        shapeLayer.add(animation, forKey: "MyAnimation")
-        
-        // save shape layer
-        self.shapeLayer = shapeLayer
-        self.img.alpha = 0.6
+    func redeemIndicator(color: CGColor){
+        //self.img.alpha = 0.6
+        pulsator.backgroundColor = color
     }
 
     
@@ -239,7 +223,12 @@ class DealViewController: UIViewController {
         timerLabel.text = timeString(time: timeSince) //This will update the label.
         if (timeSince) > 3600 {
             timerLabel.text = "Reedeemed over an hour ago"
-            self.shapeLayer?.strokeColor = UIColor.red.cgColor
+            if self.shapeLayer != nil{
+                self.shapeLayer?.strokeColor = UIColor.red.cgColor
+            }
+            else{
+                redeemIndicator(color: UIColor.green.cgColor)
+            }
             timer.invalidate()
         }
     }
