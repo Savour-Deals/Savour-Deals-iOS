@@ -47,6 +47,10 @@ class VendorHomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
             setupUI()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationItem.title = " "
+    }
 
     @IBAction func LogoutPressed(_ sender: Any) {
         // [START signout]
