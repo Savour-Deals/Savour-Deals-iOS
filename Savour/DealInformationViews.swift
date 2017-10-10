@@ -24,6 +24,9 @@ class DiscountViewController: UIViewController {
     var DolVC: DollarController!
     var Dealtype: String!
     var resName: String!
+    var deal: DealData!
+    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var prevButton: UIButton!
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -32,10 +35,45 @@ class DiscountViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
-        newDeal = DealData(ID: "")
-        newDeal.dealType = Dealtype
-        newDeal.restrauntName = self.resName
-        newDeal.restrauntID = Auth.auth().currentUser?.uid
+        
+        if deal != nil{
+            prevButton.setTitle("CANCEL", for: .normal)
+            prevButton.setTitleColor(UIColor.red, for: .normal)
+            newDeal = deal
+            if (newDeal.dealDescription?.contains("$"))!{
+                let strings = newDeal.dealDescription?.split(separator: " ", maxSplits: 2, omittingEmptySubsequences: false)
+                segmentCont.selectedSegmentIndex = 2
+                DolVC.promoItem.text = "\(strings![2])"
+                let dealTxt = "\(strings![0]) \(strings![1])"
+                for i in 0..<DolVC.pickerView.numberOfRows(inComponent: 0){
+                    if dealTxt == DolVC.pickerDataSource[i]{
+                        DolVC.pickerView.selectRow(i, inComponent: 0, animated: true)
+                    }
+                }
+            }
+            else if (newDeal.dealDescription?.contains("%"))!{
+                let strings = newDeal.dealDescription?.split(separator: " ", maxSplits: 2, omittingEmptySubsequences: false)
+                segmentCont.selectedSegmentIndex = 1
+                PercVC.promoItem.text =  "\(strings![2])"
+                let dealTxt = "\(strings![0]) \(strings![1])"
+                for i in 0..<PercVC.pickerView.numberOfRows(inComponent: 0){
+                    if dealTxt == PercVC.pickerDataSource[i]{
+                        PercVC.pickerView.selectRow(i, inComponent: 0, animated: true)
+                    }
+                }
+            }
+            else{
+                let strings = newDeal.dealDescription?.split(separator: " ", maxSplits: 5, omittingEmptySubsequences: false)
+                segmentCont.selectedSegmentIndex = 0
+                BOGOvc.promoText.placeholder =  "\(strings![5])"
+            }
+        }
+        else{
+            newDeal = DealData(ID: "")
+            newDeal.dealType = Dealtype
+            newDeal.restrauntName = self.resName
+            newDeal.restrauntID = Auth.auth().currentUser?.uid
+        }
 
         if segmentCont.selectedSegmentIndex == 0 {
             showBOGO()
@@ -66,20 +104,44 @@ class DiscountViewController: UIViewController {
         dollarContainer.isHidden = false
     }
     
+    
     @IBAction func exitPressed(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
     @IBAction func nextPressed(_ sender: Any) {
         if segmentCont.selectedSegmentIndex == 0 {
-            newDeal?.dealDescription = "Buy One Get One Free \(BOGOvc.promoText.text!)"
+            if BOGOvc.promoText.text == "" {
+                let alert = UIAlertController(title: "Item Missing", message: "Please enter a promotion item to continue.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+            else{
+                newDeal?.dealDescription = "Buy One Get One Free \(BOGOvc.promoText.text!)"
+                self.performSegue(withIdentifier: "datePick", sender: nil)
+            }
         }
         else if segmentCont.selectedSegmentIndex == 1 {
-            newDeal?.dealDescription  = "\(PercVC.pickerDataSource[PercVC.pickerView.selectedRow(inComponent: 0)]) \(PercVC.promoItem.text!)"
+            if PercVC.promoItem.text == "" {
+                let alert = UIAlertController(title: "Item Missing", message: "Please enter a promotion item to continue.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+            else{
+                newDeal?.dealDescription  = "\(PercVC.pickerDataSource[PercVC.pickerView.selectedRow(inComponent: 0)]) \(PercVC.promoItem.text!)"
+                self.performSegue(withIdentifier: "datePick", sender: nil)
+            }
         }
         else if segmentCont.selectedSegmentIndex == 2 {
-            newDeal?.dealDescription  = "\(DolVC.pickerDataSource[PercVC.pickerView.selectedRow(inComponent: 0)]) \(DolVC.promoItem.text!)"
+            if DolVC.promoItem.text == "" {
+                let alert = UIAlertController(title: "Item Missing", message: "Please enter a promotion item to continue.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+            else{
+                newDeal?.dealDescription  = "\(DolVC.pickerDataSource[DolVC.pickerView.selectedRow(inComponent: 0)]) \(DolVC.promoItem.text!)"
+                self.performSegue(withIdentifier: "datePick", sender: nil)
+            }
         }
-        self.performSegue(withIdentifier: "datePick", sender: nil)
     }
     
     @IBAction func segmentChanged(_ sender: UISegmentedControl) {
@@ -199,7 +261,10 @@ class EndTimeController: UIViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        if newDeal.endTime != nil{
+            let date = Date(timeIntervalSince1970: newDeal.endTime!)
+            EndPicker.setDate(date, animated: true)
+        }
     }
     
     @IBAction func nextPressed(_ sender: Any) {
@@ -218,6 +283,10 @@ class StartTimeController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if newDeal.startTime != nil{
+            let date = Date(timeIntervalSince1970: newDeal.startTime!)
+            startPicker.setDate(date, animated: true)
+        }
         
     }
     
@@ -249,6 +318,25 @@ class PhotoSelectController: UIViewController, UIImagePickerControllerDelegate, 
         imagePicker.delegate = self
         self.ref = Database.database().reference()
         storageRef = StorageReference()
+        if newDeal.restrauntID != nil{
+            self.nextBtn.isEnabled = true
+
+            // Reference to an image file in Firebase Storage
+            let storage = Storage.storage()
+            let storageref = storage.reference(forURL: newDeal.restrauntPhoto!)
+            // Reference to an image file in Firebase Storage
+            let reference = storageref
+                    
+            // UIImageView in your ViewController
+            let imageView: UIImageView = self.rImg
+            
+            // Placeholder image
+            let placeholderImage = UIImage(named: "placeholder.jpg")
+                    
+            // Load the image using SDWebImage
+            imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
+            
+        }
     }
     @IBAction func nextPressed(_ sender: Any) {
         self.nextBtn.isEnabled = false
@@ -260,7 +348,9 @@ class PhotoSelectController: UIViewController, UIImagePickerControllerDelegate, 
         working.startAnimating()
         self.ref.child("Deals").observeSingleEvent(of: .value, with: { (snapshot) in
             // set upload path for image
-            newDeal.dealID = "\(snapshot.childrenCount)"
+            if newDeal.dealID != nil {
+                newDeal.dealID = "\(snapshot.childrenCount+1)"
+            }
             let filePath = "Restaurants/\(Auth.auth().currentUser!.uid)/Photos/\(newDeal.dealID!)"
             let metaData = StorageMetadata()
             metaData.contentType = "image/jpg"
@@ -369,7 +459,17 @@ class ReviewController: UIViewController{
         
     }
     @IBAction func submitDeal(_ sender: Any) {
-        //self.navigationController?.popToRootViewController(animated: true)
+        let deal = [
+            "rID": newDeal.restrauntID!,
+            "rName":  newDeal.restrauntName!,
+            "dealDesc": newDeal.dealDescription!,
+            "rPhotoLoc":   newDeal.restrauntPhoto!,
+            "EndTime": newDeal.endTime!,
+            "StartTime": newDeal.startTime!,
+            "Filter": newDeal.dealType!
+            ] as [String : Any]
+        ref = Database.database().reference()
+        ref.child("Deals").child(newDeal.dealID!).setValue(deal)
         self.navigationController?.dismiss(animated: true, completion: nil)
     }
     

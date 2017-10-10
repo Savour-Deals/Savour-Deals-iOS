@@ -17,8 +17,15 @@ class VendorHomeViewController: UIViewController {
     var ref: DatabaseReference!
     var id: String!
     
+    @IBOutlet weak var logoutBtn: UIButton!
+    @IBOutlet weak var btn4: UIButton!
+    @IBOutlet weak var btn3: UIButton!
+    @IBOutlet weak var btn2: UIButton!
+    @IBOutlet weak var btn1: UIButton!
+    var btns = [UIButton]()
     override func viewDidLoad() {
         super.viewDidLoad()
+        btns.append(contentsOf: [btn1, btn2,btn3,btn4])
         setupUI()
     }
     
@@ -29,6 +36,12 @@ class VendorHomeViewController: UIViewController {
             let value = snapshot.value as? NSDictionary
             self.navigationItem.title = value?["Name"] as? String ?? ""
         })
+        for i in 0...btns.count-1{
+            btns[i].layer.borderWidth = 1.0
+            btns[i].layer.cornerRadius = 5.0
+            btns[i].layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        }
+        logoutBtn.layer.cornerRadius = 5.0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,6 +65,7 @@ class VendorHomeViewController: UIViewController {
             let VC = segue.destination as! CustomNavBar
                 VC.resName = self.navigationItem.title
         }
+        
     }
     
     @IBAction func menuPressed(_ sender: Any) {

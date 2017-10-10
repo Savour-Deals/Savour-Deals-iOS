@@ -69,21 +69,22 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
             self.rAddress.text = value?["Address"] as? String ?? ""
             self.rDesc.text = value?["Desc"] as? String ?? ""
             let photo = value?["Photo"] as? String ?? ""
-            // Reference to an image file in Firebase Storage
-            let storage = Storage.storage()
-            let storageref = storage.reference(forURL: photo)
-            // Reference to an image file in Firebase Storage
-            let reference = storageref
-            
-            // UIImageView in your ViewController
-            let imageView: UIImageView = self.rImg
-            
-            // Placeholder image
-            let placeholderImage = UIImage(named: "placeholder.jpg")
-            
-            // Load the image using SDWebImage
-            imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
-            
+            if photo != ""{
+                // Reference to an image file in Firebase Storage
+                let storage = Storage.storage()
+                let storageref = storage.reference(forURL: photo)
+                // Reference to an image file in Firebase Storage
+                let reference = storageref
+                
+                // UIImageView in your ViewController
+                let imageView: UIImageView = self.rImg
+                
+                // Placeholder image
+                let placeholderImage = UIImage(named: "placeholder.jpg")
+                
+                // Load the image using SDWebImage
+                imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
+            }
         }){ (error) in
             print(error.localizedDescription)
         }

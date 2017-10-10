@@ -13,7 +13,8 @@ import Firebase
 
 var favorites: [String:DealData] = Dictionary<String, DealData>()
 var FavMainIndex: [String:Int] = Dictionary<String, Int>()
-var mainVC: ViewController?
+var filteredDeals = [DealData]()
+var UnfilteredDeals = [DealData]()
 
 
 class HelperFuncs{

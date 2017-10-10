@@ -55,10 +55,37 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in DealsViewController.loadData():DealsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.tableView.delegate">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "AccountViewController.viewDidLoad() -&gt; ():AccountViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "user.displayName">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ChartView.viewDidLoad():ChartView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DealViewController.viewWillAppear(_:):DealViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "timerLabel.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in ChartView.getRedeems():ChartView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Components.day! - 1">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -71,6 +98,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "DealViewController.updateTimer():DealViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Date().timeIntervalSince1970">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "DealTableViewCell.FavoriteToggled(Any) -&gt; ():DealTableViewCell.swift">
          <PersistentStrings>
             <PersistentString
@@ -79,18 +114,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DealViewController.viewWillAppear(_:):DealViewController.swift">
+         contextName = "OnboardingViewController.viewDidLoad():PageViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "timerLabel.text">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "DealViewController.updateTimer():DealViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "Date().timeIntervalSince1970">
+               value = "arrayVC.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -167,7 +194,23 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "DiscountViewController.nextPressed(_:):DealInformationViews.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "BOGOvc.promoText.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ViewController.(loadFavs() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DiscountViewController.viewDidLoad():DealInformationViews.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "DolVC.pickerDataSource[i]">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "FavoritesViewController.tableView(UITableView, commit : UITableViewCellEditingStyle, forRowAt : IndexPath) -&gt; ():FavoritesViewController.swift">

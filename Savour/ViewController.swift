@@ -19,9 +19,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBOutlet var redeemedView: UIView!
     var handle: AuthStateDidChangeListenerHandle?
+    var storage: Storage!
     var ref: DatabaseReference!
-    var filteredDeals = [DealData]()
-    var unfilteredDeals = [DealData]()
     var FavdealIDs: [String:String] = Dictionary<String, String>()
     var justOpened = true
     var searchBar: UISearchBar!
@@ -41,6 +40,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ref = Database.database().reference()
+        if UnfilteredDeals.isEmpty{
+            self.setupUI()
+        }
     }
     
     func GetFavs()  {
@@ -62,10 +65,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     
     func setupUI(){
-        self.navigationController?.navigationBar.tintColor = UIColor(red: 73, green: 171, blue: 170, alpha: 1.0)
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
-        mainVC = self
         ref.keepSynced(true)
         DealsTable.delegate = self
         GetFavs()
@@ -89,19 +91,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     override func viewDidAppear(_ animated: Bool) {
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-        }
-        if Auth.auth().currentUser != nil {
-            // User is signed in.
-        }
-        else {
-            self.performSegue(withIdentifier: "Onboarding", sender: self)
-        }
+        handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        ref = Database.database().reference()
-        self.title = ""
+        self.navigationController?.navigationItem.title = ""
         UIApplication.shared.statusBarStyle = .lightContent
         let user = Auth.auth().currentUser
         if user != nil {
@@ -115,12 +110,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     self.performSegue(withIdentifier: "Vendor", sender: self)
                 }
                 else{
-                    if self.unfilteredDeals.isEmpty{
+                    if UnfilteredDeals.isEmpty{
                         self.setupUI()
                     }
                 }
             })
-            //unfilteredDeals.removeAll()
+            //UnfilteredDeals.removeAll()
             refreshData("main")
         }
         else {
@@ -149,8 +144,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
        DispatchQueue.main.async {
             var oldDeals = [DealData]()
             if sender == "refresh"{
-                oldDeals = self.unfilteredDeals
-                self.unfilteredDeals.removeAll()
+                oldDeals = UnfilteredDeals
+                UnfilteredDeals.removeAll()
             }
             let currentUnix = Date().timeIntervalSince1970
             let plusDay = currentUnix + 86400
@@ -164,7 +159,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     let temp = DealData(snap: snap, ID: (Auth.auth().currentUser?.uid)!) // convert my snapshot into my type
                     if temp.endTime! > expiredUnix {
                         if sender == "main" || sender == "refresh"{
-                            self.unfilteredDeals.append(temp)
+                            UnfilteredDeals.append(temp)
                         }
                         else if sender == "null" {
                             for deal in oldDeals{
@@ -172,14 +167,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                                     temp.redeemed = deal.redeemed
                                 }
                             }
-                            self.unfilteredDeals.append(temp)
+                            UnfilteredDeals.append(temp)
                         }
                         else if sender == "favs" {
                             if self.FavdealIDs[temp.dealID!] != nil {
                                 favorites[temp.dealID!] = temp
                             }
-                            for i in 0 ... (self.unfilteredDeals.count-1){
-                                if self.unfilteredDeals[i].dealID == temp.dealID{
+                            for i in 0 ... (UnfilteredDeals.count-1){
+                                if UnfilteredDeals[i].dealID == temp.dealID{
                                     FavMainIndex[temp.dealID!] = i
                                 }
                             }
@@ -201,33 +196,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.hasChild("Redeemed"){
                 let redeemedSnap = snapshot.childSnapshot(forPath: "Redeemed")
-                for i in 0 ... (self.unfilteredDeals.count-1){
-                    if redeemedSnap.childSnapshot(forPath: self.unfilteredDeals[i].dealID!).hasChild((Auth.auth().currentUser?.uid)!){
-                        let snap = redeemedSnap.childSnapshot(forPath: self.unfilteredDeals[i].dealID!)
+                for i in 0 ... (UnfilteredDeals.count-1){
+                    if redeemedSnap.childSnapshot(forPath: UnfilteredDeals[i].dealID!).hasChild((Auth.auth().currentUser?.uid)!){
+                        let snap = redeemedSnap.childSnapshot(forPath: UnfilteredDeals[i].dealID!)
                         let redeemers = snap.value as! NSDictionary
-                        self.unfilteredDeals[i].redeemed = true
-                        let timeString = redeemers.value(forKey: (Auth.auth().currentUser?.uid)!) as! String
-                        self.unfilteredDeals[i].redeemedTime = Double(timeString)
+                        UnfilteredDeals[i].redeemed = true
+                        UnfilteredDeals[i].redeemedTime = redeemers.value(forKey: (Auth.auth().currentUser?.uid)!) as? Double
                     }
                     else{
-                        self.unfilteredDeals[i].redeemed = false
+                        UnfilteredDeals[i].redeemed = false
                     }
-                    let deal = self.unfilteredDeals[i]
+                    let deal = UnfilteredDeals[i]
                     if favorites[deal.dealID!] != nil{
                         favorites[deal.dealID!]?.redeemed = deal.redeemed
                         favorites[deal.dealID!]?.redeemedTime = deal.redeemedTime
                     }
                 }
             }
-            if self.unfilteredDeals[0].redeemed == nil{
-                for i in 0 ... (self.unfilteredDeals.count-1){
-                    self.unfilteredDeals[i].redeemed = false
+            if UnfilteredDeals[0].redeemed == nil{
+                for i in 0 ... (UnfilteredDeals.count-1){
+                    UnfilteredDeals[i].redeemed = false
                 }
             }
             if self.DealsTable.dataSource == nil{
                 self.DealsTable.dataSource = self
             }
-            self.filteredDeals = self.unfilteredDeals
+            filteredDeals = UnfilteredDeals
             self.DealsTable.reloadData()
         })
 
@@ -243,24 +237,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
-            let deal = self.filteredDeals[indexPath.row]
+            let deal = filteredDeals[indexPath.row]
             //cell.row = indexPath.row
             cell.deal = deal
-
-            // Reference to an image file in Firebase Storage
-            let storage = Storage.storage()
-            let storageref = storage.reference()
-            // Reference to an image file in Firebase Storage
-            let reference = storageref.child("rPhotos/" + deal.restrauntPhoto!)
-            
-            // UIImageView in your ViewController
-            let imageView: UIImageView = cell.rImg
-
-            // Placeholder image
-            let placeholderImage = UIImage(named: "placeholder.jpg")
-            
-            // Load the image using SDWebImage
-            imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
+            let photo = deal.restrauntPhoto!
+            if photo != ""{
+                // Reference to an image file in Firebase Storage
+                let storage = Storage.storage()
+                let storageref = storage.reference(forURL: photo)
+        
+                // UIImageView in your ViewController
+                let imageView: UIImageView = cell.rImg
+        
+                // Placeholder image
+                let placeholderImage = UIImage(named: "placeholder.jpg")
+        
+                // Load the image using SDWebImage
+                imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
+        }
             cell.rName.text = deal.restrauntName
             cell.dealDesc.text = deal.dealDescription
             
@@ -333,7 +327,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             favorite = UITableViewRowAction(style: .normal, title: "  Favorite  ") { (action, index) -> Void in
                 
                 tableView.isEditing = false
-                favorites[self.filteredDeals[indexPath.row].dealID!] = self.filteredDeals[indexPath.row]
+                favorites[filteredDeals[indexPath.row].dealID!] = filteredDeals[indexPath.row]
                 print("favorite")
                 
             }
@@ -344,7 +338,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 tableView.isEditing = false
                 print("unfavorite")
-                favorites.removeValue(forKey: self.filteredDeals[indexPath.row].dealID!)
+                favorites.removeValue(forKey: filteredDeals[indexPath.row].dealID!)
             }
             favorite.backgroundColor = UIColor.red
         }
@@ -366,10 +360,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text! == "" {
-            filteredDeals = unfilteredDeals
+            filteredDeals = UnfilteredDeals
         } else {
             // Filter the results
-            filteredDeals = unfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
+            filteredDeals = UnfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
         DealsTable.reloadData()
     }
@@ -378,10 +372,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
         if searchBar.text! == "" {
-            filteredDeals = unfilteredDeals
+            filteredDeals = UnfilteredDeals
         } else {
             // Filter the results
-            filteredDeals = unfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
+            filteredDeals = UnfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
         DealsTable.reloadData()
     }

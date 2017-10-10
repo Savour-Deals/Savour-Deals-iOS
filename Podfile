@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-#platform :ios, '11.0'
+#platform :ios, '10.0'
 
 
 pod 'Firebase/Core'
@@ -12,7 +12,8 @@ pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
 pod 'FBSDKShareKit'
 pod 'Pulsator'
-
+pod 'Charts'
+pod 'Firebase/Messaging'
 
 target 'Savour' do
 

@@ -14,7 +14,7 @@ import SDWebImage
 import FirebaseStorageUI
 
 class FavoritesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
-
+    var storage: Storage!
     @IBOutlet weak var emptyView: UIView!
     var deals = [DealData]()
     var user: String!
@@ -60,8 +60,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
 
     
     func setupUI(){
-        self.navigationController?.navigationBar.tintColor = UIColor(red: 73, green: 171, blue: 170, alpha: 1.0)
-
+        self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -72,11 +71,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
         let deal = deals[indexPath.row]
         
+        let photo = deal.restrauntPhoto!
         // Reference to an image file in Firebase Storage
         let storage = Storage.storage()
-        let storageref = storage.reference()
-        // Reference to an image file in Firebase Storage
-        let reference = storageref.child("rPhotos/" + deal.restrauntPhoto!)
+        let storageref = storage.reference(forURL: photo)
         
         // UIImageView in your ViewController
         let imageView: UIImageView = cell.rImg
@@ -85,7 +83,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         let placeholderImage = UIImage(named: "placeholder.jpg")
         
         // Load the image using SDWebImage
-        imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
+        imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
         cell.rName.text = deal.restrauntName
         cell.dealDesc.text = deal.dealDescription
         if deal.redeemed! {
