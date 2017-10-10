@@ -15,10 +15,10 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Deal View Controller-->
+        <!-- -->
         <scene sceneID="hsV-I9-dlR">
             <objects>
-                <viewController storyboardIdentifier="Deal" autoresizesArchivedViewToFullSize="NO" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="U9a-dB-aq3" customClass="DealViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Deal" autoresizesArchivedViewToFullSize="NO" title=" " hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="U9a-dB-aq3" customClass="DealViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" contentMode="center" id="WcZ-Ck-nPH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

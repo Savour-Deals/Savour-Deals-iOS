@@ -22,7 +22,6 @@ class DealViewController: UIViewController {
     var from: String?
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
-    
     @IBOutlet weak var timerLabel: UILabel!
     var seconds = 60
     var timer = Timer()
@@ -60,9 +59,9 @@ class DealViewController: UIViewController {
             // activate the constraint
             NSLayoutConstraint.activate([verticalSpace])
         }
-        self.navigationItem.title = Deal?.restrauntName
         moreBtn.layer.borderWidth = 1.0
         moreBtn.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        self.navigationController?.navigationBar.tintColor = UIColor.white
         if (Deal?.redeemed)!{
             self.redeem.isEnabled = false
             redeem.layer.borderWidth = 1.0
@@ -105,6 +104,7 @@ class DealViewController: UIViewController {
     
     func SetupUI(){
         self.title = Deal?.restrauntName
+        
         if (fromDetails)!{
             moreBtn.isHidden = true
         }

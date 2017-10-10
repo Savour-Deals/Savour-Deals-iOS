@@ -31,7 +31,6 @@
 		83802D771F2ED1FD00E315FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D751F2ED1FD00E315FB /* LaunchScreen.storyboard */; };
 		83A457E81F85472000E803C6 /* DealsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A457E71F85472000E803C6 /* DealsViewController.swift */; };
 		83AD05E31F744EF0001B780E /* VendorHome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83AD05E21F744EF0001B780E /* VendorHome.storyboard */; };
-		83BA94861F648B3E00165064 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA94851F648B3D00165064 /* MenuViewController.swift */; };
 		83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA94891F64C3D800165064 /* AccountCell.swift */; };
 		83BC91E61F875CEA0031C372 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 832E26FE1F86E642009B8277 /* GoogleService-Info.plist */; };
 		83BC91E81F8C0FB30031C372 /* tutorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83BC91E71F8C0FB20031C372 /* tutorial.storyboard */; };
@@ -73,7 +72,6 @@
 		83A457E71F85472000E803C6 /* DealsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsViewController.swift; sourceTree = "<group>"; };
 		83AD05E21F744EF0001B780E /* VendorHome.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VendorHome.storyboard; sourceTree = "<group>"; };
 		83B0F94D1F32C64C00759C34 /* Savour.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Savour.entitlements; sourceTree = "<group>"; };
-		83BA94851F648B3D00165064 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		83BA94891F64C3D800165064 /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
 		83BC91E71F8C0FB20031C372 /* tutorial.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = tutorial.storyboard; sourceTree = "<group>"; };
 		83BC91E91F8C12DC0031C372 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 				83446AAA1F3C130400CBE73E /* DealViewController.swift */,
 				83446AAC1F3C1D4200CBE73E /* DetailsViewController.swift */,
 				833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */,
-				83BA94851F648B3D00165064 /* MenuViewController.swift */,
 				8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */,
 				8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */,
 			);
@@ -390,7 +387,6 @@
 				832E27001F874DE4009B8277 /* ChartView.swift in Sources */,
 				8320E9811F3E213200D6A0DF /* RDealsTableViewCell.swift in Sources */,
 				83EE29641F7CA09F00E89CE1 /* DealInformationViews.swift in Sources */,
-				83BA94861F648B3E00165064 /* MenuViewController.swift in Sources */,
 				83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */,
 				834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */,
 				834C1E1A1F3187AA002D7198 /* DealData.swift in Sources */,

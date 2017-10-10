@@ -26,10 +26,10 @@
             </objects>
             <point key="canvasLocation" x="828" y="121"/>
         </scene>
-        <!--Deals View Controller-->
+        <!-- -->
         <scene sceneID="fSK-OR-9EC">
             <objects>
-                <viewController id="Cg9-g7-jhr" customClass="DealsViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title=" " id="Cg9-g7-jhr" customClass="DealsViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5vU-gu-biV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -425,37 +425,31 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cB9-4F-jgC">
-                                <rect key="frame" x="5" y="124.5" width="180" height="40"/>
+                                <rect key="frame" x="5" y="84" width="180" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="4yV-yJ-NB9"/>
                                 </constraints>
                                 <state key="normal" title="Edit Deal">
-                                    <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="editPressed:" destination="5PX-un-bSz" eventType="touchUpInside" id="Gsb-Br-gZ4"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDm-4A-5RY">
-                                <rect key="frame" x="190" y="124.5" width="180" height="40"/>
+                                <rect key="frame" x="190" y="84" width="180" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="JlQ-AT-O0b"/>
                                 </constraints>
                                 <state key="normal" title="Delete Deal">
-                                    <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="deletePressed:" destination="5PX-un-bSz" eventType="touchUpInside" id="iha-SY-Kf0"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal Description" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fep-gL-GkX">
-                                <rect key="frame" x="0.0" y="84" width="375" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lda-uc-IJV" customClass="LineChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="175" width="375" height="492"/>
+                                <rect key="frame" x="0.0" y="134.5" width="375" height="532.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -464,22 +458,18 @@
                             <constraint firstItem="cB9-4F-jgC" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" constant="5" id="37M-PV-bcu"/>
                             <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="Lda-uc-IJV" secondAttribute="trailing" id="5yJ-ah-Uxc"/>
                             <constraint firstItem="Lda-uc-IJV" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" id="7jX-tE-cKu"/>
-                            <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="Fep-gL-GkX" secondAttribute="trailing" id="Exg-JS-ms8"/>
                             <constraint firstItem="UDm-4A-5RY" firstAttribute="leading" secondItem="cB9-4F-jgC" secondAttribute="trailing" constant="5" id="LTX-uR-yBT"/>
                             <constraint firstItem="cB9-4F-jgC" firstAttribute="width" secondItem="UDm-4A-5RY" secondAttribute="width" id="LUg-mF-4Cm"/>
-                            <constraint firstItem="Fep-gL-GkX" firstAttribute="top" secondItem="J3F-Ic-ea7" secondAttribute="top" constant="20" id="Spb-z2-V9d"/>
                             <constraint firstItem="Lda-uc-IJV" firstAttribute="top" secondItem="cB9-4F-jgC" secondAttribute="bottom" constant="10" id="TdQ-FT-Wke"/>
-                            <constraint firstItem="cB9-4F-jgC" firstAttribute="top" secondItem="Fep-gL-GkX" secondAttribute="bottom" constant="20" id="UqR-Dp-qOC"/>
                             <constraint firstItem="J3F-Ic-ea7" firstAttribute="bottom" secondItem="Lda-uc-IJV" secondAttribute="bottom" id="bbm-6m-uwj"/>
-                            <constraint firstItem="UDm-4A-5RY" firstAttribute="top" secondItem="Fep-gL-GkX" secondAttribute="bottom" constant="20" id="ffl-2b-iu1"/>
+                            <constraint firstItem="cB9-4F-jgC" firstAttribute="top" secondItem="J3F-Ic-ea7" secondAttribute="top" constant="20" id="qjA-3r-Sp9"/>
+                            <constraint firstItem="UDm-4A-5RY" firstAttribute="top" secondItem="J3F-Ic-ea7" secondAttribute="top" constant="20" id="wCx-Gc-A7c"/>
                             <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="UDm-4A-5RY" secondAttribute="trailing" constant="5" id="xk6-0Z-JTe"/>
-                            <constraint firstItem="Fep-gL-GkX" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" id="ykk-wi-eeF"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="J3F-Ic-ea7"/>
                     </view>
                     <connections>
                         <outlet property="chart" destination="Lda-uc-IJV" id="vq4-b2-hyf"/>
-                        <outlet property="dealDesc" destination="Fep-gL-GkX" id="Bhy-yg-o6t"/>
                         <outlet property="delete" destination="UDm-4A-5RY" id="Dhy-Mf-uX1"/>
                         <outlet property="edit" destination="cB9-4F-jgC" id="Kgq-Nj-jvJ"/>
                         <segue destination="7rA-dd-j70" kind="show" identifier="editSegue" id="03q-bu-c35"/>
@@ -487,7 +477,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2uD-DD-JOu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="181.59999999999999" y="1698.8005997001501"/>
+            <point key="canvasLocation" x="233" y="1688"/>
         </scene>
         <!--Vendor Home View Controller-->
         <scene sceneID="NM1-7s-Kmp">
@@ -668,7 +658,7 @@
                             <button alpha="0.59999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZc-lZ-ChE">
                                 <rect key="frame" x="0.0" y="64" width="375" height="211"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Select New Image">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>

@@ -12,7 +12,6 @@ import FirebaseDatabase
 var minDate: Date!
 
 class ChartView: UIViewController {
-    
     var gradientLayer: CAGradientLayer!
     var ref: DatabaseReference!
     var deal: DealData!
@@ -21,12 +20,10 @@ class ChartView: UIViewController {
     @IBOutlet weak var chart: LineChartView!
     @IBOutlet weak var delete: UIButton!
     @IBOutlet weak var edit: UIButton!
-    @IBOutlet weak var dealDesc: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        
         getRedeems()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -34,20 +31,25 @@ class ChartView: UIViewController {
     }
     
     private func setupUI(){
+        self.navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.isNavigationBarHidden = false
+        self.navigationItem.title = deal.dealDescription
         gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.5).cgColor]
+        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1).cgColor,#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.2548694349).cgColor]
         self.view.layer.insertSublayer(gradientLayer, at: 0)
-        edit.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        edit.layer.borderColor = UIColor.white.cgColor
         edit.layer.borderWidth = 1.0
         edit.layer.cornerRadius = 5
-        delete.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        delete.layer.borderColor = UIColor.white.cgColor
         delete.layer.borderWidth = 1.0
         delete.layer.cornerRadius = 5
-        dealDesc.text = deal.dealDescription
         chart.chartDescription?.enabled = false
         chart.noDataText = "No Redemptions"
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isTranslucent = true
     }
     
     func getRedeems(){
@@ -90,7 +92,7 @@ class ChartView: UIViewController {
         }
         xaxis.valueFormatter = formato
         let line = LineChartDataSet(values: lineChartEntry, label: "Times Redeemed")
-        line.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)]
+        line.colors = [UIColor.white]
         line.mode = .horizontalBezier
         line.drawCirclesEnabled = false
         line.cubicIntensity = 0.05

@@ -45,7 +45,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             return 70
         }
         else if indexPath.row == 2{
-            return 120
+            return self.tableView.frame.height - (160 + 70 + 70 + (self.tabBarController?.tabBar.frame.height)!)
         }
         else{
             return 70
