@@ -18,6 +18,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var SignupButton: UIButton!
     @IBOutlet weak var PasswordField: UITextField!
     var keyboardShowing = false
+    var keyboardHeight: CGFloat!
 
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loadingView: UIView!
@@ -131,20 +132,20 @@ class SignUpViewController: UIViewController {
             if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 if self.view.frame.origin.y == 0{
                     let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-                    let keyboardHeight = keyboardRectValue?.height
+                    keyboardHeight = keyboardRectValue?.height
                     self.view.frame.origin.y -= keyboardHeight!
                 }
             }
         }
     }
     @objc func keyboardWillHide(notification: NSNotification){
-        keyboardShowing = false
-        img.isHidden = false
-        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if self.view.frame.origin.y != 0{
-                let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-                let keyboardHeight = keyboardRectValue?.height
-                self.view.frame.origin.y += keyboardHeight!
+           if !keyboardShowing{
+            keyboardShowing = false
+            img.isHidden = false
+            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+                if self.view.frame.origin.y != 0{
+                    self.view.frame.origin.y += keyboardHeight!
+                }
             }
         }
     }

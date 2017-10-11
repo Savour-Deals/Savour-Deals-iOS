@@ -194,13 +194,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         self.title = ""
-        if segue.identifier == "menu" {
+        //menu storyboard removed as menus are externally linked
+       /* if segue.identifier == "menu" {
             if let pdfVC = segue.destination as? MenuViewController {
                 pdfVC.title = self.rName.text! + " Menu"
                 pdfVC.request = self.request
 
             }
-        }
+        }*/
     }
     
     func preferredStatusBarStyle() -> UIStatusBarStyle {

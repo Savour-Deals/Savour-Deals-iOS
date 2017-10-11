@@ -114,7 +114,7 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t2g-oo-vU5">
                                 <rect key="frame" x="10" y="303" width="115" height="30"/>
-                                <state key="normal" title="Get Directions">
+                                <state key="normal" title="Directions">
                                     <color key="titleColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -191,7 +191,6 @@
                         <outlet property="rDesc" destination="d89-BY-axk" id="kVa-CO-awu"/>
                         <outlet property="rImg" destination="zNp-Yt-Dy1" id="2CO-NG-8KU"/>
                         <outlet property="rName" destination="H4W-rf-jk7" id="Idn-d3-eaL"/>
-                        <segue destination="box-Yk-Lei" kind="show" identifier="menu" id="lY2-QM-nQa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cCl-Mo-yDP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -202,47 +201,6 @@
                 </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1328.8" y="-367.46626686656674"/>
-        </scene>
-        <!--Menu View Controller-->
-        <scene sceneID="I4C-su-Yry">
-            <objects>
-                <viewController id="box-Yk-Lei" customClass="MenuViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="taW-ae-pCF">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" keyboardDisplayRequiresUserAction="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MV5-ic-ebU">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <dataDetectorType key="dataDetectorTypes"/>
-                                <connections>
-                                    <outlet property="delegate" destination="box-Yk-Lei" id="drv-xq-2Z2"/>
-                                </connections>
-                            </webView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="207-dQ-LsC">
-                                <rect key="frame" x="169" y="315" width="37" height="37"/>
-                                <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </activityIndicatorView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="207-dQ-LsC" firstAttribute="centerX" secondItem="8HW-Cz-eJc" secondAttribute="centerX" id="28X-90-OaR"/>
-                            <constraint firstItem="8HW-Cz-eJc" firstAttribute="bottom" secondItem="MV5-ic-ebU" secondAttribute="bottom" id="exF-gb-FHY"/>
-                            <constraint firstItem="207-dQ-LsC" firstAttribute="centerY" secondItem="taW-ae-pCF" secondAttribute="centerY" id="oG8-l0-amX"/>
-                            <constraint firstItem="MV5-ic-ebU" firstAttribute="top" secondItem="8HW-Cz-eJc" secondAttribute="top" id="rxk-wu-kdY"/>
-                            <constraint firstItem="8HW-Cz-eJc" firstAttribute="trailing" secondItem="MV5-ic-ebU" secondAttribute="trailing" id="wQ4-Sl-wN1"/>
-                            <constraint firstItem="MV5-ic-ebU" firstAttribute="leading" secondItem="8HW-Cz-eJc" secondAttribute="leading" id="yLj-wr-S7A"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="8HW-Cz-eJc"/>
-                    </view>
-                    <connections>
-                        <outlet property="loadingIndicator" destination="207-dQ-LsC" id="5qI-Jc-Lxk"/>
-                        <outlet property="webView" destination="MV5-ic-ebU" id="PkL-3a-pHr"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="OQj-uF-ZpK" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2133" y="-367"/>
         </scene>
     </scenes>
 </document>
