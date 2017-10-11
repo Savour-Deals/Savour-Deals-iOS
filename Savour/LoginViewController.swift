@@ -14,7 +14,8 @@ import FBSDKLoginKit
 class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
-
+    var keyboardHeight: CGFloat!
+    
     @IBOutlet weak var img: UIImageView!
     @IBOutlet weak var Const: UIView!
     @IBOutlet weak var LoginEmail: UITextField!
@@ -217,20 +218,20 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 if self.view.frame.origin.y == 0{
                     let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-                    let keyboardHeight = keyboardRectValue?.height
+                    keyboardHeight = keyboardRectValue?.height
                     self.view.frame.origin.y -= keyboardHeight!
                 }
             }
         }
     }
     @objc func keyboardWillHide(notification: NSNotification){
-        keyboardShowing = false
-        img.isHidden = false
-        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if self.view.frame.origin.y != 0{
-                let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-                let keyboardHeight = keyboardRectValue?.height
-                self.view.frame.origin.y += keyboardHeight!
+        if keyboardShowing{
+            keyboardShowing = false
+            img.isHidden = false
+            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+                if self.view.frame.origin.y != 0{
+                    self.view.frame.origin.y += keyboardHeight!
+                }
             }
         }
     }

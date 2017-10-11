@@ -318,7 +318,7 @@ class PhotoSelectController: UIViewController, UIImagePickerControllerDelegate, 
         imagePicker.delegate = self
         self.ref = Database.database().reference()
         storageRef = StorageReference()
-        if newDeal.restrauntID != nil{
+        if newDeal.restrauntPhoto != ""{
             self.nextBtn.isEnabled = true
 
             // Reference to an image file in Firebase Storage

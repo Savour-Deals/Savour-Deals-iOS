@@ -46,20 +46,20 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time Left for deal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qFY-8d-byY">
-                                                    <rect key="frame" x="151" y="63" width="93" height="14"/>
+                                                    <rect key="frame" x="151" y="56.5" width="93" height="14"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" red="0.94432973860000002" green="0.50646102429999995" blue="0.3838719726" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Restaurant Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWm-8Y-2AL">
-                                                    <rect key="frame" x="148" y="5" width="195" height="30"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
-                                                    <nil key="textColor"/>
+                                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Restaurant Name" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWm-8Y-2AL">
+                                                    <rect key="frame" x="148" y="5" width="117" height="17.5"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal Description" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NvX-2o-EGw">
-                                                    <rect key="frame" x="148" y="40" width="113.5" height="18"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <rect key="frame" x="148" y="27.5" width="143.5" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -425,7 +425,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cB9-4F-jgC">
-                                <rect key="frame" x="5" y="84" width="180" height="40"/>
+                                <rect key="frame" x="100" y="84" width="175" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="4yV-yJ-NB9"/>
                                 </constraints>
@@ -436,18 +436,6 @@
                                     <action selector="editPressed:" destination="5PX-un-bSz" eventType="touchUpInside" id="Gsb-Br-gZ4"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDm-4A-5RY">
-                                <rect key="frame" x="190" y="84" width="180" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="JlQ-AT-O0b"/>
-                                </constraints>
-                                <state key="normal" title="Delete Deal">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="deletePressed:" destination="5PX-un-bSz" eventType="touchUpInside" id="iha-SY-Kf0"/>
-                                </connections>
-                            </button>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lda-uc-IJV" customClass="LineChartView" customModule="Charts">
                                 <rect key="frame" x="0.0" y="134.5" width="375" height="532.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -455,22 +443,18 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="cB9-4F-jgC" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" constant="5" id="37M-PV-bcu"/>
+                            <constraint firstItem="cB9-4F-jgC" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" constant="100" id="37M-PV-bcu"/>
                             <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="Lda-uc-IJV" secondAttribute="trailing" id="5yJ-ah-Uxc"/>
                             <constraint firstItem="Lda-uc-IJV" firstAttribute="leading" secondItem="J3F-Ic-ea7" secondAttribute="leading" id="7jX-tE-cKu"/>
-                            <constraint firstItem="UDm-4A-5RY" firstAttribute="leading" secondItem="cB9-4F-jgC" secondAttribute="trailing" constant="5" id="LTX-uR-yBT"/>
-                            <constraint firstItem="cB9-4F-jgC" firstAttribute="width" secondItem="UDm-4A-5RY" secondAttribute="width" id="LUg-mF-4Cm"/>
+                            <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="cB9-4F-jgC" secondAttribute="trailing" constant="100" id="NRV-IJ-T5P"/>
                             <constraint firstItem="Lda-uc-IJV" firstAttribute="top" secondItem="cB9-4F-jgC" secondAttribute="bottom" constant="10" id="TdQ-FT-Wke"/>
                             <constraint firstItem="J3F-Ic-ea7" firstAttribute="bottom" secondItem="Lda-uc-IJV" secondAttribute="bottom" id="bbm-6m-uwj"/>
                             <constraint firstItem="cB9-4F-jgC" firstAttribute="top" secondItem="J3F-Ic-ea7" secondAttribute="top" constant="20" id="qjA-3r-Sp9"/>
-                            <constraint firstItem="UDm-4A-5RY" firstAttribute="top" secondItem="J3F-Ic-ea7" secondAttribute="top" constant="20" id="wCx-Gc-A7c"/>
-                            <constraint firstItem="J3F-Ic-ea7" firstAttribute="trailing" secondItem="UDm-4A-5RY" secondAttribute="trailing" constant="5" id="xk6-0Z-JTe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="J3F-Ic-ea7"/>
                     </view>
                     <connections>
                         <outlet property="chart" destination="Lda-uc-IJV" id="vq4-b2-hyf"/>
-                        <outlet property="delete" destination="UDm-4A-5RY" id="Dhy-Mf-uX1"/>
                         <outlet property="edit" destination="cB9-4F-jgC" id="Kgq-Nj-jvJ"/>
                         <segue destination="7rA-dd-j70" kind="show" identifier="editSegue" id="03q-bu-c35"/>
                     </connections>

@@ -18,7 +18,6 @@ class ChartView: UIViewController {
     var dates = [Double]()
     var graphVals = [String:Double]()
     @IBOutlet weak var chart: LineChartView!
-    @IBOutlet weak var delete: UIButton!
     @IBOutlet weak var edit: UIButton!
     
     override func viewDidLoad() {
@@ -41,9 +40,7 @@ class ChartView: UIViewController {
         edit.layer.borderColor = UIColor.white.cgColor
         edit.layer.borderWidth = 1.0
         edit.layer.cornerRadius = 5
-        delete.layer.borderColor = UIColor.white.cgColor
-        delete.layer.borderWidth = 1.0
-        delete.layer.cornerRadius = 5
+        
         chart.chartDescription?.enabled = false
         chart.noDataText = "No Redemptions"
     }
@@ -108,7 +105,7 @@ class ChartView: UIViewController {
         chart.data = data
     }
    
-    @IBAction func deletePressed(_ sender: Any) {
+    /*@IBAction func deletePressed(_ sender: Any) {
         let alert = UIAlertController(title: "Delete Promotion?", message: "Are you sure you want to delete this promotion? This will completely remove the promotion including all redemption information you are currently looking at.", preferredStyle: .alert)
       
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {(alert: UIAlertAction!) -> Void in
@@ -119,7 +116,8 @@ class ChartView: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
-    }
+    }*/
+    
     @IBAction func editPressed(_ sender: Any) {
         self.performSegue(withIdentifier: "editSegue", sender: nil)
     }

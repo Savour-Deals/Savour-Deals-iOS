@@ -18,6 +18,7 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
     var storageRef: StorageReference!
     var id: String!
     var menu: String!
+    var keyboardHeight: CGFloat!
     @IBOutlet weak var rImg: UIImageView!
     @IBOutlet weak var rAddress: UITextField!
     @IBOutlet weak var rName: UITextField!
@@ -139,22 +140,22 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
     @objc func keyboardWillShow(notification: NSNotification){
         if !keyboardShowing{
             keyboardShowing = true
-            rImg.isHidden = true
-            self.navigationController?.navigationBar.isHidden = true
             if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 if self.view.frame.origin.y == 0{
-                    self.view.frame.origin.y -= rImg.frame.height + (self.navigationController?.navigationBar.frame.height)!
+                    let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+                    keyboardHeight = keyboardRectValue?.height
+                    self.view.frame.origin.y -= keyboardHeight!
                 }
             }
         }
     }
     @objc func keyboardWillHide(notification: NSNotification){
-        keyboardShowing = false
-        rImg.isHidden = false
-        self.navigationController?.navigationBar.isHidden = false
-        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if self.view.frame.origin.y != 0{
-                self.view.frame.origin.y += rImg.frame.height + (self.navigationController?.navigationBar.frame.height)!
+        if !keyboardShowing{
+            keyboardShowing = false
+            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+                if self.view.frame.origin.y != 0{
+                    self.view.frame.origin.y += keyboardHeight!
+                }
             }
         }
     }

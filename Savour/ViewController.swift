@@ -41,6 +41,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference()
+        ref.keepSynced(true)
+
         if UnfilteredDeals.isEmpty{
             self.setupUI()
         }
@@ -66,10 +68,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func setupUI(){
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.view.backgroundColor = UIColor.lightGray
+        self.DealsTable.backgroundColor = UIColor.lightGray
+
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
+        self.refreshControl.tintColor = UIColor.white
+
         ref.keepSynced(true)
-        DealsTable.delegate = self
         GetFavs()
         //Check if forcetouch is available
         if traitCollection.forceTouchCapability == .available {
@@ -84,7 +90,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             DealsTable.addSubview(refreshControl)
         }
         // Configure Refresh Control
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals")
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         setupSearchBar()
     }
@@ -184,6 +190,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         }
                     }
                 }
+                
                 self.loadRedeemed()
             }){ (error) in
                 print(error.localizedDescription)
@@ -221,11 +228,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if self.DealsTable.dataSource == nil{
                 self.DealsTable.dataSource = self
             }
+            self.DealsTable.delegate = self
             filteredDeals = UnfilteredDeals
             self.DealsTable.reloadData()
         })
-
-
     }
     
         
@@ -238,8 +244,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
             let deal = filteredDeals[indexPath.row]
-            //cell.row = indexPath.row
             cell.deal = deal
+            if favorites[deal.dealID!] == nil{
+                cell.likeButton.setImage(#imageLiteral(resourceName: "icons8-like"), for: .normal)
+            }
+            else{
+                cell.likeButton.setImage(#imageLiteral(resourceName: "icons8-like_filled.png"), for: .normal)
+            }
             let photo = deal.restrauntPhoto!
             if photo != ""{
                 // Reference to an image file in Firebase Storage
@@ -264,6 +275,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             else{
                 cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
+                
 
                 let start = Date(timeIntervalSince1970: deal.startTime!)
                 let end = Date(timeIntervalSince1970: deal.endTime!)
@@ -291,8 +303,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     cell.Countdown.text = "Starts in " + startingTime
                 }
             }
+        cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
+        cell.tagImg.tintColor = cell.Countdown.textColor
         
-            
         return cell
 
         
@@ -316,37 +329,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.pushViewController(VC, animated: true)
     }
     
-    // extend buttons
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+ 
+    
+    func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-       let favorite: UITableViewRowAction!
-        if favorites[filteredDeals[indexPath.row].dealID!] == nil{
-            favorite = UITableViewRowAction(style: .normal, title: "  Favorite  ") { (action, index) -> Void in
-                
-                tableView.isEditing = false
-                favorites[filteredDeals[indexPath.row].dealID!] = filteredDeals[indexPath.row]
-                print("favorite")
-                
-            }
-            favorite.backgroundColor = UIColor.green
-        }
-        else{
-            favorite = UITableViewRowAction(style: .normal, title: "  UnFavorite  ") { (action, index) -> Void in
-                
-                tableView.isEditing = false
-                print("unfavorite")
-                favorites.removeValue(forKey: filteredDeals[indexPath.row].dealID!)
-            }
-            favorite.backgroundColor = UIColor.red
-        }
-        
-        
-        // return buttons
-        return [favorite]
-    }
+   
+    
+    
     
     //SearchBar functions
     func setupSearchBar(){

@@ -12,6 +12,7 @@ import FirebaseDatabase
 import FirebaseStorage
 import SDWebImage
 import FirebaseStorageUI
+import FirebaseAuth
 
 class FavoritesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     var storage: Storage!
@@ -19,7 +20,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     var deals = [DealData]()
     var user: String!
     @IBOutlet weak var FavTable: UITableView!
-    
+    var ref: DatabaseReference!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if traitCollection.forceTouchCapability == .available {
@@ -27,7 +29,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         } else {
             print("3D Touch Not Available")
         }
-
     }
     override func viewWillAppear(_ animated: Bool) {
         
@@ -52,15 +53,12 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             emptyView.isHidden = true
         }
         FavTable.tableFooterView = UIView()
-
     }
-    
-    
-    
-
     
     func setupUI(){
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
+        self.navigationController?.view.backgroundColor = UIColor.lightGray
+        self.FavTable.backgroundColor = UIColor.lightGray
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -69,9 +67,14 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
-        let deal = deals[indexPath.row]
-        
-        let photo = deal.restrauntPhoto!
+        cell.deal = deals[indexPath.row]
+        cell.likeButton.setTitle("Remove", for: .normal)
+        cell.likeButton.setTitleColor( #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: .normal)
+        cell.likeButton.layer.borderWidth = 1
+        cell.likeButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        cell.likeButton.frame.size = CGSize(width: 300, height: 40)
+        cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
+        let photo = cell.deal.restrauntPhoto!
         // Reference to an image file in Firebase Storage
         let storage = Storage.storage()
         let storageref = storage.reference(forURL: photo)
@@ -84,17 +87,17 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         
         // Load the image using SDWebImage
         imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
-        cell.rName.text = deal.restrauntName
-        cell.dealDesc.text = deal.dealDescription
-        if deal.redeemed! {
+        cell.rName.text = cell.deal.restrauntName
+        cell.dealDesc.text = cell.deal.dealDescription
+        if cell.deal.redeemed! {
             cell.Countdown.text = "Deal Already Redeemed!"
             cell.Countdown.textColor = UIColor.red
         }
         else{
             cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
 
-            let start = Date(timeIntervalSince1970: deal.startTime!)
-            let end = Date(timeIntervalSince1970: deal.endTime!)
+            let start = Date(timeIntervalSince1970: cell.deal.startTime!)
+            let end = Date(timeIntervalSince1970: cell.deal.endTime!)
             let current = Date()
             let interval  =  DateInterval(start: start as Date, end: end as Date)
             if (interval.contains(current)){
@@ -111,9 +114,28 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 cell.Countdown.text = "Starts in " + String(describing: Components.day!) + "days"
             }
         }
+        cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
+        cell.tagImg.tintColor = cell.Countdown.textColor
         return cell
     }
-    
+    @IBAction func removePressed(sender: UIButton, event: UIEvent){
+        let touches = event.touches(for: sender)
+        if let touch = touches?.first{
+            let point = touch.location(in: FavTable)
+            if let indexPath = FavTable.indexPathForRow(at: point) {
+                let cell = FavTable.cellForRow(at: indexPath) as? DealTableViewCell
+                favorites.removeValue(forKey: (cell?.deal.dealID!)!)
+                let user = Auth.auth().currentUser?.uid
+                Database.database().reference().child("Users").child(user!).child("Favorites").child((cell?.deal.dealID!)!).removeValue()
+                deals.removeAll()
+                for fav in favorites{
+                    deals.append(fav.value)
+                }
+                FavTable.reloadData()
+            }
+        }
+        
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell
         tableView.deselectRow(at: indexPath, animated: true)
@@ -127,34 +149,11 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         self.navigationController?.pushViewController(VC, animated: true)
     }
 
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+    func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        return UITableViewAutomaticDimension
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        let deal = deals[indexPath.row]
-        if (editingStyle == UITableViewCellEditingStyle.delete) {
-            
-            favorites.removeValue(forKey:  deal.dealID!)
-            tableView.beginUpdates()
-            FavTable.deleteRows(at: [indexPath], with: .automatic)
-            tableView.endUpdates()
-
-            deals.removeAll()
-            for (_, deal) in favorites {
-                deals.append(deal)
-            }
-            //self.FavTable.reloadData()
-        }
-        if (favorites.isEmpty){
-            FavTable.isHidden = true
-            emptyView.isHidden = false
-        }
-        else{
-            FavTable.isHidden = false
-            emptyView.isHidden = true
-        }
-    }
 
    
 
