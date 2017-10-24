@@ -195,7 +195,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 else{
                     self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
                             let boarded = snapshot.value as? String ?? ""
-                        if boarded == "true"{
+                        if boarded != ""{
                             self.performSegue(withIdentifier: "MainS", sender: self)
                             self.endLoggingin()
 

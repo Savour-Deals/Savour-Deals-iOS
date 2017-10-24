@@ -9,12 +9,12 @@
 import UIKit
 import Firebase
 import FBSDKCoreKit
-
+import OneSignal
 
 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 
     var handle: AuthStateDidChangeListenerHandle?
 
@@ -23,6 +23,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        let notificationOpenedBlock: OSHandleNotificationActionBlock = { result in
+            let payload: OSNotificationPayload = result!.notification.payload
+            
+            print("Payload contains all of properties in notif is : " , payload)
+            print("Payload additionalData : " , payload.additionalData)
+            let dict = payload.additionalData! as! Dictionary<String, String>
+            notificationDeal = dict["deal"]!
+        }
+        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+        
+        // Replace 'YOUR_APP_ID' with your OneSignal App ID.
+        OneSignal.initWithLaunchOptions(launchOptions,
+                                        appId: "f1c64902-ab03-4674-95e9-440f7c8f33d0",
+                                        handleNotificationAction: notificationOpenedBlock,
+                                        settings: onesignalInitSettings)
+        
+        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+        
+        // Recommend moving the below line to prompt for push after informing the user about
+        //   how your app will use them.
+        OneSignal.promptForPushNotifications(userResponse: { accepted in
+            print("User accepted notifications: \(accepted)")
+        })
+        OneSignal.add(self as OSSubscriptionObserver)
+
+        
+        
+        
+        // Sync hashed email if you have a login system or collect it.
+        //   Will be used to reach the user at the most optimal time of day.
+        // OneSignal.syncHashedEmail(userEmail)
         FirebaseApp.configure()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         //Database.database().isPersistenceEnabled = true
@@ -121,6 +153,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     completionHandler(true)
 }
     
+    // After you add the observer on didFinishLaunching, this method will be called when the notification subscription property changes.
+    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
+        if !stateChanges.from.subscribed && stateChanges.to.subscribed {
+            signalID = " "
+            print("Subscribed for OneSignal push notifications!")
+        }
+        print("SubscriptionStateChange: \n\(stateChanges)")
+        
+        //The player id is inside stateChanges. But be careful, this value can be nil if the user has not granted you permission to send notifications.
+        if let playerId = stateChanges.to.userId {
+            signalID = playerId
+            print("Current playerId \(playerId)")
+        }
+    }
     
     
 

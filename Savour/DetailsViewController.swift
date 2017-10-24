@@ -12,14 +12,14 @@ import FirebaseDatabase
 import FirebaseStorage
 import SDWebImage
 import FirebaseStorageUI
-
+import OneSignal
 
 class DetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var directionsButton: UIButton!
     @IBOutlet weak var menuButton: UIButton!
-    var Deal: DealData?
+    var rID: String?
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
     var storage: Storage!
@@ -50,16 +50,12 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         DealsTable.rowHeight = UITableViewAutomaticDimension
         DealsTable.estimatedRowHeight = 45
-        followButton.layer.borderWidth = 1.0
-        followButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        directionsButton.layer.borderWidth = 1.0
-        directionsButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        menuButton.layer.borderWidth = 1.0
-        menuButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        followButton.layer.cornerRadius = 15
+        directionsButton.layer.cornerRadius = 15
+        menuButton.layer.cornerRadius = 15
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.title = Deal?.restrauntName
     }
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = true
@@ -73,7 +69,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func loadData(){
         //Set overall restraunt info
-        let id = Deal?.restrauntID?.description
+        let id = rID
         ref.child("Restaurants").child(id!).observeSingleEvent(of: .value, with: { (snapshot) in
             
             let value = snapshot.value as? NSDictionary
@@ -109,7 +105,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             print(error.localizedDescription)
         }
         for i in 0 ... (UnfilteredDeals.count-1){
-            if self.Deal?.restrauntID == UnfilteredDeals[i].restrauntID{
+            if self.rID == UnfilteredDeals[i].restrauntID{
                 self.Deals.append((UnfilteredDeals[i]))
                 self.indices.append(i)
             }
@@ -128,6 +124,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.dealDesc.text = deal.dealDescription
         if deal.redeemed! {
             cell.Countdown.text = "Deal Already Redeemed!"
+            cell.validHours.text = ""
             cell.Countdown.textColor = UIColor.red
             cell.FavButton.isHidden = true
         }
@@ -142,20 +139,57 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 let cal = Calendar.current
                 let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
                 cell.Countdown.text =  "Time left: " + String(describing: Components.day!) + "d " + String(describing: Components.hour!) + "h " + String(describing: Components.minute!) + "m"
+                let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
+                let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
+                let calendar = NSCalendar.current
+                var hour = calendar.component(.hour, from: startD)
+                var minute = calendar.component(.minute, from: startD)
+                var component = "AM"
+                if hour > 12{
+                    component = "PM"
+                    hour = hour - 12
+                }
+                if minute < 10 {
+                    cell.validHours.text = "Valid Between: \(hour):0\(minute)\(component)-"
+                }
+                else{
+                    cell.validHours.text = "Valid Between: \(hour):\(minute)\(component)-"
+                }
+                hour = calendar.component(.hour, from: endD)
+                minute = calendar.component(.minute, from: endD)
+                component = "AM"
+                if hour > 12{
+                    component = "PM"
+                    hour = hour - 12
+                }
+                if minute < 10 {
+                    cell.validHours.text = cell.validHours.text! + "\(hour):0\(minute)\(component)"
+                }
+                else{
+                    cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
+                }
+
             }
             else if (current > end){
                 cell.Countdown.text = "Deal Ended"
+                cell.validHours.text = ""
             }
             else {
                 let cal = Calendar.current
                 let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
                 cell.Countdown.text = "Starts in " + String(describing: Components.day!) + "days"
             }
-            if favorites[deal.dealID!] != nil{ 
-                cell.FavButton.setTitle("Unfavorite", for: .normal )
+            if favorites[deal.dealID!] != nil{
+                favorites[deal.dealID!] = deal
+                let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
+                cell.FavButton.setImage(image, for: .normal)
+                cell.FavButton.tintColor = UIColor.red
             }
             else{
-                cell.FavButton.setTitle("Favorite", for: .normal)
+                favorites.removeValue(forKey: deal.dealID!)
+                let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
+                cell.FavButton.setImage(image, for: .normal)
+                cell.FavButton.tintColor = UIColor.red
             }
         }
         return cell
@@ -168,7 +202,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
         VC.Deal = Deals[indexPath.row]
-        VC.newImg = rImg.image
+        VC.photo = VC.Deal?.restrauntPhoto
         VC.fromDetails = true
         VC.index = indices[indexPath.row]
         self.title = ""
@@ -192,17 +226,6 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         UIApplication.shared.open(URL(string: menu)!, options: [:], completionHandler: nil)
         menuButton.isEnabled = true
     }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        self.title = ""
-        //menu storyboard removed as menus are externally linked
-       /* if segue.identifier == "menu" {
-            if let pdfVC = segue.destination as? MenuViewController {
-                pdfVC.title = self.rName.text! + " Menu"
-                pdfVC.request = self.request
-
-            }
-        }*/
-    }
     
     func preferredStatusBarStyle() -> UIStatusBarStyle {
         
@@ -212,16 +235,19 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBAction func followPressed(_ sender: Any) {
         followButton.isEnabled = false
         if self.followButton.currentTitle == "Follow"{
-            let currTime = Date().timeIntervalSince1970
             let uID = Auth.auth().currentUser?.uid
-            let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
-            followRef.setValue(currTime)
+            let followRef = Database.database().reference().child("Restaurants").child((self.rID)!).child("Followers").child(uID!)
+            if signalID != " "{
+                followRef.setValue(signalID)
+            }
+            OneSignal.sendTags([(rID)! : "true"])
             self.followButton.setTitle("Unfollow", for: .normal)
         }
         else{
             let uID = Auth.auth().currentUser?.uid
-            let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
+            let followRef = Database.database().reference().child("Restaurants").child((self.rID)!).child("Followers").child(uID!)
             followRef.removeValue()
+            OneSignal.sendTags([(rID)! : "false"])
             self.followButton.setTitle("Follow", for: .normal)
 
         }

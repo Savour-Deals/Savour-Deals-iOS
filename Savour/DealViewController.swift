@@ -9,12 +9,15 @@
 import UIKit
 import Pulsator
 import FirebaseDatabase
+import FirebaseStorage
 import FirebaseAuth
+import OneSignal
 
 
 
 class DealViewController: UIViewController {
 
+    @IBOutlet weak var blurView: UIVisualEffectView!
     var Deal: DealData?
     var index = -1
     var fromDetails: Bool?
@@ -29,6 +32,7 @@ class DealViewController: UIViewController {
     var timerStartTime: Int!
     weak var shapeLayer: CAShapeLayer?
     
+    @IBOutlet weak var infoView: UIView!
     @IBOutlet var redeemedView: UIView!
     @IBOutlet weak var redeem: UIButton!
     @IBOutlet weak var dealLbl: UILabel!
@@ -36,7 +40,7 @@ class DealViewController: UIViewController {
     @IBOutlet weak var moreBtn: UIButton!
     @IBOutlet weak var img: UIImageView!
     @IBOutlet var DealView: UIView!
-    var newImg: UIImage!
+    var photo: String!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -59,20 +63,19 @@ class DealViewController: UIViewController {
             // activate the constraint
             NSLayoutConstraint.activate([verticalSpace])
         }
-        moreBtn.layer.borderWidth = 1.0
-        moreBtn.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        moreBtn.layer.cornerRadius = 25
+        infoView.layer.cornerRadius = 10
         self.navigationController?.navigationBar.tintColor = UIColor.white
         if (Deal?.redeemed)!{
             self.redeem.isEnabled = false
-            redeem.layer.borderWidth = 1.0
-            redeem.layer.borderColor = UIColor.red.cgColor
-            redeem.setTitleColor(UIColor.red, for: .normal)
+            redeem.layer.cornerRadius = 25
             self.redeem.setTitle("Already Redeemed!", for: .normal)
+            self.redeem.layer.backgroundColor = UIColor.red.cgColor
+
         }
         else{
             pulsator.start()
-            redeem.layer.borderWidth = 1.0
-            redeem.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+            redeem.layer.cornerRadius = 25
         }
         SetupUI()
 
@@ -100,6 +103,7 @@ class DealViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         pulsator.stop()
+        self.title = ""
     }
     
     func SetupUI(){
@@ -112,7 +116,19 @@ class DealViewController: UIViewController {
             moreBtn.isHidden = false
         }
         dealLbl.text = Deal?.dealDescription
-        img.image = newImg
+        if photo != ""{
+            // Reference to an image file in Firebase Storage
+            let storage = Storage.storage()
+            let storageref = storage.reference(forURL: photo!)
+            
+            let imageView: UIImageView = img
+            
+            // Placeholder image
+            let placeholderImage = UIImage(named: "placeholder.jpg")
+            
+            // Load the image using SDWebImage
+            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
+        }
         self.img.layer.cornerRadius = img.frame.size.width / 2
         moreBtn.setTitle("See More From " + (Deal?.restrauntName)!, for: .normal)
         imgbound.layer.insertSublayer(pulsator, below: img.layer)
@@ -125,15 +141,11 @@ class DealViewController: UIViewController {
         if segue.identifier == "RestaurantDetails" {
             self.title = ""
             let vc = segue.destination as! DetailsViewController
-            vc.Deal = Deal
+            vc.rID = self.Deal?.restrauntID
         }
     }
     
-    @IBAction func authenticatePressed(_ sender: Any) {        let alert = UIAlertController(title: "Notice!", message: "You must use the coupon on the day that you redeem it! By selecting Redeem below you aknowledge that you understand the discount must be used today. \n\nIf you do not want to use it today, but intend to use another day, simply favorite the discount and it will be saved under your Starred section. \n\nBe aware that even if you star a discount you must still redeem it and use it before the expiry time.", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (alert: UIAlertAction!) -> Void in
-            
-        }
-        let approveAction = UIAlertAction(title: "Redeem Today!", style: .default) { (alert: UIAlertAction!) -> Void in
+    @IBAction func authenticatePressed(_ sender: Any) {
             let alert = UIAlertController(title: "Cashier Approval", message: "Give this message to the cashier to redeem your coupon.", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (alert: UIAlertAction!) -> Void in
                 
@@ -150,8 +162,7 @@ class DealViewController: UIViewController {
                 
                 self.redeem.isEnabled = false
                 self.redeem.setTitle("Already Redeemed!", for: .normal)
-                self.redeem.layer.borderColor = UIColor.red.cgColor
-                self.redeem.setTitleColor(UIColor.red, for: .normal)
+                self.redeem.layer.backgroundColor = UIColor.red.cgColor
                 filteredDeals[self.index].redeemed = true
                 filteredDeals[self.index].redeemedTime = currTime
                 self.Deal?.redeemedTime = currTime
@@ -160,14 +171,14 @@ class DealViewController: UIViewController {
                     favorites.removeValue(forKey: (filteredDeals[self.index].dealID)!)
                 }
                 self.runTimer()
+                if signalID != " "{
+                    let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
+                    followRef.setValue(signalID)
+                }
             }
             alert.addAction(cancelAction)
             alert.addAction(approveAction)
             self.present(alert, animated: true, completion:nil)
-        }
-        alert.addAction(cancelAction)
-        alert.addAction(approveAction)
-        present(alert, animated: true, completion:nil)
     }
     
     
@@ -233,6 +244,23 @@ class DealViewController: UIViewController {
         }
     }
     
+    @IBAction func infoPressed(_ sender: Any) {
+        self.view.bringSubview(toFront: blurView)
+
+        self.view.bringSubview(toFront: infoView)
+        redeem.isEnabled = false
+        moreBtn.isEnabled = false
+        infoView.isHidden = false
+        blurView.isHidden = false
+    }
+    
+    @IBAction func infoDismiss(_ sender: Any) {
+        redeem.isEnabled = true
+        moreBtn.isEnabled = true
+        infoView.isHidden = true
+        blurView.isHidden = true
+
+    }
     func timeString(time:TimeInterval)->String{
         let minutes = Int(time) / 60 % 60
         let seconds = Int(time) % 60

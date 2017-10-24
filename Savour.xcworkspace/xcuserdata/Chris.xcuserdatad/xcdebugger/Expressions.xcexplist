@@ -19,6 +19,12 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ViewController.GetFavs():ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FavoritesViewController.tableView(_:cellForRowAt:):FavoritesViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "ViewController.(loadData() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -38,6 +44,9 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "StartTimeController.viewDidLoad():DealInformationViews.swift">
+      </ContextState>
+      <ContextState
          contextName = "mach_msg_trap:(null)">
          <PersistentStrings>
             <PersistentString
@@ -45,6 +54,17 @@
             </PersistentString>
             <PersistentString
                value = "user">
+            </PersistentString>
+            <PersistentString
+               value = "listTable">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.viewDidLoad():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.navigationController">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -123,6 +143,22 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ViewController.loadRedeemed():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in AppDelegate.application(_:didFinishLaunchingWithOptions:):AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "payload.additionalData">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "DiscountViewController.nextPressed(_:):DealInformationViews.swift">
          <PersistentStrings>
             <PersistentString
@@ -131,10 +167,21 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ViewController.prepare(for:sender:):ViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "ViewController.loadFavorites(user : User) -&gt; ():ViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "user.uid">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "listViewController.tableView(_:heightForRowAt:):VendorMapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "tableView.cellForRow(at: indexPath)">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -161,10 +208,10 @@
          contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "(self.Deal?.dealID)!">
+               value = "mainVC">
             </PersistentString>
             <PersistentString
-               value = "mainVC">
+               value = "(self.Deal?.dealID)!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -191,10 +238,45 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "DealTableViewCell.likePressed(_:):DealTableViewCell.swift">
+      </ContextState>
+      <ContextState
          contextName = "DetailsViewController.menu.getter:DetailsViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "DealTableViewCell.likePressed(_:):DealTableViewCell.swift">
+         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "specialized closure #1 in ViewController.loadData(sender:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UnfilteredDeals">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.dealDetails(deal:index:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.searchBar">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "listViewController.searchBar(_:textDidChange:):VendorMapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cellHeights">
+            </PersistentString>
+            <PersistentString
+               value = "restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))!">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "closure #1 in ViewController.loadRedeemed():ViewController.swift">
@@ -203,13 +285,22 @@
                value = "(Auth.auth().currentUser?.uid)!">
             </PersistentString>
             <PersistentString
-               value = "redeemers">
+               value = "UnfilteredDeals">
+            </PersistentString>
+            <PersistentString
+               value = "filteredDeals">
+            </PersistentString>
+            <PersistentString
+               value = "self.navigationController">
             </PersistentString>
             <PersistentString
                value = "redeemers.value(forKey: (Auth.auth().currentUser?.uid)!)">
             </PersistentString>
             <PersistentString
-               value = "filteredDeals">
+               value = "redeemers">
+            </PersistentString>
+            <PersistentString
+               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
             </PersistentString>
             <PersistentString
                value = "snap.value">
@@ -233,6 +324,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "FavoritesViewController.removePressed(sender:event:):FavoritesViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "AppDelegate.applicationWillTerminate(UIApplication) -&gt; ():AppDelegate.swift">
          <PersistentStrings>
             <PersistentString
@@ -244,10 +343,13 @@
          contextName = "ViewController.ref.getter:ViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "FavoritesViewController.removePressed(sender:event:):FavoritesViewController.swift">
+         contextName = "ReviewController.submitDeal(_:):DealInformationViews.swift">
          <PersistentStrings>
             <PersistentString
-               value = "favorites">
+               value = "Date(timeIntervalSince1970: newDeal.startTime!)">
+            </PersistentString>
+            <PersistentString
+               value = "date">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

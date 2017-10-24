@@ -9,8 +9,10 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import MessageUI
 
-class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
+
+class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate{
 
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
@@ -80,6 +82,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         else if indexPath.row == 2 {
             cell = tableView.dequeueReusableCell(withIdentifier: "Payment", for: indexPath)
+            cell.selectionStyle = UITableViewCellSelectionStyle.none
         }
         else if indexPath.row == 3 {
             
@@ -91,9 +94,39 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row == 1{
+            let mailComposeViewController = configureMailController()
+            if !MFMailComposeViewController.canSendMail() {
+                let email = "patte539@umn.edu"
+                let url = URL(string: "mailto:\(email)")
+                UIApplication.shared.open(url!)
+                return
+            }
+            else{
+                self.present(mailComposeViewController, animated: true, completion: nil)
+            }
+        }
         if indexPath.row == 3{
             LogoutPressed()
         }
+    }
+    
+    func configureMailController() -> MFMailComposeViewController {
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self
+        
+        mailComposerVC.setToRecipients(["patte539@umn.edu"])
+        mailComposerVC.setSubject("Savour Deals")
+        return mailComposerVC
+    }
+    func showMailError() {
+        let sendMailErrorAlert = UIAlertController(title: "Could not send email", message: "Your device could not send email", preferredStyle: .alert)
+        let dismiss = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        sendMailErrorAlert.addAction(dismiss)
+        self.present(sendMailErrorAlert, animated: true, completion: nil)
+    }
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
     
     func LogoutPressed() {

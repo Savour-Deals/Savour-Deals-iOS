@@ -80,7 +80,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="yes" spellCheckingType="no" returnKeyType="continue" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="continue" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes" textContentType="email"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="foZ-Wy-xls">
                                 <rect key="frame" x="25" y="410.66666666666669" width="364" height="45"/>
@@ -365,7 +365,7 @@
         <image name="logo" width="337" height="207"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GOz-cQ-F9f"/>
-        <segue reference="sYg-Gu-Rk6"/>
+        <segue reference="afN-rP-J9z"/>
+        <segue reference="5XM-XU-AuX"/>
     </inferredMetricsTieBreakers>
 </document>

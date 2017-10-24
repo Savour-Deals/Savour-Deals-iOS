@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
 
 class OnboardingViewController: UIViewController, UIScrollViewDelegate {
 
@@ -75,7 +77,7 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
 
 
 class WelcomeViewController: UIViewController{
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
@@ -85,16 +87,19 @@ class WelcomeViewController: UIViewController{
 
 class DoneViewController: UIViewController{
     @IBOutlet weak var continueBtn: UIButton!
-    
+    var ref: DatabaseReference!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
         continueBtn.layer.borderWidth = 1.0
         continueBtn.layer.borderColor = UIColor.white.cgColor
         continueBtn.layer.cornerRadius = 5
+        ref = Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Onboarded")
     }
     
     @IBAction func continuePressed(_ sender: Any) {
+        //let date = "\(Date().timeIntervalSince1970)"
+        //ref.setValue(date)
         self.parent?.performSegue(withIdentifier: "tabMain", sender: self)
     }
 }

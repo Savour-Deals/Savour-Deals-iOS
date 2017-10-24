@@ -21,7 +21,7 @@ extension DetailsViewController: 	UIViewControllerPreviewingDelegate {
         VC.hidesBottomBarWhenPushed = true
         VC.Deal = Deals[indexPath.row]
         VC.fromDetails = true
-        VC.newImg = cell.rImg.image
+        VC.photo = VC.Deal?.restrauntPhoto
         VC.preferredContentSize =
             CGSize(width: 0.0, height: 600)
         

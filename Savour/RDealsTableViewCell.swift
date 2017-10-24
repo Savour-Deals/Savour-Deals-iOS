@@ -13,15 +13,19 @@ class RDealsTableViewCell: UITableViewCell {
         @IBOutlet weak var FavButton: UIButton!
         @IBOutlet weak var Countdown: UILabel!
         @IBOutlet weak var dealDesc: UILabel!
+        @IBOutlet weak var validHours: UILabel!
+        @IBOutlet weak var insetView: UIView!
+    
         var deal: DealData!
     
         override func awakeFromNib() {
             super.awakeFromNib()
-            FavButton.layer.cornerRadius = 5
-            FavButton.layer.borderWidth = 1
-            FavButton.layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-
-    }
+            self.insetView.clipsToBounds = true
+            self.insetView.layer.cornerRadius = 5
+            self.insetView.layer.shadowRadius = 2
+            self.insetView.layer.shadowOpacity = 0.5
+            self.insetView.layer.shadowOffset = CGSize(width: 6, height: 6)
+        }
         
         override func setSelected(_ selected: Bool, animated: Bool) {
             super.setSelected(selected, animated: animated)
@@ -31,17 +35,17 @@ class RDealsTableViewCell: UITableViewCell {
         
         @IBAction func FavoriteToggled(_ sender: Any) {
             //If favorite star was hit, add or remove to favorites
-            if (FavButton.titleLabel?.text == "Favorite" ){
-                //Add deal to favorites and change text
-                FavButton.setTitle("Unfavorite", for: .normal )
+            if favorites[deal.dealID!] == nil{
                 favorites[deal.dealID!] = deal
-
+                let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
+                FavButton.setImage(image, for: .normal)
+                FavButton.tintColor = UIColor.red
             }
-            else {
-                //take deal out of favorites
-                FavButton.setTitle("Favorite", for: .normal )
+            else{
                 favorites.removeValue(forKey: deal.dealID!)
-
+                let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
+                FavButton.setImage(image, for: .normal)
+                FavButton.tintColor = UIColor.red
             }
 
         
