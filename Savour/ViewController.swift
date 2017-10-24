@@ -24,6 +24,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var FavdealIDs: [String:String] = Dictionary<String, String>()
     var justOpened = true
     var searchBar: UISearchBar!
+    var alreadyGoing = false
+    var instantiated = false
 
     private let refreshControl = UIRefreshControl()
 
@@ -40,12 +42,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        alreadyGoing = false
         ref = Database.database().reference()
         ref.keepSynced(true)
-
-        if UnfilteredDeals.isEmpty{
-            self.setupUI()
-        }
+        self.loadData(sender: "main")
+        self.setupUI()
+        self.DealsTable.dataSource = self
+        self.DealsTable.delegate = self
     }
     
     func GetFavs()  {
@@ -58,18 +61,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 let value = snap.key
                 self.FavdealIDs[value] = value
             }
-            self.loadData(sender: "favs")
         }){ (error) in
             print(error.localizedDescription)
         }
         
     }
-
     
     func setupUI(){
         self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.view.backgroundColor = UIColor.lightGray
-        self.DealsTable.backgroundColor = UIColor.lightGray
+        
+        let gradientLayer = CAGradientLayer()
+            
+        gradientLayer.frame = self.view.bounds
+        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.2524079623).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
+        self.view.layer.insertSublayer(gradientLayer, at: 0)
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
@@ -116,13 +121,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     self.performSegue(withIdentifier: "Vendor", sender: self)
                 }
                 else{
-                    if UnfilteredDeals.isEmpty{
-                        self.setupUI()
-                    }
+                   self.DealsTable.reloadData()
                 }
             })
-            //UnfilteredDeals.removeAll()
-            refreshData("main")
         }
         else {
             // No user is signed in.
@@ -134,6 +135,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        //self.title = ""
         // [START remove_auth_listener]
         Auth.auth().removeStateDidChangeListener(handle!)
         // [END remove_auth_listener]
@@ -147,9 +149,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func loadData(sender: String){
-       DispatchQueue.main.async {
             var oldDeals = [DealData]()
-            if sender == "refresh"{
+            if sender == "refresh" || sender == "main"{
                 oldDeals = UnfilteredDeals
                 UnfilteredDeals.removeAll()
             }
@@ -170,12 +171,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         else if sender == "null" {
                             for deal in oldDeals{
                                 if (deal.dealID == temp.dealID) && (deal.redeemed != nil){
-                                    temp.redeemed = deal.redeemed
+                                   temp.redeemed = deal.redeemed
                                 }
                             }
                             UnfilteredDeals.append(temp)
                         }
-                        else if sender == "favs" {
+                        else if sender == "favs" && UnfilteredDeals.count > 0{
                             if self.FavdealIDs[temp.dealID!] != nil {
                                 favorites[temp.dealID!] = temp
                             }
@@ -185,17 +186,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                                 }
                             }
                         }
-                        else{
-                            print("loadData() was called with an unkown sender")
-                        }
                     }
                 }
-                
-                self.loadRedeemed()
+                if UnfilteredDeals.count > 0 && sender != "favs"{
+                    self.loadData(sender: "favs")
+                }
+
+                if UnfilteredDeals.count > 0 && sender == "favs"{
+                    self.loadRedeemed()
+                }
+
             }){ (error) in
                 print(error.localizedDescription)
             }
-        }
     }
    
     func loadRedeemed(){
@@ -228,8 +231,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if self.DealsTable.dataSource == nil{
                 self.DealsTable.dataSource = self
             }
-            self.DealsTable.delegate = self
-            filteredDeals = UnfilteredDeals
+            if notificationDeal != nil && UnfilteredDeals.count > 0{
+                for i in 0..<UnfilteredDeals.count{
+                    if UnfilteredDeals[i].dealID == notificationDeal && !self.alreadyGoing{
+                        self.alreadyGoing = true
+                        notificationDeal = nil
+                        self.dealDetails(deal: UnfilteredDeals[i],index: i)
+                    }
+                }
+                
+            }
+            filteredDeals.removeAll()
+            for deal in UnfilteredDeals{
+                if !deal.redeemed!{
+                    filteredDeals.append(deal)
+                }
+            }
             self.DealsTable.reloadData()
         })
     }
@@ -242,29 +259,34 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-            let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
-            let deal = filteredDeals[indexPath.row]
-            cell.deal = deal
-            if favorites[deal.dealID!] == nil{
-                cell.likeButton.setImage(#imageLiteral(resourceName: "icons8-like"), for: .normal)
-            }
-            else{
-                cell.likeButton.setImage(#imageLiteral(resourceName: "icons8-like_filled.png"), for: .normal)
-            }
-            let photo = deal.restrauntPhoto!
-            if photo != ""{
-                // Reference to an image file in Firebase Storage
-                let storage = Storage.storage()
-                let storageref = storage.reference(forURL: photo)
-        
-                // UIImageView in your ViewController
-                let imageView: UIImageView = cell.rImg
-        
-                // Placeholder image
-                let placeholderImage = UIImage(named: "placeholder.jpg")
-        
-                // Load the image using SDWebImage
-                imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
+        let deal = filteredDeals[indexPath.row]
+        cell.deal = deal
+        if favorites[deal.dealID!] == nil{
+            let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
+            cell.likeButton.setImage(image, for: .normal)
+            cell.likeButton.tintColor = UIColor.red
+        }
+        else{
+            let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
+            cell.likeButton.setImage(image, for: .normal)
+            cell.likeButton.tintColor = UIColor.red
+            
+        }
+        let photo = deal.restrauntPhoto!
+        if photo != ""{
+            // Reference to an image file in Firebase Storage
+            let storage = Storage.storage()
+            let storageref = storage.reference(forURL: photo)
+
+            // UIImageView in your ViewController
+            let imageView: UIImageView = cell.rImg
+
+            // Placeholder image
+            let placeholderImage = UIImage(named: "placeholder.jpg")
+
+            // Load the image using SDWebImage
+            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
         }
             cell.rName.text = deal.restrauntName
             cell.dealDesc.text = deal.dealDescription
@@ -272,6 +294,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if deal.redeemed! {
                 cell.Countdown.text = "Deal Already Redeemed!"
                 cell.Countdown.textColor = UIColor.red
+                cell.validHours.text = ""
+
             }
             else{
                 cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
@@ -284,24 +308,64 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 if (interval.contains(current)){
                     let cal = Calendar.current
                     let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
-                    cell.Countdown.text =  "Time left: " + String(describing: Components.day!) + "d " + String(describing: Components.hour!) + "h " + String(describing: Components.minute!) + "m"
-                }
-                else if (current > end){
-                    cell.Countdown.text = "Deal Ended"
-                }
-                else {
-                    let cal = Calendar.current
-                    let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
-                    var startingTime = " "
-                    if Components.day! != 0{
-                        startingTime = startingTime + String(describing: Components.day!) + "d "
+                    if (current > end){
+                        cell.Countdown.text = "Deal Ended"
+                        cell.validHours.text = ""
                     }
-                    if Components.hour! != 0{
-                        startingTime = startingTime + String(describing: Components.hour!) + "h "
+                    else if (current<start){
+                        var startingTime = " "
+                        if Components.day! != 0{
+                            startingTime = startingTime + String(describing: Components.day!) + " days"
+                        }
+                        else{
+                            startingTime = startingTime + String(describing: Components.hour!) + "h "
+                            startingTime = startingTime + String(describing: Components.minute!) + "m"
+                        }
+                        cell.Countdown.text = "Starts in " + startingTime
                     }
-                    startingTime = startingTime + String(describing: Components.minute!) + "m"
-                    cell.Countdown.text = "Starts in " + startingTime
+                    else {
+                        var leftTime = " "
+                        if Components.day! != 0{
+                            leftTime = leftTime + String(describing: Components.day!) + " days"
+                        }
+                        else{
+                            leftTime = leftTime + String(describing: Components.hour!) + "h "
+                            leftTime = leftTime + String(describing: Components.minute!) + "m"
+                        }
+                        cell.Countdown.text = "Time left: " + leftTime
+                    }
+                    let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
+                    let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
+                    let calendar = NSCalendar.current
+                    var hour = calendar.component(.hour, from: startD)
+                    var minute = calendar.component(.minute, from: startD)
+                    var component = "AM"
+                    if hour > 12{
+                        component = "PM"
+                        hour = hour - 12
+                    }
+                    if minute < 10 {
+                        cell.validHours.text = "Valid Between: \(hour):0\(minute)\(component)-"
+                    }
+                    else{
+                        cell.validHours.text = "Valid Between: \(hour):\(minute)\(component)-"
+                    }
+                    hour = calendar.component(.hour, from: endD)
+                    minute = calendar.component(.minute, from: endD)
+                    component = "AM"
+                    if hour > 12{
+                        component = "PM"
+                        hour = hour - 12
+                    }
+                    if minute < 10 {
+                        cell.validHours.text = cell.validHours.text! + "\(hour):0\(minute)\(component)"
+                    }
+                    else{
+                        cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
+                    }
+
                 }
+                
             }
         cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
         cell.tagImg.tintColor = cell.Countdown.textColor
@@ -312,21 +376,33 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell
+        //let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell
         tableView.deselectRow(at: indexPath, animated: true)
-        let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
-        let VC = storyboard.instantiateInitialViewController() as! DealViewController
-        VC.hidesBottomBarWhenPushed = true
-        VC.Deal = filteredDeals[indexPath.row]
-        VC.fromDetails = false
-        VC.newImg = cell.rImg.image
-        VC.index = indexPath.row
-        VC.from = "deals"
-        //cleanup searchbar
-        self.searchBar.resignFirstResponder()
-        self.searchBar.showsCancelButton = false
+        dealDetails(deal: filteredDeals[indexPath.row],index: indexPath.row)
+    }
+    
+    func dealDetails(deal: DealData, index: Int){
         
-        self.navigationController?.pushViewController(VC, animated: true)
+        if self.navigationController != nil{
+            let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
+            let VC = storyboard.instantiateInitialViewController() as! DealViewController
+            VC.hidesBottomBarWhenPushed = true
+            VC.Deal = deal
+            VC.fromDetails = false
+            VC.photo = VC.Deal?.restrauntPhoto
+            VC.index = index
+            VC.from = "deals"
+            //cleanup searchbar
+            if self.searchBar != nil{
+                self.searchBar.resignFirstResponder()
+                self.searchBar.showsCancelButton = false
+            }
+            self.navigationController?.pushViewController(VC, animated: true)
+            
+        }
+        else{
+            self.performSegue(withIdentifier: "dealView", sender: ["deal":deal, "index":index])
+        }
     }
     
  
@@ -382,7 +458,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBar.showsCancelButton = true
     }
 
-
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "dealView"{
+            let VC = segue.destination as! DealViewController
+            VC.hidesBottomBarWhenPushed = true
+            let dict = sender as! Dictionary<String,Any>
+            VC.Deal = dict["deal"] as? DealData
+            VC.fromDetails = false
+            VC.photo = VC.Deal?.restrauntPhoto
+            VC.index = dict["index"] as! Int
+            VC.from = "deals"
+        }
+    }
    
 }

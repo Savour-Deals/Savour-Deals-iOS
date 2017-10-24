@@ -15,6 +15,8 @@ var favorites: [String:DealData] = Dictionary<String, DealData>()
 var FavMainIndex: [String:Int] = Dictionary<String, Int>()
 var filteredDeals = [DealData]()
 var UnfilteredDeals = [DealData]()
+var signalID = " "
+var notificationDeal: String?
 
 
 class HelperFuncs{

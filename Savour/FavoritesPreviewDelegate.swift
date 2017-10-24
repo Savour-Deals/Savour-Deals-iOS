@@ -20,7 +20,7 @@ extension FavoritesViewController: 	UIViewControllerPreviewingDelegate {
         VC.hidesBottomBarWhenPushed = true
         VC.Deal = deals[indexPath.row]
         VC.fromDetails = false
-        VC.newImg = cell.rImg.image
+        VC.photo = VC.Deal?.restrauntPhoto
         VC.preferredContentSize =
             CGSize(width: 0.0, height: 600)
         

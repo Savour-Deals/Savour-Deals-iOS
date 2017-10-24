@@ -12,6 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 import SDWebImage
+import OneSignal
 
 class DiscountViewController: UIViewController {
     var handler: AuthStateDidChangeListenerHandle!
@@ -43,7 +44,6 @@ class DiscountViewController: UIViewController {
             if (newDeal.dealDescription?.contains("$"))!{
                 let strings = newDeal.dealDescription?.split(separator: " ", maxSplits: 2, omittingEmptySubsequences: false)
                 segmentCont.selectedSegmentIndex = 2
-                DolVC.promoItem.text = "\(strings![2])"
                 let dealTxt = "\(strings![0]) \(strings![1])"
                 for i in 0..<DolVC.pickerView.numberOfRows(inComponent: 0){
                     if dealTxt == DolVC.pickerDataSource[i]{
@@ -54,7 +54,6 @@ class DiscountViewController: UIViewController {
             else if (newDeal.dealDescription?.contains("%"))!{
                 let strings = newDeal.dealDescription?.split(separator: " ", maxSplits: 2, omittingEmptySubsequences: false)
                 segmentCont.selectedSegmentIndex = 1
-                PercVC.promoItem.text =  "\(strings![2])"
                 let dealTxt = "\(strings![0]) \(strings![1])"
                 for i in 0..<PercVC.pickerView.numberOfRows(inComponent: 0){
                     if dealTxt == PercVC.pickerDataSource[i]{
@@ -63,9 +62,7 @@ class DiscountViewController: UIViewController {
                 }
             }
             else{
-                let strings = newDeal.dealDescription?.split(separator: " ", maxSplits: 5, omittingEmptySubsequences: false)
                 segmentCont.selectedSegmentIndex = 0
-                BOGOvc.promoText.placeholder =  "\(strings![5])"
             }
         }
         else{
@@ -110,37 +107,16 @@ class DiscountViewController: UIViewController {
     }
     @IBAction func nextPressed(_ sender: Any) {
         if segmentCont.selectedSegmentIndex == 0 {
-            if BOGOvc.promoText.text == "" {
-                let alert = UIAlertController(title: "Item Missing", message: "Please enter a promotion item to continue.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }
-            else{
-                newDeal?.dealDescription = "Buy One Get One Free \(BOGOvc.promoText.text!)"
-                self.performSegue(withIdentifier: "datePick", sender: nil)
-            }
+            newDeal?.dealDescription = "Buy One Get One Free \(newDeal.dealType!)"
+            self.performSegue(withIdentifier: "datePick", sender: nil)
         }
         else if segmentCont.selectedSegmentIndex == 1 {
-            if PercVC.promoItem.text == "" {
-                let alert = UIAlertController(title: "Item Missing", message: "Please enter a promotion item to continue.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }
-            else{
-                newDeal?.dealDescription  = "\(PercVC.pickerDataSource[PercVC.pickerView.selectedRow(inComponent: 0)]) \(PercVC.promoItem.text!)"
-                self.performSegue(withIdentifier: "datePick", sender: nil)
-            }
+            newDeal?.dealDescription  = "\(PercVC.pickerDataSource[PercVC.pickerView.selectedRow(inComponent: 0)]) \(newDeal.dealType!)"
+            self.performSegue(withIdentifier: "datePick", sender: nil)
         }
         else if segmentCont.selectedSegmentIndex == 2 {
-            if DolVC.promoItem.text == "" {
-                let alert = UIAlertController(title: "Item Missing", message: "Please enter a promotion item to continue.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }
-            else{
-                newDeal?.dealDescription  = "\(DolVC.pickerDataSource[DolVC.pickerView.selectedRow(inComponent: 0)]) \(DolVC.promoItem.text!)"
-                self.performSegue(withIdentifier: "datePick", sender: nil)
-            }
+            newDeal?.dealDescription  = "\(DolVC.pickerDataSource[DolVC.pickerView.selectedRow(inComponent: 0)]) \(newDeal.dealType!)"
+            self.performSegue(withIdentifier: "datePick", sender: nil)
         }
     }
     
@@ -177,9 +153,7 @@ class DiscountViewController: UIViewController {
 
 
 class BogoController: UIViewController {
-  
-    @IBOutlet weak var promoText: UITextField!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -193,7 +167,6 @@ class PercentController: UIViewController, UIPickerViewDataSource, UIPickerViewD
     @IBOutlet weak var pickerView: UIPickerView!
     var pickerDataSource = [String]()
     
-    @IBOutlet weak var promoItem: UITextField!
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -209,9 +182,9 @@ class PercentController: UIViewController, UIPickerViewDataSource, UIPickerViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for index in 1...12 {
+        for index in 5...12 {
             let percent = index * 5
-            pickerDataSource.append("\(percent)% off")
+            pickerDataSource.append("\(percent)% Off")
         }
         self.pickerView.dataSource = self
         self.pickerView.delegate = self
@@ -228,7 +201,6 @@ class DollarController: UIViewController, UIPickerViewDataSource, UIPickerViewDe
     @IBOutlet weak var pickerView: UIPickerView!
     var pickerDataSource = [String]()
     
-    @IBOutlet weak var promoItem: UITextField!
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -243,8 +215,8 @@ class DollarController: UIViewController, UIPickerViewDataSource, UIPickerViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for dollars in 1...50 {
-            pickerDataSource.append("$\(dollars) off")
+        for dollars in 2...50 {
+            pickerDataSource.append("$\(dollars) Off")
         }
         self.pickerView.dataSource = self
         self.pickerView.delegate = self
@@ -261,7 +233,7 @@ class EndTimeController: UIViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if newDeal.endTime != nil{
+        if newDeal.endTime != 0{
             let date = Date(timeIntervalSince1970: newDeal.endTime!)
             EndPicker.setDate(date, animated: true)
         }
@@ -283,10 +255,11 @@ class StartTimeController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if newDeal.startTime != nil{
+        if newDeal.startTime != 0{
             let date = Date(timeIntervalSince1970: newDeal.startTime!)
             startPicker.setDate(date, animated: true)
         }
+        //make min date current date
         
     }
     
@@ -438,6 +411,9 @@ class ReviewController: UIViewController{
     @IBOutlet weak var desc: UILabel!
     @IBOutlet weak var startDate: UILabel!
     @IBOutlet weak var endDate: UILabel!
+    @IBOutlet weak var endTime: UILabel!
+    @IBOutlet weak var startTime: UILabel!
+    var date: Date!
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -446,17 +422,25 @@ class ReviewController: UIViewController{
         rName.text = newDeal.restrauntName
         desc.text = newDeal.dealDescription
         let startD = Date(timeIntervalSince1970: newDeal.startTime!)
+        date = startD
         let endD = Date(timeIntervalSince1970: newDeal.endTime!)
         let calendar = NSCalendar.current
         var year = calendar.component(.year, from: startD)
         var month = calendar.component(.month, from: startD)
         var day = calendar.component(.day, from: startD)
+        var hour = calendar.component(.hour, from: startD)
+        var minute = calendar.component(.minute, from: startD)
+
         startDate.text = "Start Date: \(month)/\(day)/\(year)"
+        startTime.text = "Start Time: \(hour):\(minute)"
         year = calendar.component(.year, from: endD)
         month = calendar.component(.month, from: endD)
         day = calendar.component(.day, from: endD)
+        hour = calendar.component(.hour, from: startD)
+        minute = calendar.component(.minute, from: startD)
         endDate.text = "End Date: \(month)/\(day)/\(year)"
-        
+        startTime.text = "End Time: \(hour):\(minute)"
+
     }
     @IBAction func submitDeal(_ sender: Any) {
         let deal = [
@@ -471,6 +455,30 @@ class ReviewController: UIViewController{
         ref = Database.database().reference()
         ref.child("Deals").child(newDeal.dealID!).setValue(deal)
         self.navigationController?.dismiss(animated: true, completion: nil)
+        ref.child("Restaurants").child((Auth.auth().currentUser?.uid)!).child("Followers").observeSingleEvent(of: .value, with: { (snapshot) in
+            var users = [String]()
+            for entry in snapshot.children {
+                let snap = entry as! DataSnapshot
+                users.append(snap.value as! String)
+            }
+            if users.count > 0 {
+                OneSignal.postNotification(
+                    [
+                        "include_player_ids" : users,
+                        "headings" : ["en": "New Deal From \(newDeal.restrauntName!)!"],
+                        "contents" : ["en": "\(newDeal.restrauntName!) just posted a new deal! Click here to check it out!"],
+                        "data" : ["deal": newDeal.dealID],
+                        "send_after" : "\(self.date)"
+                    ],
+                    onSuccess: { (notificationData) in
+                        print("Success")
+                }) { (error) in
+                    print(error!)
+                }
+            }
+        })
+    
+       
     }
     
     @IBAction func prevPressed(_ sender: Any) {

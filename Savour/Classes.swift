@@ -63,3 +63,34 @@ class DealData{
   
     
 }
+class restaurant{
+    var restrauntName: String?
+    var restrauntID: String?
+    var restrauntPhoto: String?
+    var description: String?
+    var address: String?
+    var menu: String?
+    var followers: Int?
+    
+    init(snap: DataSnapshot? = nil, ID: String) {
+        let value = snap?.value as! NSDictionary
+        self.restrauntID = ID
+        self.restrauntName = value["Name"] as? String ?? ""
+        self.restrauntPhoto = value["Photo"] as? String ?? ""
+        self.description = value["Desc"] as? String ?? ""
+        self.address = value["Address"] as? String ?? ""
+        self.menu = value["Menu"] as? String ?? ""
+        self.restrauntPhoto = value["Photo"] as? String ?? ""
+        //if let followDict = value["Followers"] as? NSDictionary ?? nil{
+             //self.followers = followDict.count
+//        }
+//        else {
+//            self.followers = 0
+//        }
+
+
+
+
+    }
+    
+}

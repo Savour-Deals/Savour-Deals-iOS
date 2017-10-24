@@ -77,11 +77,30 @@
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fd9-HY-6PI">
+                                <rect key="frame" x="40" y="192" width="295" height="284.5"/>
+                                <string key="text">We’re making it easier for local vendors to deliver daily deals right to your Smartphone!
+ 
+
+Savour is free to join and deals do not require any upfront purchase. Just click and save!
+ 
+
+We pride our platform on simplicity, so
+we will make this quick:
+
+</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="DQy-w3-4hL" firstAttribute="leading" secondItem="bQo-eM-6An" secondAttribute="leading" id="12B-bU-lKs"/>
                             <constraint firstItem="bQo-eM-6An" firstAttribute="trailing" secondItem="oW4-Mx-DsO" secondAttribute="trailing" id="U7f-Od-qOh"/>
+                            <constraint firstItem="bQo-eM-6An" firstAttribute="trailing" secondItem="fd9-HY-6PI" secondAttribute="trailing" constant="40" id="WgO-xL-Djc"/>
+                            <constraint firstItem="fd9-HY-6PI" firstAttribute="centerY" secondItem="rIX-4X-NNf" secondAttribute="centerY" id="X35-tl-GKd"/>
+                            <constraint firstItem="fd9-HY-6PI" firstAttribute="leading" secondItem="bQo-eM-6An" secondAttribute="leading" constant="40" id="YnN-WX-AwR"/>
                             <constraint firstItem="DQy-w3-4hL" firstAttribute="top" secondItem="bQo-eM-6An" secondAttribute="top" constant="75" id="azX-Wb-Q3L"/>
                             <constraint firstItem="bQo-eM-6An" firstAttribute="trailing" secondItem="DQy-w3-4hL" secondAttribute="trailing" id="eUv-72-NbS"/>
                             <constraint firstItem="bQo-eM-6An" firstAttribute="bottom" secondItem="oW4-Mx-DsO" secondAttribute="bottom" constant="50" id="jD5-qv-yEd"/>
@@ -92,7 +111,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="seV-u9-xDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-249" y="555"/>
+            <point key="canvasLocation" x="-250.40000000000001" y="554.57271364317842"/>
         </scene>
         <!--Done View Controller-->
         <scene sceneID="Elw-uY-Oln">
@@ -103,7 +122,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mtY-11-I0z">
-                                <rect key="frame" x="20" y="617" width="335" height="30"/>
+                                <rect key="frame" x="20" y="597" width="335" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="2Fg-6E-hHh"/>
+                                </constraints>
                                 <state key="normal" title="Okay got it!">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -111,9 +133,30 @@
                                     <action selector="continuePressed:" destination="cEP-Kt-qq9" eventType="touchUpInside" id="T4Y-XF-xY6"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Savour!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wsp-dk-f8W">
-                                <rect key="frame" x="0.0" y="95" width="375" height="36"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wsp-dk-f8W">
+                                <rect key="frame" x="0.0" y="95" width="375" height="72"/>
+                                <string key="text">How It Works
+</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V69-IE-jF0">
+                                <rect key="frame" x="40" y="181.5" width="295" height="304.5"/>
+                                <string key="text">
+ 📱 Explore deals from local vendors
+
+
+
+❤️ Save deals that you plan on using in the future
+ 
+
+🏷 Select the deal you would like to redeem and present it to the vendor 
+ 
+
+💵 Save Money!
+</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -121,11 +164,14 @@
                         <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="wsp-dk-f8W" firstAttribute="top" secondItem="cpp-9p-0YV" secondAttribute="top" constant="75" id="2o6-7s-EZQ"/>
+                            <constraint firstItem="cpp-9p-0YV" firstAttribute="trailing" secondItem="V69-IE-jF0" secondAttribute="trailing" constant="40" id="4Wj-Pe-VX4"/>
                             <constraint firstItem="cpp-9p-0YV" firstAttribute="bottom" secondItem="mtY-11-I0z" secondAttribute="bottom" constant="20" id="MnY-th-5ta"/>
                             <constraint firstItem="mtY-11-I0z" firstAttribute="leading" secondItem="cpp-9p-0YV" secondAttribute="leading" constant="20" id="Wap-8g-Ee3"/>
                             <constraint firstItem="mtY-11-I0z" firstAttribute="centerX" secondItem="DJV-bQ-Jei" secondAttribute="centerX" id="gkw-0f-nDT"/>
                             <constraint firstItem="cpp-9p-0YV" firstAttribute="trailing" secondItem="mtY-11-I0z" secondAttribute="trailing" constant="20" id="glJ-Fv-OcP"/>
                             <constraint firstItem="cpp-9p-0YV" firstAttribute="trailing" secondItem="wsp-dk-f8W" secondAttribute="trailing" id="jPG-sT-RWK"/>
+                            <constraint firstItem="V69-IE-jF0" firstAttribute="centerY" secondItem="DJV-bQ-Jei" secondAttribute="centerY" id="jjp-x1-fkV"/>
+                            <constraint firstItem="V69-IE-jF0" firstAttribute="leading" secondItem="cpp-9p-0YV" secondAttribute="leading" constant="40" id="lED-qN-1Ti"/>
                             <constraint firstItem="wsp-dk-f8W" firstAttribute="leading" secondItem="DJV-bQ-Jei" secondAttribute="leading" id="mef-jv-du7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="cpp-9p-0YV"/>
