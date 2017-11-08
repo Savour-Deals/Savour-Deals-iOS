@@ -60,6 +60,8 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         gradientLayer.frame = self.view.bounds
         gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.5).cgColor]
         self.view.layer.insertSublayer(gradientLayer, at: 0)
+        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
     }
         
     // MARK : TO CHANGE WHILE CLICKING ON PAGE CONTROL
@@ -77,10 +79,24 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
 
 
 class WelcomeViewController: UIViewController{
+    @IBOutlet weak var textBox: UILabel!
     
+    @IBOutlet weak var svrheight: NSLayoutConstraint!
+    @IBOutlet weak var svrImg: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear
+        textSize()
+    }
+    
+    func textSize(){
+        if textBox.frame.height < 220{
+            textBox.font = textBox.font.withSize(13.0)
+            svrheight.constant = 60.0
+            view.layoutIfNeeded()
+        }
+        
+    
     }
     
 }

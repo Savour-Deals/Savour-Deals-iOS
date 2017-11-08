@@ -22,10 +22,15 @@ class VendorMapViewController: UIViewController{
     var listVC: listViewController!
     var mapVC: mapViewController!
     var ref: DatabaseReference!
-    
+    var locationManager: CLLocationManager!
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     
     
     override func viewDidLoad() {
@@ -36,8 +41,34 @@ class VendorMapViewController: UIViewController{
         else if segControl.selectedSegmentIndex == 1 {
             showMap()
         }
+        locationManager = CLLocationManager()
+
+        requestLocationAccess()
+        //locationManager!.delegate = self
+        
+        // set initial location
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            DispatchQueue.main.async {
+                self.locationManager!.startUpdatingLocation()
+            }
+        }
         getRestaurants()
     }
+    func requestLocationAccess() {
+        let status = CLLocationManager.authorizationStatus()
+        
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            return
+            
+        case .denied, .restricted:
+            print("location access denied")
+            
+        default:
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    
     
     func showList(){
         listView.isHidden = false
@@ -80,6 +111,8 @@ class VendorMapViewController: UIViewController{
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot
                 let temp = restaurant(snap: snap, ID: snap.key)
+                //let distanceInMeters : Double = self.userLocation.location!.distance(from: mapItems[row].placemark.location!)
+                //let distanceInMiles : Double = ((distanceInMeters.description as String).doubleValue * 0.00062137)
                 restaurants.append(temp)
             }
             self.listVC.delegateTable()
@@ -95,7 +128,12 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var regionRadius: CLLocationDistance = 1000
     var locationManager: CLLocationManager!
     var flag = 1
-   
+    
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         locationManager = CLLocationManager()
@@ -103,7 +141,6 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // set initial location
         let initialLocation = CLLocation(latitude: 44.977289, longitude: -93.229499)
-        requestLocationAccess()
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             let viewRegion = MKCoordinateRegionMakeWithDistance(initialLocation.coordinate, 1000, 1000)
             mapView.setRegion(viewRegion, animated: false)
@@ -127,6 +164,9 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     self.mapView.addAnnotation(annotation)
                 }
             }
+            
+            
+            
         }
         self.mapView.delegate = self
     }
@@ -158,20 +198,6 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         parent.performSegue(withIdentifier: "restaurant", sender: placeRID)
     }
     
-    func requestLocationAccess() {
-        let status = CLLocationManager.authorizationStatus()
-        
-        switch status {
-        case .authorizedAlways, .authorizedWhenInUse:
-            return
-            
-        case .denied, .restricted:
-            print("location access denied")
-            
-        default:
-            locationManager.requestWhenInUseAuthorization()
-        }
-    }
     
     func mapView(_ mapView: MKMapView, didUpdate
         userLocation: MKUserLocation) {
@@ -207,20 +233,46 @@ class restaurantAnnotation: NSObject, MKAnnotation {
 class listViewController: UIViewController, UITableViewDelegate,UITableViewDataSource, UISearchBarDelegate{
     var storageRef: Storage!
     @IBOutlet weak var listTable: UITableView!
-    var searchBar: UISearchBar!
     var myRestaurants = [restaurant]()
-
+    @IBOutlet weak var searchBar: UISearchBar!
+    var statusBar: UIView!
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         storageRef = Storage.storage()
         setupSearchBar()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+    }
+    
+  
     func delegateTable(){
         myRestaurants = restaurants
         listTable.dataSource = self
         listTable.delegate = self
         listTable.reloadData()
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if velocity.y>0{
+            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+                //self.navigationController?.setToolbarHidden(true, animated: true)
+            }, completion: nil)
+        }
+        else{
+            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+                //self.navigationController?.setToolbarHidden(false, animated: true)
+            }, completion: nil)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -259,12 +311,10 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     //SearchBar functions
     func setupSearchBar(){
         // Setup the Search Controller
-        searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
         searchBar.showsCancelButton = false
         searchBar.placeholder = "Search Restaurants"
         searchBar.tintColor = UIColor.white
         searchBar.delegate = self
-        self.listTable.tableHeaderView = searchBar
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

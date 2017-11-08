@@ -107,7 +107,15 @@ class DealViewController: UIViewController {
     }
     
     func SetupUI(){
-        self.title = Deal?.restrauntName
+        let size = CGSize(width: 65,height: 40)
+
+        self.navigationItem.titleView?.frame.size = size
+        let image = UIImage(named: "Savour_White.png")
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 65, height: 40))
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = image
+        self.navigationItem.titleView = imageView
+        
         
         if (fromDetails)!{
             moreBtn.isHidden = true

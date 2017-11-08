@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icons8-friends.png",
+      "filename" : "icons8-friends-2.png",
       "scale" : "1x"
     },
     {
@@ -12,7 +12,7 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "icons8-friends-2.png",
+      "filename" : "icons8-friends.png",
       "scale" : "3x"
     }
   ],

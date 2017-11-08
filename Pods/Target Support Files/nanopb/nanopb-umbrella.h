@@ -10,10 +10,19 @@
 #endif
 #endif
 
+#import "pb 2.h"
+#import "pb(1).h"
 #import "pb.h"
 #import "pb_common 2(1).h"
+#import "pb_common 2.h"
+#import "pb_common(1).h"
 #import "pb_common.h"
+#import "pb_decode 2(1).h"
+#import "pb_decode 2.h"
+#import "pb_decode(1).h"
 #import "pb_decode.h"
+#import "pb_encode 2.h"
+#import "pb_encode(1).h"
 #import "pb_encode.h"
 #import "pb.h"
 #import "pb_decode.h"

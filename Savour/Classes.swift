@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import FirebaseDatabase
 import FirebaseAuth
-
+import MapKit
 
 class DealData{
     var restrauntName: String?
@@ -69,6 +69,8 @@ class restaurant{
     var restrauntPhoto: String?
     var description: String?
     var address: String?
+    var coordinates: CLLocationCoordinate2D?
+    var distanceMiles: Double?
     var menu: String?
     var followers: Int?
     
