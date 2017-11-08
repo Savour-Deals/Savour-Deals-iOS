@@ -22,6 +22,11 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     var user: String!
     @IBOutlet weak var FavTable: UITableView!
     var ref: DatabaseReference!
+    var statusBar: UIView!
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +37,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         }
     }
     override func viewWillAppear(_ animated: Bool) {
-        
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         deals.removeAll()
         let expiredUnix = Date().timeIntervalSince1970 - 24*60*60
         for (_, deal) in favorites {
@@ -206,6 +212,22 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         }
         
     }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if velocity.y>0{
+            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+                //self.navigationController?.setToolbarHidden(true, animated: true)
+            }, completion: nil)
+        }
+        else{
+            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+               // self.navigationController?.setToolbarHidden(false, animated: true)
+            }, completion: nil)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         //let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell
         tableView.deselectRow(at: indexPath, animated: true)
@@ -216,6 +238,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         VC.fromDetails = false
         VC.photo = VC.Deal?.restrauntPhoto
         VC.index = FavMainIndex[deals[indexPath.row].dealID!]!
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationController?.pushViewController(VC, animated: true)
     }
 

@@ -26,6 +26,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var searchBar: UISearchBar!
     var alreadyGoing = false
     var instantiated = false
+    var statusBar: UIView!
 
     private let refreshControl = UIRefreshControl()
 
@@ -49,6 +50,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.setupUI()
         self.DealsTable.dataSource = self
         self.DealsTable.delegate = self
+
     }
     
     func GetFavs()  {
@@ -69,9 +71,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func setupUI(){
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.view.backgroundColor = UIColor.white
         
         let gradientLayer = CAGradientLayer()
-            
+        
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         gradientLayer.frame = self.view.bounds
         gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.2524079623).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
         self.view.layer.insertSublayer(gradientLayer, at: 0)
@@ -109,6 +114,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationItem.title = ""
         UIApplication.shared.statusBarStyle = .lightContent
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         let user = Auth.auth().currentUser
         if user != nil {
             // User is signed in.
@@ -135,7 +142,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        //self.title = ""
         // [START remove_auth_listener]
         Auth.auth().removeStateDidChangeListener(handle!)
         // [END remove_auth_listener]
@@ -375,6 +381,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
     }
     
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if velocity.y>0{
+            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+                self.navigationController?.setNavigationBarHidden(true, animated: true)
+            }, completion: nil)
+        }
+        else{
+            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+            }, completion: nil)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         //let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell
         tableView.deselectRow(at: indexPath, animated: true)
@@ -397,10 +416,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.searchBar.resignFirstResponder()
                 self.searchBar.showsCancelButton = false
             }
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(VC, animated: true)
             
         }
         else{
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.performSegue(withIdentifier: "dealView", sender: ["deal":deal, "index":index])
         }
     }
@@ -423,6 +444,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBar.placeholder = "Search Restaurants"
         searchBar.delegate = self
         self.navigationItem.titleView = searchBar
+        if #available(iOS 11.0, *) {
+            searchBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

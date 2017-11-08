@@ -26,9 +26,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     var Deals = [DealData]()
     var indices = [Int]()
     var rAddress: String = ""
-    
+    var cachedImageViewSize: CGRect!
+    var cachedTextPoint: CGPoint!
+
+    @IBOutlet weak var overview: UIView!
+    @IBOutlet weak var curr: UILabel!
+    @IBOutlet weak var rDesc: UILabel!
+    @IBOutlet weak var ContentView: UIView!
     @IBOutlet weak var DealsTable: UITableView!
-    @IBOutlet weak var rDesc: UITextView!
     @IBOutlet weak var rImg: UIImageView!
     @IBOutlet weak var rName: UILabel!
     var menu: String!
@@ -53,10 +58,13 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         followButton.layer.cornerRadius = 15
         directionsButton.layer.cornerRadius = 15
         menuButton.layer.cornerRadius = 15
+
+        self.cachedImageViewSize = self.rImg.frame
+        let footerView = UIView()
+        footerView.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0)
+        self.DealsTable.tableFooterView = footerView
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-    }
+
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = true
         self.DealsTable.reloadData()
@@ -110,7 +118,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.indices.append(i)
             }
         }
-
+        DealsTable.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -253,6 +261,18 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         followButton.isEnabled = true
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let y: CGFloat = -scrollView.contentOffset.y
+        if y > 0 {
+            self.rImg.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: self.DealsTable.frame.size.width + y, height: self.cachedImageViewSize.height + y)
+            self.overview.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: self.DealsTable.frame.size.width + y, height: self.cachedImageViewSize.size.height + y)
+            self.rImg.center = CGPoint(x: self.view.center.x, y: self.rImg.center.y)
+            self.overview.center = CGPoint(x: self.view.center.x, y: self.rImg.center.y)
+        }
+    }
+    
+    
     
 
 }

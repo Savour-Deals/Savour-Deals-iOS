@@ -21,7 +21,7 @@ class RDealsTableViewCell: UITableViewCell {
         override func awakeFromNib() {
             super.awakeFromNib()
             self.insetView.clipsToBounds = true
-            self.insetView.layer.cornerRadius = 5
+            //self.insetView.layer.cornerRadius = 5
             self.insetView.layer.shadowRadius = 2
             self.insetView.layer.shadowOpacity = 0.5
             self.insetView.layer.shadowOffset = CGSize(width: 6, height: 6)

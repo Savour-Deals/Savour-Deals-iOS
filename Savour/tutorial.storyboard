@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="phe-QJ-Ogt">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="phe-QJ-Ogt">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,15 +16,15 @@
             <objects>
                 <viewController storyboardIdentifier="page" useStoryboardIdentifierAsRestorationIdentifier="YES" id="phe-QJ-Ogt" customClass="OnboardingViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jQh-Qd-7j4">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8lq-mp-yKd">
-                                <rect key="frame" x="0.0" y="20" width="375" height="610"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="511"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Wb3-WA-RdO">
-                                <rect key="frame" x="0.0" y="630" width="375" height="37"/>
+                                <rect key="frame" x="0.0" y="531" width="320" height="37"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </pageControl>
                         </subviews>
@@ -62,24 +63,27 @@
             <objects>
                 <viewController storyboardIdentifier="WelcomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sBC-Nv-B3S" customClass="WelcomeViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rIX-4X-NNf">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Savour!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQy-w3-4hL">
-                                <rect key="frame" x="0.0" y="95" width="375" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Welcome to Savour!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DQy-w3-4hL">
+                                <rect key="frame" x="0.0" y="211.5" width="320" height="28"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe Left to Continue" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oW4-Mx-DsO">
-                                <rect key="frame" x="0.0" y="596.5" width="375" height="20.5"/>
+                                <rect key="frame" x="0.0" y="497.5" width="320" height="20.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="biP-Pc-jpq"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fd9-HY-6PI">
-                                <rect key="frame" x="40" y="192" width="295" height="284.5"/>
-                                <string key="text">We’re making it easier for local vendors to deliver daily deals right to your Smartphone!
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="6" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fd9-HY-6PI">
+                                <rect key="frame" x="40" y="249.5" width="240" height="208"/>
+                                <string key="text">We’re making it easier for local vendors to deliver daily deals right to your smart phone!
  
 
 Savour is free to join and deals do not require any upfront purchase. Just click and save!
@@ -93,21 +97,36 @@ we will make this quick:
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Savour_White" translatesAutoresizingMaskIntoConstraints="NO" id="4Y2-Yd-7LD">
+                                <rect key="frame" x="56.5" y="61.5" width="207" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="PGN-tK-6XJ"/>
+                                    <constraint firstAttribute="width" secondItem="4Y2-Yd-7LD" secondAttribute="height" multiplier="1808:875" id="QEe-rd-fj9"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="DQy-w3-4hL" firstAttribute="leading" secondItem="bQo-eM-6An" secondAttribute="leading" id="12B-bU-lKs"/>
+                            <constraint firstItem="DQy-w3-4hL" firstAttribute="top" secondItem="4Y2-Yd-7LD" secondAttribute="bottom" constant="50" id="3Sq-yY-JL0"/>
+                            <constraint firstItem="4Y2-Yd-7LD" firstAttribute="top" secondItem="bQo-eM-6An" secondAttribute="top" constant="41.5" id="K4h-BG-VAV"/>
+                            <constraint firstItem="fd9-HY-6PI" firstAttribute="top" secondItem="DQy-w3-4hL" secondAttribute="bottom" constant="10" id="Oa1-9c-5yF"/>
                             <constraint firstItem="bQo-eM-6An" firstAttribute="trailing" secondItem="oW4-Mx-DsO" secondAttribute="trailing" id="U7f-Od-qOh"/>
                             <constraint firstItem="bQo-eM-6An" firstAttribute="trailing" secondItem="fd9-HY-6PI" secondAttribute="trailing" constant="40" id="WgO-xL-Djc"/>
-                            <constraint firstItem="fd9-HY-6PI" firstAttribute="centerY" secondItem="rIX-4X-NNf" secondAttribute="centerY" id="X35-tl-GKd"/>
+                            <constraint firstItem="DQy-w3-4hL" firstAttribute="leading" secondItem="rIX-4X-NNf" secondAttribute="leading" id="Y9C-Rh-cIZ"/>
                             <constraint firstItem="fd9-HY-6PI" firstAttribute="leading" secondItem="bQo-eM-6An" secondAttribute="leading" constant="40" id="YnN-WX-AwR"/>
-                            <constraint firstItem="DQy-w3-4hL" firstAttribute="top" secondItem="bQo-eM-6An" secondAttribute="top" constant="75" id="azX-Wb-Q3L"/>
+                            <constraint firstItem="4Y2-Yd-7LD" firstAttribute="centerX" secondItem="rIX-4X-NNf" secondAttribute="centerX" id="dM6-ow-OFT"/>
                             <constraint firstItem="bQo-eM-6An" firstAttribute="trailing" secondItem="DQy-w3-4hL" secondAttribute="trailing" id="eUv-72-NbS"/>
                             <constraint firstItem="bQo-eM-6An" firstAttribute="bottom" secondItem="oW4-Mx-DsO" secondAttribute="bottom" constant="50" id="jD5-qv-yEd"/>
                             <constraint firstItem="oW4-Mx-DsO" firstAttribute="leading" secondItem="bQo-eM-6An" secondAttribute="leading" id="l4D-QE-Pzd"/>
+                            <constraint firstItem="oW4-Mx-DsO" firstAttribute="top" secondItem="fd9-HY-6PI" secondAttribute="bottom" constant="40" id="oAo-GB-WhT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bQo-eM-6An"/>
                     </view>
+                    <connections>
+                        <outlet property="svrImg" destination="4Y2-Yd-7LD" id="g03-1r-eKQ"/>
+                        <outlet property="svrheight" destination="PGN-tK-6XJ" id="Ike-Fk-Zgm"/>
+                        <outlet property="textBox" destination="fd9-HY-6PI" id="iEY-yN-VDJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="seV-u9-xDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -118,11 +137,11 @@ we will make this quick:
             <objects>
                 <viewController storyboardIdentifier="DoneViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cEP-Kt-qq9" customClass="DoneViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DJV-bQ-Jei">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mtY-11-I0z">
-                                <rect key="frame" x="20" y="597" width="335" height="50"/>
+                                <rect key="frame" x="20" y="498" width="280" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="2Fg-6E-hHh"/>
                                 </constraints>
@@ -133,8 +152,8 @@ we will make this quick:
                                     <action selector="continuePressed:" destination="cEP-Kt-qq9" eventType="touchUpInside" id="T4Y-XF-xY6"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wsp-dk-f8W">
-                                <rect key="frame" x="0.0" y="95" width="375" height="72"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wsp-dk-f8W">
+                                <rect key="frame" x="0.0" y="30" width="320" height="71.5"/>
                                 <string key="text">How It Works
 </string>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
@@ -142,17 +161,16 @@ we will make this quick:
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V69-IE-jF0">
-                                <rect key="frame" x="40" y="181.5" width="295" height="304.5"/>
+                                <rect key="frame" x="40" y="121.5" width="240" height="325"/>
                                 <string key="text">
  📱 Explore deals from local vendors
-
 
 
 ❤️ Save deals that you plan on using in the future
  
 
-🏷 Select the deal you would like to redeem and present it to the vendor 
- 
+🏷 Select the deal you would like to redeem and present it to the vendor  
+
 
 💵 Save Money!
 </string>
@@ -163,12 +181,13 @@ we will make this quick:
                         </subviews>
                         <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="wsp-dk-f8W" firstAttribute="top" secondItem="cpp-9p-0YV" secondAttribute="top" constant="75" id="2o6-7s-EZQ"/>
+                            <constraint firstItem="wsp-dk-f8W" firstAttribute="top" secondItem="cpp-9p-0YV" secondAttribute="top" constant="10" id="2o6-7s-EZQ"/>
                             <constraint firstItem="cpp-9p-0YV" firstAttribute="trailing" secondItem="V69-IE-jF0" secondAttribute="trailing" constant="40" id="4Wj-Pe-VX4"/>
                             <constraint firstItem="cpp-9p-0YV" firstAttribute="bottom" secondItem="mtY-11-I0z" secondAttribute="bottom" constant="20" id="MnY-th-5ta"/>
                             <constraint firstItem="mtY-11-I0z" firstAttribute="leading" secondItem="cpp-9p-0YV" secondAttribute="leading" constant="20" id="Wap-8g-Ee3"/>
                             <constraint firstItem="mtY-11-I0z" firstAttribute="centerX" secondItem="DJV-bQ-Jei" secondAttribute="centerX" id="gkw-0f-nDT"/>
                             <constraint firstItem="cpp-9p-0YV" firstAttribute="trailing" secondItem="mtY-11-I0z" secondAttribute="trailing" constant="20" id="glJ-Fv-OcP"/>
+                            <constraint firstItem="V69-IE-jF0" firstAttribute="top" secondItem="wsp-dk-f8W" secondAttribute="bottom" constant="20" id="h1C-0a-nYA"/>
                             <constraint firstItem="cpp-9p-0YV" firstAttribute="trailing" secondItem="wsp-dk-f8W" secondAttribute="trailing" id="jPG-sT-RWK"/>
                             <constraint firstItem="V69-IE-jF0" firstAttribute="centerY" secondItem="DJV-bQ-Jei" secondAttribute="centerY" id="jjp-x1-fkV"/>
                             <constraint firstItem="V69-IE-jF0" firstAttribute="leading" secondItem="cpp-9p-0YV" secondAttribute="leading" constant="40" id="lED-qN-1Ti"/>
@@ -185,4 +204,7 @@ we will make this quick:
             <point key="canvasLocation" x="710" y="559"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Savour_White" width="1808" height="731"/>
+    </resources>
 </document>

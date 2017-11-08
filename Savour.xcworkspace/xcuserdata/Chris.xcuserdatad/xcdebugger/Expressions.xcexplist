@@ -3,79 +3,26 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "EditInfoViewController.keyboardWillShow(notification:):EditInfo.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.view.frame.origin.y">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in DealsViewController.loadData():DealsViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.tableView.delegate">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.GetFavs():ViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "FavoritesViewController.tableView(_:cellForRowAt:):FavoritesViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.(loadData() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "">
-            </PersistentString>
-            <PersistentString
-               value = "self.FavdealIDs[temp.dealID!]">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "LoginViewController.(loginButton(FBSDKLoginButton!, didCompleteWith : FBSDKLoginManagerLoginResult!, error : Error!) -&gt; ()).(closure #1).(closure #1):LoginViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "user!.uid">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "StartTimeController.viewDidLoad():DealInformationViews.swift">
-      </ContextState>
-      <ContextState
-         contextName = "mach_msg_trap:(null)">
+         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "favorites">
             </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "DetailsViewController.scrollViewDidScroll(_:):DetailsViewController.swift">
+         <PersistentStrings>
             <PersistentString
-               value = "user">
-            </PersistentString>
-            <PersistentString
-               value = "listTable">
+               value = "self.rImg.frame">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.viewDidLoad():ViewController.swift">
+         contextName = "DealViewController.viewWillAppear(_:):DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.navigationController">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "FavoritesViewController.tableView(_:heightForRowAt:):FavoritesViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "FavoritesViewController.tableView(UITableView, commit : UITableViewCellEditingStyle, forRowAt : IndexPath) -&gt; ():FavoritesViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "favorites">
+               value = "timerLabel.text">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -91,23 +38,45 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.(loadData(sender : String) -&gt; ()).(closure #1).(closure #1):ViewController.swift">
+         contextName = "LoginViewController.(loginButton(FBSDKLoginButton!, didCompleteWith : FBSDKLoginManagerLoginResult!, error : Error!) -&gt; ()).(closure #1).(closure #1):LoginViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "favorites">
+               value = "user!.uid">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DetailsViewController.previewingContext(UIViewControllerPreviewing, viewControllerForLocation : CGPoint) -&gt; UIViewController?:DetailsPreviewDelegate.swift">
-      </ContextState>
-      <ContextState
-         contextName = "filteredDeals.unsafeMutableAddressor:Globals.swift">
+         contextName = "ViewController.(loadData() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "filteredDeals.count">
+               value = "">
+            </PersistentString>
+            <PersistentString
+               value = "self.FavdealIDs[temp.dealID!]">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "newDeal.unsafeMutableAddressor:DealInformationViews.swift">
+      </ContextState>
+      <ContextState
+         contextName = "WelcomeViewController.textSize():PageViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "textBox.frame.height">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.tableView(UITableView, cellForRowAt : IndexPath) -&gt; UITableViewCell:ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Components.day!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "StartTimeController.viewDidLoad():DealInformationViews.swift">
       </ContextState>
       <ContextState
          contextName = "AccountViewController.viewDidLoad() -&gt; ():AccountViewController.swift">
@@ -118,163 +87,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ChartView.viewDidLoad():ChartView.swift">
-      </ContextState>
-      <ContextState
-         contextName = "DetailsViewController.openMenu(Any) -&gt; ():DetailsViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "menu">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "newDeal.unsafeMutableAddressor:DealInformationViews.swift">
-      </ContextState>
-      <ContextState
-         contextName = "AppDelegate.(application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool).(closure #1):AppDelegate.swift">
-      </ContextState>
-      <ContextState
-         contextName = "AppDelegate.application(UIApplication, performActionFor : UIApplicationShortcutItem, completionHandler : (Bool) -&gt; ()) -&gt; ():AppDelegate.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "shortcutItem.localizedTitle">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.loadRedeemed():ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "favorites">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in AppDelegate.application(_:didFinishLaunchingWithOptions:):AppDelegate.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "payload.additionalData">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "DiscountViewController.nextPressed(_:):DealInformationViews.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "BOGOvc.promoText.text">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.prepare(for:sender:):ViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.loadFavorites(user : User) -&gt; ():ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "user.uid">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "listViewController.tableView(_:heightForRowAt:):VendorMapViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "tableView.cellForRow(at: indexPath)">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.tableView(_:numberOfRowsInSection:):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "filteredDeals">
-            </PersistentString>
-            <PersistentString
-               value = "filteredDeals.count">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "OnboardingViewController.viewDidLoad():PageViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "arrayVC.count">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "mainVC">
-            </PersistentString>
-            <PersistentString
-               value = "(self.Deal?.dealID)!">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.(searchBarSearchButtonClicked(UISearchBar) -&gt; ()).(closure #1):ViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "AppDelegate.application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool:AppDelegate.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "favorites">
-            </PersistentString>
-            <PersistentString
-               value = "(Auth.auth().currentUser?.uid)!">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "specialized closure #1 in closure #1 in ViewController.loadData(sender:):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "UnfilteredDeals.count">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "DealTableViewCell.likePressed(_:):DealTableViewCell.swift">
-      </ContextState>
-      <ContextState
-         contextName = "DetailsViewController.menu.getter:DetailsViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "favorites">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "specialized closure #1 in ViewController.loadData(sender:):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "UnfilteredDeals">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "ViewController.dealDetails(deal:index:):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.searchBar">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "listViewController.searchBar(_:textDidChange:):VendorMapViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "cellHeights">
-            </PersistentString>
-            <PersistentString
-               value = "restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -294,16 +110,59 @@
                value = "self.navigationController">
             </PersistentString>
             <PersistentString
-               value = "redeemers.value(forKey: (Auth.auth().currentUser?.uid)!)">
+               value = "redeemers">
             </PersistentString>
             <PersistentString
-               value = "redeemers">
+               value = "redeemers.value(forKey: (Auth.auth().currentUser?.uid)!)">
             </PersistentString>
             <PersistentString
                value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
             </PersistentString>
             <PersistentString
                value = "snap.value">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "filteredDeals.unsafeMutableAddressor:Globals.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "filteredDeals.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ChartView.viewDidLoad():ChartView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AppDelegate.applicationWillTerminate(UIApplication) -&gt; ():AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(user?.uid)!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "specialized closure #1 in closure #1 in ViewController.loadData(sender:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UnfilteredDeals.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "DealViewController.updateTimer():DealViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Date().timeIntervalSince1970">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in DealsViewController.loadData():DealsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.tableView.delegate">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -316,12 +175,29 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.tableView(UITableView, cellForRowAt : IndexPath) -&gt; UITableViewCell:ViewController.swift">
+         contextName = "ViewController.loadRedeemed():ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "Components.day!">
+               value = "favorites">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.(loadFavs() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AppDelegate.application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool:AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
+            </PersistentString>
+            <PersistentString
+               value = "(Auth.auth().currentUser?.uid)!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "DetailsViewController.menu.getter:DetailsViewController.swift">
       </ContextState>
       <ContextState
          contextName = "FavoritesViewController.removePressed(sender:event:):FavoritesViewController.swift">
@@ -332,15 +208,78 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "AppDelegate.applicationWillTerminate(UIApplication) -&gt; ():AppDelegate.swift">
+         contextName = "ViewController.ref.getter:ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "mach_msg_trap:(null)">
          <PersistentStrings>
             <PersistentString
-               value = "(user?.uid)!">
+               value = "favorites">
+            </PersistentString>
+            <PersistentString
+               value = "user">
+            </PersistentString>
+            <PersistentString
+               value = "listTable">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.ref.getter:ViewController.swift">
+         contextName = "ViewController.tableView(_:heightForRowAt:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "tableView.cellForRow(at: indexPath)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "DealTableViewCell.likePressed(_:):DealTableViewCell.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.viewDidLoad():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.navigationController">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "listViewController.tableView(_:heightForRowAt:):VendorMapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "tableView.cellForRow(at: indexPath)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.prepare(for:sender:):ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "EditInfoViewController.keyboardWillShow(notification:):EditInfo.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.view.frame.origin.y">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.loadFavorites(user : User) -&gt; ():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "user.uid">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FavoritesViewController.tableView(_:heightForRowAt:):FavoritesViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AppDelegate.application(UIApplication, performActionFor : UIApplicationShortcutItem, completionHandler : (Bool) -&gt; ()) -&gt; ():AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "shortcutItem.localizedTitle">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "ReviewController.submitDeal(_:):DealInformationViews.swift">
@@ -354,15 +293,50 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.(loadFavs() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
-      </ContextState>
-      <ContextState
-         contextName = "DealViewController.viewWillAppear(_:):DealViewController.swift">
+         contextName = "DealTableViewCell.FavoriteToggled(Any) -&gt; ():DealTableViewCell.swift">
          <PersistentStrings>
             <PersistentString
-               value = "timerLabel.text">
+               value = "deal.dealID!">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.(loadData(sender : String) -&gt; ()).(closure #1).(closure #1):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FavoritesViewController.tableView(UITableView, commit : UITableViewCellEditingStyle, forRowAt : IndexPath) -&gt; ():FavoritesViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.GetFavs():ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in AppDelegate.application(_:didFinishLaunchingWithOptions:):AppDelegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "payload.additionalData">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "DiscountViewController.nextPressed(_:):DealInformationViews.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "BOGOvc.promoText.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AppDelegate.(application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool).(closure #1):AppDelegate.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in ChartView.getRedeems():ChartView.swift">
@@ -373,26 +347,68 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DealTableViewCell.FavoriteToggled(Any) -&gt; ():DealTableViewCell.swift">
+         contextName = "ViewController.(searchBarSearchButtonClicked(UISearchBar) -&gt; ()).(closure #1):ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DetailsViewController.openMenu(Any) -&gt; ():DetailsViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "deal.dealID!">
+               value = "menu">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DealViewController.updateTimer():DealViewController.swift">
+         contextName = "DetailsViewController.previewingContext(UIViewControllerPreviewing, viewControllerForLocation : CGPoint) -&gt; UIViewController?:DetailsPreviewDelegate.swift">
+      </ContextState>
+      <ContextState
+         contextName = "specialized closure #1 in ViewController.loadData(sender:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "Date().timeIntervalSince1970">
+               value = "UnfilteredDeals">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.tableView(_:heightForRowAt:):ViewController.swift">
+         contextName = "FavoritesViewController.tableView(_:cellForRowAt:):FavoritesViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "tableView.cellForRow(at: indexPath)">
+               value = "(self.Deal?.dealID)!">
+            </PersistentString>
+            <PersistentString
+               value = "mainVC">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.tableView(_:numberOfRowsInSection:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "filteredDeals">
+            </PersistentString>
+            <PersistentString
+               value = "filteredDeals.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.dealDetails(deal:index:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.searchBar">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "listViewController.searchBar(_:textDidChange:):VendorMapViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cellHeights">
+            </PersistentString>
+            <PersistentString
+               value = "restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

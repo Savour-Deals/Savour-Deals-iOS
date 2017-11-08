@@ -53,7 +53,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController!.setNavigationBarHidden(true, animated: true)
-
+        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
         // [START auth_listener]
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
             // [START_EXCLUDE]
@@ -74,9 +75,23 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     func setUpUI(){
         LoginView.isHidden = true
         LoginLabel.isHidden = true
+        let gradientLayer = CAGradientLayer()
+        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
+        gradientLayer.frame = self.view.bounds
+        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
+        self.view.layer.insertSublayer(gradientLayer, at: 0)
+        LoginEmail.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        LoginEmail.layer.borderWidth = 2
+        LoginPassword.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        LoginPassword.layer.borderWidth = 2
+        LoginButton.layer.borderColor = UIColor.white.cgColor
+        LoginButton.layer.borderWidth = 2
+        LoginPassword.textColor = UIColor.white
+        LoginEmail.textColor = UIColor.white
+        LoginPassword.layer.cornerRadius = 5
+        LoginEmail.layer.cornerRadius = 5
         LoginButton.layer.cornerRadius = 5
-        SignUpButton.layer.cornerRadius = 5
-        LoginView.layer.cornerRadius = 5
     }
     
     func isLoggingin(){
