@@ -83,15 +83,6 @@ class restaurant{
         self.address = value["Address"] as? String ?? ""
         self.menu = value["Menu"] as? String ?? ""
         self.restrauntPhoto = value["Photo"] as? String ?? ""
-        //if let followDict = value["Followers"] as? NSDictionary ?? nil{
-             //self.followers = followDict.count
-//        }
-//        else {
-//            self.followers = 0
-//        }
-
-
-
 
     }
     

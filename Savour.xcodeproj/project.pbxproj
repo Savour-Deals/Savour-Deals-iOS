@@ -16,6 +16,7 @@
 		833B25CB1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */; };
 		833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */; };
 		833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */; };
+		833D55E81FB6A91A00C66125 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D55E71FB6A91A00C66125 /* TabBarViewController.swift */; };
 		83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */; };
 		83446AA21F3BDC6400CBE73E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AA11F3BDC6400CBE73E /* AccountViewController.swift */; };
 		83446AA91F3C06AB00CBE73E /* DealDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */; };
@@ -85,6 +86,7 @@
 		833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
 		833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsPreviewDelegate.swift; sourceTree = "<group>"; };
 		833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesPreviewDelegate.swift; sourceTree = "<group>"; };
+		833D55E71FB6A91A00C66125 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		83446AA11F3BDC6400CBE73E /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DealDetails.storyboard; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				83BA94891F64C3D800165064 /* AccountCell.swift */,
 				834C1E131F3151A4002D7198 /* ViewController.swift */,
 				834C1E191F3187AA002D7198 /* Classes.swift */,
+				833D55E71FB6A91A00C66125 /* TabBarViewController.swift */,
 				833756381F9E7F4E00336744 /* VendorMapViewController.swift */,
 				83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */,
 				833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */,
@@ -533,6 +536,7 @@
 				83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */,
 				834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */,
 				834C1E1A1F3187AA002D7198 /* Classes.swift in Sources */,
+				833D55E81FB6A91A00C66125 /* TabBarViewController.swift in Sources */,
 				83A457E81F85472000E803C6 /* DealsViewController.swift in Sources */,
 				83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */,
 				83BC91EA1F8C12DC0031C372 /* PageViewController.swift in Sources */,
@@ -708,7 +712,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Savour/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -735,7 +739,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Savour/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -751,13 +755,12 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -773,13 +776,12 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";

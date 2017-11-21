@@ -3,18 +3,18 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "favorites">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "DetailsViewController.scrollViewDidScroll(_:):DetailsViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "self.rImg.frame">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favorites">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -155,6 +155,17 @@
          <PersistentStrings>
             <PersistentString
                value = "Date().timeIntervalSince1970">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "RDealsTableViewCell.awakeFromNib():RDealsTableViewCell.swift">
+      </ContextState>
+      <ContextState
+         contextName = "buttonCell.followPressed(_:):DetailsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "signalID">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -318,6 +329,14 @@
       </ContextState>
       <ContextState
          contextName = "ViewController.GetFavs():ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DetailsViewController.tableView(_:cellForRowAt:):DetailsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexPath.row">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "closure #1 in AppDelegate.application(_:didFinishLaunchingWithOptions:):AppDelegate.swift">

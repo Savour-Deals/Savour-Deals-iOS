@@ -128,22 +128,24 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                     if Components.day! != 0{
                         startingTime = startingTime + String(describing: Components.day!) + " days"
                     }
-                    else{
-                        startingTime = startingTime + String(describing: Components.hour!) + "h "
-                        startingTime = startingTime + String(describing: Components.minute!) + "m"
+                    else if Components.hour! != 0{
+                        startingTime = startingTime + String(describing: Components.hour!) + "hours"
+                    }else{
+                        startingTime = startingTime + String(describing: Components.minute!) + "minutes"
                     }
                     cell.Countdown.text = "Starts in " + startingTime
                 }
                 else {
-                    var leftTime = " "
+                    var leftTime = ""
                     if Components.day! != 0{
-                        leftTime = leftTime + String(describing: Components.day!) + " days"
+                        leftTime = leftTime + String(describing: Components.day!) + " days left"
                     }
-                    else{
-                        leftTime = leftTime + String(describing: Components.hour!) + "h "
-                        leftTime = leftTime + String(describing: Components.minute!) + "m"
+                    else if Components.hour! != 0{
+                        leftTime = leftTime + String(describing: Components.hour!) + "hours left"
+                    }else{
+                        leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
                     }
-                    cell.Countdown.text = "Time left: " + leftTime
+                    cell.Countdown.text = leftTime
                 }
                 let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
                 let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
@@ -156,10 +158,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                     hour = hour - 12
                 }
                 if minute < 10 {
-                    cell.validHours.text = "Valid Between: \(hour):0\(minute)\(component)-"
+                    cell.validHours.text = "Valid \(hour):0\(minute)\(component) to "
                 }
                 else{
-                    cell.validHours.text = "Valid Between: \(hour):\(minute)\(component)-"
+                    cell.validHours.text = "Valid \(hour):\(minute)\(component) to "
                 }
                 hour = calendar.component(.hour, from: endD)
                 minute = calendar.component(.minute, from: endD)
@@ -176,15 +178,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 }
                 
             }
-            else if (current > end){
-                cell.Countdown.text = "Deal Ended"
-                cell.validHours.text = ""
-            }
-            else {
-                let cal = Calendar.current
-                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
-                cell.Countdown.text = "Starts in " + String(describing: Components.day!) + "days"
-            }
+            
         }
         cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
         cell.tagImg.tintColor = cell.Countdown.textColor
@@ -245,6 +239,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         return UITableViewAutomaticDimension
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
 

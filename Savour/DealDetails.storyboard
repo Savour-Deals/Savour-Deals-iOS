@@ -4,8 +4,8 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -125,16 +125,20 @@ This promotion is for individual use only and shall be used for an individual's 
                                             <constraint firstAttribute="width" constant="100" id="qcO-yM-HXi"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-dk-vcz">
+                                    <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-dk-vcz">
                                         <rect key="frame" x="87" y="173" width="200" height="200"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="c50-Gn-ufj"/>
                                             <constraint firstAttribute="height" constant="200" id="ghU-ss-P3I"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="zO5-ZJ-dfw" appends="YES" id="xol-Me-fKg"/>
+                                        </connections>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal " textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPP-Jv-J2f">
                                         <rect key="frame" x="10" y="113" width="355" height="30"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="25"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -199,6 +203,7 @@ This promotion is for individual use only and shall be used for an individual's 
                             <constraint firstItem="zhn-Qz-hBb" firstAttribute="leading" secondItem="WcZ-Ck-nPH" secondAttribute="leading" id="sAd-NW-Rea"/>
                             <constraint firstAttribute="trailing" secondItem="hpi-Nv-M1z" secondAttribute="trailing" id="xQu-1s-8nQ"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="Vvv-Lw-bVJ"/>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
@@ -210,6 +215,7 @@ This promotion is for individual use only and shall be used for an individual's 
                         <outlet property="infoView" destination="7A3-BV-eil" id="kmt-bB-Y4o"/>
                         <outlet property="moreBtn" destination="YrQ-GR-Dun" id="BKU-Jo-ThW"/>
                         <outlet property="redeem" destination="g2z-lR-J3D" id="tCr-Be-Usv"/>
+                        <outlet property="textView" destination="RO2-Ob-ZGY" id="3o7-Zx-dn8"/>
                         <outlet property="timerLabel" destination="KvV-v9-jhB" id="Wfg-hZ-ien"/>
                     </connections>
                 </viewController>
@@ -219,6 +225,11 @@ This promotion is for individual use only and shall be used for an individual's 
                         <action selector="backSwipe:" destination="U9a-dB-aq3" id="eYW-2z-G04"/>
                     </connections>
                 </swipeGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="zO5-ZJ-dfw">
+                    <connections>
+                        <action selector="infoPressed:" destination="U9a-dB-aq3" id="Qzu-fb-oBT"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1173.5999999999999" y="-1057.4212893553224"/>
         </scene>
