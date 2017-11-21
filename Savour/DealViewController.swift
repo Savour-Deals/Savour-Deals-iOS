@@ -32,6 +32,7 @@ class DealViewController: UIViewController {
     var timerStartTime: Int!
     weak var shapeLayer: CAShapeLayer?
     
+    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var infoView: UIView!
     @IBOutlet var redeemedView: UIView!
     @IBOutlet weak var redeem: UIButton!
@@ -65,6 +66,8 @@ class DealViewController: UIViewController {
         }
         moreBtn.layer.cornerRadius = 25
         infoView.layer.cornerRadius = 10
+        textView.setContentOffset(CGPoint.zero, animated: false)
+
         self.navigationController?.navigationBar.tintColor = UIColor.white
         if (Deal?.redeemed)!{
             self.redeem.isEnabled = false
@@ -139,10 +142,11 @@ class DealViewController: UIViewController {
         }
         self.img.layer.cornerRadius = img.frame.size.width / 2
         moreBtn.setTitle("See More From " + (Deal?.restrauntName)!, for: .normal)
-        imgbound.layer.insertSublayer(pulsator, below: img.layer)
+        imgbound.layer.insertSublayer(pulsator, below: imgbound.layer)
         pulsator.numPulse = 6
         pulsator.radius = 230
         pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        textView.contentOffset.y = 0
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -253,20 +257,37 @@ class DealViewController: UIViewController {
     }
     
     @IBAction func infoPressed(_ sender: Any) {
+        self.redeem.isEnabled = false
+        self.moreBtn.isEnabled = false
+        self.infoView.isHidden = false
+        self.blurView.isHidden = false
         self.view.bringSubview(toFront: blurView)
-
         self.view.bringSubview(toFront: infoView)
-        redeem.isEnabled = false
-        moreBtn.isEnabled = false
-        infoView.isHidden = false
-        blurView.isHidden = false
+        var scaleTrans = CGAffineTransform(scaleX: 0.0, y: 0.0)
+        self.blurView.transform = scaleTrans
+        self.infoView.transform = scaleTrans
+        scaleTrans = CGAffineTransform(scaleX: 1, y: 1)
+        UIView.animate(withDuration: 0.8,delay: 0, usingSpringWithDamping:0.6,
+            initialSpringVelocity:1.0,  options: .curveEaseInOut, animations: {
+            self.blurView.transform = scaleTrans
+            self.infoView.transform = scaleTrans
+        }, completion: nil)
+       
     }
     
     @IBAction func infoDismiss(_ sender: Any) {
-        redeem.isEnabled = true
-        moreBtn.isEnabled = true
-        infoView.isHidden = true
-        blurView.isHidden = true
+        let scaleTrans = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.8,delay: 0, usingSpringWithDamping:0.6,
+                       initialSpringVelocity:1.0,  options: .curveEaseInOut, animations: {
+                        self.blurView.transform = scaleTrans
+                        self.infoView.transform = scaleTrans
+        }, completion: {(value: Bool) in
+            self.redeem.isEnabled = true
+            self.moreBtn.isEnabled = true
+            self.infoView.isHidden = true
+            self.blurView.isHidden = true
+        })
+        
 
     }
     func timeString(time:TimeInterval)->String{

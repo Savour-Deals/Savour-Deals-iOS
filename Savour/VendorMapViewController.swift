@@ -23,6 +23,7 @@ class VendorMapViewController: UIViewController{
     var mapVC: mapViewController!
     var ref: DatabaseReference!
     var locationManager: CLLocationManager!
+    var distanceFilter = 50.0
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -53,7 +54,9 @@ class VendorMapViewController: UIViewController{
             }
         }
         getRestaurants()
+
     }
+
     func requestLocationAccess() {
         let status = CLLocationManager.authorizationStatus()
         
@@ -82,6 +85,7 @@ class VendorMapViewController: UIViewController{
         
     }
     
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "list"{
             listVC = segue.destination as! listViewController
@@ -90,9 +94,11 @@ class VendorMapViewController: UIViewController{
             mapVC = segue.destination as! mapViewController
         }
         if segue.identifier == "restaurant"{
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
             let vc = segue.destination as! DetailsViewController
             vc.rID = sender as? String
         }
+        
     }
     
     @IBAction func segmentChanged(_ sender: Any) {
@@ -111,13 +117,33 @@ class VendorMapViewController: UIViewController{
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot
                 let temp = restaurant(snap: snap, ID: snap.key)
-                //let distanceInMeters : Double = self.userLocation.location!.distance(from: mapItems[row].placemark.location!)
-                //let distanceInMiles : Double = ((distanceInMeters.description as String).doubleValue * 0.00062137)
-                restaurants.append(temp)
+                let geoCoder = CLGeocoder()
+                geoCoder.geocodeAddressString(temp.address!) { (placemarks, error) -> Void in
+                    if((error) != nil){
+                        print("Error", error ?? "")
+                    }
+                    if let placemark = placemarks?.first {
+                        temp.coordinates = placemark.location!.coordinate
+                        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+                            let Location = CLLocation.init(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)
+                            temp.distanceMiles = (placemark.location?.distance(from: Location))!/1609.344
+                            if temp.distanceMiles! < self.distanceFilter{
+                                restaurants.append(temp)
+                            }
+                        }
+                        else{
+                            restaurants.append(temp)
+                        }
+                        restaurants.sort { CGFloat($0.distanceMiles!) < CGFloat($1.distanceMiles!) }
+                    }
+                    self.mapVC.makeAnnotations()
+                    self.listVC.delegateTable()
+                    self.listVC.listTable.reloadData()
+                    self.mapVC.flag = 1
+                }
+                
             }
-            self.listVC.delegateTable()
-            self.mapVC.makeAnnotations()
-            self.mapVC.flag = 1
+            
         })
     }
 }
@@ -152,21 +178,10 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     func makeAnnotations(){
+        self.mapView.removeAnnotations(self.mapView.annotations)
         for i in 0..<restaurants.count{
-            let geoCoder = CLGeocoder()
-            geoCoder.geocodeAddressString(restaurants[i].address!) { (placemarks, error) -> Void in
-                if((error) != nil){
-                    print("Error", error ?? "")
-                }
-                if let placemark = placemarks?.first {
-                    let coordinates:CLLocationCoordinate2D = placemark.location!.coordinate
-                    let annotation = restaurantAnnotation(title: restaurants[i].restrauntName!, coordinate: coordinates, rID: restaurants[i].restrauntID!)
-                    self.mapView.addAnnotation(annotation)
-                }
-            }
-            
-            
-            
+            let annotation = restaurantAnnotation(title: restaurants[i].restrauntName!, coordinate: restaurants[i].coordinates!, rID: restaurants[i].restrauntID!)
+            self.mapView.addAnnotation(annotation)
         }
         self.mapView.delegate = self
     }
@@ -236,6 +251,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     var myRestaurants = [restaurant]()
     @IBOutlet weak var searchBar: UISearchBar!
     var statusBar: UIView!
+    @IBOutlet weak var noRest: UILabel!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -276,6 +292,13 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if restaurants.count < 1 {
+            self.noRest.isHidden = false
+            self.listTable.isHidden = true
+        }else{
+            self.noRest.isHidden = true
+            self.listTable.isHidden = false
+        }
         return myRestaurants.count
     }
     
@@ -299,7 +322,12 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
         }
         cell.rName.text = cell.restaurant.restrauntName
-        
+        if let distance = cell.restaurant.distanceMiles{
+            cell.distanceTxt.text = String(format:"%.1f", distance) + " miles away"
+        }
+        else{
+            cell.distanceTxt.text = ""
+        }
         return cell
     }
     
@@ -357,6 +385,7 @@ class restaurantCell: UITableViewCell{
     @IBOutlet weak var insetView: UIView!
     @IBOutlet weak var rName: UILabel!
     var restaurant: restaurant!
+    @IBOutlet weak var distanceTxt: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

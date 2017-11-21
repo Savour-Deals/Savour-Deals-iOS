@@ -17,17 +17,20 @@ import FirebaseAuth
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate{
 
+    var searchBar: UISearchBar!
+    @IBOutlet weak var loading: UIActivityIndicatorView!
     @IBOutlet var redeemedView: UIView!
     var handle: AuthStateDidChangeListenerHandle?
     var storage: Storage!
     var ref: DatabaseReference!
     var FavdealIDs: [String:String] = Dictionary<String, String>()
     var justOpened = true
-    var searchBar: UISearchBar!
     var alreadyGoing = false
-    var instantiated = false
     var statusBar: UIView!
-
+    
+    @IBOutlet weak var buttonsView: UIView!
+    @IBOutlet weak var scrollFilter: UIScrollView!
+    @IBOutlet weak var noDeals: UILabel!
     private let refreshControl = UIRefreshControl()
 
     
@@ -43,6 +46,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loading.startAnimating()
         alreadyGoing = false
         ref = Database.database().reference()
         ref.keepSynced(true)
@@ -83,7 +87,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
-        self.refreshControl.tintColor = UIColor.white
 
         ref.keepSynced(true)
         GetFavs()
@@ -100,9 +103,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             DealsTable.addSubview(refreshControl)
         }
         // Configure Refresh Control
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+        refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         setupSearchBar()
+        for subview in buttonsView.subviews{
+            let button = subview as! UIButton
+            button.layer.borderColor = UIColor.white.cgColor
+            button.layer.borderWidth = 1
+            button.layer.cornerRadius = 5
+            button.addTarget(self, action: #selector(filterWithButtons(button:)), for: .touchUpInside)
+        }
     }
     
     
@@ -150,8 +161,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @objc private func refreshData(_ sender: Any) {
         // Fetch Data
         loadData(sender: "refresh")
-        self.refreshControl.endRefreshing()
-
+    }
+    
+    func endRefresh(){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
+            // When done requesting/reloading/processing invoke endRefreshing, to close the control
+            self.refreshControl.endRefreshing()
+        }
     }
 
     func loadData(sender: String){
@@ -253,7 +269,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     filteredDeals.append(deal)
                 }
             }
+            filteredDeals.sort { CGFloat($0.endTime!) < CGFloat($1.endTime!) }
             self.DealsTable.reloadData()
+            if self.refreshControl.isRefreshing{
+                self.endRefresh()
+            }
+            if self.loading.isAnimating{
+                self.loading.stopAnimating()
+            }
+            if filteredDeals.count < 1 {
+                self.DealsTable.isHidden = true
+                self.noDeals.isHidden = false
+            }else{
+                self.DealsTable.isHidden = false
+                self.noDeals.isHidden = true
+            }
+         
         })
     }
     
@@ -296,7 +327,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
             cell.rName.text = deal.restrauntName
             cell.dealDesc.text = deal.dealDescription
-            
             if deal.redeemed! {
                 cell.Countdown.text = "Deal Already Redeemed!"
                 cell.Countdown.textColor = UIColor.red
@@ -323,22 +353,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         if Components.day! != 0{
                             startingTime = startingTime + String(describing: Components.day!) + " days"
                         }
-                        else{
-                            startingTime = startingTime + String(describing: Components.hour!) + "h "
-                            startingTime = startingTime + String(describing: Components.minute!) + "m"
+                        else if Components.hour! != 0{
+                            startingTime = startingTime + String(describing: Components.hour!) + "hours"
+                        }else{
+                            startingTime = startingTime + String(describing: Components.minute!) + "minutes"
                         }
                         cell.Countdown.text = "Starts in " + startingTime
                     }
                     else {
-                        var leftTime = " "
+                        var leftTime = ""
                         if Components.day! != 0{
-                            leftTime = leftTime + String(describing: Components.day!) + " days"
+                            leftTime = leftTime + String(describing: Components.day!) + " days left"
                         }
-                        else{
-                            leftTime = leftTime + String(describing: Components.hour!) + "h "
-                            leftTime = leftTime + String(describing: Components.minute!) + "m"
+                        else if Components.hour! != 0{
+                            leftTime = leftTime + String(describing: Components.hour!) + "hours left"
+                        }else{
+                            leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
                         }
-                        cell.Countdown.text = "Time left: " + leftTime
+                        cell.Countdown.text = leftTime
                     }
                     let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
                     let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
@@ -351,10 +383,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         hour = hour - 12
                     }
                     if minute < 10 {
-                        cell.validHours.text = "Valid Between: \(hour):0\(minute)\(component)-"
+                        cell.validHours.text = "Valid \(hour):0\(minute)\(component) to "
                     }
                     else{
-                        cell.validHours.text = "Valid Between: \(hour):\(minute)\(component)-"
+                        cell.validHours.text = "Valid \(hour):\(minute)\(component) to "
                     }
                     hour = calendar.component(.hour, from: endD)
                     minute = calendar.component(.minute, from: endD)
@@ -385,11 +417,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if velocity.y>0{
             UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(true, animated: true)
+                //self.scrollFilter.isHidden = true
             }, completion: nil)
         }
         else{
             UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
+                //self.scrollFilter.isHidden = false
             }, completion: nil)
         }
     }
@@ -433,13 +467,34 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
    
-    
+    @objc func filterWithButtons(button: UIButton){
+        let title = button.currentTitle
+        if title == "ALL" {
+            filteredDeals = UnfilteredDeals
+        }else if title == "%" || title == "$"{
+            filteredDeals = UnfilteredDeals.filter { ($0.dealDescription!.lowercased().contains(title!.lowercased())) }
+        }else if  title == "BOGO" {
+            // Filter the results
+            filteredDeals = UnfilteredDeals.filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
+        } else{
+            filteredDeals = UnfilteredDeals.filter { ($0.dealType!.lowercased().contains(title!.lowercased())) }
+        }
+        filteredDeals.sort { CGFloat($0.endTime!) < CGFloat($1.endTime!) }
+        if filteredDeals.count < 1 {
+            self.DealsTable.isHidden = true
+            self.noDeals.isHidden = false
+        }else{
+            self.DealsTable.isHidden = false
+            self.noDeals.isHidden = true
+        }
+        DealsTable.reloadData()
+    }
     
     
     //SearchBar functions
     func setupSearchBar(){
         // Setup the Search Controller
-        self.searchBar = UISearchBar()
+        searchBar = UISearchBar()
         searchBar.showsCancelButton = false
         searchBar.placeholder = "Search Restaurants"
         searchBar.delegate = self
@@ -456,6 +511,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             // Filter the results
             filteredDeals = UnfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
+        if filteredDeals.count < 1 {
+            self.DealsTable.isHidden = true
+            self.noDeals.isHidden = false
+        }else{
+            self.DealsTable.isHidden = false
+            self.noDeals.isHidden = true
+        }
         DealsTable.reloadData()
     }
     
@@ -468,13 +530,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             // Filter the results
             filteredDeals = UnfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
+        if filteredDeals.count < 1 {
+            self.DealsTable.isHidden = true
+            self.noDeals.isHidden = false
+        }else{
+            self.DealsTable.isHidden = false
+            self.noDeals.isHidden = true
+        }
         DealsTable.reloadData()
+       
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         //searchBar.resignFirstResponder()
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
+        if filteredDeals.count < 1 {
+            self.DealsTable.isHidden = true
+            self.noDeals.isHidden = false
+        }else{
+            self.DealsTable.isHidden = false
+            self.noDeals.isHidden = true
+        }
     }
  
     

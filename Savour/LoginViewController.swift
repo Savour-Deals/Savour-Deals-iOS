@@ -111,6 +111,12 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginButton.isEnabled = true
         SignUpButton.isEnabled = true
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.LoginEmail.resignFirstResponder()
+        self.LoginPassword.resignFirstResponder()
+
+    }
    
 
     @IBAction func LoginButtonPressed(_ sender: Any) {
@@ -127,6 +133,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                         let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
                         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
+                        self.endLoggingin()
                         return
                     }
                     self.ref.child("Users").child(user!.uid).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
