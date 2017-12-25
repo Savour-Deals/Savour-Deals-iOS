@@ -116,7 +116,7 @@ class DealsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell")! as! DealTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell")! as! VendorDealCell
         cell.deal = groups[indexPath.section].deals[indexPath.row]
         let photo = cell.deal.restrauntPhoto!
         if photo != ""{
@@ -179,7 +179,7 @@ class DealsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         //tableView.endUpdates()
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell
+        let cell = tableView.cellForRow(at: indexPath) as! VendorDealCell
         tableView.deselectRow(at: indexPath, animated: true)
         chosenDeal = cell.deal
         performSegue(withIdentifier: "DealInfo", sender: nil)

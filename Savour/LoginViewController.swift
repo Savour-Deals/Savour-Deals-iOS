@@ -92,6 +92,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginPassword.layer.cornerRadius = 5
         LoginEmail.layer.cornerRadius = 5
         LoginButton.layer.cornerRadius = 5
+        LoginView.layer.cornerRadius = 5
     }
     
     func isLoggingin(){
@@ -145,9 +146,19 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
                         }
                         else{
-                            self.performSegue(withIdentifier: "MainS", sender: self)
-                            self.endLoggingin()
-
+                            self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
+                                let boarded = snapshot.value as? String ?? ""
+                                if boarded != ""{
+                                    self.performSegue(withIdentifier: "MainS", sender: self)
+                                    self.endLoggingin()
+                                    
+                                }
+                                else{
+                                    self.performSegue(withIdentifier: "tutorial", sender: self)
+                                    self.endLoggingin()
+                                    
+                                }
+                            })
                         }
                     })
                 }
@@ -203,7 +214,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     
                     data = result as! [String : AnyObject]
                     let name = data["name"] as! String
+                    let id = data["id"] as! String
                     self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
+                    self.ref.child("Users").child(user!.uid).child("FacebookID").setValue(id)
+
                 }
             })
 

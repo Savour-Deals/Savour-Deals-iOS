@@ -57,6 +57,8 @@ class SignUpViewController: UIViewController {
         NameField.layer.cornerRadius = 5
         EmailField.layer.cornerRadius = 5
         PasswordField.layer.cornerRadius = 5
+        loadingView.layer.cornerRadius = 5
+
     }
     func isLoading(){
         loadingIndicator.startAnimating()

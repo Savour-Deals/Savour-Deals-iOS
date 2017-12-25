@@ -38,10 +38,10 @@ class VendorHomeViewController: UIViewController {
         })
         for i in 0...btns.count-1{
             btns[i].layer.borderWidth = 1.0
-            btns[i].layer.cornerRadius = 5.0
+            btns[i].layer.cornerRadius = btns[i].frame.height/2
             btns[i].layer.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         }
-        logoutBtn.layer.cornerRadius = 5.0
+        logoutBtn.layer.cornerRadius = logoutBtn.frame.height/2
     }
     
     override func viewWillAppear(_ animated: Bool) {

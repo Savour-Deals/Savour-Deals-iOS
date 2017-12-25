@@ -65,11 +65,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     func setupUI(){
         self.navigationController?.navigationItem.title = "Favorites"
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
-        let gradientLayer = CAGradientLayer()
-        
-        gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.2494381421).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
 
@@ -82,11 +77,11 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
         cell.deal = deals[indexPath.row]
+        //cell.likeButton.frame.size = CGSize(width: 300, height: 40)
+        cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
         let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
         cell.likeButton.setImage(image, for: .normal)
         cell.likeButton.tintColor = UIColor.red
-        cell.likeButton.frame.size = CGSize(width: 300, height: 40)
-        cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
         let photo = cell.deal.restrauntPhoto!
         // Reference to an image file in Firebase Storage
         let storage = Storage.storage()
@@ -102,10 +97,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
         cell.rName.text = cell.deal.restrauntName
         cell.dealDesc.text = cell.deal.dealDescription
+        cell.validHours.text = ""
         if cell.deal.redeemed! {
             cell.Countdown.text = "Deal Already Redeemed!"
             cell.Countdown.textColor = UIColor.red
-            cell.validHours.text = ""
             
         }
         else{
@@ -147,6 +142,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                     }
                     cell.Countdown.text = leftTime
                 }
+                /*For setting the time left for a deal which is not currently used
                 let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
                 let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
                 let calendar = NSCalendar.current
@@ -175,7 +171,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 }
                 else{
                     cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
-                }
+                }*/
                 
             }
             
