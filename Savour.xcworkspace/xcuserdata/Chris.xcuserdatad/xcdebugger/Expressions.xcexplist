@@ -3,18 +3,21 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "DetailsViewController.scrollViewDidScroll(_:):DetailsViewController.swift">
+         contextName = "ViewController.dealDetails(deal:index:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.rImg.frame">
+               value = "self.searchBar">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
+         contextName = "listViewController.searchBar(_:textDidChange:):VendorMapViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "favorites">
+               value = "cellHeights">
+            </PersistentString>
+            <PersistentString
+               value = "restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -110,10 +113,10 @@
                value = "self.navigationController">
             </PersistentString>
             <PersistentString
-               value = "redeemers">
+               value = "redeemers.value(forKey: (Auth.auth().currentUser?.uid)!)">
             </PersistentString>
             <PersistentString
-               value = "redeemers.value(forKey: (Auth.auth().currentUser?.uid)!)">
+               value = "redeemers">
             </PersistentString>
             <PersistentString
                value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
@@ -168,6 +171,9 @@
                value = "signalID">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in LoginViewController.loginButton(_:didCompleteWith:error:):LoginViewController.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in DealsViewController.loadData():DealsViewController.swift">
@@ -293,6 +299,17 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "EditInfoViewController.tableView(_:didSelectRowAt:):EditInfo.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "textfield.text">
+            </PersistentString>
+            <PersistentString
+               value = "cell?.contentView.subviews">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ReviewController.submitDeal(_:):DealInformationViews.swift">
          <PersistentStrings>
             <PersistentString
@@ -358,6 +375,9 @@
          contextName = "AppDelegate.(application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool).(closure #1):AppDelegate.swift">
       </ContextState>
       <ContextState
+         contextName = "AccountViewController.tableView(_:cellForRowAt:):AccountViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in ChartView.getRedeems():ChartView.swift">
          <PersistentStrings>
             <PersistentString
@@ -394,10 +414,10 @@
          contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "(self.Deal?.dealID)!">
+               value = "mainVC">
             </PersistentString>
             <PersistentString
-               value = "mainVC">
+               value = "(self.Deal?.dealID)!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -413,21 +433,18 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.dealDetails(deal:index:):ViewController.swift">
+         contextName = "DetailsViewController.scrollViewDidScroll(_:):DetailsViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.searchBar">
+               value = "self.rImg.frame">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "listViewController.searchBar(_:textDidChange:):VendorMapViewController.swift">
+         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "cellHeights">
-            </PersistentString>
-            <PersistentString
-               value = "restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))!">
+               value = "favorites">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

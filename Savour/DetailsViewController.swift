@@ -54,15 +54,15 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         DealsTable.rowHeight = UITableViewAutomaticDimension
         DealsTable.estimatedRowHeight = 45
-        
-
         self.cachedImageViewSize = self.rImg.frame
         self.cachedTextPoint = self.rName.center
         let footerView = UIView()
         footerView.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0)
         self.DealsTable.tableFooterView = footerView
+        self.DealsTable.sectionHeaderHeight = self.rImg.frame.height
     }
-
+    
+ 
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = true
         self.DealsTable.reloadData()
@@ -79,10 +79,10 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             
             let value = snapshot.value as? NSDictionary
             if snapshot.childSnapshot(forPath: "Followers").hasChild((Auth.auth().currentUser?.uid)!){
-                self.followString = "Unfollow"
+                self.followString = "Click to Unfollow"
             }
             else{
-                self.followString = "  Follow"
+                self.followString = "Click to Follow"
             }
                 self.menu = value?["Menu"] as? String ?? ""
                 self.rName.text = value?["Name"] as? String ?? ""
@@ -115,17 +115,19 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                     // Load the image using SDWebImage
                     imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
             }
+            self.DealsTable.reloadData()
+            self.DealsTable.isHidden = false
         }){ (error) in
             print(error.localizedDescription)
         }
-        for i in 0 ... (UnfilteredDeals.count-1){
-            if self.rID == UnfilteredDeals[i].restrauntID{
-                self.Deals.append((UnfilteredDeals[i]))
-                self.indices.append(i)
+        if UnfilteredDeals.count > 0 {
+            for i in 0 ... (UnfilteredDeals.count-1){
+                if self.rID == UnfilteredDeals[i].restrauntID{
+                    self.Deals.append((UnfilteredDeals[i]))
+                    self.indices.append(i)
+                }
             }
         }
-        DealsTable.reloadData()
-        self.DealsTable.isHidden = false
     }
     
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -184,9 +186,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         else if indexPath.row == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: "buttonCell", for: indexPath) as! buttonCell
             cell.followButton.setTitle(self.followString, for: .normal)
-            cell.followButton.alignContentVerticallyByCenter(Img: #imageLiteral(resourceName: "follow"))
-            cell.menuButton.alignContentVerticallyByCenter(Img: #imageLiteral(resourceName: "menu"))
-            cell.directionsButton.alignContentVerticallyByCenter(Img: #imageLiteral(resourceName: "directions"))
+            if self.followString == "Click to Follow"{
+                cell.followButton.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+            }else{
+                cell.followButton.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+            }
+            cell.followButton.setTemplateImg(Img: #imageLiteral(resourceName: "follow"))
+            cell.menuButton.setTemplateImg(Img: #imageLiteral(resourceName: "menu"))
+            cell.directionsButton.setTemplateImg(Img: #imageLiteral(resourceName: "directions"))
             cell.request = self.request
             cell.menu = self.menu
             cell.rID = self.rID
@@ -207,10 +214,10 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
            let  cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! RDealsTableViewCell
             let deal = Deals[indexPath.row - 4]
             cell.deal = deal
+            cell.validHours.text = ""
             cell.dealDesc.text = deal.dealDescription
             if deal.redeemed! {
                 cell.Countdown.text = "Deal Already Redeemed!"
-                cell.validHours.text = ""
                 cell.Countdown.textColor = UIColor.red
                 cell.FavButton.isHidden = true
             }
@@ -222,9 +229,20 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 let current = Date()
                 let interval  =  DateInterval(start: start as Date, end: end as Date)
                 if (interval.contains(current)){
+                    
                     let cal = Calendar.current
                     let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
-                    cell.Countdown.text =  "Time left: " + String(describing: Components.day!) + "d " + String(describing: Components.hour!) + "h " + String(describing: Components.minute!) + "m"
+                    var leftTime = ""
+                    if Components.day! != 0{
+                        leftTime = leftTime + String(describing: Components.day!) + " days left"
+                    }
+                    else if Components.hour! != 0{
+                        leftTime = leftTime + String(describing: Components.hour!) + "hours left"
+                    }else{
+                        leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
+                    }
+                    cell.Countdown.text = leftTime
+                    /*Section for getting valid hours which is not currently used
                     let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
                     let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
                     let calendar = NSCalendar.current
@@ -253,7 +271,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     else{
                         cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
-                    }
+                    }*/
                     
                 }
                 else if (current > end){
@@ -383,46 +401,84 @@ class buttonCell: UITableViewCell {
 
     @IBAction func followPressed(_ sender: Any) {
         followButton.isEnabled = false
-        if self.followButton.currentTitle == "  Follow"{
+        if self.followButton.currentTitle == "Click to Follow"{
             let uID = Auth.auth().currentUser?.uid
             let followRef = Database.database().reference().child("Restaurants").child((self.rID)!).child("Followers").child(uID!)
             followRef.setValue(signalID)
             OneSignal.sendTags([(rID)! : "true"])
             self.followButton.imageView?.center = CGPoint(x: self.followButton.center.x, y: (self.followButton.imageView?.center.y)!)
-            self.followButton.setTitle("Unfollow", for: .normal)
+            self.followButton.setTitle("Click to Unfollow", for: .normal)
+            self.followButton.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+
         }
         else{
             let uID = Auth.auth().currentUser?.uid
             let followRef = Database.database().reference().child("Restaurants").child((self.rID)!).child("Followers").child(uID!)
             followRef.removeValue()
             OneSignal.sendTags([(rID)! : "false"])
-            self.followButton.setTitle("  Follow", for: .normal)
+            self.followButton.setTitle("Click to Follow", for: .normal)
+            self.followButton.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
             
         }
         followButton.isEnabled = true
     }
-        
+    
     
 }
 
-fileprivate extension UIButton {
+class CenteredButton: UIButton
+{
+    //For centered x-axis images in buttons
+    override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+        let rect = super.titleRect(forContentRect: contentRect)
+        let imageRect = super.imageRect(forContentRect: contentRect)
+        
+        return CGRect(x: 0, y: imageRect.maxY + 10,
+                      width: contentRect.width, height: rect.height)
+    }
     
-    func alignContentVerticallyByCenter(padding:CGFloat = 6, Img: UIImage) {
+    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+        let rect = super.imageRect(forContentRect: contentRect)
+        let titleRect = self.titleRect(forContentRect: contentRect)
+        
+        return CGRect(x: contentRect.width/2.0 - rect.width/2.0,
+                      y: (contentRect.height - titleRect.height)/2.0 - rect.height/2.0,
+                      width: rect.width, height: rect.height)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        centerTitleLabel()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        centerTitleLabel()
+    }
+    
+    private func centerTitleLabel() {
+        self.titleLabel?.textAlignment = .center
+    }
+}
+
+fileprivate extension UIButton {
+    //Sets Img template and corrects title offsets
+    func setTemplateImg(Img: UIImage) {
         let image = Img.withRenderingMode(.alwaysTemplate)
         self.setImage(image, for: .normal)
         self.tintColor = UIColor.white
         
         let imageSize = self.imageView!.frame.size
         let titleSize = self.titleLabel!.frame.size
-        let totalHeight = imageSize.height + titleSize.height + padding
-        
+        let totalHeight = imageSize.height + titleSize.height + 6
+
         self.imageEdgeInsets = UIEdgeInsets(
             top: -(totalHeight - imageSize.height),
             left: 0,
             bottom: 0,
             right: -titleSize.width
         )
-        
+
         self.titleEdgeInsets = UIEdgeInsets(
             top: 0,
             left: -imageSize.width,

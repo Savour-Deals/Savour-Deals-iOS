@@ -16,9 +16,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
 
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
+    var imgURL: String!
 
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    
     
     @IBOutlet weak var welcomeLabel: UILabel!
     override func viewDidLoad() {
@@ -26,6 +28,18 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         if #available(iOS 11.0, *) {
             tableView.contentInsetAdjustmentBehavior = .never
         }
+        let user = Auth.auth().currentUser
+        let ref = Database.database().reference().child("Users").child((user?.uid)!).child("FacebookID")
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists(){
+                let value = snapshot.value as! String
+                self.imgURL = "https://graph.facebook.com/" + value + "/picture?height=500"
+            }
+            else{
+                self.imgURL = nil
+            }
+            self.tableView.reloadData()
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,23 +77,25 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         var cell: UITableViewCell!
         if indexPath.row == 0 {
             var cell1: AccountCell!
-             cell1 = tableView.dequeueReusableCell(withIdentifier: "Welcome", for: indexPath) as! AccountCell
+            cell1 = tableView.dequeueReusableCell(withIdentifier: "Welcome", for: indexPath) as! AccountCell
             let user = Auth.auth().currentUser
-            // UIImageView in your ViewController#colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
-            let imageView: UIImageView = cell1.Img
-            let imgURL = user?.photoURL
-            if imgURL != nil{
-                    // Placeholder image
-                    let placeholderImage = UIImage(named: "placeholder.jpg")
-            
-                    // Load the image using SDWebImage
-                    imageView.sd_setImage(with: imgURL, placeholderImage: placeholderImage)
-                    cell1.Img.layer.cornerRadius = cell1.Img.frame.size.width/2
-                    cell1.Img.clipsToBounds = true
+            if self.imgURL != nil{
+                let imageView: UIImageView = cell1.Img
+
+                // Placeholder image
+                let placeholderImage = UIImage(named: "placeholder.jpg")
                 
+                // Load the image using SDWebImage
+                imageView.sd_setImage(with: URL(string: self.imgURL), placeholderImage: placeholderImage)
+                cell1.Img.layer.cornerRadius = cell1.Img.frame.size.width/2
+                cell1.Img.clipsToBounds = true
+            }
+            else{
+                cell1.Img.image = #imageLiteral(resourceName: "logo")
             }
             cell1.Welcome.text = "Welcome " + (user?.displayName)!
-            cell1.Img.image = #imageLiteral(resourceName: "logo")
+            
+            // UIImageView in your ViewController#colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
             return cell1
         }
         else if indexPath.row == 1 {

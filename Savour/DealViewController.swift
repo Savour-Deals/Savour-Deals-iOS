@@ -74,7 +74,7 @@ class DealViewController: UIViewController {
             redeem.layer.cornerRadius = 25
             self.redeem.setTitle("Already Redeemed!", for: .normal)
             self.redeem.layer.backgroundColor = UIColor.red.cgColor
-
+            
         }
         else{
             pulsator.start()
@@ -85,21 +85,8 @@ class DealViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if !(Deal?.redeemed)!{
-            if !pulsator.isPulsating {
-                pulsator.start()
-            }
-        }
-        else{
-            if timerLabel.text == ""{
-                runTimer()
-                if timerLabel.text == "Reedeemed over an hour ago"{
-                    self.drawCheck(color: UIColor.red.cgColor)
-                }
-                else {
-                    self.drawCheck(color: UIColor.green.cgColor)
-                }
-            }
+        if !pulsator.isPulsating {
+            pulsator.start()
         }
         SetupUI()
     }
@@ -145,7 +132,20 @@ class DealViewController: UIViewController {
         imgbound.layer.insertSublayer(pulsator, below: imgbound.layer)
         pulsator.numPulse = 6
         pulsator.radius = 230
-        pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        if (Deal?.redeemed)!{
+            if timerLabel.text == ""{
+                runTimer()
+            }
+            if timerLabel.text == "Reedeemed over an hour ago"{
+                self.redeemIndicator(color: UIColor.red.cgColor)
+            }
+            else{
+                self.redeemIndicator(color: UIColor.green.cgColor)
+            }
+        }
+        else{
+            pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        }
         textView.contentOffset.y = 0
     }
     
@@ -202,42 +202,15 @@ class DealViewController: UIViewController {
         timerLabel.text = timeString(time: timeSince) //This will update the label
         if (timeSince) > 3600 {
             timerLabel.text = "Reedeemed over an hour ago"
-            if self.shapeLayer != nil{
-                self.shapeLayer?.strokeColor = UIColor.red.cgColor
-            }
-            else{
-                redeemIndicator(color: UIColor.green.cgColor)
-            }
+            redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
         }
     }
     
-    func drawCheck(color: CGColor){
-        //set and draw checkmark
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: self.img.frame.origin.x - 60, y: self.img.frame.origin.y - 60))
-        path.addLine(to: CGPoint(x: self.img.frame.origin.x , y: self.img.frame.origin.y + 10))
-        path.addLine(to: CGPoint(x: self.img.frame.origin.x + 80, y: self.img.frame.origin.y - 120))
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.fillColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor
-        shapeLayer.strokeColor = color
-        shapeLayer.lineWidth = 10
-        shapeLayer.path = path.cgPath
-        // animate it
-        self.img.layer.addSublayer(shapeLayer)
-        let animation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.fromValue = 0
-        animation.duration = 1
-        shapeLayer.add(animation, forKey: "MyAnimation")
-        
-        // save shape layer
-        self.shapeLayer = shapeLayer
-        self.img.alpha = 0.6
-    }
     
     func redeemIndicator(color: CGColor){
         //self.img.alpha = 0.6
-        pulsator.backgroundColor = color
+        self.pulsator.backgroundColor = color
     }
 
     
@@ -246,12 +219,7 @@ class DealViewController: UIViewController {
         timerLabel.text = timeString(time: timeSince) //This will update the label.
         if (timeSince) > 3600 {
             timerLabel.text = "Reedeemed over an hour ago"
-            if self.shapeLayer != nil{
-                self.shapeLayer?.strokeColor = UIColor.red.cgColor
-            }
-            else{
-                redeemIndicator(color: UIColor.green.cgColor)
-            }
+            self.redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
         }
     }

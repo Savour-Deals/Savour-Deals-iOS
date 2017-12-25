@@ -77,13 +77,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.view.backgroundColor = UIColor.white
         
-        let gradientLayer = CAGradientLayer()
+        
         
         statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.2524079623).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
@@ -107,12 +104,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         setupSearchBar()
-        for subview in buttonsView.subviews{
-            let button = subview as! UIButton
-            button.layer.borderColor = UIColor.white.cgColor
-            button.layer.borderWidth = 1
-            button.layer.cornerRadius = 5
-            button.addTarget(self, action: #selector(filterWithButtons(button:)), for: .touchUpInside)
+        for subview in self.buttonsView.subviews as [UIView] {
+            if let button = subview as? UIButton {
+                button.layer.borderColor = UIColor.white.cgColor
+                button.layer.borderWidth = 1
+                button.layer.cornerRadius = 5
+                button.addTarget(self, action: #selector(filterWithButtons(button:)), for: .touchUpInside)
+                if button.title(for: .normal) == "All"{
+                    button.backgroundColor = UIColor.white
+                    button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
+                }
+            }
         }
     }
     
@@ -161,11 +163,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @objc private func refreshData(_ sender: Any) {
         // Fetch Data
         loadData(sender: "refresh")
+        
     }
     
     func endRefresh(){
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
             // When done requesting/reloading/processing invoke endRefreshing, to close the control
+            for subview in self.buttonsView.subviews as [UIView] {
+                if let button = subview as? UIButton {
+                    if button.backgroundColor == UIColor.white{
+                        button.sendActions(for: .touchUpInside)
+                        break
+                    }
+                }
+            }
             self.refreshControl.endRefreshing()
         }
     }
@@ -308,7 +319,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
             cell.likeButton.setImage(image, for: .normal)
             cell.likeButton.tintColor = UIColor.red
-            
         }
         let photo = deal.restrauntPhoto!
         if photo != ""{
@@ -341,12 +351,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 let end = Date(timeIntervalSince1970: deal.endTime!)
                 let current = Date()
                 let interval  =  DateInterval(start: start as Date, end: end as Date)
+                cell.validHours.text = ""
                 if (interval.contains(current)){
                     let cal = Calendar.current
                     let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
                     if (current > end){
                         cell.Countdown.text = "Deal Ended"
-                        cell.validHours.text = ""
                     }
                     else if (current<start){
                         var startingTime = " "
@@ -372,6 +382,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         }
                         cell.Countdown.text = leftTime
                     }
+                    /* Section used to set time left which is not currently used
                     let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
                     let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
                     let calendar = NSCalendar.current
@@ -400,8 +411,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                     else{
                         cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
-                    }
-
+                    }*/
                 }
                 
             }
@@ -468,6 +478,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
    
     @objc func filterWithButtons(button: UIButton){
+        for view in self.buttonsView.subviews as [UIView] {
+            if let btn = view as? UIButton {
+                btn.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                btn.setTitleColor(UIColor.white, for: UIControlState.normal)
+            }
+        }
+        button.backgroundColor = UIColor.white
+        button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
         let title = button.currentTitle
         if title == "ALL" {
             filteredDeals = UnfilteredDeals
