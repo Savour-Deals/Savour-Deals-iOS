@@ -1,12 +1,11 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '11.0'
+platform :ios, 11.0
 
-
+inhibit_all_warnings!
 
 target 'Savour' do
   pod 'Firebase/Core'
-  pod 'Firebase/Auth'
-  pod 'Firebase/Database'
+  pod 'Firebase/Database' 
   pod 'SDWebImage/WebP'
   pod 'Firebase/Storage'
   pod 'FirebaseUI/Storage'
