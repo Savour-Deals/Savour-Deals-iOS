@@ -4,6 +4,8 @@ platform :ios, 11.0
 inhibit_all_warnings!
 
 target 'Savour' do
+  pod 'Firebase' 
+  pod 'Firebase/Auth'
   pod 'Firebase/Core'
   pod 'Firebase/Database' 
   pod 'SDWebImage/WebP'
