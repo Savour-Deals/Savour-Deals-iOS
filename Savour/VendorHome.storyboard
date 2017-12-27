@@ -711,7 +711,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="0jv-xa-8KE">
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="TIw-hJ-92L">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="TIw-hJ-92L">
                             <connections>
                                 <action selector="SaveChanges:" destination="za6-O7-xXJ" id="6RU-LA-UWY"/>
                             </connections>

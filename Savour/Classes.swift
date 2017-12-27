@@ -73,7 +73,20 @@ class restaurant{
     var distanceMiles: Double?
     var menu: String?
     var followers: Int?
-    
+    var hoursArray = [String]()
+    var Deals = [DealData]()
+    struct loyaltyStruct{
+        var loyaltyCode: String
+        var loyaltyCount: Int
+        var loyaltyDeal: String
+        
+        init(code: String = "", deal: String = "", count: Int = -1) {
+            self.loyaltyCount = count
+            self.loyaltyCode = code
+            self.loyaltyDeal = deal
+        }
+    }
+    var loyalty: loyaltyStruct
     init(snap: DataSnapshot? = nil, ID: String) {
         let value = snap?.value as! NSDictionary
         self.restrauntID = ID
@@ -83,7 +96,24 @@ class restaurant{
         self.address = value["Address"] as? String ?? ""
         self.menu = value["Menu"] as? String ?? ""
         self.restrauntPhoto = value["Photo"] as? String ?? ""
-
+        
+        if (snap?.childSnapshot(forPath: "HappyHours").childrenCount)! > 0 {
+            let hoursSnapshot = snap?.childSnapshot(forPath: "HappyHours").value as? NSDictionary
+            self.hoursArray.append(hoursSnapshot?["Mon"] as? String ?? "No Happy Hour")
+            self.hoursArray.append(hoursSnapshot?["Tues"] as? String ?? "No Happy Hour")
+            self.hoursArray.append(hoursSnapshot?["Wed"] as? String ?? "No Happy Hour")
+            self.hoursArray.append(hoursSnapshot?["Thurs"] as? String ?? "No Happy Hour")
+            self.hoursArray.append(hoursSnapshot?["Fri"] as? String ?? "No Happy Hour")
+            self.hoursArray.append(hoursSnapshot?["Sat"] as? String ?? "No Happy Hour")
+            self.hoursArray.append(hoursSnapshot?["Sun"] as? String ?? "No Happy Hour")
+        }
+        if (snap?.childSnapshot(forPath: "loyalty").exists())!{
+            let loyaltySnapshot = snap?.childSnapshot(forPath: "loyalty").value as? NSDictionary
+            let code = loyaltySnapshot!["loyaltyCode"] as? String ?? ""
+            let deal = loyaltySnapshot!["loyaltyDeal"] as? String ?? ""
+            let count = loyaltySnapshot!["loyaltyCount"] as? Int ?? -1
+            loyalty = loyaltyStruct(code: code, deal: deal, count: count)
+        }else{loyalty = loyaltyStruct()}
     }
     
 }
