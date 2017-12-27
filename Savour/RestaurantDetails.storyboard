@@ -66,7 +66,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="248" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HCY-it-A3D">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="248" verticalCompressionResistancePriority="1000" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="HCY-it-A3D">
                                                     <rect key="frame" x="10" y="20" width="355" height="29.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -146,6 +146,9 @@
                                                     <state key="selected">
                                                         <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
                                                     <connections>
                                                         <action selector="directionsPressed:" destination="ZaE-BI-Y6Z" eventType="touchUpInside" id="F4D-zi-Xdf"/>
                                                     </connections>
@@ -161,6 +164,9 @@
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
                                                     <state key="selected">
+                                                        <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <state key="highlighted">
                                                         <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
                                                     <connections>
@@ -191,8 +197,65 @@
                                             <outlet property="menuButton" destination="SDy-bu-MTi" id="hED-BP-Mro"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="loyaltyCell" rowHeight="128" id="7xW-tu-Jgp" customClass="loyaltyCell" customModule="Savour" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="474" width="375" height="128"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7xW-tu-Jgp" id="akc-Ix-aB6">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="341-1D-daP">
+                                                    <rect key="frame" x="75" y="16" width="225" height="50"/>
+                                                    <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="m0o-cb-u8u"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Loyalty Check-In">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <state key="selected">
+                                                        <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="x     •      •     •     •     •     •     •" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MMf-Ks-uFD">
+                                                    <rect key="frame" x="5" y="97" width="365" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
+                                                    <color key="textColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Visit 7 more times for a free entree" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P0I-wF-4aZ">
+                                                    <rect key="frame" x="20" y="71" width="335" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstItem="341-1D-daP" firstAttribute="leading" secondItem="akc-Ix-aB6" secondAttribute="leadingMargin" constant="60" id="7kT-Dt-9bK"/>
+                                                <constraint firstItem="MMf-Ks-uFD" firstAttribute="top" secondItem="P0I-wF-4aZ" secondAttribute="bottom" constant="5" id="ICb-cf-IQo"/>
+                                                <constraint firstAttribute="trailing" secondItem="MMf-Ks-uFD" secondAttribute="trailing" constant="5" id="JL7-Th-gv1"/>
+                                                <constraint firstItem="P0I-wF-4aZ" firstAttribute="leading" secondItem="akc-Ix-aB6" secondAttribute="leadingMargin" constant="5" id="Jck-0t-gnD"/>
+                                                <constraint firstItem="341-1D-daP" firstAttribute="top" secondItem="akc-Ix-aB6" secondAttribute="topMargin" constant="5" id="LSd-Mf-N0i"/>
+                                                <constraint firstItem="MMf-Ks-uFD" firstAttribute="leading" secondItem="akc-Ix-aB6" secondAttribute="leading" constant="5" id="Pch-K3-oLh"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="P0I-wF-4aZ" secondAttribute="trailing" constant="5" id="YTq-rY-kNy"/>
+                                                <constraint firstItem="P0I-wF-4aZ" firstAttribute="top" secondItem="341-1D-daP" secondAttribute="bottom" constant="5" id="gd9-1o-VM3"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="341-1D-daP" secondAttribute="trailing" constant="60" id="pPE-ea-vfL"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <outlet property="checkin" destination="341-1D-daP" id="aqR-L7-rLK"/>
+                                            <outlet property="loyaltyLabel" destination="P0I-wF-4aZ" id="3Z0-I3-jve"/>
+                                            <outlet property="marker" destination="MMf-Ks-uFD" id="LCd-bT-Lhw"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="labelCell" rowHeight="70" id="28H-fq-CzZ" customClass="labelCell" customModule="Savour" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="474" width="375" height="70"/>
+                                        <rect key="frame" x="0.0" y="602" width="375" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="28H-fq-CzZ" id="S4U-An-CMe">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
@@ -220,7 +283,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="dealCell" rowHeight="70" id="x0N-2D-2iR" customClass="RDealsTableViewCell" customModule="Savour" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="544" width="375" height="70"/>
+                                        <rect key="frame" x="0.0" y="672" width="375" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="x0N-2D-2iR" id="O8n-x4-C3w">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
@@ -305,10 +368,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="Nzg-SZ-TiD" id="6jn-UD-YyN"/>
-                                    <outlet property="delegate" destination="Nzg-SZ-TiD" id="Zez-q3-Qq0"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

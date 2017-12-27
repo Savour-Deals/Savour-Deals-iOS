@@ -22,11 +22,11 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     var storage: Storage!
     var Deals = [DealData]()
     var indices = [Int]()
-    var rAddress: String = ""
     var cachedImageViewSize: CGRect!
     var cachedTextPoint: CGPoint!
-    var rDesc: String!
-    var hoursArray = [String]()
+    var loyaltyCode: String!
+    var thisRestaurant: restaurant!
+    var loyaltyRedemptions: Int!
     
     @IBOutlet weak var overview: UIView!
     @IBOutlet weak var curr: UILabel!
@@ -75,46 +75,60 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     func loadData(){
         //Set overall restraunt info
         let id = rID
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(rID!).observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists(){
+                let value = snapshot.value as? NSDictionary
+                self.loyaltyRedemptions = value?["redemptions"] as? Int ?? 0
+            }else{
+                self.loyaltyRedemptions = 0
+            }
+        }){ (error) in
+            print(error.localizedDescription)
+        }
         ref.child("Restaurants").child(id!).observeSingleEvent(of: .value, with: { (snapshot) in
             
-            let value = snapshot.value as? NSDictionary
+            //let value = snapshot.value as? NSDictionary
+            self.thisRestaurant = restaurant(snap: snapshot, ID: self.rID!)
             if snapshot.childSnapshot(forPath: "Followers").hasChild((Auth.auth().currentUser?.uid)!){
                 self.followString = "Click to Unfollow"
             }
             else{
                 self.followString = "Click to Follow"
             }
-                self.menu = value?["Menu"] as? String ?? ""
-                self.rName.text = value?["Name"] as? String ?? ""
-                self.rAddress = value?["Address"] as? String ?? ""
-                self.rDesc = value?["Desc"] as? String ?? ""
-                if snapshot.childSnapshot(forPath: "HappyHours").childrenCount > 0 {
-                    let hoursSnapshot = snapshot.childSnapshot(forPath: "HappyHours").value as? NSDictionary
-                    self.hoursArray.append(hoursSnapshot?["Mon"] as? String ?? "No Happy Hour")
-                    self.hoursArray.append(hoursSnapshot?["Tues"] as? String ?? "No Happy Hour")
-                    self.hoursArray.append(hoursSnapshot?["Wed"] as? String ?? "No Happy Hour")
-                    self.hoursArray.append(hoursSnapshot?["Thurs"] as? String ?? "No Happy Hour")
-                    self.hoursArray.append(hoursSnapshot?["Fri"] as? String ?? "No Happy Hour")
-                    self.hoursArray.append(hoursSnapshot?["Sat"] as? String ?? "No Happy Hour")
-                    self.hoursArray.append(hoursSnapshot?["Sun"] as? String ?? "No Happy Hour")
+            
+//            self.menu = value?["Menu"] as? String ?? ""
+            self.rName.text = self.thisRestaurant.restrauntName
+//            self.rAddress = value?["Address"] as? String ?? ""
+//            self.rDesc = value?["Desc"] as? String ?? ""
+//            self.loyaltyCode = value?["loayltyCode"] as? String ?? ""
+//            if snapshot.childSnapshot(forPath: "HappyHours").childrenCount > 0 {
+//                let hoursSnapshot = snapshot.childSnapshot(forPath: "HappyHours").value as? NSDictionary
+//                self.hoursArray.append(hoursSnapshot?["Mon"] as? String ?? "No Happy Hour")
+//                self.hoursArray.append(hoursSnapshot?["Tues"] as? String ?? "No Happy Hour")
+//                self.hoursArray.append(hoursSnapshot?["Wed"] as? String ?? "No Happy Hour")
+//                self.hoursArray.append(hoursSnapshot?["Thurs"] as? String ?? "No Happy Hour")
+//                self.hoursArray.append(hoursSnapshot?["Fri"] as? String ?? "No Happy Hour")
+//                self.hoursArray.append(hoursSnapshot?["Sat"] as? String ?? "No Happy Hour")
+//                self.hoursArray.append(hoursSnapshot?["Sun"] as? String ?? "No Happy Hour")
+//            }
+            if self.thisRestaurant.restrauntPhoto != ""{
+                // Reference to an image file in Firebase Storage
+                let storage = Storage.storage()
+                let storageref = storage.reference(forURL: self.thisRestaurant.restrauntPhoto!)
+                // Reference to an image file in Firebase Storage
+                let reference = storageref
+        
+                // UIImageView in your ViewController
+                let imageView: UIImageView = self.rImg
+        
+                // Placeholder image
+                let placeholderImage = UIImage(named: "placeholder.jpg")
+        
+                // Load the image using SDWebImage
+                imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
             }
-                let photo = value?["Photo"] as? String ?? ""
-                if photo != ""{
-                    // Reference to an image file in Firebase Storage
-                    let storage = Storage.storage()
-                    let storageref = storage.reference(forURL: photo)
-                    // Reference to an image file in Firebase Storage
-                    let reference = storageref
-            
-                    // UIImageView in your ViewController
-                    let imageView: UIImageView = self.rImg
-            
-                    // Placeholder image
-                    let placeholderImage = UIImage(named: "placeholder.jpg")
-            
-                    // Load the image using SDWebImage
-                    imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
-            }
+            self.DealsTable.delegate = self
+            self.DealsTable.dataSource = self
             self.DealsTable.reloadData()
             self.DealsTable.isHidden = false
         }){ (error) in
@@ -135,8 +149,16 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             return 100
         }
         if indexPath.row == 1{
-            if self.hoursArray.count > 0{
+            if self.thisRestaurant.hoursArray.count > 0{
                 return UITableViewAutomaticDimension
+            }
+            else{
+                return 0
+            }
+        }
+        if indexPath.row == 3{
+            if self.thisRestaurant.loyalty.loyaltyCount > 0{
+                return 128
             }
             else{
                 return 0
@@ -147,32 +169,33 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Deals.count + 4
+        return Deals.count + 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: "descCell", for: indexPath) as! labelCell
-            cell.label.text = self.rDesc
-            cell.contentView.borders(for: [.bottom], width: 2.0, color: UIColor.darkGray)
+            cell.label.text = self.thisRestaurant.description
+            cell.contentView.borders(for: [.bottom], width: 1.0, color: UIColor.darkGray)
             return cell
         }
         else if indexPath.row == 1{
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! happyHourCell
-            if hoursArray.count > 0{
-                //cell.contentView.borders(for: [.bottom], width: 2.0, color: UIColor.darkGray)
+            if self.thisRestaurant.hoursArray.count > 0{
+                let thisHoursArray = self.thisRestaurant.hoursArray
+                cell.contentView.borders(for: [.bottom], width: 1.0, color: UIColor.darkGray)
                 let mutableAttributedString = NSMutableAttributedString()
                 let leftAlign = NSMutableParagraphStyle()
                 leftAlign.alignment = .left
                 let attrs = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy), NSAttributedStringKey.paragraphStyle: leftAlign]
                 let header = NSMutableAttributedString(string:"Happy Hours:\n", attributes:attrs)
-                var hours = "Monday: " + hoursArray[0] + "\n"
-                hours = hours + "Tuesday: " + hoursArray[1] + "\n"
-                hours = hours + "Wednesday: " + hoursArray[2] + "\n"
-                hours = hours + "Thursday: " + hoursArray[3] + "\n"
-                hours = hours + "Friday: " + hoursArray[4] + "\n"
-                hours = hours + "Saturday: " + hoursArray[5] + "\n"
-                hours = hours + "Sunday: " + hoursArray[6] + "\n"
+                var hours = "Monday: " + thisHoursArray[0] + "\n"
+                hours = hours + "Tuesday: " + thisHoursArray[1] + "\n"
+                hours = hours + "Wednesday: " + thisHoursArray[2] + "\n"
+                hours = hours + "Thursday: " + thisHoursArray[3] + "\n"
+                hours = hours + "Friday: " + thisHoursArray[4] + "\n"
+                hours = hours + "Saturday: " + thisHoursArray[5] + "\n"
+                hours = hours + "Sunday: " + thisHoursArray[6] + "\n"
                 let center = NSMutableParagraphStyle()
                 center.alignment = .center
                 let attrs1 = [NSAttributedStringKey.foregroundColor : UIColor.darkGray, NSAttributedStringKey.paragraphStyle: center, NSAttributedStringKey.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.regular)]
@@ -197,11 +220,42 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.request = self.request
             cell.menu = self.menu
             cell.rID = self.rID
-            cell.rAddress = self.rAddress
+            cell.rAddress = self.thisRestaurant.address!
             //cell.contentView.borders(for: [.bottom], width: 2.0, color: UIColor.darkGray)
             return cell
         }
+        
         else if indexPath.row == 3{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "loyaltyCell", for: indexPath) as! loyaltyCell
+            if self.thisRestaurant.loyalty.loyaltyCount > 0 {
+                let visitsLeft =  thisRestaurant.loyalty.loyaltyCount - loyaltyRedemptions
+                if visitsLeft == 0{
+                    cell.checkin.setTitle("Reedeem", for: .normal)
+                    cell.loyaltyLabel.text = "You're ready to redeem your \(thisRestaurant.loyalty.loyaltyDeal)!"
+                }else{
+                    cell.loyaltyLabel.text = "Visit \(visitsLeft) more times for a \(thisRestaurant.loyalty.loyaltyDeal)!"
+                }
+                cell.checkin.addTarget(self, action: #selector(self.checkin(_:)), for: .touchUpInside)
+                cell.contentView.borders(for: [.top, .bottom], width: 1.0, color: UIColor.darkGray)
+                var loyaltyMarks = ""
+                if loyaltyRedemptions > 0 {
+                    for _ in 1...loyaltyRedemptions{
+                        loyaltyMarks += "x    "
+                    }
+                }
+                if loyaltyRedemptions < thisRestaurant.loyalty.loyaltyCount{
+                    for _ in 1...visitsLeft{
+                        loyaltyMarks += "•    "
+                    }
+                }
+                
+                let trimmedString = loyaltyMarks.trimmingCharacters(in: .whitespacesAndNewlines)
+                cell.marker.text = trimmedString
+            }
+
+            return cell
+        }
+        else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: "labelCell", for: indexPath) as! labelCell
             cell.label.text = "Current Offers"
             if Deals.count <= 0 {
@@ -212,7 +266,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         else{
            let  cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! RDealsTableViewCell
-            let deal = Deals[indexPath.row - 4]
+            let deal = Deals[indexPath.row - 5]
             cell.deal = deal
             cell.validHours.text = ""
             cell.dealDesc.text = deal.dealDescription
@@ -229,7 +283,6 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 let current = Date()
                 let interval  =  DateInterval(start: start as Date, end: end as Date)
                 if (interval.contains(current)){
-                    
                     let cal = Calendar.current
                     let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
                     var leftTime = ""
@@ -315,7 +368,53 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
   
+    @objc func checkin(_ sender:UIButton!)
+    {
+        if self.loyaltyRedemptions == self.thisRestaurant.loyalty.loyaltyCount{
+            self.loyaltyRedemptions = 0
+            let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
+            redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": self.loyaltyRedemptions])
+                sender.setTitle("Loyalty Check-In", for: .normal)
+                self.DealsTable.reloadData()
+            }))
+            redeemAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+            self.present(redeemAlert, animated: true)
 
+        }else{
+            //1. Create the alert controller.
+            let alert = UIAlertController(title: "Check-In", message: "Enter Check-In Code", preferredStyle: .alert)
+            
+            //2. Add the text field. You can configure it however you need.
+            alert.addTextField { (textField) in
+                textField.placeholder = "Enter Code"
+            }
+            
+            // 3. Grab the value from the text field, and print it when the user clicks OK.
+            alert.addAction(UIAlertAction(title: "Submit", style: .default, handler: { [weak alert] (_) in
+                let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+                if textField?.text == self.thisRestaurant.loyalty.loyaltyCode{
+                    self.loyaltyRedemptions = self.loyaltyRedemptions + 1
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": self.loyaltyRedemptions])
+                    if self.loyaltyRedemptions == self.thisRestaurant.loyalty.loyaltyCount{
+                        //sender.setTitle("Redeem", for: .normal)
+                    }
+                    self.DealsTable.reloadData()
+                }
+                else{
+                    let erroralert = UIAlertController(title: "Incorrect code!", message: "The Check-In code you entered was incorrect. Please try again.", preferredStyle: .alert)
+                    erroralert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                    self.present(erroralert, animated: true)
+                }
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+
+            
+            // 4. Present the alert.
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
 
    
     
@@ -364,6 +463,17 @@ class happyHourCell: UITableViewCell {
         super.awakeFromNib()
     }
 }
+class loyaltyCell: UITableViewCell {
+    
+    @IBOutlet weak var checkin: UIButton!
+    @IBOutlet weak var loyaltyLabel: UILabel!
+    
+    @IBOutlet weak var marker: UILabel!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+}
+
 
 class buttonCell: UITableViewCell {
     
