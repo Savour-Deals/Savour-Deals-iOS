@@ -25,6 +25,7 @@ class DealData{
     var redeemed: Bool?
     var redeemedTime: Double?
     var dealType: String?
+    var dealCode: String?
 
     
     
@@ -40,6 +41,7 @@ class DealData{
             self.dealType = ""
             self.dealID = ""
             self.fav = false
+            self.dealCode = ""
         }
         else{
             let value = snap?.value as! NSDictionary
@@ -58,6 +60,8 @@ class DealData{
             self.dealType = value["Filter"] as? String ?? ""
             self.dealID = snap?.key
             self.fav = false
+            self.dealCode = value["code"] as? String ?? ""
+
         }
     }
   

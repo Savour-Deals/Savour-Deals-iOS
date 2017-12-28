@@ -218,7 +218,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.menuButton.setTemplateImg(Img: #imageLiteral(resourceName: "menu"))
             cell.directionsButton.setTemplateImg(Img: #imageLiteral(resourceName: "directions"))
             cell.request = self.request
-            cell.menu = self.menu
+            cell.menu = self.thisRestaurant.menu
             cell.rID = self.rID
             cell.rAddress = self.thisRestaurant.address!
             //cell.contentView.borders(for: [.bottom], width: 2.0, color: UIColor.darkGray)

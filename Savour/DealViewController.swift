@@ -32,6 +32,7 @@ class DealViewController: UIViewController {
     var timerStartTime: Int!
     weak var shapeLayer: CAShapeLayer?
     
+    @IBOutlet weak var dealCode: UILabel!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var infoView: UIView!
     @IBOutlet var redeemedView: UIView!
@@ -141,6 +142,7 @@ class DealViewController: UIViewController {
             }
             else{
                 self.redeemIndicator(color: UIColor.green.cgColor)
+                self.dealCode.text = self.Deal?.dealCode
             }
         }
         else{
@@ -182,6 +184,7 @@ class DealViewController: UIViewController {
                 if favorites[(filteredDeals[self.index].dealID)!] != nil{
                     favorites.removeValue(forKey: (filteredDeals[self.index].dealID)!)
                 }
+                self.dealCode.text = self.Deal?.dealCode
                 self.runTimer()
                 if signalID != " "{
                     let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
@@ -201,6 +204,7 @@ class DealViewController: UIViewController {
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
         timerLabel.text = timeString(time: timeSince) //This will update the label
         if (timeSince) > 3600 {
+            dealCode.text = ""
             timerLabel.text = "Reedeemed over an hour ago"
             redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
@@ -218,6 +222,7 @@ class DealViewController: UIViewController {
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
         timerLabel.text = timeString(time: timeSince) //This will update the label.
         if (timeSince) > 3600 {
+            dealCode.text = ""
             timerLabel.text = "Reedeemed over an hour ago"
             self.redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()

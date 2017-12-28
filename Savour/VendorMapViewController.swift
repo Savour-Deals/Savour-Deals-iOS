@@ -49,12 +49,41 @@ class VendorMapViewController: UIViewController{
         
         // set initial location
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            //self.getRestaurants()
+
             DispatchQueue.main.async {
                 self.locationManager!.startUpdatingLocation()
             }
         }
-        getRestaurants()
-
+        else{
+            self.listVC.searchBar.isHidden = true
+            let label = UILabel()
+            label.textAlignment = NSTextAlignment.center
+            label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
+            label.text = "To use this feature, you must turn on location in:\n\n Settings -> Savour -> Location"
+            label.lineBreakMode = NSLineBreakMode.byWordWrapping
+            label.numberOfLines = 0
+            label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.tag = 100
+            self.listView.addSubview(label)
+            var constraints = [NSLayoutConstraint]()
+            constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
+            constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
+            constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
+            constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
+            NSLayoutConstraint.activate(constraints)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            self.getRestaurants()
+            self.listView.viewWithTag(100)?.removeFromSuperview()
+            DispatchQueue.main.async {
+                self.locationManager!.startUpdatingLocation()
+            }
+        }
     }
 
     func requestLocationAccess() {
@@ -111,10 +140,12 @@ class VendorMapViewController: UIViewController{
         
     }
     func getRestaurants(){
+        let group = DispatchGroup()
         ref = Database.database().reference().child("Restaurants")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
+            restaurants.removeAll()
             for entry in snapshot.children {
+                group.enter()
                 let snap = entry as! DataSnapshot
                 let temp = restaurant(snap: snap, ID: snap.key)
                 let geoCoder = CLGeocoder()
@@ -136,14 +167,36 @@ class VendorMapViewController: UIViewController{
                         }
                         restaurants.sort { CGFloat($0.distanceMiles!) < CGFloat($1.distanceMiles!) }
                     }
+                    group.leave()
+                }
+                
+            }
+            group.notify(queue: DispatchQueue.main) {
+                if restaurants.count < 1 {
+                    let label = UILabel()
+                    label.textAlignment = NSTextAlignment.center
+                    label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
+                    label.text = "No restaurants are nearby."
+                    label.lineBreakMode = NSLineBreakMode.byWordWrapping
+                    label.numberOfLines = 0
+                    label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                    label.translatesAutoresizingMaskIntoConstraints = false
+                    label.tag = 100
+                    self.listView.addSubview(label)
+                    var constraints = [NSLayoutConstraint]()
+                    constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
+                    constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
+                    constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
+                    constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
+                    NSLayoutConstraint.activate(constraints)
+                }else if restaurants.count > 0{
+                    self.listView.viewWithTag(100)?.removeFromSuperview()
                     self.mapVC.makeAnnotations()
                     self.listVC.delegateTable()
                     self.listVC.listTable.reloadData()
                     self.mapVC.flag = 1
                 }
-                
             }
-            
         })
     }
 }
