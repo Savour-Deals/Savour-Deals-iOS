@@ -18,6 +18,7 @@ target 'Savour' do
   pod 'Charts'
   pod 'Firebase/Messaging'
   pod 'OneSignal'
+ pod 'AcknowList'
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
@@ -30,4 +31,9 @@ target 'OneSignalNotificationServiceExtension' do
   use_frameworks!
 end
 
+
+post_install do | installer |
+  require 'fileutils'
+  FileUtils.cp_r('Pods/Target Support Files/Pods-Savour/Pods-Savour-acknowledgements.plist', 'Savour/Acknowledgements.plist', :remove_destination => true)
+end
 

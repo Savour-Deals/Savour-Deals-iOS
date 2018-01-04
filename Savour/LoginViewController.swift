@@ -27,10 +27,14 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     var keyboardShowing = false
     @IBOutlet weak var LoginLabel: UILabel!
     @IBOutlet weak var LoginView: UIView!
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,12 +79,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     func setUpUI(){
         LoginView.isHidden = true
         LoginLabel.isHidden = true
-        let gradientLayer = CAGradientLayer()
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
-        gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
+        let rounded = LoginEmail.layer.frame.height/2
         LoginEmail.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         LoginEmail.layer.borderWidth = 2
         LoginPassword.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
@@ -89,10 +90,13 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginButton.layer.borderWidth = 2
         LoginPassword.textColor = UIColor.white
         LoginEmail.textColor = UIColor.white
-        LoginPassword.layer.cornerRadius = 5
-        LoginEmail.layer.cornerRadius = 5
-        LoginButton.layer.cornerRadius = 5
-        LoginView.layer.cornerRadius = 5
+        LoginPassword.layer.cornerRadius = rounded
+        LoginEmail.layer.cornerRadius = rounded
+        LoginButton.layer.cornerRadius = rounded
+        LoginView.layer.cornerRadius = rounded
+    }
+    @IBAction func toSignup(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func isLoggingin(){
@@ -130,11 +134,12 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 // [START headless_email_auth]
                 Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
                     // [START_EXCLUDE]
-                    if let error = error {
-                        let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    if error != nil {
+                        self.loginIndicator.stopAnimating()
+                        self.endLoggingin()
+                        let alert = UIAlertController(title: "Alert", message: "Username or password incorrect. Please try again.", preferredStyle: UIAlertControllerStyle.alert)
                         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
-                        self.endLoggingin()
                         return
                     }
                     self.ref.child("Users").child(user!.uid).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
@@ -165,13 +170,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             // [END_EXCLUDE]
             }
                 // [END headless_email_auth]
-        else {
-            loginIndicator.stopAnimating()
-            self.endLoggingin()
-            let alert = UIAlertController(title: "Alert", message: "email/password can't be empty", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
+       
     }
 
     @IBAction func FBLoginPressed(_ sender: Any) {

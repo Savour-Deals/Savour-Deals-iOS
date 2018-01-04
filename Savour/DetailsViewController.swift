@@ -136,7 +136,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         if UnfilteredDeals.count > 0 {
             for i in 0 ... (UnfilteredDeals.count-1){
-                if self.rID == UnfilteredDeals[i].restrauntID{
+                if self.rID! == UnfilteredDeals[i].restrauntID! && !UnfilteredDeals[i].redeemed!{
                     self.Deals.append((UnfilteredDeals[i]))
                     self.indices.append(i)
                 }

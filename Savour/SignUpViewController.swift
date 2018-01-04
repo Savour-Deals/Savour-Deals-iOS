@@ -26,23 +26,25 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var loadingLabel: UIView!
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         SignupButton.addTarget(self, action: #selector(SignupPressed), for: .touchUpInside)
-        SignupButton.layer.cornerRadius = 5
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        let gradientLayer = CAGradientLayer()
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
-        gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
+        let rounded = EmailField.layer.frame.height/2
+
+        SignupButton.layer.cornerRadius = rounded
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NameField.layer.borderColor = UIColor.white.cgColor
         NameField.layer.borderWidth = 2
         EmailField.layer.borderColor = UIColor.white.cgColor
@@ -54,10 +56,10 @@ class SignUpViewController: UIViewController {
         NameField.textColor = UIColor.white
         EmailField.textColor = UIColor.white
         PasswordField.textColor = UIColor.white
-        NameField.layer.cornerRadius = 5
-        EmailField.layer.cornerRadius = 5
-        PasswordField.layer.cornerRadius = 5
-        loadingView.layer.cornerRadius = 5
+        NameField.layer.cornerRadius = rounded
+        EmailField.layer.cornerRadius = rounded
+        PasswordField.layer.cornerRadius = rounded
+        loadingView.layer.cornerRadius = rounded
 
     }
     func isLoading(){
@@ -77,9 +79,6 @@ class SignUpViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController!.setNavigationBarHidden(false, animated: false)
-        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         
         // [START auth_listener]
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
