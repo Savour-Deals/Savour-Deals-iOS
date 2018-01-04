@@ -275,9 +275,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
             }
             filteredDeals.removeAll()
-            for deal in UnfilteredDeals{
+            for (index,deal) in UnfilteredDeals.enumerated(){
                 if !deal.redeemed!{
                     filteredDeals.append(deal)
+                }else if let time = deal.redeemedTime{
+                    if (Date().timeIntervalSince1970 - time) < 1800{
+                         filteredDeals.append(deal)
+                    }
+                }else{
+                    UnfilteredDeals.remove(at: index)
                 }
             }
             filteredDeals.sort { CGFloat($0.endTime!) < CGFloat($1.endTime!) }

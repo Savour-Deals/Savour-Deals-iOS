@@ -137,7 +137,7 @@ class DealViewController: UIViewController {
             if timerLabel.text == ""{
                 runTimer()
             }
-            if timerLabel.text == "Reedeemed over an hour ago"{
+            if timerLabel.text == "Reedeemed over half an hour ago"{
                 self.redeemIndicator(color: UIColor.red.cgColor)
             }
             else{
@@ -184,7 +184,10 @@ class DealViewController: UIViewController {
                 if favorites[(filteredDeals[self.index].dealID)!] != nil{
                     favorites.removeValue(forKey: (filteredDeals[self.index].dealID)!)
                 }
-                self.dealCode.text = self.Deal?.dealCode
+                if self.Deal?.dealCode != ""{
+                    self.dealCode.textColor = UIColor.black
+                    self.dealCode.text = self.Deal?.dealCode
+                }
                 self.runTimer()
                 if signalID != " "{
                     let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
@@ -202,10 +205,11 @@ class DealViewController: UIViewController {
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
+        self.dealCode.textColor = UIColor.black
         timerLabel.text = timeString(time: timeSince) //This will update the label
-        if (timeSince) > 3600 {
+        if (timeSince) > 1800 {
             dealCode.text = ""
-            timerLabel.text = "Reedeemed over an hour ago"
+            timerLabel.text = "Reedeemed over half an hour ago"
             redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
         }
@@ -221,10 +225,10 @@ class DealViewController: UIViewController {
     @objc func updateTimer() {
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
         timerLabel.text = timeString(time: timeSince) //This will update the label.
-        if (timeSince) > 3600 {
+        if (timeSince) > 1800 {
             dealCode.text = ""
-            timerLabel.text = "Reedeemed over an hour ago"
-            self.redeemIndicator(color: UIColor.red.cgColor)
+            timerLabel.text = "Reedeemed over half an hour ago"
+            redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
         }
     }

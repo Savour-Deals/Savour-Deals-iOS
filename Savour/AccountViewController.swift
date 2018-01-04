@@ -10,6 +10,8 @@ import UIKit
 import FirebaseAuth
 import FirebaseDatabase
 import MessageUI
+import AcknowList
+
 
 
 class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate{
@@ -44,17 +46,19 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         tableView.tableFooterView = UIView()
-        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = UIColor.white
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = true
+        
+        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = UIColor.white
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 5
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
@@ -62,11 +66,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         if indexPath.row == 0{
             return 160
         }
-        else if indexPath.row == 1{
-            return 70
-        }
-        else if indexPath.row == 2{
-            return self.tableView.frame.height - (160 + 70 + 70)
+        else if indexPath.row == 3{
+            return self.tableView.frame.height - (160 + 70 + 70 + 70)
         }
         else{
             return 70
@@ -101,12 +102,14 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         else if indexPath.row == 1 {
              cell = tableView.dequeueReusableCell(withIdentifier: "Contact", for: indexPath)
         }
-        else if indexPath.row == 2 {
-            cell = tableView.dequeueReusableCell(withIdentifier: "Payment", for: indexPath)
+        else if indexPath.row == 2{
+            cell = tableView.dequeueReusableCell(withIdentifier: "acknowledgements", for: indexPath)
+        }
+        else if indexPath.row == 3{
+            cell = tableView.dequeueReusableCell(withIdentifier: "space", for: indexPath)
             cell.selectionStyle = UITableViewCellSelectionStyle.none
         }
-        else if indexPath.row == 3 {
-            
+        else if indexPath.row == 4 {
             cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
             cell.backgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         }
@@ -127,7 +130,15 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.present(mailComposeViewController, animated: true, completion: nil)
             }
         }
-        if indexPath.row == 3{
+        else if indexPath.row == 2{
+            let path = Bundle.main.path(forResource: "Acknowledgements", ofType: "plist")
+            let viewController = AcknowListViewController(acknowledgementsPlistPath: path)
+            self.navigationController?.isNavigationBarHidden = false
+            let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+            statusBar.backgroundColor  = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
+        else if indexPath.row == 4{
             LogoutPressed()
         }
     }
@@ -136,7 +147,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self
         
-        mailComposerVC.setToRecipients(["patte539@umn.edu"])
+        mailComposerVC.setToRecipients(["info@savourdeals.com"])
         mailComposerVC.setSubject("Savour Deals")
         return mailComposerVC
     }
