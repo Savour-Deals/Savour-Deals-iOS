@@ -81,6 +81,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginLabel.isHidden = true
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.view.bounds
+        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.4).cgColor]
+        self.view.layer.insertSublayer(gradientLayer, at: 0)
         let rounded = LoginEmail.layer.frame.height/2
         LoginEmail.layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         LoginEmail.layer.borderWidth = 2
@@ -94,6 +98,16 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginEmail.layer.cornerRadius = rounded
         LoginButton.layer.cornerRadius = rounded
         LoginView.layer.cornerRadius = rounded
+        // Obtain all constraints for the button:
+        let layoutConstraintsArr = FBLoginButton.constraints
+        // Iterate over array and test constraints until we find the correct one:
+        for lc in layoutConstraintsArr { // or attribute is NSLayoutAttributeHeight etc.
+            if ( lc.constant == 28 ){
+                // Then disable it...
+                lc.isActive = false
+                break
+            }
+        }
     }
     @IBAction func toSignup(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
@@ -106,6 +120,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         FBLoginButton.isEnabled = false
         LoginButton.isEnabled = false
         SignUpButton.isEnabled = false
+        FBLoginButton.isHidden = true
+
     }
     
     func endLoggingin(){
@@ -115,6 +131,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         FBLoginButton.isEnabled = true
         LoginButton.isEnabled = true
         SignUpButton.isEnabled = true
+        FBLoginButton.isHidden = false
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

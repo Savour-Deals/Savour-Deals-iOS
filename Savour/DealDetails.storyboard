@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U9a-dB-aq3">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,22 +21,22 @@
             <objects>
                 <viewController storyboardIdentifier="Deal" autoresizesArchivedViewToFullSize="NO" title=" " hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="U9a-dB-aq3" customClass="DealViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="WcZ-Ck-nPH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <visualEffectView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hpi-Nv-M1z">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="oG6-7q-EWE">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7A3-BV-eil">
-                                <rect key="frame" x="20" y="20" width="335" height="567"/>
+                                <rect key="frame" x="20" y="20" width="374" height="636"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9oM-U9-JZb">
-                                        <rect key="frame" x="0.0" y="527" width="335" height="40"/>
+                                        <rect key="frame" x="0.0" y="596" width="374" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="G4D-bL-xW1"/>
                                         </constraints>
@@ -46,7 +48,7 @@
                                         </connections>
                                     </button>
                                     <textView autoresizesSubviews="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RO2-Ob-ZGY">
-                                        <rect key="frame" x="20" y="79" width="295" height="428"/>
+                                        <rect key="frame" x="20" y="79" width="334" height="497"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <string key="text">This promotion is subject to vendor approval.
  
@@ -67,7 +69,7 @@ This promotion is for individual use only and shall be used for an individual's 
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notice!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K3u-A3-80S">
-                                        <rect key="frame" x="20" y="30" width="295" height="29"/>
+                                        <rect key="frame" x="20" y="30" width="334" height="29"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -88,7 +90,7 @@ This promotion is for individual use only and shall be used for an individual's 
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g2z-lR-J3D">
-                                <rect key="frame" x="10" y="607" width="355" height="50"/>
+                                <rect key="frame" x="10" y="676" width="394" height="50"/>
                                 <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="hD5-0H-bdz"/>
@@ -102,13 +104,13 @@ This promotion is for individual use only and shall be used for an individual's 
                                 </connections>
                             </button>
                             <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YrQ-GR-Dun">
-                                <rect key="frame" x="10" y="547" width="355" height="50"/>
+                                <rect key="frame" x="10" y="616" width="394" height="50"/>
                                 <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="mIR-ha-yJR"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                                <state key="normal" title="See More From ">
+                                <state key="normal">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -116,55 +118,52 @@ This promotion is for individual use only and shall be used for an individual's 
                                 </connections>
                             </button>
                             <view autoresizesSubviews="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zhn-Qz-hBb">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="547"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hub-RY-SRs">
-                                        <rect key="frame" x="187" y="274" width="100" height="100"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="4e6-zO-WNw"/>
-                                            <constraint firstAttribute="width" constant="100" id="qcO-yM-HXi"/>
-                                        </constraints>
+                                        <rect key="frame" x="206.66666666666666" y="318" width="125.33333333333334" height="125"/>
                                     </imageView>
-                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-dk-vcz">
-                                        <rect key="frame" x="87" y="173" width="200" height="200"/>
+                                    <imageView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-dk-vcz">
+                                        <rect key="frame" x="82" y="193" width="250" height="250"/>
                                         <gestureRecognizers/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="200" id="c50-Gn-ufj"/>
-                                            <constraint firstAttribute="height" constant="200" id="ghU-ss-P3I"/>
+                                            <constraint firstAttribute="width" secondItem="qlh-dk-vcz" secondAttribute="height" multiplier="1:1" id="YdA-Bc-BzD"/>
+                                            <constraint firstAttribute="height" constant="250" id="dVo-2p-a67"/>
+                                            <constraint firstAttribute="width" constant="250" id="jy7-uf-PhI"/>
                                         </constraints>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="zO5-ZJ-dfw" appends="YES" id="xol-Me-fKg"/>
                                         </connections>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deal" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPP-Jv-J2f">
-                                        <rect key="frame" x="10" y="113" width="355" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="25"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="dPP-Jv-J2f">
+                                        <rect key="frame" x="10" y="183" width="394" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="22"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-v9-jhB">
-                                        <rect key="frame" x="188" y="510" width="0.0" height="27"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="27" id="gfY-fd-1vU"/>
-                                        </constraints>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-v9-jhB">
+                                        <rect key="frame" x="207" y="606" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pov-td-Kxk">
-                                        <rect key="frame" x="333" y="81" width="22" height="22"/>
+                                        <rect key="frame" x="372" y="20" width="22" height="22"/>
                                         <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <action selector="infoPressed:" destination="U9a-dB-aq3" eventType="touchUpInside" id="cYl-b3-uIo"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This deal is for one person only!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
-                                        <rect key="frame" x="5" y="484" width="365" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="21" id="bKN-00-Oc9"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This deal is intended for one person only!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
+                                        <rect key="frame" x="5" y="583" width="404" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="o7o-6Q-F0e">
+                                        <rect key="frame" x="10" y="173" width="394" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -173,18 +172,24 @@ This promotion is for individual use only and shall be used for an individual's 
                                 <constraints>
                                     <constraint firstItem="dPP-Jv-J2f" firstAttribute="leading" secondItem="zhn-Qz-hBb" secondAttribute="leading" constant="10" id="1Lx-nR-U8X"/>
                                     <constraint firstAttribute="bottom" secondItem="KvV-v9-jhB" secondAttribute="bottom" constant="10" id="1ba-sR-76S"/>
-                                    <constraint firstItem="hub-RY-SRs" firstAttribute="top" secondItem="qlh-dk-vcz" secondAttribute="bottom" constant="-99.5" id="5uK-zm-cnr"/>
-                                    <constraint firstItem="qlh-dk-vcz" firstAttribute="top" secondItem="dPP-Jv-J2f" secondAttribute="bottom" constant="30" id="5wj-uY-2Yk"/>
-                                    <constraint firstAttribute="trailing" secondItem="Pov-td-Kxk" secondAttribute="trailing" constant="20" id="AIB-ON-RFP"/>
+                                    <constraint firstItem="hub-RY-SRs" firstAttribute="bottom" secondItem="qlh-dk-vcz" secondAttribute="bottom" id="3HF-ak-26R"/>
+                                    <constraint firstItem="qlh-dk-vcz" firstAttribute="top" secondItem="dPP-Jv-J2f" secondAttribute="bottom" constant="10" id="5wj-uY-2Yk"/>
+                                    <constraint firstItem="hub-RY-SRs" firstAttribute="width" secondItem="qlh-dk-vcz" secondAttribute="width" multiplier="0.5" id="6lh-pA-iaL"/>
+                                    <constraint firstAttribute="trailing" secondItem="o7o-6Q-F0e" secondAttribute="trailing" constant="10" id="8DH-zI-Adx"/>
                                     <constraint firstItem="9XN-zF-3A1" firstAttribute="leading" secondItem="zhn-Qz-hBb" secondAttribute="leading" constant="5" id="Ds7-RF-wBC"/>
+                                    <constraint firstItem="dPP-Jv-J2f" firstAttribute="top" secondItem="o7o-6Q-F0e" secondAttribute="bottom" constant="10" id="HiZ-xC-snz"/>
                                     <constraint firstItem="KvV-v9-jhB" firstAttribute="centerX" secondItem="zhn-Qz-hBb" secondAttribute="centerX" id="Kmt-OX-Z6P"/>
+                                    <constraint firstItem="Pov-td-Kxk" firstAttribute="top" secondItem="zhn-Qz-hBb" secondAttribute="top" constant="20" id="MVh-S2-yX9"/>
                                     <constraint firstItem="dPP-Jv-J2f" firstAttribute="centerX" secondItem="zhn-Qz-hBb" secondAttribute="centerX" id="Qvs-6y-FKx"/>
-                                    <constraint firstItem="dPP-Jv-J2f" firstAttribute="top" secondItem="Pov-td-Kxk" secondAttribute="bottom" constant="10" id="S7N-ZS-XN5"/>
-                                    <constraint firstItem="qlh-dk-vcz" firstAttribute="centerY" secondItem="zhn-Qz-hBb" secondAttribute="centerY" id="Uu9-oa-zuu"/>
                                     <constraint firstAttribute="trailing" secondItem="9XN-zF-3A1" secondAttribute="trailing" constant="5" id="VG8-PV-wW7"/>
-                                    <constraint firstItem="hub-RY-SRs" firstAttribute="leading" secondItem="qlh-dk-vcz" secondAttribute="trailing" constant="-100" id="YKf-rm-oni"/>
+                                    <constraint firstItem="qlh-dk-vcz" firstAttribute="centerY" secondItem="zhn-Qz-hBb" secondAttribute="centerY" constant="10" id="bgB-aU-ncE"/>
+                                    <constraint firstItem="o7o-6Q-F0e" firstAttribute="leading" secondItem="zhn-Qz-hBb" secondAttribute="leading" constant="10" id="cM1-Qg-0OR"/>
+                                    <constraint firstItem="qlh-dk-vcz" firstAttribute="centerX" secondItem="zhn-Qz-hBb" secondAttribute="centerX" id="fES-X8-haQ"/>
+                                    <constraint firstItem="hub-RY-SRs" firstAttribute="height" secondItem="qlh-dk-vcz" secondAttribute="height" multiplier="0.5" id="gr5-kK-C3T"/>
+                                    <constraint firstItem="hub-RY-SRs" firstAttribute="trailing" secondItem="qlh-dk-vcz" secondAttribute="trailing" id="hKh-OK-56p"/>
+                                    <constraint firstItem="o7o-6Q-F0e" firstAttribute="top" relation="greaterThanOrEqual" secondItem="zhn-Qz-hBb" secondAttribute="top" constant="10" id="ji0-bF-ubq"/>
                                     <constraint firstAttribute="trailing" secondItem="dPP-Jv-J2f" secondAttribute="trailing" constant="10" id="mLT-hN-AbG"/>
-                                    <constraint firstItem="qlh-dk-vcz" firstAttribute="centerX" secondItem="zhn-Qz-hBb" secondAttribute="centerX" id="pwV-dj-iC4"/>
+                                    <constraint firstAttribute="trailing" secondItem="Pov-td-Kxk" secondAttribute="trailing" constant="20" id="xFg-7D-m92"/>
                                     <constraint firstItem="KvV-v9-jhB" firstAttribute="top" secondItem="9XN-zF-3A1" secondAttribute="bottom" constant="5" id="yl2-Os-gly"/>
                                 </constraints>
                                 <connections>
@@ -228,6 +233,7 @@ This promotion is for individual use only and shall be used for an individual's 
                         <outlet property="infoView" destination="7A3-BV-eil" id="kmt-bB-Y4o"/>
                         <outlet property="moreBtn" destination="YrQ-GR-Dun" id="BKU-Jo-ThW"/>
                         <outlet property="redeem" destination="g2z-lR-J3D" id="tCr-Be-Usv"/>
+                        <outlet property="restaurantLabel" destination="o7o-6Q-F0e" id="TlH-ln-zwT"/>
                         <outlet property="textView" destination="RO2-Ob-ZGY" id="3o7-Zx-dn8"/>
                         <outlet property="timerLabel" destination="KvV-v9-jhB" id="Wfg-hZ-ien"/>
                     </connections>
@@ -244,7 +250,7 @@ This promotion is for individual use only and shall be used for an individual's 
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1173.5999999999999" y="-1057.4212893553224"/>
+            <point key="canvasLocation" x="1173" y="-1058"/>
         </scene>
         <!--RestaurantDetails-->
         <scene sceneID="foh-v2-im6">

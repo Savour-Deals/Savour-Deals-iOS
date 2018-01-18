@@ -27,6 +27,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var justOpened = true
     var alreadyGoing = false
     var statusBar: UIView!
+    var count = 0
+    let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
+
     
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var scrollFilter: UIScrollView!
@@ -77,8 +80,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.view.backgroundColor = UIColor.white
         
-        
-        
         statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
 
@@ -128,7 +129,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationItem.title = ""
         UIApplication.shared.statusBarStyle = .lightContent
         statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        statusBar.backgroundColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
         let user = Auth.auth().currentUser
         if user != nil {
             // User is signed in.
@@ -169,14 +170,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func endRefresh(){
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
             // When done requesting/reloading/processing invoke endRefreshing, to close the control
-            for subview in self.buttonsView.subviews as [UIView] {
-                if let button = subview as? UIButton {
-                    if button.backgroundColor == UIColor.white{
-                        button.sendActions(for: .touchUpInside)
-                        break
-                    }
-                }
-            }
             self.refreshControl.endRefreshing()
         }
     }
@@ -196,7 +189,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 // Get user value
                 for entry in snapshot.children {
                     let snap = entry as! DataSnapshot
-                    let temp = DealData(snap: snap, ID: (Auth.auth().currentUser?.uid)!) // convert my snapshot into my type
+                    let temp = DealData(snap: snap, ID: (Auth.auth().currentUser?.uid)!)
                     if temp.endTime! > expiredUnix {
                         if sender == "main" || sender == "refresh"{
                             UnfilteredDeals.append(temp)
@@ -221,101 +214,77 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         }
                     }
                 }
+                if notificationDeal != nil && UnfilteredDeals.count > 0{
+                    for i in 0..<UnfilteredDeals.count{
+                        if UnfilteredDeals[i].dealID == notificationDeal && !self.alreadyGoing{
+                            self.alreadyGoing = true
+                            notificationDeal = nil
+                            self.dealDetails(deal: UnfilteredDeals[i],index: i)
+                        }
+                    }
+                    
+                }
                 if UnfilteredDeals.count > 0 && sender != "favs"{
                     self.loadData(sender: "favs")
+                }else{
+                    filteredDeals.removeAll()
+                    let temp = UnfilteredDeals
+                    UnfilteredDeals.removeAll()
+                    for deal in temp{
+                        if !deal.redeemed!{
+                            UnfilteredDeals.append(deal)
+                        }else if let time = deal.redeemedTime{
+                            if (Date().timeIntervalSince1970 - time) < 1800{
+                                UnfilteredDeals.append(deal)
+                            }
+                        }
+                    }
+                    for subview in self.buttonsView.subviews as [UIView] {
+                        if let button = subview as? UIButton {
+                            if button.backgroundColor == UIColor.white{
+                                button.sendActions(for: .touchUpInside)
+                                break
+                            }
+                        }
+                    }
+                    filteredDeals = filteredDeals.sorted(by:{ (d1, d2) -> Bool in
+                        if d1.valid && !d2.valid {
+                            return true
+                        }else if !d1.valid && d2.valid{
+                            return false
+                        }
+                        else if d1.valid == d2.valid {
+                            return CGFloat(d1.endTime!) < CGFloat(d2.endTime!)
+                        }
+                        return false
+                    })
                 }
-
-                if UnfilteredDeals.count > 0 && sender == "favs"{
-                    self.loadRedeemed()
+                if self.refreshControl.isRefreshing{
+                    self.endRefresh()
                 }
-
+                if self.loading.isAnimating{
+                    self.loading.stopAnimating()
+                }
             }){ (error) in
                 print(error.localizedDescription)
             }
-    }
-   
-    func loadRedeemed(){
-        let ref = Database.database().reference()
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.hasChild("Redeemed"){
-                let redeemedSnap = snapshot.childSnapshot(forPath: "Redeemed")
-                for i in 0 ... (UnfilteredDeals.count-1){
-                    if redeemedSnap.childSnapshot(forPath: UnfilteredDeals[i].dealID!).hasChild((Auth.auth().currentUser?.uid)!){
-                        let snap = redeemedSnap.childSnapshot(forPath: UnfilteredDeals[i].dealID!)
-                        let redeemers = snap.value as! NSDictionary
-                        UnfilteredDeals[i].redeemed = true
-                        UnfilteredDeals[i].redeemedTime = redeemers.value(forKey: (Auth.auth().currentUser?.uid)!) as? Double
-                    }
-                    else{
-                        UnfilteredDeals[i].redeemed = false
-                    }
-                    let deal = UnfilteredDeals[i]
-                    if favorites[deal.dealID!] != nil{
-                        favorites[deal.dealID!]?.redeemed = deal.redeemed
-                        favorites[deal.dealID!]?.redeemedTime = deal.redeemedTime
-                    }
-                }
-            }
-            if UnfilteredDeals[0].redeemed == nil{
-                for i in 0 ... (UnfilteredDeals.count-1){
-                    UnfilteredDeals[i].redeemed = false
-                }
-            }
-            if self.DealsTable.dataSource == nil{
-                self.DealsTable.dataSource = self
-            }
-            if notificationDeal != nil && UnfilteredDeals.count > 0{
-                for i in 0..<UnfilteredDeals.count{
-                    if UnfilteredDeals[i].dealID == notificationDeal && !self.alreadyGoing{
-                        self.alreadyGoing = true
-                        notificationDeal = nil
-                        self.dealDetails(deal: UnfilteredDeals[i],index: i)
-                    }
-                }
-                
-            }
-            filteredDeals.removeAll()
-            for (index,deal) in UnfilteredDeals.enumerated(){
-                if !deal.redeemed!{
-                    filteredDeals.append(deal)
-                }else if let time = deal.redeemedTime{
-                    if (Date().timeIntervalSince1970 - time) < 1800{
-                         filteredDeals.append(deal)
-                    }
-                }else{
-                    UnfilteredDeals.remove(at: index)
-                }
-            }
-            filteredDeals.sort { CGFloat($0.endTime!) < CGFloat($1.endTime!) }
-            self.DealsTable.reloadData()
-            if self.refreshControl.isRefreshing{
-                self.endRefresh()
-            }
-            if self.loading.isAnimating{
-                self.loading.stopAnimating()
-            }
-            if filteredDeals.count < 1 {
-                self.DealsTable.isHidden = true
-                self.noDeals.isHidden = false
-            }else{
-                self.DealsTable.isHidden = false
-                self.noDeals.isHidden = true
-            }
-         
-        })
-    }
-    
         
+    }
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredDeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
         let deal = filteredDeals[indexPath.row]
         cell.deal = deal
+        cell.tempImg.image = UIImage(named: placeholderImgs[count])
+        count = count + 1
+        if count > 2{
+            count = 0
+        }
         if favorites[deal.dealID!] == nil{
             let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
             cell.likeButton.setImage(image, for: .normal)
@@ -339,88 +308,60 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let placeholderImage = UIImage(named: "placeholder.jpg")
 
             // Load the image using SDWebImage
-            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
+            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage, completion: { (img, err, typ, ref) in
+                cell.tempImg.isHidden = true
+            })
         }
-            cell.rName.text = deal.restrauntName
-            cell.dealDesc.text = deal.dealDescription
-            if deal.redeemed! {
-                cell.Countdown.text = "Deal Already Redeemed!"
-                cell.Countdown.textColor = UIColor.red
-                cell.validHours.text = ""
+        cell.rName.text = deal.restrauntName
+        cell.dealDesc.text = deal.dealDescription
+        if deal.redeemed! {
+            cell.Countdown.text = "Deal Already Redeemed!"
+            cell.Countdown.textColor = UIColor.red
+            cell.validHours.text = ""
 
-            }
-            else{
-                cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
-                
+        }
+        else{
+            cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
+            
 
-                let start = Date(timeIntervalSince1970: deal.startTime!)
-                let end = Date(timeIntervalSince1970: deal.endTime!)
-                let current = Date()
-                let interval  =  DateInterval(start: start as Date, end: end as Date)
-                cell.validHours.text = ""
-                if (interval.contains(current)){
-                    let cal = Calendar.current
-                    let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
-                    if (current > end){
-                        cell.Countdown.text = "Deal Ended"
-                    }
-                    else if (current<start){
-                        var startingTime = " "
-                        if Components.day! != 0{
-                            startingTime = startingTime + String(describing: Components.day!) + " days"
-                        }
-                        else if Components.hour! != 0{
-                            startingTime = startingTime + String(describing: Components.hour!) + "hours"
-                        }else{
-                            startingTime = startingTime + String(describing: Components.minute!) + "minutes"
-                        }
-                        cell.Countdown.text = "Starts in " + startingTime
-                    }
-                    else {
-                        var leftTime = ""
-                        if Components.day! != 0{
-                            leftTime = leftTime + String(describing: Components.day!) + " days left"
-                        }
-                        else if Components.hour! != 0{
-                            leftTime = leftTime + String(describing: Components.hour!) + "hours left"
-                        }else{
-                            leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
-                        }
-                        cell.Countdown.text = leftTime
-                    }
-                    /* Section used to set time left which is not currently used
-                    let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
-                    let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
-                    let calendar = NSCalendar.current
-                    var hour = calendar.component(.hour, from: startD)
-                    var minute = calendar.component(.minute, from: startD)
-                    var component = "AM"
-                    if hour > 12{
-                        component = "PM"
-                        hour = hour - 12
-                    }
-                    if minute < 10 {
-                        cell.validHours.text = "Valid \(hour):0\(minute)\(component) to "
-                    }
-                    else{
-                        cell.validHours.text = "Valid \(hour):\(minute)\(component) to "
-                    }
-                    hour = calendar.component(.hour, from: endD)
-                    minute = calendar.component(.minute, from: endD)
-                    component = "AM"
-                    if hour > 12{
-                        component = "PM"
-                        hour = hour - 12
-                    }
-                    if minute < 10 {
-                        cell.validHours.text = cell.validHours.text! + "\(hour):0\(minute)\(component)"
-                    }
-                    else{
-                        cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
-                    }*/
+            let start = Date(timeIntervalSince1970: deal.startTime!)
+            let end = Date(timeIntervalSince1970: deal.endTime!)
+            let current = Date()
+            let interval  =  DateInterval(start: start as Date, end: end as Date)
+            cell.validHours.text = ""
+            if (interval.contains(current)){
+                let cal = Calendar.current
+                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
+                if (current > end){
+                    cell.Countdown.text = "Deal Ended"
                 }
-                
+                else if (current<start){
+                    var startingTime = " "
+                    if Components.day! != 0{
+                        startingTime = startingTime + String(describing: Components.day!) + " days"
+                    }
+                    else if Components.hour! != 0{
+                        startingTime = startingTime + String(describing: Components.hour!) + "hours"
+                    }else{
+                        startingTime = startingTime + String(describing: Components.minute!) + "minutes"
+                    }
+                    cell.Countdown.text = "Starts in " + startingTime
+                }
+                else {
+                    var leftTime = ""
+                    if Components.day! != 0{
+                        leftTime = leftTime + String(describing: Components.day!) + " days left"
+                    }
+                    else if Components.hour! != 0{
+                        leftTime = leftTime + String(describing: Components.hour!) + "hours left"
+                    }else{
+                        leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
+                    }
+                    cell.Countdown.text = leftTime
+                }
+                cell.validHours.text = deal.validHours
             }
+        }
         cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
         cell.tagImg.tintColor = cell.Countdown.textColor
         
@@ -493,7 +434,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         button.backgroundColor = UIColor.white
         button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
         let title = button.currentTitle
-        if title == "ALL" {
+        if title == "All" {
             filteredDeals = UnfilteredDeals
         }else if title == "%" || title == "$"{
             filteredDeals = UnfilteredDeals.filter { ($0.dealDescription!.lowercased().contains(title!.lowercased())) }

@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Savour Deals</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -37,7 +39,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>9</string>
+	<string>14</string>
 	<key>FacebookAppID</key>
 	<string>127494581197194</string>
 	<key>FacebookDisplayName</key>
@@ -56,10 +58,25 @@
 		<string>MKDirectionsModeCar</string>
 		<string>MKDirectionsModePedestrian</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>We need to use your camera for scanning QR codes.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Savour needs your location so that you can see it on a map.</string>
+	<string>Savour needs your location to find all the restaurants near you!</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app wants to access your photo library. </string>
+	<string>Savour needs access to your photo library to allow image uploads. </string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>OpenSans-Bold.ttf</string>
+		<string>OpenSans-BoldItalic.ttf</string>
+		<string>OpenSans-ExtraBold.ttf</string>
+		<string>OpenSans-ExtraBoldItalic.ttf</string>
+		<string>OpenSans-Italic.ttf</string>
+		<string>OpenSans-Light.ttf</string>
+		<string>OpenSans-LightItalic.ttf</string>
+		<string>OpenSans-Regular.ttf</string>
+		<string>OpenSans-SemiBold.ttf</string>
+		<string>OpenSans-SemiBoldItalic.ttf</string>
+	</array>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -90,6 +107,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarHidden</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

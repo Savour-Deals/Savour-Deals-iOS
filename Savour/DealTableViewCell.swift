@@ -10,6 +10,7 @@ import UIKit
 
 class DealTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var tempImg: UIImageView!
     @IBOutlet weak var validHours: UILabel!
     @IBOutlet weak var insetView: UIView!
     @IBOutlet weak var likeButton: UIButton!
@@ -28,7 +29,7 @@ class DealTableViewCell: UITableViewCell {
         let maskPath = UIBezierPath(roundedRect: self.bounds,
                                     byRoundingCorners: [.topLeft, .topRight],
                                     cornerRadii: CGSize(width: 10.0, height: 10.0))
-        
+
         let shape = CAShapeLayer()
         shape.path = maskPath.cgPath
         self.rImg.layer.mask = shape

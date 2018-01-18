@@ -5,8 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,18 +23,16 @@
                             <imageView userInteractionEnabled="NO" alpha="0.40000000000000002" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stil-336188" translatesAutoresizingMaskIntoConstraints="NO" id="Wsh-xt-2Oo">
                                 <rect key="frame" x="-0.5" y="-0.5" width="375" height="667"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Savour_Deals_White" translatesAutoresizingMaskIntoConstraints="NO" id="Mgc-Mg-chJ">
-                                <rect key="frame" x="18.5" y="229.5" width="337" height="207"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Mgc-Mg-chJ" secondAttribute="height" multiplier="337:207" id="oSB-cX-RPu"/>
-                                </constraints>
+                            <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Savour_Deals_White" translatesAutoresizingMaskIntoConstraints="NO" id="Mgc-Mg-chJ">
+                                <rect key="frame" x="10" y="-63" width="355" height="792"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Mgc-Mg-chJ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="2.5" id="6fk-Hn-LoD"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Mgc-Mg-chJ" secondAttribute="trailing" constant="3.5" id="E5e-do-mqt"/>
+                            <constraint firstItem="Mgc-Mg-chJ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="10" id="IdM-Na-ILm"/>
                             <constraint firstItem="Mgc-Mg-chJ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="QyG-Zg-D9L"/>
+                            <constraint firstAttribute="trailing" secondItem="Mgc-Mg-chJ" secondAttribute="trailing" constant="10" id="Rc9-Ic-2E5"/>
                             <constraint firstItem="Wsh-xt-2Oo" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height" id="h6U-au-F9U"/>
                             <constraint firstItem="Wsh-xt-2Oo" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="lrG-lU-gwN"/>
                             <constraint firstItem="Mgc-Mg-chJ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="mYd-09-DMd"/>
@@ -44,6 +40,7 @@
                             <constraint firstItem="Wsh-xt-2Oo" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" id="z1z-xe-Jgc"/>
                         </constraints>
                     </view>
+                    <nil key="simulatedTopBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -51,7 +48,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Savour_Deals_White" width="1808" height="875"/>
+        <image name="Savour_Deals_White" width="612" height="792"/>
         <image name="stil-336188" width="3024" height="3780"/>
     </resources>
 </document>
