@@ -32,6 +32,9 @@ class DealViewController: UIViewController {
     var timerStartTime: Int!
     weak var shapeLayer: CAShapeLayer?
     
+    @IBOutlet weak var restaurantLabel: UILabel!
+    @IBOutlet weak var dealCode: UILabel!
+    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var infoView: UIView!
     @IBOutlet var redeemedView: UIView!
     @IBOutlet weak var redeem: UIButton!
@@ -50,72 +53,43 @@ class DealViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         if #available(iOS 11, *) {
             let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.DealView.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1.0, constant: -10.0)
             // activate the constraint
             NSLayoutConstraint.activate([verticalSpace])
-        } else {
-            
+        }else {
             let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.redeem.superview, attribute: .bottom, multiplier: 1.0, constant: -10.0)
             // activate the constraint
             NSLayoutConstraint.activate([verticalSpace])
         }
-        moreBtn.layer.cornerRadius = 25
-        infoView.layer.cornerRadius = 10
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        if (Deal?.redeemed)!{
-            self.redeem.isEnabled = false
-            redeem.layer.cornerRadius = 25
-            self.redeem.setTitle("Already Redeemed!", for: .normal)
-            self.redeem.layer.backgroundColor = UIColor.red.cgColor
-
-        }
-        else{
-            pulsator.start()
-            redeem.layer.cornerRadius = 25
-        }
         SetupUI()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if !(Deal?.redeemed)!{
-            if !pulsator.isPulsating {
-                pulsator.start()
-            }
-        }
-        else{
-            if timerLabel.text == ""{
-                runTimer()
-                if timerLabel.text == "Reedeemed over an hour ago"{
-                    self.drawCheck(color: UIColor.red.cgColor)
-                }
-                else {
-                    self.drawCheck(color: UIColor.green.cgColor)
-                }
-            }
-        }
         SetupUI()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        pulsator.stop()
         self.title = ""
     }
     
     func SetupUI(){
-        let size = CGSize(width: 65,height: 40)
-
-        self.navigationItem.titleView?.frame.size = size
-        let image = UIImage(named: "Savour_White.png")
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 65, height: 40))
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = image
-        self.navigationItem.titleView = imageView
+        pulsator.start()
         
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        let imageView = UIImageView(image: UIImage(named: "Savour_White"))
+        imageView.contentMode = UIViewContentMode.scaleAspectFit
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
+        imageView.frame = titleView.bounds
+        titleView.addSubview(imageView)
+        self.navigationItem.titleView = titleView
+
+        
+        moreBtn.layer.cornerRadius = 25
+        infoView.layer.cornerRadius = 10
+        textView.setContentOffset(CGPoint.zero, animated: false)
         
         if (fromDetails)!{
             moreBtn.isHidden = true
@@ -123,6 +97,7 @@ class DealViewController: UIViewController {
         else{
             moreBtn.isHidden = false
         }
+        restaurantLabel.text = Deal?.restrauntName
         dealLbl.text = Deal?.dealDescription
         if photo != ""{
             // Reference to an image file in Firebase Storage
@@ -135,14 +110,41 @@ class DealViewController: UIViewController {
             let placeholderImage = UIImage(named: "placeholder.jpg")
             
             // Load the image using SDWebImage
-            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
+            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage, completion: { (_, err,_ , _) in
+                self.img.layer.cornerRadius = self.img.frame.size.height/2
+            })
         }
-        self.img.layer.cornerRadius = img.frame.size.width / 2
         moreBtn.setTitle("See More From " + (Deal?.restrauntName)!, for: .normal)
-        imgbound.layer.insertSublayer(pulsator, below: img.layer)
+        imgbound.layer.insertSublayer(pulsator, below: imgbound.layer)
         pulsator.numPulse = 6
         pulsator.radius = 230
-        pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        if (Deal?.redeemed)!{
+            self.redeem.isEnabled = false
+            redeem.layer.cornerRadius = 25
+            self.redeem.setTitle("Already Redeemed!", for: .normal)
+            self.redeem.layer.backgroundColor = UIColor.red.cgColor
+            if timerLabel.text == ""{
+                runTimer()
+            }
+            if timerLabel.text == "Reedeemed over half an hour ago"{
+                self.redeemIndicator(color: UIColor.red.cgColor)
+            }
+            else{
+                self.redeemIndicator(color: UIColor.green.cgColor)
+                self.dealCode.text = self.Deal?.dealCode
+            }
+        }
+        else{
+            pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+            redeem.layer.cornerRadius = 25
+        }
+        textView.contentOffset.y = 0
+        if !(Deal?.valid)!{
+            self.redeem.setTitle("Deal Not Active", for: .normal)
+            pulsator.backgroundColor = UIColor.red.cgColor
+            self.redeem.isEnabled = false
+            self.redeem.layer.backgroundColor = UIColor.red.cgColor
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -154,17 +156,15 @@ class DealViewController: UIViewController {
     }
     
     @IBAction func authenticatePressed(_ sender: Any) {
-            let alert = UIAlertController(title: "Cashier Approval", message: "Give this message to the cashier to redeem your coupon.", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Cashier Approval", message: "This deal is valid for one person only. \n\nGive this message to the cashier to redeem your coupon. \n\nDiscount is not gaurenteed if the casheir does not see this message!", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (alert: UIAlertAction!) -> Void in
                 
             }
             let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
                 let currTime = Date().timeIntervalSince1970
                 let uID = Auth.auth().currentUser?.uid
-                let ref = Database.database().reference().child("Redeemed").child((self.Deal?.dealID)!).child(uID!)
+                let ref = Database.database().reference().child("Deals").child((self.Deal?.dealID)!).child("redeemed").child(uID!)
                 ref.setValue(currTime)
-                let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
-                followRef.setValue(currTime)
                 //set and draw checkmark
                 self.redeemIndicator(color: UIColor.green.cgColor)
                 
@@ -178,10 +178,16 @@ class DealViewController: UIViewController {
                 if favorites[(filteredDeals[self.index].dealID)!] != nil{
                     favorites.removeValue(forKey: (filteredDeals[self.index].dealID)!)
                 }
+                if self.Deal?.dealCode != ""{
+                    self.dealCode.textColor = UIColor.black
+                    self.dealCode.text = self.Deal?.dealCode
+                }
                 self.runTimer()
-                if signalID != " "{
+                let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
+                if status.subscriptionStatus.userId != " "{
                     let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
-                    followRef.setValue(signalID)
+                    followRef.setValue(status.subscriptionStatus.userId)
+
                 }
             }
             alert.addAction(cancelAction)
@@ -195,41 +201,16 @@ class DealViewController: UIViewController {
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
+        self.dealCode.textColor = UIColor.black
         timerLabel.text = timeString(time: timeSince) //This will update the label
-        if (timeSince) > 3600 {
-            timerLabel.text = "Reedeemed over an hour ago"
-            if self.shapeLayer != nil{
-                self.shapeLayer?.strokeColor = UIColor.red.cgColor
-            }
-            else{
-                redeemIndicator(color: UIColor.green.cgColor)
-            }
+        if (timeSince) > 1800 {
+            dealCode.text = ""
+            timerLabel.text = "Reedeemed over half an hour ago"
+            redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
         }
     }
     
-    func drawCheck(color: CGColor){
-        //set and draw checkmark
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: self.img.frame.origin.x - 60, y: self.img.frame.origin.y - 60))
-        path.addLine(to: CGPoint(x: self.img.frame.origin.x , y: self.img.frame.origin.y + 10))
-        path.addLine(to: CGPoint(x: self.img.frame.origin.x + 80, y: self.img.frame.origin.y - 120))
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.fillColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0).cgColor
-        shapeLayer.strokeColor = color
-        shapeLayer.lineWidth = 10
-        shapeLayer.path = path.cgPath
-        // animate it
-        self.img.layer.addSublayer(shapeLayer)
-        let animation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.fromValue = 0
-        animation.duration = 1
-        shapeLayer.add(animation, forKey: "MyAnimation")
-        
-        // save shape layer
-        self.shapeLayer = shapeLayer
-        self.img.alpha = 0.6
-    }
     
     func redeemIndicator(color: CGColor){
         //self.img.alpha = 0.6
@@ -240,33 +221,46 @@ class DealViewController: UIViewController {
     @objc func updateTimer() {
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
         timerLabel.text = timeString(time: timeSince) //This will update the label.
-        if (timeSince) > 3600 {
-            timerLabel.text = "Reedeemed over an hour ago"
-            if self.shapeLayer != nil{
-                self.shapeLayer?.strokeColor = UIColor.red.cgColor
-            }
-            else{
-                redeemIndicator(color: UIColor.green.cgColor)
-            }
+        if (timeSince) > 1800 {
+            dealCode.text = ""
+            timerLabel.text = "Reedeemed over half an hour ago"
+            redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
         }
     }
     
     @IBAction func infoPressed(_ sender: Any) {
+        self.redeem.isEnabled = false
+        self.moreBtn.isEnabled = false
+        self.infoView.isHidden = false
+        self.blurView.isHidden = false
         self.view.bringSubview(toFront: blurView)
-
         self.view.bringSubview(toFront: infoView)
-        redeem.isEnabled = false
-        moreBtn.isEnabled = false
-        infoView.isHidden = false
-        blurView.isHidden = false
+        var scaleTrans = CGAffineTransform(scaleX: 0.0, y: 0.0)
+        self.blurView.transform = scaleTrans
+        self.infoView.transform = scaleTrans
+        scaleTrans = CGAffineTransform(scaleX: 1, y: 1)
+        UIView.animate(withDuration: 0.8,delay: 0, usingSpringWithDamping:0.6,
+            initialSpringVelocity:1.0,  options: .curveEaseInOut, animations: {
+            self.blurView.transform = scaleTrans
+            self.infoView.transform = scaleTrans
+        }, completion: nil)
+       
     }
     
     @IBAction func infoDismiss(_ sender: Any) {
-        redeem.isEnabled = true
-        moreBtn.isEnabled = true
-        infoView.isHidden = true
-        blurView.isHidden = true
+        let scaleTrans = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.8,delay: 0, usingSpringWithDamping:0.6,
+                       initialSpringVelocity:1.0,  options: .curveEaseInOut, animations: {
+                        self.blurView.transform = scaleTrans
+                        self.infoView.transform = scaleTrans
+        }, completion: {(value: Bool) in
+            self.redeem.isEnabled = true
+            self.moreBtn.isEnabled = true
+            self.infoView.isHidden = true
+            self.blurView.isHidden = true
+        })
+        
 
     }
     func timeString(time:TimeInterval)->String{
@@ -275,3 +269,4 @@ class DealViewController: UIViewController {
         return String(format:"Redeemed %02i minutes %02i seconds ago", minutes, seconds)
     }
 }
+

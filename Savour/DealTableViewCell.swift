@@ -10,6 +10,7 @@ import UIKit
 
 class DealTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var tempImg: UIImageView!
     @IBOutlet weak var validHours: UILabel!
     @IBOutlet weak var insetView: UIView!
     @IBOutlet weak var likeButton: UIButton!
@@ -21,10 +22,20 @@ class DealTableViewCell: UITableViewCell {
     var deal: DealData!
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.insetView.layer.cornerRadius = 5
+        self.insetView.layer.cornerRadius = 10
         self.insetView.layer.shadowRadius = 2
         self.insetView.layer.shadowOpacity = 0.5
         self.insetView.layer.shadowOffset = CGSize(width: 6, height: 6)
+        let maskPath = UIBezierPath(roundedRect: self.bounds,
+                                    byRoundingCorners: [.topLeft, .topRight],
+                                    cornerRadii: CGSize(width: 10.0, height: 10.0))
+
+        let shape = CAShapeLayer()
+        shape.path = maskPath.cgPath
+        self.rImg.layer.mask = shape
+
+        self.rImg.clipsToBounds = true
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

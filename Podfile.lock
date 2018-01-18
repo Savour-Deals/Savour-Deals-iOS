@@ -1,4 +1,5 @@
 PODS:
+  - AcknowList (1.4)
   - Bolts (1.8.4):
     - Bolts/AppLinks (= 1.8.4)
     - Bolts/Tasks (= 1.8.4)
@@ -14,6 +15,8 @@ PODS:
     - FBSDKCoreKit
   - FBSDKShareKit (4.28.0):
     - FBSDKCoreKit
+  - Firebase (4.5.0):
+    - Firebase/Core (= 4.5.0)
   - Firebase/Auth (4.5.0):
     - Firebase/Core
     - FirebaseAuth (= 4.3.1)
@@ -113,10 +116,12 @@ PODS:
     - SDWebImage/Core
 
 DEPENDENCIES:
+  - AcknowList
   - Charts
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
+  - Firebase
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -128,6 +133,7 @@ DEPENDENCIES:
   - SDWebImage/WebP
 
 SPEC CHECKSUMS:
+  AcknowList: 1fae3fa62f256ddd1001adf20ba5c52743515ac7
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
   Charts: 0705898046257443f0afbbc3179f4b67507b6e48
   FBSDKCoreKit: ca961e279113f691fd83dc634c0bbad9d4e3f370
@@ -152,6 +158,6 @@ SPEC CHECKSUMS:
   Pulsator: a0e7c006790a576de63280b2f0552ea1c1b83ce0
   SDWebImage: 89a9d32cd520bbb46eb14e541d5109b3564af198
 
-PODFILE CHECKSUM: 96dddbb29912b22aa7c9bfcb4eb9ee9363c30887
+PODFILE CHECKSUM: 6254e92d1082448bcaab795c695fd096a10e4d51
 
 COCOAPODS: 1.4.0.beta.1

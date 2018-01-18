@@ -17,17 +17,23 @@ import FirebaseAuth
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate{
 
+    var searchBar: UISearchBar!
+    @IBOutlet weak var loading: UIActivityIndicatorView!
     @IBOutlet var redeemedView: UIView!
     var handle: AuthStateDidChangeListenerHandle?
     var storage: Storage!
     var ref: DatabaseReference!
     var FavdealIDs: [String:String] = Dictionary<String, String>()
     var justOpened = true
-    var searchBar: UISearchBar!
     var alreadyGoing = false
-    var instantiated = false
     var statusBar: UIView!
+    var count = 0
+    let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
 
+    
+    @IBOutlet weak var buttonsView: UIView!
+    @IBOutlet weak var scrollFilter: UIScrollView!
+    @IBOutlet weak var noDeals: UILabel!
     private let refreshControl = UIRefreshControl()
 
     
@@ -43,6 +49,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loading.startAnimating()
         alreadyGoing = false
         ref = Database.database().reference()
         ref.keepSynced(true)
@@ -73,17 +80,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.view.backgroundColor = UIColor.white
         
-        let gradientLayer = CAGradientLayer()
-        
         statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.2524079623).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
-        self.refreshControl.tintColor = UIColor.white
 
         ref.keepSynced(true)
         GetFavs()
@@ -100,9 +101,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             DealsTable.addSubview(refreshControl)
         }
         // Configure Refresh Control
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+        refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         setupSearchBar()
+        for subview in self.buttonsView.subviews as [UIView] {
+            if let button = subview as? UIButton {
+                button.layer.borderColor = UIColor.white.cgColor
+                button.layer.borderWidth = 1
+                button.layer.cornerRadius = 5
+                button.addTarget(self, action: #selector(filterWithButtons(button:)), for: .touchUpInside)
+                if button.title(for: .normal) == "All"{
+                    button.backgroundColor = UIColor.white
+                    button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
+                }
+            }
+        }
     }
     
     
@@ -115,7 +129,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationItem.title = ""
         UIApplication.shared.statusBarStyle = .lightContent
         statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        statusBar.backgroundColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
         let user = Auth.auth().currentUser
         if user != nil {
             // User is signed in.
@@ -150,8 +164,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @objc private func refreshData(_ sender: Any) {
         // Fetch Data
         loadData(sender: "refresh")
-        self.refreshControl.endRefreshing()
-
+        
+    }
+    
+    func endRefresh(){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
+            // When done requesting/reloading/processing invoke endRefreshing, to close the control
+            self.refreshControl.endRefreshing()
+        }
     }
 
     func loadData(sender: String){
@@ -169,7 +189,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 // Get user value
                 for entry in snapshot.children {
                     let snap = entry as! DataSnapshot
-                    let temp = DealData(snap: snap, ID: (Auth.auth().currentUser?.uid)!) // convert my snapshot into my type
+                    let temp = DealData(snap: snap, ID: (Auth.auth().currentUser?.uid)!)
                     if temp.endTime! > expiredUnix {
                         if sender == "main" || sender == "refresh"{
                             UnfilteredDeals.append(temp)
@@ -194,80 +214,77 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         }
                     }
                 }
+                if notificationDeal != nil && UnfilteredDeals.count > 0{
+                    for i in 0..<UnfilteredDeals.count{
+                        if UnfilteredDeals[i].dealID == notificationDeal && !self.alreadyGoing{
+                            self.alreadyGoing = true
+                            notificationDeal = nil
+                            self.dealDetails(deal: UnfilteredDeals[i],index: i)
+                        }
+                    }
+                    
+                }
                 if UnfilteredDeals.count > 0 && sender != "favs"{
                     self.loadData(sender: "favs")
+                }else{
+                    filteredDeals.removeAll()
+                    let temp = UnfilteredDeals
+                    UnfilteredDeals.removeAll()
+                    for deal in temp{
+                        if !deal.redeemed!{
+                            UnfilteredDeals.append(deal)
+                        }else if let time = deal.redeemedTime{
+                            if (Date().timeIntervalSince1970 - time) < 1800{
+                                UnfilteredDeals.append(deal)
+                            }
+                        }
+                    }
+                    for subview in self.buttonsView.subviews as [UIView] {
+                        if let button = subview as? UIButton {
+                            if button.backgroundColor == UIColor.white{
+                                button.sendActions(for: .touchUpInside)
+                                break
+                            }
+                        }
+                    }
+                    filteredDeals = filteredDeals.sorted(by:{ (d1, d2) -> Bool in
+                        if d1.valid && !d2.valid {
+                            return true
+                        }else if !d1.valid && d2.valid{
+                            return false
+                        }
+                        else if d1.valid == d2.valid {
+                            return CGFloat(d1.endTime!) < CGFloat(d2.endTime!)
+                        }
+                        return false
+                    })
                 }
-
-                if UnfilteredDeals.count > 0 && sender == "favs"{
-                    self.loadRedeemed()
+                if self.refreshControl.isRefreshing{
+                    self.endRefresh()
                 }
-
+                if self.loading.isAnimating{
+                    self.loading.stopAnimating()
+                }
             }){ (error) in
                 print(error.localizedDescription)
             }
-    }
-   
-    func loadRedeemed(){
-        let ref = Database.database().reference()
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.hasChild("Redeemed"){
-                let redeemedSnap = snapshot.childSnapshot(forPath: "Redeemed")
-                for i in 0 ... (UnfilteredDeals.count-1){
-                    if redeemedSnap.childSnapshot(forPath: UnfilteredDeals[i].dealID!).hasChild((Auth.auth().currentUser?.uid)!){
-                        let snap = redeemedSnap.childSnapshot(forPath: UnfilteredDeals[i].dealID!)
-                        let redeemers = snap.value as! NSDictionary
-                        UnfilteredDeals[i].redeemed = true
-                        UnfilteredDeals[i].redeemedTime = redeemers.value(forKey: (Auth.auth().currentUser?.uid)!) as? Double
-                    }
-                    else{
-                        UnfilteredDeals[i].redeemed = false
-                    }
-                    let deal = UnfilteredDeals[i]
-                    if favorites[deal.dealID!] != nil{
-                        favorites[deal.dealID!]?.redeemed = deal.redeemed
-                        favorites[deal.dealID!]?.redeemedTime = deal.redeemedTime
-                    }
-                }
-            }
-            if UnfilteredDeals[0].redeemed == nil{
-                for i in 0 ... (UnfilteredDeals.count-1){
-                    UnfilteredDeals[i].redeemed = false
-                }
-            }
-            if self.DealsTable.dataSource == nil{
-                self.DealsTable.dataSource = self
-            }
-            if notificationDeal != nil && UnfilteredDeals.count > 0{
-                for i in 0..<UnfilteredDeals.count{
-                    if UnfilteredDeals[i].dealID == notificationDeal && !self.alreadyGoing{
-                        self.alreadyGoing = true
-                        notificationDeal = nil
-                        self.dealDetails(deal: UnfilteredDeals[i],index: i)
-                    }
-                }
-                
-            }
-            filteredDeals.removeAll()
-            for deal in UnfilteredDeals{
-                if !deal.redeemed!{
-                    filteredDeals.append(deal)
-                }
-            }
-            self.DealsTable.reloadData()
-        })
-    }
-    
         
+    }
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredDeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
         let deal = filteredDeals[indexPath.row]
         cell.deal = deal
+        cell.tempImg.image = UIImage(named: placeholderImgs[count])
+        count = count + 1
+        if count > 2{
+            count = 0
+        }
         if favorites[deal.dealID!] == nil{
             let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
             cell.likeButton.setImage(image, for: .normal)
@@ -277,7 +294,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
             cell.likeButton.setImage(image, for: .normal)
             cell.likeButton.tintColor = UIColor.red
-            
         }
         let photo = deal.restrauntPhoto!
         if photo != ""{
@@ -292,87 +308,60 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let placeholderImage = UIImage(named: "placeholder.jpg")
 
             // Load the image using SDWebImage
-            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
+            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage, completion: { (img, err, typ, ref) in
+                cell.tempImg.isHidden = true
+            })
         }
-            cell.rName.text = deal.restrauntName
-            cell.dealDesc.text = deal.dealDescription
+        cell.rName.text = deal.restrauntName
+        cell.dealDesc.text = deal.dealDescription
+        if deal.redeemed! {
+            cell.Countdown.text = "Deal Already Redeemed!"
+            cell.Countdown.textColor = UIColor.red
+            cell.validHours.text = ""
+
+        }
+        else{
+            cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
             
-            if deal.redeemed! {
-                cell.Countdown.text = "Deal Already Redeemed!"
-                cell.Countdown.textColor = UIColor.red
-                cell.validHours.text = ""
 
-            }
-            else{
-                cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
-                
-
-                let start = Date(timeIntervalSince1970: deal.startTime!)
-                let end = Date(timeIntervalSince1970: deal.endTime!)
-                let current = Date()
-                let interval  =  DateInterval(start: start as Date, end: end as Date)
-                if (interval.contains(current)){
-                    let cal = Calendar.current
-                    let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
-                    if (current > end){
-                        cell.Countdown.text = "Deal Ended"
-                        cell.validHours.text = ""
-                    }
-                    else if (current<start){
-                        var startingTime = " "
-                        if Components.day! != 0{
-                            startingTime = startingTime + String(describing: Components.day!) + " days"
-                        }
-                        else{
-                            startingTime = startingTime + String(describing: Components.hour!) + "h "
-                            startingTime = startingTime + String(describing: Components.minute!) + "m"
-                        }
-                        cell.Countdown.text = "Starts in " + startingTime
-                    }
-                    else {
-                        var leftTime = " "
-                        if Components.day! != 0{
-                            leftTime = leftTime + String(describing: Components.day!) + " days"
-                        }
-                        else{
-                            leftTime = leftTime + String(describing: Components.hour!) + "h "
-                            leftTime = leftTime + String(describing: Components.minute!) + "m"
-                        }
-                        cell.Countdown.text = "Time left: " + leftTime
-                    }
-                    let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
-                    let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
-                    let calendar = NSCalendar.current
-                    var hour = calendar.component(.hour, from: startD)
-                    var minute = calendar.component(.minute, from: startD)
-                    var component = "AM"
-                    if hour > 12{
-                        component = "PM"
-                        hour = hour - 12
-                    }
-                    if minute < 10 {
-                        cell.validHours.text = "Valid Between: \(hour):0\(minute)\(component)-"
-                    }
-                    else{
-                        cell.validHours.text = "Valid Between: \(hour):\(minute)\(component)-"
-                    }
-                    hour = calendar.component(.hour, from: endD)
-                    minute = calendar.component(.minute, from: endD)
-                    component = "AM"
-                    if hour > 12{
-                        component = "PM"
-                        hour = hour - 12
-                    }
-                    if minute < 10 {
-                        cell.validHours.text = cell.validHours.text! + "\(hour):0\(minute)\(component)"
-                    }
-                    else{
-                        cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
-                    }
-
+            let start = Date(timeIntervalSince1970: deal.startTime!)
+            let end = Date(timeIntervalSince1970: deal.endTime!)
+            let current = Date()
+            let interval  =  DateInterval(start: start as Date, end: end as Date)
+            cell.validHours.text = ""
+            if (interval.contains(current)){
+                let cal = Calendar.current
+                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
+                if (current > end){
+                    cell.Countdown.text = "Deal Ended"
                 }
-                
+                else if (current<start){
+                    var startingTime = " "
+                    if Components.day! != 0{
+                        startingTime = startingTime + String(describing: Components.day!) + " days"
+                    }
+                    else if Components.hour! != 0{
+                        startingTime = startingTime + String(describing: Components.hour!) + "hours"
+                    }else{
+                        startingTime = startingTime + String(describing: Components.minute!) + "minutes"
+                    }
+                    cell.Countdown.text = "Starts in " + startingTime
+                }
+                else {
+                    var leftTime = ""
+                    if Components.day! != 0{
+                        leftTime = leftTime + String(describing: Components.day!) + " days left"
+                    }
+                    else if Components.hour! != 0{
+                        leftTime = leftTime + String(describing: Components.hour!) + "hours left"
+                    }else{
+                        leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
+                    }
+                    cell.Countdown.text = leftTime
+                }
+                cell.validHours.text = deal.validHours
             }
+        }
         cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
         cell.tagImg.tintColor = cell.Countdown.textColor
         
@@ -385,11 +374,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if velocity.y>0{
             UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(true, animated: true)
+                //self.scrollFilter.isHidden = true
             }, completion: nil)
         }
         else{
             UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
+                //self.scrollFilter.isHidden = false
             }, completion: nil)
         }
     }
@@ -433,13 +424,42 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
    
-    
+    @objc func filterWithButtons(button: UIButton){
+        for view in self.buttonsView.subviews as [UIView] {
+            if let btn = view as? UIButton {
+                btn.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                btn.setTitleColor(UIColor.white, for: UIControlState.normal)
+            }
+        }
+        button.backgroundColor = UIColor.white
+        button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
+        let title = button.currentTitle
+        if title == "All" {
+            filteredDeals = UnfilteredDeals
+        }else if title == "%" || title == "$"{
+            filteredDeals = UnfilteredDeals.filter { ($0.dealDescription!.lowercased().contains(title!.lowercased())) }
+        }else if  title == "BOGO" {
+            // Filter the results
+            filteredDeals = UnfilteredDeals.filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
+        } else{
+            filteredDeals = UnfilteredDeals.filter { ($0.dealType!.lowercased().contains(title!.lowercased())) }
+        }
+        filteredDeals.sort { CGFloat($0.endTime!) < CGFloat($1.endTime!) }
+        if filteredDeals.count < 1 {
+            self.DealsTable.isHidden = true
+            self.noDeals.isHidden = false
+        }else{
+            self.DealsTable.isHidden = false
+            self.noDeals.isHidden = true
+        }
+        DealsTable.reloadData()
+    }
     
     
     //SearchBar functions
     func setupSearchBar(){
         // Setup the Search Controller
-        self.searchBar = UISearchBar()
+        searchBar = UISearchBar()
         searchBar.showsCancelButton = false
         searchBar.placeholder = "Search Restaurants"
         searchBar.delegate = self
@@ -456,6 +476,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             // Filter the results
             filteredDeals = UnfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
+        if filteredDeals.count < 1 {
+            self.DealsTable.isHidden = true
+            self.noDeals.isHidden = false
+        }else{
+            self.DealsTable.isHidden = false
+            self.noDeals.isHidden = true
+        }
         DealsTable.reloadData()
     }
     
@@ -468,13 +495,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             // Filter the results
             filteredDeals = UnfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
+        if filteredDeals.count < 1 {
+            self.DealsTable.isHidden = true
+            self.noDeals.isHidden = false
+        }else{
+            self.DealsTable.isHidden = false
+            self.noDeals.isHidden = true
+        }
         DealsTable.reloadData()
+       
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         //searchBar.resignFirstResponder()
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
+        if filteredDeals.count < 1 {
+            self.DealsTable.isHidden = true
+            self.noDeals.isHidden = false
+        }else{
+            self.DealsTable.isHidden = false
+            self.noDeals.isHidden = true
+        }
     }
  
     

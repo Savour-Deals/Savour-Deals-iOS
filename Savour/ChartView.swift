@@ -50,7 +50,7 @@ class ChartView: UIViewController {
     }
     
     func getRedeems(){
-        ref = Database.database().reference().child("Redeemed").child(deal.dealID!)
+        ref = Database.database().reference().child("Deals").child((self.deal?.dealID)!).child("redeemed")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot
@@ -142,3 +142,23 @@ public class BarChartFormatter: NSObject, IAxisValueFormatter{
         return xLabel
     }
 }
+
+class VendorDealCell: UITableViewCell {
+    
+    @IBOutlet weak var validHours: UILabel!
+    @IBOutlet weak var rImg: UIImageView!
+    @IBOutlet weak var rName: UILabel!
+    @IBOutlet weak var Countdown: UILabel!
+    @IBOutlet weak var dealDesc: UILabel!
+    var deal: DealData!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        // Configure the view for the selected state
+    }
+}
+

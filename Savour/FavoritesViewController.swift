@@ -65,11 +65,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     func setupUI(){
         self.navigationController?.navigationItem.title = "Favorites"
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
-        let gradientLayer = CAGradientLayer()
-        
-        gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.2494381421).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
 
@@ -82,11 +77,11 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
         cell.deal = deals[indexPath.row]
+        //cell.likeButton.frame.size = CGSize(width: 300, height: 40)
+        cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
         let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
         cell.likeButton.setImage(image, for: .normal)
         cell.likeButton.tintColor = UIColor.red
-        cell.likeButton.frame.size = CGSize(width: 300, height: 40)
-        cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
         let photo = cell.deal.restrauntPhoto!
         // Reference to an image file in Firebase Storage
         let storage = Storage.storage()
@@ -102,11 +97,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
         cell.rName.text = cell.deal.restrauntName
         cell.dealDesc.text = cell.deal.dealDescription
+        cell.validHours.text = ""
         if cell.deal.redeemed! {
             cell.Countdown.text = "Deal Already Redeemed!"
             cell.Countdown.textColor = UIColor.red
-            cell.validHours.text = ""
-            
         }
         else{
             cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
@@ -128,62 +122,26 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                     if Components.day! != 0{
                         startingTime = startingTime + String(describing: Components.day!) + " days"
                     }
-                    else{
-                        startingTime = startingTime + String(describing: Components.hour!) + "h "
-                        startingTime = startingTime + String(describing: Components.minute!) + "m"
+                    else if Components.hour! != 0{
+                        startingTime = startingTime + String(describing: Components.hour!) + "hours"
+                    }else{
+                        startingTime = startingTime + String(describing: Components.minute!) + "minutes"
                     }
                     cell.Countdown.text = "Starts in " + startingTime
                 }
                 else {
-                    var leftTime = " "
+                    var leftTime = ""
                     if Components.day! != 0{
-                        leftTime = leftTime + String(describing: Components.day!) + " days"
+                        leftTime = leftTime + String(describing: Components.day!) + " days left"
                     }
-                    else{
-                        leftTime = leftTime + String(describing: Components.hour!) + "h "
-                        leftTime = leftTime + String(describing: Components.minute!) + "m"
+                    else if Components.hour! != 0{
+                        leftTime = leftTime + String(describing: Components.hour!) + " hours left"
+                    }else{
+                        leftTime = leftTime + String(describing: Components.minute!) + " minutes left"
                     }
-                    cell.Countdown.text = "Time left: " + leftTime
+                    cell.Countdown.text = leftTime
                 }
-                let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
-                let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
-                let calendar = NSCalendar.current
-                var hour = calendar.component(.hour, from: startD)
-                var minute = calendar.component(.minute, from: startD)
-                var component = "AM"
-                if hour > 12{
-                    component = "PM"
-                    hour = hour - 12
-                }
-                if minute < 10 {
-                    cell.validHours.text = "Valid Between: \(hour):0\(minute)\(component)-"
-                }
-                else{
-                    cell.validHours.text = "Valid Between: \(hour):\(minute)\(component)-"
-                }
-                hour = calendar.component(.hour, from: endD)
-                minute = calendar.component(.minute, from: endD)
-                component = "AM"
-                if hour > 12{
-                    component = "PM"
-                    hour = hour - 12
-                }
-                if minute < 10 {
-                    cell.validHours.text = cell.validHours.text! + "\(hour):0\(minute)\(component)"
-                }
-                else{
-                    cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
-                }
-                
-            }
-            else if (current > end){
-                cell.Countdown.text = "Deal Ended"
-                cell.validHours.text = ""
-            }
-            else {
-                let cal = Calendar.current
-                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
-                cell.Countdown.text = "Starts in " + String(describing: Components.day!) + "days"
+                cell.validHours.text = cell.deal.validHours
             }
         }
         cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
@@ -245,6 +203,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         return UITableViewAutomaticDimension
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
 

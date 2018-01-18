@@ -9,13 +9,23 @@
 /* Begin PBXBuildFile section */
 		5E2B77275480E79A210575D7 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */; };
 		8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
-		8320E9811F3E213200D6A0DF /* RDealsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */; };
 		832E27001F874DE4009B8277 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832E26FF1F874DE4009B8277 /* ChartView.swift */; };
+		83344F9D20082F1900126465 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9320082F1100126465 /* OpenSans-Bold.ttf */; };
+		83344F9E20082F1900126465 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9420082F1200126465 /* OpenSans-Italic.ttf */; };
+		83344F9F20082F1900126465 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9520082F1200126465 /* OpenSans-BoldItalic.ttf */; };
+		83344FA020082F1900126465 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9620082F1300126465 /* OpenSans-LightItalic.ttf */; };
+		83344FA120082F1900126465 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9720082F1400126465 /* OpenSans-ExtraBold.ttf */; };
+		83344FA220082F1900126465 /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9820082F1500126465 /* OpenSans-SemiBoldItalic.ttf */; };
+		83344FA320082F1900126465 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9920082F1600126465 /* OpenSans-Regular.ttf */; };
+		83344FA420082F1900126465 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9A20082F1700126465 /* OpenSans-SemiBold.ttf */; };
+		83344FA520082F1900126465 /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9B20082F1800126465 /* OpenSans-ExtraBoldItalic.ttf */; };
+		83344FA620082F1900126465 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9C20082F1800126465 /* OpenSans-Light.ttf */; };
 		833756391F9E7F4E00336744 /* VendorMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833756381F9E7F4E00336744 /* VendorMapViewController.swift */; };
 		8337563B1F9E938C00336744 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337563A1F9E938C00336744 /* MapKit.framework */; };
 		833B25CB1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */; };
 		833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */; };
 		833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */; };
+		833D55E81FB6A91A00C66125 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D55E71FB6A91A00C66125 /* TabBarViewController.swift */; };
 		83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */; };
 		83446AA21F3BDC6400CBE73E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AA11F3BDC6400CBE73E /* AccountViewController.swift */; };
 		83446AA91F3C06AB00CBE73E /* DealDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */; };
@@ -35,7 +45,7 @@
 		8397B2C81F951D3400EC392C /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		83A457E81F85472000E803C6 /* DealsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A457E71F85472000E803C6 /* DealsViewController.swift */; };
 		83AD05E31F744EF0001B780E /* VendorHome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83AD05E21F744EF0001B780E /* VendorHome.storyboard */; };
-		83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA94891F64C3D800165064 /* AccountCell.swift */; };
+		83BA5CCD1FFB3E6F009C7880 /* Acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */; };
 		83BC91E61F875CEA0031C372 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 832E26FE1F86E642009B8277 /* GoogleService-Info.plist */; };
 		83BC91E81F8C0FB30031C372 /* tutorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83BC91E71F8C0FB20031C372 /* tutorial.storyboard */; };
 		83BC91EA1F8C12DC0031C372 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BC91E91F8C12DC0031C372 /* PageViewController.swift */; };
@@ -77,14 +87,24 @@
 		11FC412B5DFD4025E307D473 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RestaurantDetails.storyboard; sourceTree = "<group>"; };
-		8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RDealsTableViewCell.swift; sourceTree = "<group>"; };
 		832E26FE1F86E642009B8277 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		832E26FF1F874DE4009B8277 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		83344F9320082F1100126465 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		83344F9420082F1200126465 /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Italic.ttf"; sourceTree = "<group>"; };
+		83344F9520082F1200126465 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		83344F9620082F1300126465 /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
+		83344F9720082F1400126465 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		83344F9820082F1500126465 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		83344F9920082F1600126465 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		83344F9A20082F1700126465 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		83344F9B20082F1800126465 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		83344F9C20082F1800126465 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		833756381F9E7F4E00336744 /* VendorMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorMapViewController.swift; sourceTree = "<group>"; };
 		8337563A1F9E938C00336744 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
 		833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsPreviewDelegate.swift; sourceTree = "<group>"; };
 		833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesPreviewDelegate.swift; sourceTree = "<group>"; };
+		833D55E71FB6A91A00C66125 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		83446AA11F3BDC6400CBE73E /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DealDetails.storyboard; sourceTree = "<group>"; };
@@ -109,7 +129,7 @@
 		83A457E71F85472000E803C6 /* DealsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsViewController.swift; sourceTree = "<group>"; };
 		83AD05E21F744EF0001B780E /* VendorHome.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VendorHome.storyboard; sourceTree = "<group>"; };
 		83B0F94D1F32C64C00759C34 /* Savour.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Savour.entitlements; sourceTree = "<group>"; };
-		83BA94891F64C3D800165064 /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
+		83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Acknowledgements.plist; sourceTree = "<group>"; };
 		83BC91E71F8C0FB20031C372 /* tutorial.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = tutorial.storyboard; sourceTree = "<group>"; };
 		83BC91E91F8C12DC0031C372 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		83DBBE371F747945007B58DD /* leveldb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = leveldb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +166,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		83344FA720082F2300126465 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				83344F9320082F1100126465 /* OpenSans-Bold.ttf */,
+				83344F9520082F1200126465 /* OpenSans-BoldItalic.ttf */,
+				83344F9720082F1400126465 /* OpenSans-ExtraBold.ttf */,
+				83344F9B20082F1800126465 /* OpenSans-ExtraBoldItalic.ttf */,
+				83344F9420082F1200126465 /* OpenSans-Italic.ttf */,
+				83344F9C20082F1800126465 /* OpenSans-Light.ttf */,
+				83344F9620082F1300126465 /* OpenSans-LightItalic.ttf */,
+				83344F9920082F1600126465 /* OpenSans-Regular.ttf */,
+				83344F9A20082F1700126465 /* OpenSans-SemiBold.ttf */,
+				83344F9820082F1500126465 /* OpenSans-SemiBoldItalic.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		83446AA71F3C067900CBE73E /* DealDetails */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,7 +190,6 @@
 				83446AAA1F3C130400CBE73E /* DealViewController.swift */,
 				83446AAC1F3C1D4200CBE73E /* DetailsViewController.swift */,
 				833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */,
-				8320E9801F3E213200D6A0DF /* RDealsTableViewCell.swift */,
 				8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */,
 			);
 			name = DealDetails;
@@ -194,6 +230,7 @@
 		83802D6B1F2ED1FD00E315FB /* Savour */ = {
 			isa = PBXGroup;
 			children = (
+				83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */,
 				83B0F94D1F32C64C00759C34 /* Savour.entitlements */,
 				83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */,
 				832E26FE1F86E642009B8277 /* GoogleService-Info.plist */,
@@ -204,6 +241,7 @@
 				83AD05E41F744EF6001B780E /* VendorPortal */,
 				83802D751F2ED1FD00E315FB /* LaunchScreen.storyboard */,
 				83802D781F2ED1FD00E315FB /* Info.plist */,
+				83344FA720082F2300126465 /* Resources */,
 				83DDDBB41F4157EC00B14FEB /* Globals.swift */,
 			);
 			path = Savour;
@@ -224,9 +262,9 @@
 			children = (
 				834C1E111F31518F002D7198 /* Main.storyboard */,
 				83446AA11F3BDC6400CBE73E /* AccountViewController.swift */,
-				83BA94891F64C3D800165064 /* AccountCell.swift */,
 				834C1E131F3151A4002D7198 /* ViewController.swift */,
 				834C1E191F3187AA002D7198 /* Classes.swift */,
+				833D55E71FB6A91A00C66125 /* TabBarViewController.swift */,
 				833756381F9E7F4E00336744 /* VendorMapViewController.swift */,
 				83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */,
 				833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */,
@@ -383,15 +421,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83344FA220082F1900126465 /* OpenSans-SemiBoldItalic.ttf in Resources */,
+				83344F9D20082F1900126465 /* OpenSans-Bold.ttf in Resources */,
 				83802D771F2ED1FD00E315FB /* LaunchScreen.storyboard in Resources */,
+				83344FA020082F1900126465 /* OpenSans-LightItalic.ttf in Resources */,
 				83BC91E61F875CEA0031C372 /* GoogleService-Info.plist in Resources */,
 				834C1E121F31518F002D7198 /* Main.storyboard in Resources */,
 				83AD05E31F744EF0001B780E /* VendorHome.storyboard in Resources */,
 				83802D741F2ED1FD00E315FB /* Assets.xcassets in Resources */,
+				83BA5CCD1FFB3E6F009C7880 /* Acknowledgements.plist in Resources */,
 				83802D721F2ED1FD00E315FB /* Onboarding.storyboard in Resources */,
+				83344FA420082F1900126465 /* OpenSans-SemiBold.ttf in Resources */,
+				83344FA520082F1900126465 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
+				83344F9F20082F1900126465 /* OpenSans-BoldItalic.ttf in Resources */,
 				83BC91E81F8C0FB30031C372 /* tutorial.storyboard in Resources */,
+				83344F9E20082F1900126465 /* OpenSans-Italic.ttf in Resources */,
 				8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */,
+				83344FA320082F1900126465 /* OpenSans-Regular.ttf in Resources */,
 				83446AA91F3C06AB00CBE73E /* DealDetails.storyboard in Resources */,
+				83344FA620082F1900126465 /* OpenSans-Light.ttf in Resources */,
+				83344FA120082F1900126465 /* OpenSans-ExtraBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,6 +491,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AcknowList/AcknowList.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
@@ -458,6 +508,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AcknowList.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
@@ -528,13 +579,12 @@
 				833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */,
 				833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */,
 				832E27001F874DE4009B8277 /* ChartView.swift in Sources */,
-				8320E9811F3E213200D6A0DF /* RDealsTableViewCell.swift in Sources */,
 				83EE29641F7CA09F00E89CE1 /* DealInformationViews.swift in Sources */,
 				83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */,
 				834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */,
 				834C1E1A1F3187AA002D7198 /* Classes.swift in Sources */,
+				833D55E81FB6A91A00C66125 /* TabBarViewController.swift in Sources */,
 				83A457E81F85472000E803C6 /* DealsViewController.swift in Sources */,
-				83BA948A1F64C3D800165064 /* AccountCell.swift in Sources */,
 				83BC91EA1F8C12DC0031C372 /* PageViewController.swift in Sources */,
 				83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */,
 				83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */,
@@ -702,20 +752,24 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Savour/Savour.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Savour/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -729,19 +783,23 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Savour/Savour.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Savour/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -751,13 +809,12 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -773,13 +830,12 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
