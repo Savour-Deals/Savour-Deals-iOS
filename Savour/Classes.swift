@@ -26,6 +26,8 @@ class DealData{
     var redeemedTime: Double?
     var dealType: String?
     var dealCode: String?
+    var validHours: String?
+    var valid: Bool
 
     
     
@@ -42,6 +44,10 @@ class DealData{
             self.dealID = ""
             self.fav = false
             self.dealCode = ""
+            self.redeemed = false
+            self.redeemedTime = 0
+            self.validHours = ""
+            self.valid = false
         }
         else{
             let value = snap?.value as! NSDictionary
@@ -61,11 +67,42 @@ class DealData{
             self.dealID = snap?.key
             self.fav = false
             self.dealCode = value["code"] as? String ?? ""
-
+            if let redeemValue = value["redeemed"] as? NSDictionary{
+                if let time = redeemValue[ID]{
+                    self.redeemed = true
+                    self.redeemedTime = time as? Double
+                }else{
+                    self.redeemed = false
+                    self.redeemedTime = 0
+                }
+            }else{
+                self.redeemed = false
+                self.redeemedTime = 0
+            }
+            let startD = Date(timeIntervalSince1970: self.startTime!)
+            let endD = Date(timeIntervalSince1970: self.endTime!)
+            let calendar = Calendar.current
+            let startTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: startD), minute: calendar.component(.minute, from: startD))
+            let endTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: endD), minute: calendar.component(.minute, from: endD))
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.dateFormat = "h:mm a"
+            formatter.amSymbol = "AM"
+            formatter.pmSymbol = "PM"
+            let now = Date()
+            let startOfToday = calendar.startOfDay(for: now)
+            let startTime    = calendar.date(byAdding: startTimeComponent, to: startOfToday)!
+            let endTime      = calendar.date(byAdding: endTimeComponent, to: startOfToday)!
+            if now > startTime && now < endTime{
+                self.validHours = "Valid until " + formatter.string(from: endTime)
+                self.valid = true
+            }
+            else{
+                self.validHours = "Valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                self.valid = false
+            }
         }
     }
-  
-    
 }
 class restaurant{
     var restrauntName: String?

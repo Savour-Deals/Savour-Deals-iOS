@@ -11,6 +11,8 @@ import FirebaseAuth
 import FirebaseDatabase
 import MessageUI
 import AcknowList
+import OneSignal
+import UserNotifications
 
 
 
@@ -25,6 +27,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     @IBOutlet weak var welcomeLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if #available(iOS 11.0, *) {
@@ -42,19 +45,21 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             self.tableView.reloadData()
         })
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        tableView.tableFooterView = UIView()
+        let footerView = UIView()
+        footerView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
+        tableView.tableFooterView = footerView
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.navigationController?.isNavigationBarHidden = true
-        
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = UIColor.white
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
         }
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -66,11 +71,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         if indexPath.row == 0{
             return 160
         }
-        else if indexPath.row == 3{
-            return self.tableView.frame.height - (160 + 70 + 70 + 70)
-        }
         else{
-            return 70
+            return 45
         }
     }
     
@@ -90,38 +92,39 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 imageView.sd_setImage(with: URL(string: self.imgURL), placeholderImage: placeholderImage)
                 cell1.Img.layer.cornerRadius = cell1.Img.frame.size.width/2
                 cell1.Img.clipsToBounds = true
+                
             }
             else{
-                cell1.Img.image = #imageLiteral(resourceName: "logo")
+                cell1.Img.image = #imageLiteral(resourceName: "Savour_FullColor")
             }
             cell1.Welcome.text = "Welcome " + (user?.displayName)!
             
-            // UIImageView in your ViewController#colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+            cell1.selectionStyle = UITableViewCellSelectionStyle.none
+
             return cell1
         }
-        else if indexPath.row == 1 {
+        else if indexPath.row == 2 {
              cell = tableView.dequeueReusableCell(withIdentifier: "Contact", for: indexPath)
         }
-        else if indexPath.row == 2{
+        else if indexPath.row == 3{
+            cell = tableView.dequeueReusableCell(withIdentifier: "settings", for: indexPath)
+        }
+        else if indexPath.row == 4{
             cell = tableView.dequeueReusableCell(withIdentifier: "acknowledgements", for: indexPath)
         }
-        else if indexPath.row == 3{
-            cell = tableView.dequeueReusableCell(withIdentifier: "space", for: indexPath)
+        else{
+            cell = tableView.dequeueReusableCell(withIdentifier: "seperate", for: indexPath)
             cell.selectionStyle = UITableViewCellSelectionStyle.none
-        }
-        else if indexPath.row == 4 {
-            cell = tableView.dequeueReusableCell(withIdentifier: "Logout", for: indexPath)
-            cell.backgroundColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row == 1{
+        if indexPath.row == 2{
             let mailComposeViewController = configureMailController()
             if !MFMailComposeViewController.canSendMail() {
-                let email = "patte539@umn.edu"
+                let email = "info@savourdeals.com"
                 let url = URL(string: "mailto:\(email)")
                 UIApplication.shared.open(url!)
                 return
@@ -130,17 +133,14 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.present(mailComposeViewController, animated: true, completion: nil)
             }
         }
-        else if indexPath.row == 2{
+       
+        else if indexPath.row == 4{
             let path = Bundle.main.path(forResource: "Acknowledgements", ofType: "plist")
             let viewController = AcknowListViewController(acknowledgementsPlistPath: path)
-            self.navigationController?.isNavigationBarHidden = false
-            let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-            statusBar.backgroundColor  = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+            self.navigationController?.navigationBar.tintColor = UIColor.black
             self.navigationController?.pushViewController(viewController, animated: true)
         }
-        else if indexPath.row == 4{
-            LogoutPressed()
-        }
+       
     }
     
     func configureMailController() -> MFMailComposeViewController {
@@ -161,19 +161,19 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         controller.dismiss(animated: true, completion: nil)
     }
     
-    func LogoutPressed() {
+    @IBAction func logoutPressed(_ sender: Any) {
         // [START signout]
         let firebaseAuth = Auth.auth()
-       
-            let user = Auth.auth().currentUser?.uid
-            self.ref = Database.database().reference()
-            
-            var favs = Dictionary<String, String>()
-            for member in favorites{
-                favs[member.value.dealID!] = member.value.dealID
-            }
-            self.ref.child("Users").child(user!).child("Favorites").setValue(favs)
-
+        
+        let user = Auth.auth().currentUser?.uid
+        self.ref = Database.database().reference()
+        
+        var favs = Dictionary<String, String>()
+        for member in favorites{
+            favs[member.value.dealID!] = member.value.dealID
+        }
+        self.ref.child("Users").child(user!).child("Favorites").setValue(favs)
+        
         favorites.removeAll()
         do {
             try firebaseAuth.signOut()
@@ -185,3 +185,88 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 
 }
+
+class AccountCell: UITableViewCell {
+    
+    @IBOutlet weak var Welcome: UILabel!
+    @IBOutlet weak var Img: UIImageView!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+    }
+    
+}
+
+class accountNav: UINavigationController{
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+}
+
+class settingsViewController: UITableViewController{
+    
+    @IBOutlet weak var notificationDirections: UILabel!
+    @IBOutlet weak var notificationSwitch: UISwitch!
+    let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
+    var OSNotiSetting = false
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationItem.title = "Settings"
+        self.navigationItem.backBarButtonItem?.title = ""
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().getNotificationSettings(){ (settings) in
+                if settings.authorizationStatus == .authorized{
+                    self.OSNotiSetting = true
+                }
+                DispatchQueue.main.async {
+                    self.setupUI()
+                }
+            }
+        } else {
+            let isNotificationEnabled = UIApplication.shared.currentUserNotificationSettings?.types.contains(UIUserNotificationType.alert)
+            if isNotificationEnabled!{
+                OSNotiSetting = true
+            }
+            setupUI()
+        }
+    }
+    
+    func setupUI(){
+        let isSubscribed = status.subscriptionStatus.subscribed
+        notificationSwitch.isHidden = false
+        if isSubscribed {
+            notificationSwitch.isOn = true
+        }else{
+            notificationSwitch.isOn = false
+        }
+        let footerView = UIView()
+        footerView.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0)
+        self.tableView.tableFooterView = footerView
+    }
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    @IBAction func notificationToggles(_ sender: Any) {
+        if notificationSwitch.isOn{
+            OneSignal.setSubscription(true)
+            if !OSNotiSetting{
+                notificationDirections.isHidden = false
+                notificationSwitch.isHidden = true
+            }
+        }else{
+            OneSignal.setSubscription(false)
+        }
+    }
+}
+

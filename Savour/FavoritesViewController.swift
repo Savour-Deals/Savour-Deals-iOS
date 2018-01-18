@@ -101,7 +101,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         if cell.deal.redeemed! {
             cell.Countdown.text = "Deal Already Redeemed!"
             cell.Countdown.textColor = UIColor.red
-            
         }
         else{
             cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
@@ -136,45 +135,14 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                         leftTime = leftTime + String(describing: Components.day!) + " days left"
                     }
                     else if Components.hour! != 0{
-                        leftTime = leftTime + String(describing: Components.hour!) + "hours left"
+                        leftTime = leftTime + String(describing: Components.hour!) + " hours left"
                     }else{
-                        leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
+                        leftTime = leftTime + String(describing: Components.minute!) + " minutes left"
                     }
                     cell.Countdown.text = leftTime
                 }
-                /*For setting the time left for a deal which is not currently used
-                let startD = Date(timeIntervalSince1970: cell.deal.startTime!)
-                let endD = Date(timeIntervalSince1970: cell.deal.endTime!)
-                let calendar = NSCalendar.current
-                var hour = calendar.component(.hour, from: startD)
-                var minute = calendar.component(.minute, from: startD)
-                var component = "AM"
-                if hour > 12{
-                    component = "PM"
-                    hour = hour - 12
-                }
-                if minute < 10 {
-                    cell.validHours.text = "Valid \(hour):0\(minute)\(component) to "
-                }
-                else{
-                    cell.validHours.text = "Valid \(hour):\(minute)\(component) to "
-                }
-                hour = calendar.component(.hour, from: endD)
-                minute = calendar.component(.minute, from: endD)
-                component = "AM"
-                if hour > 12{
-                    component = "PM"
-                    hour = hour - 12
-                }
-                if minute < 10 {
-                    cell.validHours.text = cell.validHours.text! + "\(hour):0\(minute)\(component)"
-                }
-                else{
-                    cell.validHours.text = cell.validHours.text! + "\(hour):\(minute)\(component)"
-                }*/
-                
+                cell.validHours.text = cell.deal.validHours
             }
-            
         }
         cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
         cell.tagImg.tintColor = cell.Countdown.textColor
