@@ -41,12 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                                         settings: onesignalInitSettings)
         
         OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-        
-        // Recommend moving the below line to prompt for push after informing the user about
-        //   how your app will use them.
-        OneSignal.promptForPushNotifications(userResponse: { accepted in
-            print("User accepted notifications: \(accepted)")
-        })
         OneSignal.add(self as OSSubscriptionObserver)
 
         
@@ -92,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             self.window!.rootViewController = OnboardVC
 
         }
-    
+        UIApplication.shared.isStatusBarHidden = false
         return true
     }
 

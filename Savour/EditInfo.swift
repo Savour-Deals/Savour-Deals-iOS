@@ -12,10 +12,11 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class EditInfoViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
     var storageRef: StorageReference!
+    var data: NSData!
     var id: String!
     var menu: String!
     var keyboardHeight: CGFloat!
@@ -23,9 +24,6 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var rAddress: UITextField!
     @IBOutlet weak var rName: UITextField!
     @IBOutlet weak var rDesc: UITextView!
-    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var submitButton: UIButton!
     var tempName: String!
     var tempAddress: String!
     var tempDesc: String!
@@ -43,14 +41,12 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         storageRef = StorageReference()
-        editButton.layer.cornerRadius = 5
-        cancelButton.layer.cornerRadius = 5
-        submitButton.layer.cornerRadius = 5
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         loadData()
         imagePicker.delegate = self
         self.imagePicker.allowsEditing = true
+        let footerView = UIView()
+        footerView.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0)
+        self.tableView.tableFooterView = footerView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -86,77 +82,9 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
                 // Load the image using SDWebImage
                 imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
             }
+            
         }){ (error) in
             print(error.localizedDescription)
-        }
-    }
-    @IBAction func editInfo(_ sender: Any) {
-            cancelButton.isHidden = false
-            submitButton.isHidden = false
-            editButton.isHidden = true
-            rName.isEnabled = true
-            rAddress.isEnabled = true
-            rDesc.isEditable = true
-            tempDesc = rDesc.text
-            tempName = rName.text
-            tempAddress = rAddress.text
-            rName.borderStyle = UITextBorderStyle.roundedRect
-            rAddress.borderStyle = UITextBorderStyle.roundedRect
-            rDesc.backgroundColor = UIColor.lightGray
-            rName.becomeFirstResponder()        
-    }
-    @IBAction func submitPress(_ sender: Any) {
-            cancelButton.isHidden = true
-            submitButton.isHidden = true
-            editButton.isHidden = false
-            rName.isEnabled = false
-            rAddress.isEnabled = false
-            rDesc.isEditable = false
-            rName.borderStyle = UITextBorderStyle.none
-            rAddress.borderStyle = UITextBorderStyle.none
-            rDesc.backgroundColor = UIColor.white
-            ref.child("Restaurants").child(id!).child("Name").setValue(rName.text)
-            ref.child("Restaurants").child(id!).child("Address").setValue(rAddress.text)
-            ref.child("Restaurants").child(id!).child("Desc").setValue(rDesc.text)
-    }
-    
-    
-    @IBAction func cancelEdit(_ sender: Any) {
-            cancelButton.isHidden = true
-            submitButton.isHidden = true
-            editButton.isHidden = false
-            rDesc.text = tempDesc
-            rName.text = tempName
-            rAddress.text = tempAddress
-            cancelButton.isHidden = true
-            rName.isEnabled = false
-            rAddress.isEnabled = false
-            rDesc.isEditable = false
-            rName.borderStyle = UITextBorderStyle.none
-            rAddress.borderStyle = UITextBorderStyle.none
-            rDesc.backgroundColor = UIColor.white
-    }
-    
-    @objc func keyboardWillShow(notification: NSNotification){
-        if !keyboardShowing{
-            keyboardShowing = true
-            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-                if self.view.frame.origin.y == 0{
-                    let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-                    keyboardHeight = keyboardRectValue?.height
-                    self.view.frame.origin.y -= keyboardHeight!
-                }
-            }
-        }
-    }
-    @objc func keyboardWillHide(notification: NSNotification){
-        if !keyboardShowing{
-            keyboardShowing = false
-            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-                if self.view.frame.origin.y != 0{
-                    self.view.frame.origin.y += keyboardHeight!
-                }
-            }
         }
     }
     
@@ -167,7 +95,16 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
         present(imagePicker, animated: true, completion: nil)
     }
     
-  
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        if indexPath.row > 0 && indexPath.row < 3{
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            let cell = tableView.cellForRow(at: indexPath)
+            let textfield = cell?.contentView.subviews[0] as! UITextField
+            textfield.becomeFirstResponder()
+        }
+    }
+    
     private func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage
@@ -181,23 +118,8 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
         }
 
         dismiss(animated: true, completion: nil)
-        var data = NSData()
+        data = NSData()
         data = UIImageJPEGRepresentation(rImg.image!, 0.8)! as NSData
-        // set upload path
-        let filePath = "\(Auth.auth().currentUser!.uid)/Photos/\("restrauntPhoto")"
-        let metaData = StorageMetadata()
-        metaData.contentType = "image/jpg"
-        self.storageRef.child(filePath).putData(data as Data, metadata: metaData){(metaData,error) in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }else{
-                //store downloadURL
-                let downloadURL = metaData!.downloadURL()!.absoluteString
-                //store downloadURL at database
-                self.ref.child("Restaurants").child(Auth.auth().currentUser!.uid).updateChildValues(["Photo": downloadURL])
-            }
-        }
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
@@ -205,10 +127,19 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
             rImg.image = image
         }
         dismiss(animated: true, completion: nil)
-        var data = NSData()
-        data = UIImageJPEGRepresentation(rImg.image!, 0.8)! as NSData
+    }
+
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    @IBAction func SaveChanges(_ sender: Any) {
+        
         // set upload path
-        let filePath = "Restaurants/\(Auth.auth().currentUser!.uid)/Photos/\("restrauntPhoto")"
+        let filePath = "Restaurants/\(Auth.auth().currentUser!.uid)/Photos/\("restaurantPhoto")"
+        self.data = NSData()
+        self.data = UIImageJPEGRepresentation(self.rImg.image!, 0.8)! as NSData
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         self.storageRef.child(filePath).putData(data as Data, metadata: metaData){(metaData,error) in
@@ -222,11 +153,10 @@ class EditInfoViewController: UIViewController, UIImagePickerControllerDelegate,
                 self.ref.child("Restaurants").child(Auth.auth().currentUser!.uid).updateChildValues(["Photo": downloadURL])
             }
         }
-    }
-
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
+        ref.child("Restaurants").child(id!).child("Name").setValue(rName.text)
+        ref.child("Restaurants").child(id!).child("Address").setValue(rAddress.text)
+        ref.child("Restaurants").child(id!).child("Desc").setValue(rDesc.text)
+        self.navigationController?.popViewController(animated: true)
     }
     
 }

@@ -8,9 +8,10 @@
 
 import UIKit
 import Firebase
+import FBSDKCoreKit
+import FBSDKLoginKit
 
-
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
 
     @IBOutlet weak var img: UIImageView!
     @IBOutlet weak var NameField: UITextField!
@@ -20,29 +21,45 @@ class SignUpViewController: UIViewController {
     var keyboardShowing = false
     var keyboardHeight: CGFloat!
 
+    @IBOutlet weak var fbButton: FBSDKLoginButton!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var loadingText: UILabel!
     
     @IBOutlet weak var loadingLabel: UIView!
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if Auth.auth().currentUser != nil {
+            // User is signed in.
+            self.performSegue(withIdentifier: "Main", sender: self)
+        }
+        else {
+            // No user is signed in.
+            ref = Database.database().reference()
+            FBSDKLoginManager().logOut()
+            fbButton.delegate = self
+        }
         SignupButton.addTarget(self, action: #selector(SignupPressed), for: .touchUpInside)
-        SignupButton.layer.cornerRadius = 5
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        let gradientLayer = CAGradientLayer()
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
+        let rounded = EmailField.layer.frame.height/2
+        let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1).cgColor, #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).cgColor]
+        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.4).cgColor]
         self.view.layer.insertSublayer(gradientLayer, at: 0)
+        SignupButton.layer.cornerRadius = rounded
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NameField.layer.borderColor = UIColor.white.cgColor
         NameField.layer.borderWidth = 2
         EmailField.layer.borderColor = UIColor.white.cgColor
@@ -54,15 +71,28 @@ class SignUpViewController: UIViewController {
         NameField.textColor = UIColor.white
         EmailField.textColor = UIColor.white
         PasswordField.textColor = UIColor.white
-        NameField.layer.cornerRadius = 5
-        EmailField.layer.cornerRadius = 5
-        PasswordField.layer.cornerRadius = 5
+        NameField.layer.cornerRadius = rounded
+        EmailField.layer.cornerRadius = rounded
+        PasswordField.layer.cornerRadius = rounded
+        loadingView.layer.cornerRadius = rounded
+        // Obtain all constraints for the button:
+        let layoutConstraintsArr = fbButton.constraints
+        // Iterate over array and test constraints until we find the correct one:
+        for lc in layoutConstraintsArr { // or attribute is NSLayoutAttributeHeight etc.
+            if ( lc.constant == 28 ){
+                // Then disable it...
+                lc.isActive = false
+                break
+            }
+        }
+
     }
     func isLoading(){
         loadingIndicator.startAnimating()
         loadingView.isHidden = false
         loadingLabel.isHidden = false
         SignupButton.isEnabled = false
+        fbButton.isHidden = true
     }
     
     func doneLoading(){
@@ -71,13 +101,11 @@ class SignUpViewController: UIViewController {
         loadingView.isHidden = true
         loadingLabel.isHidden = true
         SignupButton.isEnabled = true
+        fbButton.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController!.setNavigationBarHidden(false, animated: false)
-        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         
         // [START auth_listener]
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
@@ -99,6 +127,8 @@ class SignUpViewController: UIViewController {
 
     
     @objc func SignupPressed(_ sender: Any) {
+        loadingText.text = "Signing Up"
+
         isLoading()
         if let password = PasswordField.text, let email = EmailField.text, let name = NameField.text {//let username = UsernameField.text {
             // [START create_user]
@@ -132,7 +162,6 @@ class SignUpViewController: UIViewController {
                     }
                 }
                 
-                self.navigationController?.isNavigationBarHidden = true
                 self.ref.child("Users").child(user!.uid).child("Onboarded").setValue("true")
                 self.performSegue(withIdentifier: "tutorial", sender: self)
 
@@ -147,6 +176,83 @@ class SignUpViewController: UIViewController {
         }
         self.doneLoading()
     }
+    
+    
+    @IBAction func FBLoginPressed(_ sender: Any) {
+        
+    }
+    
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
+        print("Did log out of facebook")
+    }
+    
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!){
+        loadingText.text = "Logging in"
+        isLoading()
+        var data:[String:AnyObject]!
+        if error != nil {
+            print(error)
+            self.doneLoading()
+            return
+        }
+        if result.isCancelled {
+            self.doneLoading()
+            return
+        }
+        print("Successfully logged in with facebook...")
+        let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+        Auth.auth().signIn(with: credential) { (user, error) in
+            if error != nil {
+                print(error.debugDescription)
+                return
+            }
+            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large)"])
+            
+            graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+                
+                if ((error) != nil)
+                {
+                    print("Error: \(String(describing: error))")
+                }
+                else
+                {
+                    
+                    data = result as! [String : AnyObject]
+                    let name = data["name"] as! String
+                    let id = data["id"] as! String
+                    self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
+                    self.ref.child("Users").child(user!.uid).child("FacebookID").setValue(id)
+                    
+                }
+            })
+            
+            self.ref.child("Users").child(user!.uid).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                let type = snapshot.value as? String ?? ""
+                if type == "Vendor"{
+                    self.performSegue(withIdentifier: "Vendor", sender: self)
+                    self.doneLoading()
+                }
+                else{
+                    self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
+                        let boarded = snapshot.value as? String ?? ""
+                        if boarded != ""{
+                            self.performSegue(withIdentifier: "signedUp", sender: self)
+                            self.doneLoading()
+                            
+                        }
+                        else{
+                            self.performSegue(withIdentifier: "tutorial", sender: self)
+                            self.doneLoading()
+                            
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    
     @objc func keyboardWillShow(notification: NSNotification){
         if !keyboardShowing{
             keyboardShowing = true
@@ -160,6 +266,7 @@ class SignUpViewController: UIViewController {
             }
         }
     }
+    
     @objc func keyboardWillHide(notification: NSNotification){
            if keyboardShowing{
             keyboardShowing = false
