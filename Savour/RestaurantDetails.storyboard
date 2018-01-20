@@ -15,10 +15,10 @@
         </array>
     </customFonts>
     <scenes>
-        <!--Details View Controller-->
+        <!--Restaurant View Controller-->
         <scene sceneID="W1b-eR-n6I">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="Gjh-Kz-R8v" customClass="DetailsViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="Gjh-Kz-R8v" customClass="RestaurantViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" id="Occ-Ji-NSB">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -478,18 +478,17 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="ContentView" destination="0DC-eh-fkn" id="dhY-ZP-3Ue"/>
-                        <outlet property="DealsTable" destination="LwI-1U-CJB" id="ktU-xC-hU4"/>
-                        <outlet property="RImg" destination="s1f-O1-CmU" id="yFF-Kk-XBL"/>
-                        <outlet property="overview" destination="asm-Ed-udh" id="ek1-w6-icQ"/>
-                        <outlet property="rImg" destination="s1f-O1-CmU" id="q5G-40-Fxt"/>
-                        <outlet property="rName" destination="rDL-4h-xDh" id="Uc4-Tc-tZd"/>
+                        <outlet property="overview" destination="asm-Ed-udh" id="MF8-s7-lEH"/>
+                        <outlet property="rImg" destination="s1f-O1-CmU" id="wg3-qb-9Nn"/>
+                        <outlet property="rName" destination="rDL-4h-xDh" id="FE5-uZ-cag"/>
+                        <outlet property="restaurantTable" destination="LwI-1U-CJB" id="wcs-8H-D5Y"/>
                         <segue destination="Bbv-JY-jcp" kind="presentation" identifier="QRsegue" id="Lbb-zB-ypt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Woo-fS-YfE" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <swipeGestureRecognizer direction="right" id="RiD-Bw-QbE">
                     <connections>
-                        <action selector="backSwipe:" destination="Gjh-Kz-R8v" id="Aby-ld-sQg"/>
+                        <action selector="backSwipe:" destination="Gjh-Kz-R8v" id="SYG-Za-UVv"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
 
 class DealTableViewCell: UITableViewCell {
 
@@ -33,9 +35,7 @@ class DealTableViewCell: UITableViewCell {
         let shape = CAShapeLayer()
         shape.path = maskPath.cgPath
         self.rImg.layer.mask = shape
-
         self.rImg.clipsToBounds = true
-
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -46,20 +46,19 @@ class DealTableViewCell: UITableViewCell {
     
    
     @IBAction func likePressed(_ sender: Any) {
-        if likeButton.title(for: .normal) != "Remove" {
-            if favorites[deal.dealID!] == nil{
-                favorites[deal.dealID!] = deal
-                let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
-                likeButton.setImage(image, for: .normal)
-                likeButton.tintColor = UIColor.red
-            }
-            else{
-                favorites.removeValue(forKey: deal.dealID!)
-                let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
-                likeButton.setImage(image, for: .normal)
-                likeButton.tintColor = UIColor.red
-            }
+        if deal.fav!{
+            deal.fav = false
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.dealID!).removeValue()
+            let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
+            likeButton.setImage(image, for: .normal)
+            likeButton.tintColor = UIColor.red
         }
-        
+        else{
+            deal.fav = true
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.dealID!).setValue(deal.dealID!)
+            let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
+            likeButton.setImage(image, for: .normal)
+            likeButton.tintColor = UIColor.red
+        }
     }
 }

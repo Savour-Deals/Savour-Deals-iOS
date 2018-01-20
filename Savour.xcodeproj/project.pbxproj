@@ -22,19 +22,16 @@
 		83344FA620082F1900126465 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83344F9C20082F1800126465 /* OpenSans-Light.ttf */; };
 		833756391F9E7F4E00336744 /* VendorMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833756381F9E7F4E00336744 /* VendorMapViewController.swift */; };
 		8337563B1F9E938C00336744 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337563A1F9E938C00336744 /* MapKit.framework */; };
-		833B25CB1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */; };
-		833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */; };
-		833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */; };
 		833D55E81FB6A91A00C66125 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D55E71FB6A91A00C66125 /* TabBarViewController.swift */; };
 		83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */; };
 		83446AA21F3BDC6400CBE73E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AA11F3BDC6400CBE73E /* AccountViewController.swift */; };
 		83446AA91F3C06AB00CBE73E /* DealDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */; };
 		83446AAB1F3C130400CBE73E /* DealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AAA1F3C130400CBE73E /* DealViewController.swift */; };
-		83446AAD1F3C1D4200CBE73E /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AAC1F3C1D4200CBE73E /* DetailsViewController.swift */; };
+		83446AAD1F3C1D4200CBE73E /* RestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AAC1F3C1D4200CBE73E /* RestaurantViewController.swift */; };
 		834C1E121F31518F002D7198 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 834C1E111F31518F002D7198 /* Main.storyboard */; };
 		834C1E141F3151A4002D7198 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E131F3151A4002D7198 /* ViewController.swift */; };
 		834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E151F315BA8002D7198 /* SignUpViewController.swift */; };
-		834C1E1A1F3187AA002D7198 /* Classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E191F3187AA002D7198 /* Classes.swift */; };
+		834C1E1A1F3187AA002D7198 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E191F3187AA002D7198 /* Database.swift */; };
 		834C1E1C1F3194B6002D7198 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */; };
 		83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */; };
 		83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6E1F2ED1FD00E315FB /* LoginViewController.swift */; };
@@ -101,19 +98,16 @@
 		83344F9C20082F1800126465 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		833756381F9E7F4E00336744 /* VendorMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorMapViewController.swift; sourceTree = "<group>"; };
 		8337563A1F9E938C00336744 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
-		833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsPreviewDelegate.swift; sourceTree = "<group>"; };
-		833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesPreviewDelegate.swift; sourceTree = "<group>"; };
 		833D55E71FB6A91A00C66125 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		83446AA11F3BDC6400CBE73E /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DealDetails.storyboard; sourceTree = "<group>"; };
 		83446AAA1F3C130400CBE73E /* DealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealViewController.swift; sourceTree = "<group>"; };
-		83446AAC1F3C1D4200CBE73E /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		83446AAC1F3C1D4200CBE73E /* RestaurantViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestaurantViewController.swift; sourceTree = "<group>"; };
 		834C1E111F31518F002D7198 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		834C1E131F3151A4002D7198 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		834C1E151F315BA8002D7198 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
-		834C1E191F3187AA002D7198 /* Classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Classes.swift; sourceTree = "<group>"; };
+		834C1E191F3187AA002D7198 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Database.swift; sourceTree = "<group>"; };
 		834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
 		83802D691F2ED1FD00E315FB /* Savour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Savour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -188,8 +182,7 @@
 			children = (
 				83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */,
 				83446AAA1F3C130400CBE73E /* DealViewController.swift */,
-				83446AAC1F3C1D4200CBE73E /* DetailsViewController.swift */,
-				833B25CC1F4D013E002499F9 /* DetailsPreviewDelegate.swift */,
+				83446AAC1F3C1D4200CBE73E /* RestaurantViewController.swift */,
 				8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */,
 			);
 			name = DealDetails;
@@ -263,13 +256,11 @@
 				834C1E111F31518F002D7198 /* Main.storyboard */,
 				83446AA11F3BDC6400CBE73E /* AccountViewController.swift */,
 				834C1E131F3151A4002D7198 /* ViewController.swift */,
-				834C1E191F3187AA002D7198 /* Classes.swift */,
+				834C1E191F3187AA002D7198 /* Database.swift */,
 				833D55E71FB6A91A00C66125 /* TabBarViewController.swift */,
 				833756381F9E7F4E00336744 /* VendorMapViewController.swift */,
 				83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */,
-				833B25CE1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift */,
 				834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */,
-				833B25CA1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift */,
 			);
 			name = MainUser;
 			sourceTree = "<group>";
@@ -576,13 +567,11 @@
 				83446AA21F3BDC6400CBE73E /* AccountViewController.swift in Sources */,
 				833756391F9E7F4E00336744 /* VendorMapViewController.swift in Sources */,
 				83446AAB1F3C130400CBE73E /* DealViewController.swift in Sources */,
-				833B25CD1F4D013E002499F9 /* DetailsPreviewDelegate.swift in Sources */,
-				833B25CF1F4D01F5002499F9 /* FavoritesPreviewDelegate.swift in Sources */,
 				832E27001F874DE4009B8277 /* ChartView.swift in Sources */,
 				83EE29641F7CA09F00E89CE1 /* DealInformationViews.swift in Sources */,
 				83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */,
 				834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */,
-				834C1E1A1F3187AA002D7198 /* Classes.swift in Sources */,
+				834C1E1A1F3187AA002D7198 /* Database.swift in Sources */,
 				833D55E81FB6A91A00C66125 /* TabBarViewController.swift in Sources */,
 				83A457E81F85472000E803C6 /* DealsViewController.swift in Sources */,
 				83BC91EA1F8C12DC0031C372 /* PageViewController.swift in Sources */,
@@ -591,9 +580,8 @@
 				83EE29621F7C6DF700E89CE1 /* DealTypeViewController.swift in Sources */,
 				83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */,
 				83DBBE391F7989CC007B58DD /* EditInfo.swift in Sources */,
-				83446AAD1F3C1D4200CBE73E /* DetailsViewController.swift in Sources */,
+				83446AAD1F3C1D4200CBE73E /* RestaurantViewController.swift in Sources */,
 				83DBBE3B1F7AC872007B58DD /* VendorHomeViewController.swift in Sources */,
-				833B25CB1F4CF8FF002499F9 /* ViewController+UIViewControllerPreviewing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

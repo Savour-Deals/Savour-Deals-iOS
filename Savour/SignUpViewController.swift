@@ -141,29 +141,25 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                 self.present(alert, animated: true, completion: nil)
                 return
             }
-                self.ref = Database.database().reference()
+            self.ref = Database.database().reference()
+            
+            self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
+            if let user = user {
+                let changeRequest = user.createProfileChangeRequest()
                 
-                var favs = Dictionary<String, String>()
-                for member in favorites{
-                    favs[member.value.dealID!] = member.value.dealID
-                }
-                self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
-                if let user = user {
-                    let changeRequest = user.createProfileChangeRequest()
-                    
-                    changeRequest.displayName = name
-                    //changeRequest.photoURL =
-                    changeRequest.commitChanges { error in
-                        if error != nil {
-                            // An error happened.
-                        } else {
-                            // Profile updated.
-                        }
+                changeRequest.displayName = name
+                //changeRequest.photoURL =
+                changeRequest.commitChanges { error in
+                    if error != nil {
+                        // An error happened.
+                    } else {
+                        // Profile updated.
                     }
                 }
-                
-                self.ref.child("Users").child(user!.uid).child("Onboarded").setValue("true")
-                self.performSegue(withIdentifier: "tutorial", sender: self)
+            }
+            
+            self.ref.child("Users").child(user!.uid).child("Onboarded").setValue("true")
+            self.performSegue(withIdentifier: "tutorial", sender: self)
 
         }
         // [END_EXCLUDE]

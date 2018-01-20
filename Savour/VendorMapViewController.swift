@@ -145,7 +145,7 @@ class VendorMapViewController: UIViewController{
         }
         if segue.identifier == "restaurant"{
             self.navigationController?.setNavigationBarHidden(false, animated: true)
-            let vc = segue.destination as! DetailsViewController
+            let vc = segue.destination as! RestaurantViewController
             vc.rID = sender as? String
         }
         if segue.identifier == "promptSegue"{

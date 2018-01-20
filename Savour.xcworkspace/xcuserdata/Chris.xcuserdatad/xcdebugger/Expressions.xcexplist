@@ -3,10 +3,10 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "ViewController.dealDetails(deal:index:):ViewController.swift">
+         contextName = "DetailsViewController.scrollViewDidScroll(_:):DetailsViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.searchBar">
+               value = "self.rImg.frame">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -14,13 +14,10 @@
          contextName = "AcknowListViewController.commonInit(acknowledgementsPlistPath:):AcknowListViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "listViewController.searchBar(_:textDidChange:):VendorMapViewController.swift">
+         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "cellHeights">
-            </PersistentString>
-            <PersistentString
-               value = "restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))!">
+               value = "favorites">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -72,10 +69,10 @@
                value = "self.textBox.frame.height">
             </PersistentString>
             <PersistentString
-               value = "textBox.frame.height">
+               value = "UIScreen.main.nativeBounds.height">
             </PersistentString>
             <PersistentString
-               value = "UIScreen.main.nativeBounds.height">
+               value = "textBox.frame.height">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -110,24 +107,27 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "QRViewController.foundCode(code:):DetailsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.parent as? navigationController">
+            </PersistentString>
+            <PersistentString
+               value = "self.presentingViewController as? TabBarViewController">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in DealViewController.SetupUI():DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.img.frame.size.height/2">
+               value = "self.img.frame.size.width/2">
             </PersistentString>
             <PersistentString
                value = "self.img.frame.size.height">
             </PersistentString>
             <PersistentString
-               value = "self.img.frame.size.width/2">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "OnboardingViewController.viewDidLoad():PageViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "arrayVC.count">
+               value = "self.img.frame.size.height/2">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -141,6 +141,22 @@
       </ContextState>
       <ContextState
          contextName = "ChartView.viewDidLoad():ChartView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "OnboardingViewController.viewDidLoad():PageViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "arrayVC.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "specialized closure #1 in closure #1 in ViewController.loadData(sender:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UnfilteredDeals.count">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "closure #1 in ViewController.loadRedeemed():ViewController.swift">
@@ -158,7 +174,7 @@
                value = "self.navigationController">
             </PersistentString>
             <PersistentString
-               value = "self.buttonsView.subviews">
+               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
             </PersistentString>
             <PersistentString
                value = "button.backgroundColor">
@@ -176,17 +192,12 @@
                value = "snap.value">
             </PersistentString>
             <PersistentString
-               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
+               value = "self.buttonsView.subviews">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "specialized closure #1 in closure #1 in ViewController.loadData(sender:):ViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "UnfilteredDeals.count">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "RDealsTableViewCell.awakeFromNib():RDealsTableViewCell.swift">
       </ContextState>
       <ContextState
          contextName = "AppDelegate.applicationWillTerminate(UIApplication) -&gt; ():AppDelegate.swift">
@@ -197,9 +208,6 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "RDealsTableViewCell.awakeFromNib():RDealsTableViewCell.swift">
-      </ContextState>
-      <ContextState
          contextName = "DealViewController.updateTimer():DealViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -208,13 +216,13 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "QRViewController.foundCode(code:):DetailsViewController.swift">
+         contextName = "closure #1 in closure #1 in FavoritesViewController.loadFavorites():FavoritesViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.parent as? navigationController">
+               value = "snapshot.children">
             </PersistentString>
             <PersistentString
-               value = "self.presentingViewController as? TabBarViewController">
+               value = "DealData(snap: snapshot, ID: userid!)">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -352,10 +360,10 @@
          contextName = "specialized DealData.init(snap:ID:):Classes.swift">
          <PersistentStrings>
             <PersistentString
-               value = "redeemValue[ID]">
+               value = "value[&quot;redeemed&quot;] as? NSDictionary">
             </PersistentString>
             <PersistentString
-               value = "value[&quot;redeemed&quot;] as? NSDictionary">
+               value = "redeemValue[ID]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -417,6 +425,9 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #2 in closure #1 in FavoritesViewController.loadFavorites():FavoritesViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "ReviewController.submitDeal(_:):DealInformationViews.swift">
          <PersistentStrings>
             <PersistentString
@@ -459,6 +470,14 @@
          <PersistentStrings>
             <PersistentString
                value = "favorites">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in ViewController.loadData():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "favoriteIDs[deal.dealID!]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -515,6 +534,9 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in ViewController.loadData():ViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "DetailsViewController.previewingContext(UIViewControllerPreviewing, viewControllerForLocation : CGPoint) -&gt; UIViewController?:DetailsPreviewDelegate.swift">
       </ContextState>
       <ContextState
@@ -526,16 +548,27 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in FavoritesViewController.loadFavorites():FavoritesViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FavoritesViewController.tableView(_:numberOfRowsInSection:):FavoritesViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "deals.filteredDeals.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "FavoritesViewController.tableView(_:cellForRowAt:):FavoritesViewController.swift">
       </ContextState>
       <ContextState
          contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "mainVC">
+               value = "(self.Deal?.dealID)!">
             </PersistentString>
             <PersistentString
-               value = "(self.Deal?.dealID)!">
+               value = "mainVC">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -551,18 +584,24 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "DetailsViewController.scrollViewDidScroll(_:):DetailsViewController.swift">
+         contextName = "FavoritesViewController.deals.getter:FavoritesViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.dealDetails(deal:index:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.rImg.frame">
+               value = "self.searchBar">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.viewWillAppear(_:):ViewController.swift">
+         contextName = "listViewController.searchBar(_:textDidChange:):VendorMapViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "favorites">
+               value = "cellHeights">
+            </PersistentString>
+            <PersistentString
+               value = "restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

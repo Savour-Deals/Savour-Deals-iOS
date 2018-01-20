@@ -91,18 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        //Save Favorites in Firebase
-            let user = Auth.auth().currentUser?.uid
-            self.ref = Database.database().reference()
-            var favs = Dictionary<String, String>()
-            for member in favorites{
-                favs[member.value.dealID!] = member.value.dealID
-            }
-        if user != nil{
-            self.ref.child("Users").child(user!).child("Favorites").setValue(favs)
-        }
-        
-        
+ 
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -119,9 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        favorites.removeAll()
-        
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.        
     }
    
     

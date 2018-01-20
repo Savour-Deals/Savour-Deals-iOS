@@ -1,5 +1,5 @@
 //
-//  DetailsViewController.swift
+//  RestaurantViewController.swift
 //  Savour
 //
 //  Created by Chris Patterson on 8/9/17.
@@ -15,13 +15,13 @@ import FirebaseStorageUI
 import OneSignal
 import AVFoundation
 
-class DetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class RestaurantViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var rID: String?
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
     var storage: Storage!
-    var Deals = [DealData]()
+    var deals = Deals()
     var indices = [Int]()
     var cachedImageViewSize: CGRect!
     var cachedTextPoint: CGPoint!
@@ -32,9 +32,8 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
     var followButton: UIButton!
     
     @IBOutlet weak var overview: UIView!
-    @IBOutlet weak var curr: UILabel!
     @IBOutlet weak var ContentView: UIView!
-    @IBOutlet weak var DealsTable: UITableView!
+    @IBOutlet weak var restaurantTable: UITableView!
     @IBOutlet weak var rImg: UIImageView!
     @IBOutlet weak var rName: UILabel!
     var menu: String!
@@ -53,14 +52,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         loadData()
         
         
-        DealsTable.rowHeight = UITableViewAutomaticDimension
-        DealsTable.estimatedRowHeight = 45
+        restaurantTable.rowHeight = UITableViewAutomaticDimension
+        restaurantTable.estimatedRowHeight = 45
         self.cachedImageViewSize = self.rImg.frame
         self.cachedTextPoint = self.rName.center
         let footerView = UIView()
         footerView.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0)
-        self.DealsTable.tableFooterView = footerView
-        self.DealsTable.sectionHeaderHeight = self.rImg.frame.height
+        self.restaurantTable.tableFooterView = footerView
+        self.restaurantTable.sectionHeaderHeight = self.rImg.frame.height
         
         self.navigationController?.navigationBar.tintColor = UIColor.white
         let imageView = UIImageView(image: UIImage(named: "Savour_White"))
@@ -75,7 +74,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
  
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = true
-        self.DealsTable.reloadData()
+        self.restaurantTable.reloadData()
     }
     
     @IBAction func backSwipe(_ sender: Any) {
@@ -124,21 +123,14 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
                 // Load the image using SDWebImage
                 imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
             }
-            self.DealsTable.delegate = self
-            self.DealsTable.dataSource = self
-            self.DealsTable.reloadData()
-            self.DealsTable.isHidden = false
+            self.restaurantTable.delegate = self
+            self.restaurantTable.dataSource = self
+            self.restaurantTable.reloadData()
+            self.restaurantTable.isHidden = false
         }){ (error) in
             print(error.localizedDescription)
         }
-        if UnfilteredDeals.count > 0 {
-            for i in 0 ... (UnfilteredDeals.count-1){
-                if self.rID! == UnfilteredDeals[i].restrauntID! && !UnfilteredDeals[i].redeemed!{
-                    self.Deals.append((UnfilteredDeals[i]))
-                    self.indices.append(i)
-                }
-            }
-        }
+        deals.getDeals(forRestaurant: rID!, table: restaurantTable)
     }
     
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -166,7 +158,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             
         }
         else if indexPath.row == 5{
-            if Deals.count > 0{
+            if deals.filteredDeals.count > 0{
                 return 150
             }else{
                 return 0
@@ -288,7 +280,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
         else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: "labelCell", for: indexPath) as! labelCell
             cell.label.text = "Current Offers"
-            if Deals.count <= 0 {
+            if deals.filteredDeals.count <= 0 {
                 cell.label.text = "No Current Offers"
             }
             return cell
@@ -308,10 +300,9 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
             let VC = storyboard.instantiateInitialViewController() as! DealViewController
             VC.hidesBottomBarWhenPushed = true
-            VC.Deal = Deals[indexPath.row - 5]
+            VC.Deal = deals.filteredDeals[indexPath.row - 5]
             VC.photo = VC.Deal?.restrauntPhoto
             VC.fromDetails = true
-            VC.index = indices[indexPath.row - 5]
             self.title = ""
             self.navigationController?.pushViewController(VC, animated: true)
         }
@@ -324,7 +315,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
                 self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": self.loyaltyRedemptions])
                 sender.setTitle("Loyalty Check-In", for: .normal)
-                self.DealsTable.reloadData()
+                self.restaurantTable.reloadData()
             }))
             redeemAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(redeemAlert, animated: true)
@@ -344,7 +335,7 @@ class DetailsViewController: UIViewController, UITableViewDataSource, UITableVie
             OneSignal.sendTags([(self.rID)! : "true"])
             self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": self.loyaltyRedemptions])
             self.followString = "Following"
-            self.DealsTable.reloadData()
+            self.restaurantTable.reloadData()
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
             successAlert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
             self.present(successAlert, animated: true)
@@ -436,7 +427,7 @@ class loyaltyCell: UITableViewCell {
 
 class buttonCell: UITableViewCell {
     
-    var mainView: DetailsViewController!
+    var mainView: RestaurantViewController!
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var directionsButton: UIButton!
     @IBOutlet weak var menuButton: UIButton!
@@ -475,7 +466,7 @@ class buttonCell: UITableViewCell {
             followRef.setValue(status.subscriptionStatus.userId)
             OneSignal.sendTags([(rID)! : "true"])
             self.mainView.followString = "Following"
-            self.mainView.DealsTable.reloadData()
+            self.mainView.restaurantTable.reloadData()
         }else{
             if hasLoyalty{
                 let alert = UIAlertController(title: "Notice!", message: "By unfollowing this restaurant you will lose all your loyalty check-ins!", preferredStyle: .alert)
@@ -506,7 +497,7 @@ class buttonCell: UITableViewCell {
         self.mainView.followString = "Follow"
         self.followButton.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
         self.mainView.loyaltyRedemptions = 0
-        self.mainView.DealsTable.reloadData()
+        self.mainView.restaurantTable.reloadData()
     }
 }
 
@@ -667,30 +658,32 @@ class CollectionDealCell: UICollectionViewCell{
     
     @IBAction func FavoriteToggled(_ sender: Any) {
         //If favorite star was hit, add or remove to favorites
-        if favorites[deal.dealID!] == nil{
-            favorites[deal.dealID!] = deal
-            let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
+        if deal.fav!{
+            deal.fav = false
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.dealID!).removeValue()
+            let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
             FavButton.setImage(image, for: .normal)
             FavButton.tintColor = UIColor.red
         }
         else{
-            favorites.removeValue(forKey: deal.dealID!)
-            let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
+            deal.fav = true
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.dealID!).setValue(deal.dealID!)
+            let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
             FavButton.setImage(image, for: .normal)
             FavButton.tintColor = UIColor.red
         }
     }
 }
 
-extension DetailsViewController: UICollectionViewDelegate,UICollectionViewDataSource{
+extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView,numberOfItemsInSection section: Int) -> Int {
-        return Deals.count
+        return deals.filteredDeals.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dealCell",for: indexPath) as! CollectionDealCell
-        let deal = Deals[indexPath.row]
+        let deal = deals.filteredDeals[indexPath.row]
         cell.deal = deal
     
         //cell.validHours.text = ""
@@ -721,7 +714,6 @@ extension DetailsViewController: UICollectionViewDelegate,UICollectionViewDataSo
                 cell.timeLabel.text = leftTime
             }else if (current > end){
                 cell.timeLabel.text = "Deal Ended"
-                //cell.validHours.text = ""
             }else{
                 let cal = Calendar.current
                 let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
@@ -729,13 +721,11 @@ extension DetailsViewController: UICollectionViewDelegate,UICollectionViewDataSo
             }
         }
         cell.validHours.text = deal.validHours
-        if favorites[deal.dealID!] != nil{
-            favorites[deal.dealID!] = deal
+        if cell.deal.fav!{
             let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
             cell.FavButton.setImage(image, for: .normal)
             cell.FavButton.tintColor = UIColor.red
         }else{
-            favorites.removeValue(forKey: deal.dealID!)
             let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
             cell.FavButton.setImage(image, for: .normal)
             cell.FavButton.tintColor = UIColor.red
@@ -763,10 +753,9 @@ extension DetailsViewController: UICollectionViewDelegate,UICollectionViewDataSo
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
-        VC.Deal = Deals[indexPath.row]
+        VC.Deal = deals.filteredDeals[indexPath.row]
         VC.photo = VC.Deal?.restrauntPhoto
         VC.fromDetails = true
-        VC.index = indices[indexPath.row]
         self.title = ""
         self.navigationController?.pushViewController(VC, animated: true)
     }
@@ -801,7 +790,7 @@ extension UIView {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         guard let indexPath = collectionView.indexPathForRow(at: location),
-            let cell = DealsTable.cellForRow(at: indexPath) as? DealTableViewCell else {
+            let cell = restaurantTable.cellForRow(at: indexPath) as? DealTableViewCell else {
                 return nil }
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
@@ -829,7 +818,7 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
     
     @IBOutlet var topbar: UIView!
     
-    var parentVC: DetailsViewController?
+    var parentVC: RestaurantViewController?
     var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     var qrCodeFrameView: UIView?
