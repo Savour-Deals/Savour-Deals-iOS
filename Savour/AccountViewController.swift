@@ -164,17 +164,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBAction func logoutPressed(_ sender: Any) {
         // [START signout]
         let firebaseAuth = Auth.auth()
-        
-        let user = Auth.auth().currentUser?.uid
-        self.ref = Database.database().reference()
-        
-        var favs = Dictionary<String, String>()
-        for member in favorites{
-            favs[member.value.dealID!] = member.value.dealID
-        }
-        self.ref.child("Users").child(user!).child("Favorites").setValue(favs)
-        
-        favorites.removeAll()
         do {
             try firebaseAuth.signOut()
             self.performSegue(withIdentifier: "OnboardingSegue", sender: self)

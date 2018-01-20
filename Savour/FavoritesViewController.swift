@@ -18,7 +18,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     var storage: Storage!
     @IBOutlet weak var heartImg: UIImageView!
     @IBOutlet weak var emptyView: UIView!
-    var deals = [DealData]()
+    var favorites: Favorites!
     var user: String!
     @IBOutlet weak var FavTable: UITableView!
     var ref: DatabaseReference!
@@ -35,31 +35,12 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         } else {
             print("3D Touch Not Available")
         }
+        favorites = Favorites()
     }
     override func viewWillAppear(_ animated: Bool) {
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        deals.removeAll()
-        let expiredUnix = Date().timeIntervalSince1970 - 24*60*60
-        for (_, deal) in favorites {
-            if deal.endTime! > expiredUnix{
-                deals.append(deal)
-            }
-            else{
-                favorites.removeValue(forKey: deal.dealID!)
-            }
-        }
-        self.FavTable.reloadData()
+        super.viewWillAppear(false)
+        favorites.getFavorites(table: self.FavTable)
         setupUI()
-        if (deals.isEmpty){
-            FavTable.isHidden = true
-            emptyView.isHidden = false
-        }
-        else{
-            FavTable.isHidden = false
-            emptyView.isHidden = true
-        }
-        FavTable.tableFooterView = UIView()
     }
     
     func setupUI(){
@@ -67,17 +48,25 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
-
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        FavTable.tableFooterView = UIView()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favorites.count
+        if (favorites.favoriteDeals.isEmpty){
+            FavTable.isHidden = true
+            emptyView.isHidden = false
+        }else{
+            FavTable.isHidden = false
+            emptyView.isHidden = true
+        }
+        return favorites.favoriteDeals.count //deals.filteredDeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
-        cell.deal = deals[indexPath.row]
-        //cell.likeButton.frame.size = CGSize(width: 300, height: 40)
+        cell.deal = favorites.favoriteDeals[indexPath.row]
         cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
         let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
         cell.likeButton.setImage(image, for: .normal)
@@ -148,40 +137,29 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         cell.tagImg.tintColor = cell.Countdown.textColor
         return cell
     }
+    
     @IBAction func removePressed(sender: UIButton, event: UIEvent){
         let touches = event.touches(for: sender)
         if let touch = touches?.first{
             let point = touch.location(in: FavTable)
             if let indexPath = FavTable.indexPathForRow(at: point) {
                 let cell = FavTable.cellForRow(at: indexPath) as? DealTableViewCell
-                favorites.removeValue(forKey: (cell?.deal.dealID!)!)
                 let user = Auth.auth().currentUser?.uid
                 Database.database().reference().child("Users").child(user!).child("Favorites").child((cell?.deal.dealID!)!).removeValue()
-                deals.removeAll()
-                for fav in favorites{
-                    deals.append(fav.value)
-                }
-                FavTable.reloadData()
+                favorites.getFavorites(table: FavTable)
             }
         }
-        if deals.isEmpty{
-            FavTable.isHidden = true
-            emptyView.isHidden = false
-        }
-        
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if velocity.y>0{
             UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(true, animated: true)
-                //self.navigationController?.setToolbarHidden(true, animated: true)
             }, completion: nil)
         }
         else{
             UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
-               // self.navigationController?.setToolbarHidden(false, animated: true)
             }, completion: nil)
         }
     }
@@ -192,10 +170,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
-        VC.Deal = deals[indexPath.row]
+        VC.Deal = favorites.favoriteDeals[indexPath.row]
         VC.fromDetails = false
         VC.photo = VC.Deal?.restrauntPhoto
-        VC.index = FavMainIndex[deals[indexPath.row].dealID!]!
+        //VC.index = FavMainIndex[deals[indexPath.row].dealID!]!
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationController?.pushViewController(VC, animated: true)
     }
@@ -208,8 +186,29 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
+}
+
+extension FavoritesViewController: UIViewControllerPreviewingDelegate {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        guard let indexPath = FavTable.indexPathForRow(at: location),
+            let cell = FavTable.cellForRow(at: indexPath) as? DealTableViewCell else {
+                return nil }
+        let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
+        let VC = storyboard.instantiateInitialViewController() as! DealViewController
+        VC.hidesBottomBarWhenPushed = true
+        VC.Deal = favorites.favoriteDeals[indexPath.row]
+        VC.fromDetails = false
+        VC.photo = VC.Deal?.restrauntPhoto
+        VC.preferredContentSize =
+            CGSize(width: 0.0, height: 600)
+        
+        previewingContext.sourceRect = cell.frame
+        
+        return VC
+    }
     
-
-   
-
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+    }
 }

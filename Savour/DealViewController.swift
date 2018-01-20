@@ -18,9 +18,8 @@ import OneSignal
 class DealViewController: UIViewController {
 
     @IBOutlet weak var blurView: UIVisualEffectView!
-    var Deal: DealData?
-    var index = -1
-    var fromDetails: Bool?
+    var Deal: DealData!
+    var fromDetails: Bool!
     let pulsator = Pulsator()
     var from: String?
     var handle: AuthStateDidChangeListenerHandle?
@@ -86,7 +85,6 @@ class DealViewController: UIViewController {
         titleView.addSubview(imageView)
         self.navigationItem.titleView = titleView
 
-        
         moreBtn.layer.cornerRadius = 25
         infoView.layer.cornerRadius = 10
         textView.setContentOffset(CGPoint.zero, animated: false)
@@ -141,6 +139,7 @@ class DealViewController: UIViewController {
         textView.contentOffset.y = 0
         if !(Deal?.valid)!{
             self.redeem.setTitle("Deal Not Active", for: .normal)
+            self.dealCode.text = Deal.validHours
             pulsator.backgroundColor = UIColor.red.cgColor
             self.redeem.isEnabled = false
             self.redeem.layer.backgroundColor = UIColor.red.cgColor
@@ -150,7 +149,7 @@ class DealViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RestaurantDetails" {
             self.title = ""
-            let vc = segue.destination as! DetailsViewController
+            let vc = segue.destination as! RestaurantViewController
             vc.rID = self.Deal?.restrauntID
         }
     }
@@ -171,13 +170,11 @@ class DealViewController: UIViewController {
                 self.redeem.isEnabled = false
                 self.redeem.setTitle("Already Redeemed!", for: .normal)
                 self.redeem.layer.backgroundColor = UIColor.red.cgColor
-                filteredDeals[self.index].redeemed = true
-                filteredDeals[self.index].redeemedTime = currTime
+                self.Deal.redeemed = true
+                self.self.Deal.redeemedTime = currTime
                 self.Deal?.redeemedTime = currTime
                 self.Deal?.redeemed = true
-                if favorites[(filteredDeals[self.index].dealID)!] != nil{
-                    favorites.removeValue(forKey: (filteredDeals[self.index].dealID)!)
-                }
+                ref.child("Users").child(uID!).child("Favorites").child(self.Deal.dealID!).removeValue()
                 if self.Deal?.dealCode != ""{
                     self.dealCode.textColor = UIColor.black
                     self.dealCode.text = self.Deal?.dealCode

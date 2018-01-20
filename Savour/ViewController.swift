@@ -23,12 +23,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var handle: AuthStateDidChangeListenerHandle?
     var storage: Storage!
     var ref: DatabaseReference!
-    var FavdealIDs: [String:String] = Dictionary<String, String>()
-    var justOpened = true
-    var alreadyGoing = false
+    var hasRefreshed = false
+//    var alreadyGoing = false
     var statusBar: UIView!
     var count = 0
     let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
+    var deals = Deals()
 
     
     @IBOutlet weak var buttonsView: UIView!
@@ -50,44 +50,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         loading.startAnimating()
-        alreadyGoing = false
+        //alreadyGoing = false
         ref = Database.database().reference()
         ref.keepSynced(true)
-        self.loadData(sender: "main")
-        self.setupUI()
-        self.DealsTable.dataSource = self
-        self.DealsTable.delegate = self
-
-    }
-    
-    func GetFavs()  {
-        let userid = Auth.auth().currentUser?.uid
-        let ref = Database.database().reference()
-        ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            for entry in snapshot.children {
-                let snap = entry as! DataSnapshot
-                let value = snap.key
-                self.FavdealIDs[value] = value
-            }
-        }){ (error) in
-            print(error.localizedDescription)
-        }
-        
-    }
-    
-    func setupUI(){
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.view.backgroundColor = UIColor.white
-        
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.tabBarController?.tabBar.isHidden = false
-
-        ref.keepSynced(true)
-        GetFavs()
         //Check if forcetouch is available
         if traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: self.DealsTable)
@@ -101,10 +66,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             DealsTable.addSubview(refreshControl)
         }
         // Configure Refresh Control
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
-        refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         setupSearchBar()
+        self.setupUI()
+        self.DealsTable.dataSource = self
+        self.DealsTable.delegate = self
+
+    }
+    
+    func setupUI(){
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.view.backgroundColor = UIColor.white
+        self.navigationController?.navigationItem.title = ""
+        
+        UIApplication.shared.statusBarStyle = .lightContent
+        
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+        refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.tabBarController?.tabBar.isHidden = false
+        
         for subview in self.buttonsView.subviews as [UIView] {
             if let button = subview as? UIButton {
                 button.layer.borderColor = UIColor.white.cgColor
@@ -119,17 +104,44 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    func refreshUI(){
+        hasRefreshed = true
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.view.backgroundColor = UIColor.white
+        self.navigationController?.navigationItem.title = ""
+        
+        UIApplication.shared.statusBarStyle = .lightContent
+        
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+        refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.tabBarController?.tabBar.isHidden = false
+        
+        //Filter by any buttons the user pressed.
+        var title = ""
+        for subview in self.buttonsView.subviews as [UIView] {
+            if let button = subview as? UIButton {
+                if button.backgroundColor == UIColor.white{
+                    title = button.title(for: .normal)!
+                    break
+                }
+            }
+        }
+        deals.getDeals(table: self.DealsTable, dealType: title)
+    }
+    
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.navigationItem.title = ""
-        UIApplication.shared.statusBarStyle = .lightContent
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
+        super.viewWillAppear(animated)
         let user = Auth.auth().currentUser
         if user != nil {
             // User is signed in.
@@ -142,7 +154,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     self.performSegue(withIdentifier: "Vendor", sender: self)
                 }
                 else{
-                   self.DealsTable.reloadData()
+                    self.refreshUI()
                 }
             })
         }
@@ -151,8 +163,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
     }
-    
-    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -163,129 +173,47 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @objc private func refreshData(_ sender: Any) {
         // Fetch Data
-        loadData(sender: "refresh")
-        
-    }
-    
-    func endRefresh(){
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
-            // When done requesting/reloading/processing invoke endRefreshing, to close the control
-            self.refreshControl.endRefreshing()
+        hasRefreshed = true
+        var title = ""
+        for subview in self.buttonsView.subviews as [UIView] {
+            if let button = subview as? UIButton {
+                if button.backgroundColor == UIColor.white{
+                    title = button.title(for: .normal)!
+                    break
+                }
+            }
         }
+        deals.getDeals(table: self.DealsTable, dealType: title)
     }
-
-    func loadData(sender: String){
-            var oldDeals = [DealData]()
-            if sender == "refresh" || sender == "main"{
-                oldDeals = UnfilteredDeals
-                UnfilteredDeals.removeAll()
-            }
-            let currentUnix = Date().timeIntervalSince1970
-            let plusDay = currentUnix + 86400
-            let expiredUnix = currentUnix
-            let sortedRef = self.ref.child("Deals").queryOrdered(byChild: "StartTime")
-            let filteredRef = sortedRef.queryEnding(atValue: plusDay, childKey: "StartTime")
-            filteredRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                // Get user value
-                for entry in snapshot.children {
-                    let snap = entry as! DataSnapshot
-                    let temp = DealData(snap: snap, ID: (Auth.auth().currentUser?.uid)!)
-                    if temp.endTime! > expiredUnix {
-                        if sender == "main" || sender == "refresh"{
-                            UnfilteredDeals.append(temp)
-                        }
-                        else if sender == "null" {
-                            for deal in oldDeals{
-                                if (deal.dealID == temp.dealID) && (deal.redeemed != nil){
-                                   temp.redeemed = deal.redeemed
-                                }
-                            }
-                            UnfilteredDeals.append(temp)
-                        }
-                        else if sender == "favs" && UnfilteredDeals.count > 0{
-                            if self.FavdealIDs[temp.dealID!] != nil {
-                                favorites[temp.dealID!] = temp
-                            }
-                            for i in 0 ... (UnfilteredDeals.count-1){
-                                if UnfilteredDeals[i].dealID == temp.dealID{
-                                    FavMainIndex[temp.dealID!] = i
-                                }
-                            }
-                        }
-                    }
-                }
-                if notificationDeal != nil && UnfilteredDeals.count > 0{
-                    for i in 0..<UnfilteredDeals.count{
-                        if UnfilteredDeals[i].dealID == notificationDeal && !self.alreadyGoing{
-                            self.alreadyGoing = true
-                            notificationDeal = nil
-                            self.dealDetails(deal: UnfilteredDeals[i],index: i)
-                        }
-                    }
-                    
-                }
-                if UnfilteredDeals.count > 0 && sender != "favs"{
-                    self.loadData(sender: "favs")
-                }else{
-                    filteredDeals.removeAll()
-                    let temp = UnfilteredDeals
-                    UnfilteredDeals.removeAll()
-                    for deal in temp{
-                        if !deal.redeemed!{
-                            UnfilteredDeals.append(deal)
-                        }else if let time = deal.redeemedTime{
-                            if (Date().timeIntervalSince1970 - time) < 1800{
-                                UnfilteredDeals.append(deal)
-                            }
-                        }
-                    }
-                    for subview in self.buttonsView.subviews as [UIView] {
-                        if let button = subview as? UIButton {
-                            if button.backgroundColor == UIColor.white{
-                                button.sendActions(for: .touchUpInside)
-                                break
-                            }
-                        }
-                    }
-                    filteredDeals = filteredDeals.sorted(by:{ (d1, d2) -> Bool in
-                        if d1.valid && !d2.valid {
-                            return true
-                        }else if !d1.valid && d2.valid{
-                            return false
-                        }
-                        else if d1.valid == d2.valid {
-                            return CGFloat(d1.endTime!) < CGFloat(d2.endTime!)
-                        }
-                        return false
-                    })
-                }
-                if self.refreshControl.isRefreshing{
-                    self.endRefresh()
-                }
-                if self.loading.isAnimating{
-                    self.loading.stopAnimating()
-                }
-            }){ (error) in
-                print(error.localizedDescription)
-            }
-        
-    }
-
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredDeals.count
+        //check if user clicked a notification and segue if they did
+        if !hasRefreshed{
+            //If a user clicked a deal notification, segue to that deal
+            if let notiDeal = deals.getNotificationDeal(dealID: notificationDeal){
+                self.dealDetails(deal: notiDeal)
+            }
+        }
+        //take care of any loading animations
+        if refreshControl.isRefreshing{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
+                self.refreshControl.endRefreshing()
+            }
+        }
+        loading.stopAnimating()
+        return deals.filteredDeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
-        let deal = filteredDeals[indexPath.row]
+        let deal = deals.filteredDeals[indexPath.row]
         cell.deal = deal
         cell.tempImg.image = UIImage(named: placeholderImgs[count])
         count = count + 1
         if count > 2{
             count = 0
         }
-        if favorites[deal.dealID!] == nil{
+        if !cell.deal.fav!{
             let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
             cell.likeButton.setImage(image, for: .normal)
             cell.likeButton.tintColor = UIColor.red
@@ -374,25 +302,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if velocity.y>0{
             UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(true, animated: true)
-                //self.scrollFilter.isHidden = true
             }, completion: nil)
         }
         else{
             UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
-                //self.scrollFilter.isHidden = false
             }, completion: nil)
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        //let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell
         tableView.deselectRow(at: indexPath, animated: true)
-        dealDetails(deal: filteredDeals[indexPath.row],index: indexPath.row)
+        dealDetails(deal: deals.filteredDeals[indexPath.row])
     }
     
-    func dealDetails(deal: DealData, index: Int){
-        
+    func dealDetails(deal: DealData){
         if self.navigationController != nil{
             let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
             let VC = storyboard.instantiateInitialViewController() as! DealViewController
@@ -400,7 +324,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             VC.Deal = deal
             VC.fromDetails = false
             VC.photo = VC.Deal?.restrauntPhoto
-            VC.index = index
             VC.from = "deals"
             //cleanup searchbar
             if self.searchBar != nil{
@@ -409,15 +332,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.navigationController?.pushViewController(VC, animated: true)
-            
         }
         else{
             self.navigationController?.setNavigationBarHidden(false, animated: true)
-            self.performSegue(withIdentifier: "dealView", sender: ["deal":deal, "index":index])
+            self.performSegue(withIdentifier: "dealView", sender: ["deal":deal])
         }
     }
-    
- 
     
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
@@ -433,19 +353,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         button.backgroundColor = UIColor.white
         button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
-        let title = button.currentTitle
-        if title == "All" {
-            filteredDeals = UnfilteredDeals
-        }else if title == "%" || title == "$"{
-            filteredDeals = UnfilteredDeals.filter { ($0.dealDescription!.lowercased().contains(title!.lowercased())) }
-        }else if  title == "BOGO" {
-            // Filter the results
-            filteredDeals = UnfilteredDeals.filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
-        } else{
-            filteredDeals = UnfilteredDeals.filter { ($0.dealType!.lowercased().contains(title!.lowercased())) }
-        }
-        filteredDeals.sort { CGFloat($0.endTime!) < CGFloat($1.endTime!) }
-        if filteredDeals.count < 1 {
+        let Title = button.currentTitle
+        deals.filter(byTitle: Title!)
+        if deals.filteredDeals.count < 1 {
             self.DealsTable.isHidden = true
             self.noDeals.isHidden = false
         }else{
@@ -470,13 +380,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text! == "" {
-            filteredDeals = UnfilteredDeals
-        } else {
-            // Filter the results
-            filteredDeals = UnfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
-        }
-        if filteredDeals.count < 1 {
+        deals.filter(byName: searchBar.text!)
+        if deals.filteredDeals.count < 1 {
             self.DealsTable.isHidden = true
             self.noDeals.isHidden = false
         }else{
@@ -489,13 +394,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
-        if searchBar.text! == "" {
-            filteredDeals = UnfilteredDeals
-        } else {
-            // Filter the results
-            filteredDeals = UnfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
-        }
-        if filteredDeals.count < 1 {
+        deals.filter(byName: searchBar.text!)
+        if deals.filteredDeals.count < 1 {
             self.DealsTable.isHidden = true
             self.noDeals.isHidden = false
         }else{
@@ -503,14 +403,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-       
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        //searchBar.resignFirstResponder()
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
-        if filteredDeals.count < 1 {
+        if deals.filteredDeals.count < 1 {
             self.DealsTable.isHidden = true
             self.noDeals.isHidden = false
         }else{
@@ -532,9 +430,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             VC.Deal = dict["deal"] as? DealData
             VC.fromDetails = false
             VC.photo = VC.Deal?.restrauntPhoto
-            VC.index = dict["index"] as! Int
             VC.from = "deals"
         }
     }
-   
+}
+
+extension ViewController:     UIViewControllerPreviewingDelegate {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let indexPath = DealsTable.indexPathForRow(at: location),
+            let cell = DealsTable.cellForRow(at: indexPath) as? DealTableViewCell else {
+                return nil }
+        let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
+        let VC = storyboard.instantiateInitialViewController() as! DealViewController
+        VC.hidesBottomBarWhenPushed = true
+        VC.Deal = deals.filteredDeals[indexPath.row]
+        VC.fromDetails = false
+        VC.photo = VC.Deal?.restrauntPhoto
+        VC.preferredContentSize = CGSize(width: 0.0, height: 600)
+        previewingContext.sourceRect = cell.frame
+        return VC
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+    }
 }
