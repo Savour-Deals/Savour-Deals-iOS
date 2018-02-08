@@ -28,6 +28,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     var loyaltyCode: String!
     var thisRestaurant: restaurant!
     var loyaltyRedemptions: Int!
+    var redemptionTime: Double!
     var expandedCells: [Bool] = [false, false]
     var followButton: UIButton!
     
@@ -51,7 +52,6 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         storage = Storage.storage()
         loadData()
         
-        
         restaurantTable.rowHeight = UITableViewAutomaticDimension
         restaurantTable.estimatedRowHeight = 45
         self.cachedImageViewSize = self.rImg.frame
@@ -60,6 +60,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         footerView.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0)
         self.restaurantTable.tableFooterView = footerView
         self.restaurantTable.sectionHeaderHeight = self.rImg.frame.height
+
         
         self.navigationController?.navigationBar.tintColor = UIColor.white
         let imageView = UIImageView(image: UIImage(named: "Savour_White"))
@@ -84,12 +85,14 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     func loadData(){
         //Set overall restraunt info
         let id = rID
-        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(rID!).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(rID!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
                 let value = snapshot.value as? NSDictionary
-                self.loyaltyRedemptions = value?["redemptions"] as? Int ?? 0
+                self.loyaltyRedemptions = value?["count"] as? Int ?? 0
+                self.redemptionTime = value?["time"] as? Double ?? 0.0
             }else{
                 self.loyaltyRedemptions = 0
+                self.redemptionTime = 0.0
             }
         }){ (error) in
             print(error.localizedDescription)
@@ -200,13 +203,15 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }
         else if indexPath.row == 1{
             let cell = tableView.dequeueReusableCell(withIdentifier: "descCell", for: indexPath) as! aboutCell
-            cell.label.text = self.thisRestaurant.description
+            cell.label.text = "\n" +  self.thisRestaurant.description!
+            cell.address.text = thisRestaurant.address!
+            cell.todayHours.text = thisRestaurant.dailyHours[Date().dayNumberOfWeek()!-1]
             if expandedCells[0]{
                 cell.label.numberOfLines = 0
                 cell.label.lineBreakMode = .byWordWrapping
                 cell.show.text = "Show less..."
             }else{
-                cell.label.numberOfLines = 2
+                cell.label.numberOfLines = 3
                 cell.label.lineBreakMode = .byTruncatingTail
                 cell.show.text = "Show more..."
             }
@@ -249,10 +254,14 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 cell.checkin.layer.cornerRadius = cell.checkin.frame.height/2
                 let visitsLeft =  thisRestaurant.loyalty.loyaltyCount - loyaltyRedemptions
                 if visitsLeft == 0{
+                    cell.animate()
                     cell.checkin.setTitle("Reedeem", for: .normal)
                     cell.loyaltyLabel.text = "You're ready to redeem your \(thisRestaurant.loyalty.loyaltyDeal)!"
                 }else{
                     cell.loyaltyLabel.text = "Visit \(visitsLeft) more times for a \(thisRestaurant.loyalty.loyaltyDeal)!"
+                    if cell.isAnimating{
+                        cell.stopAnimate()
+                    }
                 }
                 cell.checkin.addTarget(self, action: #selector(self.checkin(_:)), for: .touchUpInside)
                 var loyaltyMarks = ""
@@ -274,7 +283,6 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 cell.loyaltyLabel.isHidden = true
                 cell.marker.isHidden = true
             }
-
             return cell
         }
         else if indexPath.row == 4{
@@ -310,30 +318,40 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
   
     @objc func checkin(_ sender:UIButton!){
         if self.loyaltyRedemptions == self.thisRestaurant.loyalty.loyaltyCount{
-            self.loyaltyRedemptions = 0
+            
             let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
             redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
-                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": self.loyaltyRedemptions])
+                self.loyaltyRedemptions = 0
+                self.redemptionTime = 0
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 sender.setTitle("Loyalty Check-In", for: .normal)
+                
                 self.restaurantTable.reloadData()
             }))
             redeemAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(redeemAlert, animated: true)
 
         }else{
-            performSegue(withIdentifier: "QRsegue", sender: self)
+            if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
+                performSegue(withIdentifier: "QRsegue", sender: self)
+            }else{
+                let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to get another loyalty visit!", preferredStyle: .alert)
+                erroralert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(erroralert, animated: true)
+            }
         }
     }
     
     func checkCode(code: String){
         if code == self.thisRestaurant.loyalty.loyaltyCode{
             self.loyaltyRedemptions = self.loyaltyRedemptions + 1
+            self.redemptionTime = Date().timeIntervalSince1970
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
             let followRef = Database.database().reference().child("Restaurants").child(self.rID!).child("Followers").child(uID!)
             followRef.setValue(status.subscriptionStatus.userId)
             OneSignal.sendTags([(self.rID)! : "true"])
-            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": self.loyaltyRedemptions])
+            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
             self.followString = "Following"
             self.restaurantTable.reloadData()
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
@@ -385,12 +403,15 @@ class aboutCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var show: UILabel!
     @IBOutlet weak var borderView: UIView!
+    @IBOutlet weak var address: UILabel!
+    @IBOutlet weak var todayHours: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         if let view = self.borderView{
             view.borders(for: [.top,.bottom], width: 1.0, color: UIColor.lightGray)
             view.layer.cornerRadius = 10
+            label.borders(for: [.top], width: 1.0, color: UIColor.lightText)
         }
     }
 }
@@ -417,10 +438,30 @@ class loyaltyCell: UITableViewCell {
     
     @IBOutlet weak var checkin: UIButton!
     @IBOutlet weak var loyaltyLabel: UILabel!
+    var isAnimating = false
     
     @IBOutlet weak var marker: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+    }
+    
+    func animate(){
+        let pulse = CASpringAnimation(keyPath: "transform.scale")
+        pulse.duration = 0.3
+        pulse.fromValue = 0.95
+        pulse.toValue = 1.0
+        pulse.autoreverses = true
+        pulse.repeatCount = 10000
+        pulse.initialVelocity = 0.5
+        pulse.damping = 1.0
+        self.checkin.layer.add(pulse, forKey: "pulse")
+        isAnimating = true
+
+    }
+    func stopAnimate(){
+        self.checkin.layer.removeAnimation(forKey: "pulse")
+        isAnimating = false
     }
 }
 
@@ -439,11 +480,16 @@ class buttonCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        
     }
     
     @IBAction func openMenu(_ sender: Any) {
         menuButton.isEnabled = false
-        UIApplication.shared.open(URL(string: menu)!, options: [:], completionHandler: nil)
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(URL(string: menu)!, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(URL(string: menu)!)
+        }
         menuButton.isEnabled = true
     }
     
@@ -453,7 +499,11 @@ class buttonCell: UITableViewCell {
         let finalUrl = baseUrl + encodedName
         if let url = URL(string: finalUrl)
         {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                 UIApplication.shared.openURL(url)
+            }
         }
     }
 
@@ -620,11 +670,11 @@ class CollectionTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        if traitCollection.forceTouchCapability == .available {
-          //  registerForPreviewing(with: self, sourceView: collectionView)
-        } else {
-            print("3D Touch Not Available")
-        }
+//        if traitCollection.forceTouchCapability == .available {
+//          //  registerForPreviewing(with: self, sourceView: collectionView)
+//        } else {
+//            print("3D Touch Not Available")
+//        }
         
     }
 
@@ -698,8 +748,14 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
             let start = Date(timeIntervalSince1970: deal.startTime!)
             let end = Date(timeIntervalSince1970: deal.endTime!)
             let current = Date()
-            let interval  =  DateInterval(start: start as Date, end: end as Date)
-            if (interval.contains(current)){
+            var isInInterval = false
+            if #available(iOS 10.0, *) {
+                let interval  =  DateInterval(start: start as Date, end: end as Date)
+                isInInterval = interval.contains(current)
+            } else {
+                isInInterval = current.timeIntervalSince1970 > start.timeIntervalSince1970 && current.timeIntervalSince1970 < end.timeIntervalSince1970
+            }
+            if (isInInterval){
                 let cal = Calendar.current
                 let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
                 var leftTime = ""
@@ -828,11 +884,28 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
-
+        var gotDevice = false
+        var captureDevice: AVCaptureDevice!
         // Get the back-facing camera for capturing videos
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
-        
-        guard let captureDevice = deviceDiscoverySession.devices.first else {
+        if #available(iOS 10.0, *) {
+            let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
+            if let temp = deviceDiscoverySession.devices.first{
+                captureDevice = temp
+                gotDevice = true
+            }
+        } else {
+            let devices: NSArray = AVCaptureDevice.devices() as NSArray;
+            for de in devices {
+                let deviceConverted = de as! AVCaptureDevice
+                if(deviceConverted.position == .back){
+                    captureDevice = deviceConverted
+                    gotDevice = true
+                    break
+                }
+            }
+        }
+
+        if !gotDevice{
             let label = UILabel()
             label.textColor = UIColor.black
             label.text = "Failed to get camera!"
@@ -932,6 +1005,10 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
     }
     
 }
-
+extension Date {
+    func dayNumberOfWeek() -> Int? {
+        return Calendar.current.dateComponents([.weekday], from: self).weekday
+    }
+}
 
 

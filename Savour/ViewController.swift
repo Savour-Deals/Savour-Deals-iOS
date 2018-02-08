@@ -12,6 +12,8 @@ import FirebaseStorage
 import SDWebImage
 import FirebaseStorageUI
 import FirebaseAuth
+import CoreLocation
+
 
 
 
@@ -24,11 +26,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var storage: Storage!
     var ref: DatabaseReference!
     var hasRefreshed = false
-//    var alreadyGoing = false
     var statusBar: UIView!
     var count = 0
     let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
     var deals = Deals()
+    var showedNotiDeal = false
+    var locationManager: CLLocationManager!
+    var userLocation: CLLocation!
 
     
     @IBOutlet weak var buttonsView: UIView!
@@ -49,7 +53,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let user = Auth.auth().currentUser
+        if user == nil {
+            // No user is signed in.
+            self.performSegue(withIdentifier: "Onboarding", sender: self)
+        }
+        //setLocation()
         loading.startAnimating()
+        locationManager = CLLocationManager()
+        requestLocationAccess()
         //alreadyGoing = false
         ref = Database.database().reference()
         ref.keepSynced(true)
@@ -69,9 +81,73 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
         setupSearchBar()
         self.setupUI()
-        self.DealsTable.dataSource = self
-        self.DealsTable.delegate = self
-
+    }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        //callback to know when the user accepts or denies location services
+        if status == CLAuthorizationStatus.denied {
+            locationDisabled()
+        } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
+            userLocation = CLLocation(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
+            locationEnabled()
+        }
+    }
+    
+    func requestLocationAccess() {
+        let status = CLLocationManager.authorizationStatus()
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            self.locationManager!.startUpdatingLocation()
+//            userLocation = CLLocation(latitude: locationManager.location!.coordinate.latitude, longitude: locationManager.location!.coordinate.longitude)
+            locationEnabled()
+        case .denied, .restricted:
+            locationDisabled()
+        default:
+            performSegue(withIdentifier: "promptSegue", sender: "home")
+        }
+    }
+    
+    func locationDisabled(){
+        self.searchBar.isHidden = true
+        DealsTable.isHidden = true
+        let label = UILabel()
+        label.textAlignment = NSTextAlignment.center
+        label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
+        label.text = "To use this feature, you must turn on location in:\n\n Settings -> Savour -> Location"
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.numberOfLines = 0
+        label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.tag = 100
+        self.view.addSubview(label)
+        var constraints = [NSLayoutConstraint]()
+        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
+        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
+        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
+        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
+        NSLayoutConstraint.activate(constraints)
+    }
+    
+    func locationEnabled(){
+        DispatchQueue.main.async {
+            if let _ = self.view.viewWithTag(100){
+                self.view.viewWithTag(100)?.removeFromSuperview()
+            }
+            self.locationManager!.startUpdatingLocation()
+            self.userLocation = CLLocation(latitude: self.locationManager.location!.coordinate.latitude, longitude: self.locationManager.location!.coordinate.longitude)
+            self.searchBar.isHidden = false
+            //Filter by any buttons the user pressed.
+            var title = ""
+            for subview in self.buttonsView.subviews as [UIView] {
+                if let button = subview as? UIButton {
+                    if button.backgroundColor == UIColor.white{
+                        title = button.title(for: .normal)!
+                        break
+                    }
+                }
+            }
+            self.deals.getDeals(byLocation: self.userLocation, table: self.DealsTable, dealType: title)
+        }
     }
     
     func setupUI(){
@@ -121,17 +197,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
         
-        //Filter by any buttons the user pressed.
-        var title = ""
-        for subview in self.buttonsView.subviews as [UIView] {
-            if let button = subview as? UIButton {
-                if button.backgroundColor == UIColor.white{
-                    title = button.title(for: .normal)!
-                    break
-                }
-            }
+        searchBar.endEditing(true)
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        //dont call requestlocation or the user can get into a loop here
+        let status = CLLocationManager.authorizationStatus()
+        if status == CLAuthorizationStatus.denied {
+            locationDisabled()
+        } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
+            locationEnabled()
         }
-        deals.getDeals(table: self.DealsTable, dealType: title)
     }
     
     
@@ -167,7 +242,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // [START remove_auth_listener]
-        Auth.auth().removeStateDidChangeListener(handle!)
+        //Auth.auth().removeStateDidChangeListener(handle!)
         // [END remove_auth_listener]
     }
     
@@ -183,15 +258,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
         }
-        deals.getDeals(table: self.DealsTable, dealType: title)
+        deals.getDeals(byLocation: userLocation, table: self.DealsTable, dealType: title)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //check if user clicked a notification and segue if they did
-        if !hasRefreshed{
+        if !showedNotiDeal{
             //If a user clicked a deal notification, segue to that deal
             if let notiDeal = deals.getNotificationDeal(dealID: notificationDeal){
                 self.dealDetails(deal: notiDeal)
+                showedNotiDeal = true
             }
         }
         //take care of any loading animations
@@ -201,6 +277,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
         loading.stopAnimating()
+        if deals.filteredDeals.isEmpty{
+            DealsTable.isHidden = true
+            //noDeals.isHidden = false
+        }else{
+            DealsTable.isHidden = false
+            noDeals.isHidden = true
+            loading.stopAnimating()
+        }
         return deals.filteredDeals.count
     }
     
@@ -250,45 +334,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else{
             cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
-            
-
-            let start = Date(timeIntervalSince1970: deal.startTime!)
-            let end = Date(timeIntervalSince1970: deal.endTime!)
-            let current = Date()
-            let interval  =  DateInterval(start: start as Date, end: end as Date)
-            cell.validHours.text = ""
-            if (interval.contains(current)){
-                let cal = Calendar.current
-                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
-                if (current > end){
-                    cell.Countdown.text = "Deal Ended"
-                }
-                else if (current<start){
-                    var startingTime = " "
-                    if Components.day! != 0{
-                        startingTime = startingTime + String(describing: Components.day!) + " days"
-                    }
-                    else if Components.hour! != 0{
-                        startingTime = startingTime + String(describing: Components.hour!) + "hours"
-                    }else{
-                        startingTime = startingTime + String(describing: Components.minute!) + "minutes"
-                    }
-                    cell.Countdown.text = "Starts in " + startingTime
-                }
-                else {
-                    var leftTime = ""
-                    if Components.day! != 0{
-                        leftTime = leftTime + String(describing: Components.day!) + " days left"
-                    }
-                    else if Components.hour! != 0{
-                        leftTime = leftTime + String(describing: Components.hour!) + "hours left"
-                    }else{
-                        leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
-                    }
-                    cell.Countdown.text = leftTime
-                }
-                cell.validHours.text = deal.validHours
-            }
+            cell.Countdown.text = deal.countdown
+            cell.validHours.text = deal.validHours
         }
         cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
         cell.tagImg.tintColor = cell.Countdown.textColor
@@ -298,18 +345,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
     }
     
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if velocity.y>0{
-            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
-                self.navigationController?.setNavigationBarHidden(true, animated: true)
-            }, completion: nil)
-        }
-        else{
-            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
-            }, completion: nil)
-        }
-    }
+//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        if velocity.y>0{
+//            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+//                self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            }, completion: nil)
+//        }
+//        else{
+//            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+//                self.navigationController?.setNavigationBarHidden(false, animated: true)
+//            }, completion: nil)
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         tableView.deselectRow(at: indexPath, animated: true)
@@ -351,6 +398,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 btn.setTitleColor(UIColor.white, for: UIControlState.normal)
             }
         }
+        searchBar.endEditing(true)
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
         button.backgroundColor = UIColor.white
         button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
         let Title = button.currentTitle
@@ -416,10 +466,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
     }
+    
+    func selectAllButton(){
+        for subview in self.buttonsView.subviews as [UIView] {
+            if let button = subview as? UIButton {
+                button.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                button.setTitleColor(UIColor.white, for: UIControlState.normal)
+                if button.title(for: .normal) == "All"{
+                    button.backgroundColor = UIColor.white
+                    button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
+                }
+            }
+        }
+    }
  
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = true
+        selectAllButton()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -23,6 +23,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     @IBOutlet weak var FavTable: UITableView!
     var ref: DatabaseReference!
     var statusBar: UIView!
+    var count = 0
+    let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -61,12 +63,17 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             FavTable.isHidden = false
             emptyView.isHidden = true
         }
-        return favorites.favoriteDeals.count //deals.filteredDeals.count
+        return favorites.favoriteDeals.count 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
         cell.deal = favorites.favoriteDeals[indexPath.row]
+        cell.tempImg.image = UIImage(named: placeholderImgs[count])
+        count = count + 1
+        if count > 2{
+            count = 0
+        }
         cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
         let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
         cell.likeButton.setImage(image, for: .normal)
@@ -98,8 +105,14 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             let start = Date(timeIntervalSince1970: cell.deal.startTime!)
             let end = Date(timeIntervalSince1970: cell.deal.endTime!)
             let current = Date()
-            let interval  =  DateInterval(start: start as Date, end: end as Date)
-            if (interval.contains(current)){
+            var isInInterval = false
+            if #available(iOS 10.0, *) {
+                let interval  =  DateInterval(start: start as Date, end: end as Date)
+                isInInterval = interval.contains(current)
+            } else {
+                isInInterval = current.timeIntervalSince1970 > start.timeIntervalSince1970 && current.timeIntervalSince1970 < end.timeIntervalSince1970
+            }
+            if (isInInterval){
                 let cal = Calendar.current
                 let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
                 if (current > end){
@@ -151,18 +164,18 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         }
     }
     
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if velocity.y>0{
-            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
-                self.navigationController?.setNavigationBarHidden(true, animated: true)
-            }, completion: nil)
-        }
-        else{
-            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
-                self.navigationController?.setNavigationBarHidden(false, animated: true)
-            }, completion: nil)
-        }
-    }
+//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+//        if velocity.y>0{
+//            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+//                self.navigationController?.setNavigationBarHidden(true, animated: true)
+//            }, completion: nil)
+//        }
+//        else{
+//            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+//                self.navigationController?.setNavigationBarHidden(false, animated: true)
+//            }, completion: nil)
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         //let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell

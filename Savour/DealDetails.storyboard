@@ -121,22 +121,22 @@ This promotion is for individual use only and shall be used for an individual's 
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="616"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hub-RY-SRs">
-                                        <rect key="frame" x="206.66666666666666" y="318" width="125.33333333333334" height="125"/>
+                                        <rect key="frame" x="206.66666666666663" y="318" width="113" height="112.66666666666669"/>
                                     </imageView>
                                     <imageView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-dk-vcz">
-                                        <rect key="frame" x="82" y="193" width="250" height="250"/>
+                                        <rect key="frame" x="94.666666666666686" y="205.66666666666663" width="225" height="225"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="qlh-dk-vcz" secondAttribute="height" multiplier="1:1" id="YdA-Bc-BzD"/>
-                                            <constraint firstAttribute="height" constant="250" id="dVo-2p-a67"/>
-                                            <constraint firstAttribute="width" constant="250" id="jy7-uf-PhI"/>
+                                            <constraint firstAttribute="height" constant="225" id="dVo-2p-a67"/>
+                                            <constraint firstAttribute="width" constant="225" id="jy7-uf-PhI"/>
                                         </constraints>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="zO5-ZJ-dfw" appends="YES" id="xol-Me-fKg"/>
                                         </connections>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="dPP-Jv-J2f">
-                                        <rect key="frame" x="10" y="183" width="394" height="0.0"/>
+                                        <rect key="frame" x="10" y="195.66666666666666" width="394" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="22"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -161,7 +161,7 @@ This promotion is for individual use only and shall be used for an individual's 
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="o7o-6Q-F0e">
-                                        <rect key="frame" x="10" y="173" width="394" height="0.0"/>
+                                        <rect key="frame" x="10" y="185.66666666666666" width="394" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
