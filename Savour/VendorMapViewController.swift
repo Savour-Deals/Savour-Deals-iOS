@@ -11,6 +11,7 @@ import MapKit
 import CoreLocation
 import FirebaseDatabase
 import FirebaseStorage
+import GeoFire
 
 fileprivate var restaurants = [restaurant]()
 
@@ -25,8 +26,6 @@ class VendorMapViewController: UIViewController{
     var ref: DatabaseReference!
     var locationManager: CLLocationManager!
     var distanceFilter = 50.0
-    var timer = Timer()
-    var safeReload = true
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -75,7 +74,7 @@ class VendorMapViewController: UIViewController{
         case .denied, .restricted:
             locationDisabled()
         default:
-            performSegue(withIdentifier: "promptSegue", sender: self)
+            performSegue(withIdentifier: "promptSegue", sender: "vendors")
         }
     }
     
@@ -107,20 +106,8 @@ class VendorMapViewController: UIViewController{
             }
             self.locationManager!.startUpdatingLocation()
             self.listVC.searchBar.isHidden = false
-            if self.safeReload{
-                self.safeReload = false
-                self.getRestaurants()
-                self.runTimer()
-            }
+            self.getRestaurants()
         }
-    }
-    
-    func runTimer(){
-        timer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: (#selector(self.timerInt)), userInfo: nil, repeats: false)
-    }
-    
-    @objc func timerInt(){
-        safeReload = true
     }
     
     func showList(){
@@ -164,46 +151,23 @@ class VendorMapViewController: UIViewController{
     }
     
     @objc func refreshData() {
-        if safeReload{
-            getRestaurants()
-            safeReload = false
-        }
+       getRestaurants()
     }
     
     func getRestaurants(){
-        let group = DispatchGroup()
+        let geofireRef = Database.database().reference().child("Restaurants_Location")
         ref = Database.database().reference().child("Restaurants")
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            restaurants.removeAll()
-            for entry in snapshot.children {
-                group.enter()
-                let snap = entry as! DataSnapshot
-                let temp = restaurant(snap: snap, ID: snap.key)
-                let geoCoder = CLGeocoder()
-                geoCoder.geocodeAddressString(temp.address!) { (placemarks, error) -> Void in
-                    if((error) != nil){
-                        print("Error", error ?? "")
+        let geoFire = GeoFire(firebaseRef: geofireRef)
+        geoFire.query(at: locationManager.location!, withRadius: 80.5).observe(.keyEntered, with: { (key: String!, location: CLLocation!) in //50 miles
+            self.ref.queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .value, with: { (snapshot) in
+                for child in snapshot.children{
+                    let snap = child as! DataSnapshot
+                    let temp = restaurant(snap: snap, ID: key, location: location, myLocation: self.locationManager.location!)
+                    if !restaurants.contains(where: { $0.restrauntID  == temp.restrauntID }){
+                        restaurants.append(temp)
                     }
-                    if let placemark = placemarks?.first {
-                        temp.coordinates = placemark.location!.coordinate
-                        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-                            let Location = CLLocation.init(latitude: (self.locationManager.location?.coordinate.latitude)!, longitude: (self.locationManager.location?.coordinate.longitude)!)
-                            temp.distanceMiles = (placemark.location?.distance(from: Location))!/1609.344
-                            if temp.distanceMiles! < self.distanceFilter{
-                                restaurants.append(temp)
-                            }
-                        }
-                        else{
-                            restaurants.append(temp)
-                        }
-                        restaurants.sort { CGFloat($0.distanceMiles!) < CGFloat($1.distanceMiles!) }
-                    }
-                    group.leave()
                 }
-                
-            }
-            group.notify(queue: DispatchQueue.main) {
-                if restaurants.count < 1 {
+                if restaurants.count < 0 {
                     let label = UILabel()
                     label.textAlignment = NSTextAlignment.center
                     label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
@@ -227,7 +191,7 @@ class VendorMapViewController: UIViewController{
                     self.listVC.listTable.reloadData()
                     self.mapVC.flag = 1
                 }
-            }
+            })
         })
     }
 }
@@ -264,7 +228,7 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func makeAnnotations(){
         self.mapView.removeAnnotations(self.mapView.annotations)
         for i in 0..<restaurants.count{
-            let annotation = restaurantAnnotation(title: restaurants[i].restrauntName!, coordinate: restaurants[i].coordinates!, rID: restaurants[i].restrauntID!)
+            let annotation = restaurantAnnotation(title: restaurants[i].restrauntName!, coordinate: (restaurants[i].location?.coordinate)!, rID: restaurants[i].restrauntID!)
             self.mapView.addAnnotation(annotation)
         }
         self.mapView.delegate = self
@@ -298,8 +262,7 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
-    func mapView(_ mapView: MKMapView, didUpdate
-        userLocation: MKUserLocation) {
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         if flag == 1{
             mapView.centerCoordinate = userLocation.location!.coordinate
             flag = 0
@@ -356,6 +319,9 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     }
     
     @objc private func refreshingData(_ sender: Any){
+        searchBar.endEditing(true)
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
             let parent = self.parent as! VendorMapViewController
             parent.refreshData()
@@ -495,9 +461,3 @@ class restaurantCell: UITableViewCell{
     }
 
 }
-
-
-
-
-
-

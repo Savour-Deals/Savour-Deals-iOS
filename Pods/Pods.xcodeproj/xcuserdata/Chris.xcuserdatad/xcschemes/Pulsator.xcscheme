@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "98542F143AAF87E06FB2383AB15DE431"
+               BlueprintIdentifier = "383F910A19414F60DEA384613CDA1A31"
                BuildableName = "Pulsator.framework"
                BlueprintName = "Pulsator"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "98542F143AAF87E06FB2383AB15DE431"
+            BlueprintIdentifier = "383F910A19414F60DEA384613CDA1A31"
             BuildableName = "Pulsator.framework"
             BlueprintName = "Pulsator"
             ReferencedContainer = "container:Pods.xcodeproj">

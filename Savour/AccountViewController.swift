@@ -126,7 +126,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             if !MFMailComposeViewController.canSendMail() {
                 let email = "info@savourdeals.com"
                 let url = URL(string: "mailto:\(email)")
-                UIApplication.shared.open(url!)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url!)
+                } else {
+                    UIApplication.shared.openURL(url!)
+                }
                 return
             }
             else{
@@ -211,6 +215,8 @@ class settingsViewController: UITableViewController{
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = UIColor.white
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getNotificationSettings(){ (settings) in
                 if settings.authorizationStatus == .authorized{
@@ -232,6 +238,7 @@ class settingsViewController: UITableViewController{
     func setupUI(){
         let isSubscribed = status.subscriptionStatus.subscribed
         notificationSwitch.isHidden = false
+        notificationDirections.isHidden = true
         if isSubscribed {
             notificationSwitch.isOn = true
         }else{
@@ -248,10 +255,30 @@ class settingsViewController: UITableViewController{
     
     @IBAction func notificationToggles(_ sender: Any) {
         if notificationSwitch.isOn{
-            OneSignal.setSubscription(true)
-            if !OSNotiSetting{
-                notificationDirections.isHidden = false
-                notificationSwitch.isHidden = true
+            if #available(iOS 10.0, *) {
+                let current = UNUserNotificationCenter.current()
+                OneSignal.setSubscription(true)
+                current.getNotificationSettings(completionHandler: { (settings) in
+                    if settings.authorizationStatus == .notDetermined || settings.authorizationStatus == .authorized{
+                        OneSignal.promptForPushNotifications(userResponse: { accepted in
+                            print("User accepted notifications: \(accepted)")
+                            if accepted == false{
+                                DispatchQueue.main.async {
+                                    self.notificationDirections.isHidden = false
+                                    self.notificationSwitch.isHidden = true
+                                }
+                            }
+                        })
+                    }
+                    if settings.authorizationStatus == .denied {
+                        DispatchQueue.main.async {
+                            self.notificationDirections.isHidden = false
+                            self.notificationSwitch.isHidden = true
+                        }
+                    }
+                })
+            } else {
+                OneSignal.setSubscription(true)
             }
         }else{
             OneSignal.setSubscription(false)

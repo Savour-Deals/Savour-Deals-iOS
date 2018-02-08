@@ -11,23 +11,68 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 import MapKit
+import GeoFire
 
 class Deals{
     private var unfilteredDeals = [DealData]()
     private let ref = Database.database().reference()
     private let userid = Auth.auth().currentUser?.uid
     var filteredDeals = [DealData]()
+    var favoriteIDs = Dictionary<String, String>()
     
+    func getDeals(byLocation location: CLLocation, table: UITableView, dealType: String? = "All"){
+        let geofireRef = Database.database().reference().child("Restaurants_Location")
+        let geoFire = GeoFire(firebaseRef: geofireRef)
+        let currentUnix = Date().timeIntervalSince1970
+       // let plusDay = currentUnix + 86400
+        let expiredUnix = currentUnix
+        ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
+            for entry in snapshot.children{
+                let snap = entry as! DataSnapshot
+                let value = snap.key
+                self.favoriteIDs[value] = value
+            }
+            geoFire.query(at: location, withRadius: 85).observe(.keyEntered, with: { (key: String!, location: CLLocation!) in //~50 miles
+                self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: key).observeSingleEvent(of: .value, with: { (snapshot) in
+                    for entry in snapshot.children {
+                        let snap = entry as! DataSnapshot
+                        let temp = DealData(snap: snap, ID: self.userid!)
+                        if !self.unfilteredDeals.contains(where: {$0.dealID  == temp.dealID }){
+                            //if the deal is not expired or redeemed less than half an hour ago, show it
+                            if temp.endTime! > expiredUnix && !temp.redeemed! && temp.valid{
+                                self.unfilteredDeals.append(temp)
+                            }else if let time = temp.redeemedTime{
+                                if (Date().timeIntervalSince1970 - time) < 1800{
+                                    self.unfilteredDeals.append(temp)
+                                }
+                            }
+                        }
+                        
+                    }
+                    for deal in self.unfilteredDeals{
+                        if let _ = self.favoriteIDs[deal.dealID!]{
+                            deal.fav = true
+                        }
+                    }
+                    self.filter(byTitle: dealType!)
+                    self.sortDeals()
+                    table.reloadData()
+                }){ (error) in
+                    print(error.localizedDescription)
+                }
+            })
+        })
+    }
+
     func getDeals(table: UITableView, dealType: String? = "All"){
         //Check if deal is favorited
-        var favoriteIDs = Dictionary<String, String>()
         let userid = Auth.auth().currentUser?.uid
         let ref = Database.database().reference()
         ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
             for entry in snapshot.children{
                 let snap = entry as! DataSnapshot
                 let value = snap.key
-                favoriteIDs[value] = value
+                self.favoriteIDs[value] = value
             }
             //once we have the favorites, we can get the deals
             self.unfilteredDeals.removeAll()
@@ -41,7 +86,7 @@ class Deals{
                     let snap = entry as! DataSnapshot
                     let temp = DealData(snap: snap, ID: userid!)
                     //if the deal is not expired or redeemed less than half an hour ago, show it
-                    if temp.endTime! > expiredUnix && !temp.redeemed!{
+                    if temp.endTime! > expiredUnix && !temp.redeemed! && temp.valid{
                         self.unfilteredDeals.append(temp)
                     }else if let time = temp.redeemedTime{
                         if (Date().timeIntervalSince1970 - time) < 1800{
@@ -50,7 +95,7 @@ class Deals{
                     }
                 }
                 for deal in self.unfilteredDeals{
-                    if let _ = favoriteIDs[deal.dealID!]{
+                    if let _ = self.favoriteIDs[deal.dealID!]{
                         deal.fav = true
                     }
                 }
@@ -66,14 +111,13 @@ class Deals{
     }
     
     func getDeals(forRestaurant restaurant: String, table: UITableView){
-        var favoriteIDs = Dictionary<String, Bool>()
         let userid = Auth.auth().currentUser?.uid
         let ref = Database.database().reference()
         ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
             for entry in snapshot.children{
                 let snap = entry as! DataSnapshot
                 let value = snap.key
-                favoriteIDs[value] = true
+                self.favoriteIDs[value] = value
             }
             self.unfilteredDeals.removeAll()
             let expiredUnix = Date().timeIntervalSince1970 - 24*60*60
@@ -82,7 +126,7 @@ class Deals{
                     let snap = entry as! DataSnapshot
                     let temp = DealData(snap: snap, ID: userid!)
                     //if the deal is not expired or redeemed less than half an hour ago, show it
-                    if temp.endTime! > expiredUnix && !temp.redeemed!{
+                    if temp.endTime! > expiredUnix && !temp.redeemed! && temp.valid{
                         self.unfilteredDeals.append(temp)
                     }else if let time = temp.redeemedTime{
                         if (Date().timeIntervalSince1970 - time) < 1800{
@@ -91,7 +135,7 @@ class Deals{
                     }
                 }
                 for deal in self.unfilteredDeals{
-                    if let _ = favoriteIDs[deal.dealID!]{
+                    if let _ = self.favoriteIDs[deal.dealID!]{
                         deal.fav = true
                     }
                 }
@@ -231,6 +275,8 @@ class DealData{
     var dealDescription: String?
     var startTime: Double?
     var endTime: Double?
+    var startDay: Double?
+    var endDay: Double?
     var likes: Int?
     var dealID: String?
     var fav: Bool?
@@ -240,6 +286,7 @@ class DealData{
     var dealCode: String?
     var validHours: String?
     var valid: Bool
+    var countdown: String?
 
     
     
@@ -252,6 +299,8 @@ class DealData{
             self.restrauntPhoto = ""
             self.endTime = 0
             self.startTime = 0
+            self.endDay = 0
+            self.startDay = 0
             self.dealType = ""
             self.dealID = ""
             self.fav = false
@@ -275,6 +324,8 @@ class DealData{
             self.restrauntPhoto = value["rPhotoLoc"] as? String ?? ""
             self.endTime = value["EndTime"] as? Double
             self.startTime = value["StartTime"] as? Double
+            self.endDay = value["EndDay"] as? Double
+            self.startDay = value["StartDay"] as? Double
             self.dealType = value["Filter"] as? String ?? ""
             self.dealID = snap?.key
             self.dealCode = value["code"] as? String ?? ""
@@ -290,29 +341,59 @@ class DealData{
                 self.redeemed = false
                 self.redeemedTime = 0
             }
-            let startD = Date(timeIntervalSince1970: self.startTime!)
-            let endD = Date(timeIntervalSince1970: self.endTime!)
+            let start = Date(timeIntervalSince1970: self.startTime!)
+            let end = Date(timeIntervalSince1970: self.endTime!)
             let calendar = Calendar.current
-            let startTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: startD), minute: calendar.component(.minute, from: startD))
-            let endTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: endD), minute: calendar.component(.minute, from: endD))
+            let startTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: start), minute: calendar.component(.minute, from: start))
+            let endTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: end), minute: calendar.component(.minute, from: end))
             let formatter = DateFormatter()
             formatter.locale = Locale(identifier: "en_US_POSIX")
             formatter.dateFormat = "h:mm a"
             formatter.amSymbol = "AM"
             formatter.pmSymbol = "PM"
             let now = Date()
-            let startOfToday = calendar.startOfDay(for: now)
+            let nowHour = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: now))
+            var startOfToday: Date!
+            if nowHour.hour! < 5{//To solve problem with checking for deals after midnight... might have better way
+                startOfToday = calendar.startOfDay(for: calendar.date(byAdding: .day, value: -1, to: now)!)
+            }else{
+                startOfToday = calendar.startOfDay(for: now)
+            }
             let startTime    = calendar.date(byAdding: startTimeComponent, to: startOfToday)!
-            let endTime      = calendar.date(byAdding: endTimeComponent, to: startOfToday)!
+            var endTime      = calendar.date(byAdding: endTimeComponent, to: startOfToday)!
+            if startTime > endTime {
+                //Deal goes past midnight (might be typical of bar's drink deals)
+                endTime = calendar.date(byAdding: .day, value: 1, to: endTime)!
+            }
             if now > startTime && now < endTime{
                 self.validHours = "Valid until " + formatter.string(from: endTime)
                 self.valid = true
-            }
-            else{
+            }else{
                 self.validHours = "Valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
                 self.valid = false
             }
-            
+            var isInInterval = false
+            if #available(iOS 10.0, *) {
+                let interval  =  DateInterval(start: start as Date, end: end as Date)
+                isInInterval = interval.contains(now)
+            } else {
+                isInInterval = now.timeIntervalSince1970 > start.timeIntervalSince1970 && now.timeIntervalSince1970 < end.timeIntervalSince1970
+            }
+            if (isInInterval){
+                let Components = calendar.dateComponents([.day, .hour, .minute], from: now, to: end)
+                if (now < end && now > start){
+                    var leftTime = ""
+                    if Components.day! != 0{
+                        leftTime = leftTime + String(describing: Components.day!) + " days left"
+                    }
+                    else if Components.hour! != 0{
+                        leftTime = leftTime + String(describing: Components.hour!) + "hours left"
+                    }else{
+                        leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
+                    }
+                    self.countdown = leftTime
+                }
+            }
             //favorites are set during the firebase calls
             self.fav = false
         }
@@ -325,11 +406,12 @@ class restaurant{
     var restrauntPhoto: String?
     var description: String?
     var address: String?
-    var coordinates: CLLocationCoordinate2D?
+    var location: CLLocation?
     var distanceMiles: Double?
     var menu: String?
     var followers: Int?
     var hoursArray = [String]()
+    var dailyHours = [String]()
     var Deals = [DealData]()
     struct loyaltyStruct{
         var loyaltyCode: String
@@ -343,7 +425,7 @@ class restaurant{
         }
     }
     var loyalty: loyaltyStruct
-    init(snap: DataSnapshot? = nil, ID: String) {
+    init(snap: DataSnapshot? = nil, ID: String, location: CLLocation? = nil, myLocation: CLLocation? = nil) {
         let value = snap?.value as! NSDictionary
         self.restrauntID = ID
         self.restrauntName = value["Name"] as? String ?? ""
@@ -352,7 +434,10 @@ class restaurant{
         self.address = value["Address"] as? String ?? ""
         self.menu = value["Menu"] as? String ?? ""
         self.restrauntPhoto = value["Photo"] as? String ?? ""
-        
+        if location != nil{
+            self.location = location
+            self.distanceMiles = (location?.distance(from: myLocation!))!/1609
+        }
         if (snap?.childSnapshot(forPath: "HappyHours").childrenCount)! > 0 {
             let hoursSnapshot = snap?.childSnapshot(forPath: "HappyHours").value as? NSDictionary
             self.hoursArray.append(hoursSnapshot?["Mon"] as? String ?? "No Happy Hour")
@@ -362,6 +447,16 @@ class restaurant{
             self.hoursArray.append(hoursSnapshot?["Fri"] as? String ?? "No Happy Hour")
             self.hoursArray.append(hoursSnapshot?["Sat"] as? String ?? "No Happy Hour")
             self.hoursArray.append(hoursSnapshot?["Sun"] as? String ?? "No Happy Hour")
+        }
+        if (snap?.childSnapshot(forPath: "DailyHours").childrenCount)! > 0 {
+            let hoursSnapshot = snap?.childSnapshot(forPath: "DailyHours").value as? NSDictionary
+            self.dailyHours.append(hoursSnapshot?["Sun"] as? String ?? "")
+            self.dailyHours.append(hoursSnapshot?["Mon"] as? String ?? "")
+            self.dailyHours.append(hoursSnapshot?["Tues"] as? String ?? "")
+            self.dailyHours.append(hoursSnapshot?["Wed"] as? String ?? "")
+            self.dailyHours.append(hoursSnapshot?["Thurs"] as? String ?? "")
+            self.dailyHours.append(hoursSnapshot?["Fri"] as? String ?? "")
+            self.dailyHours.append(hoursSnapshot?["Sat"] as? String ?? "")
         }
         if (snap?.childSnapshot(forPath: "loyalty").exists())!{
             let loyaltySnapshot = snap?.childSnapshot(forPath: "loyalty").value as? NSDictionary
@@ -373,3 +468,64 @@ class restaurant{
     }
     
 }
+
+
+func getRestaurants(byLocation location: CLLocation){
+    
+}
+
+
+
+
+
+
+
+
+
+
+//class addresseClass{
+//    var address: String?
+//    var ID: String?
+//    init(add: String = "", id: String = ""){
+//        self.address = add
+//        self.ID = id
+//    }
+//}
+//var addresses = [addresseClass]()
+//var geocoder = CLGeocoder()  //Configure the geocoder as needed.
+//
+//
+//
+//func setLocation(){
+//
+//    let ref = Database.database().reference()
+//    ref.child("Restaurants").observeSingleEvent(of: .value, with: { (snapshot) in
+//        for entry in snapshot.children{
+//            let snap = entry as! DataSnapshot
+//            let value = snap.key
+//            let data = snap.value as! NSDictionary
+//            let temp = addresseClass.init(add: data["Address"] as? String ?? "", id: value)
+//            addresses.append(temp)
+//        }
+//        doGeoCoding()
+//    })
+//
+//}
+//func doGeoCoding(){
+//    let geofireRef = Database.database().reference().child("Restaurants_Location")
+//    let geoFire = GeoFire(firebaseRef: geofireRef)
+//    if addresses.count > 0{
+//        let temp = addresses.popLast()
+//        geocoder.geocodeAddressString((temp?.address!)!) { (placemarks, error) -> Void in
+//            if((error) != nil){
+//                print("Error", error ?? "")
+//            }
+//            if let placemark = placemarks?.first {
+//                let Location = placemark.location
+//                geoFire.setLocation(Location!, forKey: (temp?.ID!)!)
+//            }
+//            doGeoCoding()
+//        }
+//    }
+//}
+

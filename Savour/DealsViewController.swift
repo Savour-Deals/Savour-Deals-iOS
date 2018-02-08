@@ -140,8 +140,14 @@ class DealsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let start = Date(timeIntervalSince1970: cell.deal.startTime!)
             let end = Date(timeIntervalSince1970: cell.deal.endTime!)
             let current = Date()
-            let interval  =  DateInterval(start: start as Date, end: end as Date)
-            if (interval.contains(current)){
+            var isInInterval = false
+            if #available(iOS 10.0, *) {
+                let interval  =  DateInterval(start: start as Date, end: end as Date)
+                isInInterval = interval.contains(current)
+            } else {
+                isInInterval = current.timeIntervalSince1970 > start.timeIntervalSince1970 && current.timeIntervalSince1970 < end.timeIntervalSince1970
+            }
+            if (isInInterval){
                 let cal = Calendar.current
                 let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
                 cell.Countdown.text =  "Time left: " + String(describing: Components.day!) + "d " + String(describing: Components.hour!) + "h " + String(describing: Components.minute!) + "m"
