@@ -68,6 +68,9 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
         imageView.frame = titleView.bounds
         titleView.addSubview(imageView)
+        if #available(iOS 11.0, *) {
+            restaurantTable.contentInsetAdjustmentBehavior = .never
+        }
         self.navigationItem.titleView = titleView
         self.navigationItem.backBarButtonItem?.title = ""
     }
@@ -109,7 +112,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             }
             
             self.rName.text = self.thisRestaurant.restrauntName
-
+            
             if self.thisRestaurant.restrauntPhoto != ""{
                 // Reference to an image file in Firebase Storage
                 let storage = Storage.storage()
@@ -153,7 +156,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             }
         }else if indexPath.row == 3{
             if self.thisRestaurant.loyalty.loyaltyCount > 0{
-                return 128
+                return UITableViewAutomaticDimension
             }
             else{
                 return 0
@@ -258,26 +261,15 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                     cell.checkin.setTitle("Reedeem", for: .normal)
                     cell.loyaltyLabel.text = "You're ready to redeem your \(thisRestaurant.loyalty.loyaltyDeal)!"
                 }else{
-                    cell.loyaltyLabel.text = "Visit \(visitsLeft) more times for a \(thisRestaurant.loyalty.loyaltyDeal)!"
+                    cell.loyaltyLabel.text = "Today's check-in would earn you \(thisRestaurant.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]) points towards a \(thisRestaurant.loyalty.loyaltyDeal)!"
                     if cell.isAnimating{
                         cell.stopAnimate()
                     }
                 }
                 cell.checkin.addTarget(self, action: #selector(self.checkin(_:)), for: .touchUpInside)
-                var loyaltyMarks = ""
-                if loyaltyRedemptions > 0 {
-                    for _ in 1...loyaltyRedemptions{
-                        loyaltyMarks += "●    "
-                    }
-                }
-                if loyaltyRedemptions < thisRestaurant.loyalty.loyaltyCount{
-                    for _ in 1...visitsLeft{
-                        loyaltyMarks += "○    "
-                    }
-                }
+                cell.progressBar.progress = Float(loyaltyRedemptions)/Float(thisRestaurant.loyalty.loyaltyCount)
                 
-                let trimmedString = loyaltyMarks.trimmingCharacters(in: .whitespacesAndNewlines)
-                cell.marker.text = trimmedString
+                cell.marker.text = "\(loyaltyRedemptions!)/\(thisRestaurant.loyalty.loyaltyCount)"
             }else{
                 cell.checkin.isHidden = true
                 cell.loyaltyLabel.isHidden = true
@@ -332,19 +324,22 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             self.present(redeemAlert, animated: true)
 
         }else{
-            if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
+//            if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
                 performSegue(withIdentifier: "QRsegue", sender: self)
-            }else{
-                let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to get another loyalty visit!", preferredStyle: .alert)
-                erroralert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                self.present(erroralert, animated: true)
-            }
+//            }else{
+//                let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to get another loyalty visit!", preferredStyle: .alert)
+//                erroralert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+//                self.present(erroralert, animated: true)
+//            }
         }
     }
     
     func checkCode(code: String){
         if code == self.thisRestaurant.loyalty.loyaltyCode{
-            self.loyaltyRedemptions = self.loyaltyRedemptions + 1
+            self.loyaltyRedemptions = self.loyaltyRedemptions + self.thisRestaurant.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]
+            if self.loyaltyRedemptions > self.thisRestaurant.loyalty.loyaltyCount{
+                self.loyaltyRedemptions = self.thisRestaurant.loyalty.loyaltyCount
+            }
             self.redemptionTime = Date().timeIntervalSince1970
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
@@ -440,10 +435,13 @@ class loyaltyCell: UITableViewCell {
     @IBOutlet weak var loyaltyLabel: UILabel!
     var isAnimating = false
     
+    @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var marker: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        //progressBar.transform = progressBar.transform.scaledBy(x: 1, y: 20)
+        progressBar.layer.cornerRadius = progressBar.frame.height/2
+        progressBar.clipsToBounds = true
     }
     
     func animate(){
@@ -872,6 +870,7 @@ extension UIView {
 class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
    
     
+    @IBOutlet weak var textView: UILabel!
     @IBOutlet var topbar: UIView!
     
     var parentVC: RestaurantViewController?
@@ -955,7 +954,7 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         // Move the message label and top bar to the front
         //view.bringSubview(toFront: messageLabel)
         view.bringSubview(toFront: topbar)
-        
+        view.bringSubview(toFront: textView)
         // Initialize QR Code Frame to highlight the QR code
         qrCodeFrameView = UIView()
         

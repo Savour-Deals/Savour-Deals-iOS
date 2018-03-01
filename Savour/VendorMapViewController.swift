@@ -158,6 +158,7 @@ class VendorMapViewController: UIViewController{
         let geofireRef = Database.database().reference().child("Restaurants_Location")
         ref = Database.database().reference().child("Restaurants")
         let geoFire = GeoFire(firebaseRef: geofireRef)
+        restaurants.removeAll()
         geoFire.query(at: locationManager.location!, withRadius: 80.5).observe(.keyEntered, with: { (key: String!, location: CLLocation!) in //50 miles
             self.ref.queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .value, with: { (snapshot) in
                 for child in snapshot.children{
@@ -184,12 +185,20 @@ class VendorMapViewController: UIViewController{
                     constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
                     constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
                     NSLayoutConstraint.activate(constraints)
+                    
                 }else if restaurants.count > 0{
                     self.listView.viewWithTag(100)?.removeFromSuperview()
                     self.mapVC.makeAnnotations()
                     self.listVC.delegateTable()
                     self.listVC.listTable.reloadData()
                     self.mapVC.flag = 1
+                    restaurants.sort(by: { (r1, r2) -> Bool in
+                        if r1.distanceMiles! < r2.distanceMiles!{
+                            return true
+                        }else{
+                            return false
+                        }
+                    })
                 }
             })
         })
@@ -203,6 +212,7 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var locationManager: CLLocationManager!
     var flag = 1
     
+    @IBOutlet weak var center: UIButton!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -210,6 +220,15 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        center.layer.cornerRadius = center.frame.height/2
+        let image = center.imageView?.image!.withRenderingMode(.alwaysTemplate)
+        center.tintColor = UIColor.white
+        center.imageView?.tintColor = UIColor.white
+        center.setImage(image, for: UIControlState.normal)
+        center.layer.shadowRadius = 2
+        center.layer.shadowOpacity = 0.5
+        center.layer.shadowOffset = CGSize(width: 6, height: 6)
+
         locationManager = CLLocationManager()
         locationManager!.delegate = self
         
@@ -223,6 +242,10 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
             mapView.showsUserLocation = true
         }
+    }
+    @IBAction func centerMap(_ sender: Any) {
+        let viewRegion = MKCoordinateRegionMakeWithDistance((locationManager.location?.coordinate)!, 1000, 1000)
+        mapView.setRegion(viewRegion, animated: true)
     }
     
     func makeAnnotations(){

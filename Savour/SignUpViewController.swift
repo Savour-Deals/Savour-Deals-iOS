@@ -48,6 +48,8 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
             ref = Database.database().reference()
             FBSDKLoginManager().logOut()
             fbButton.delegate = self
+            fbButton.readPermissions = ["public_profile", "email", "user_friends"]
+
         }
         SignupButton.addTarget(self, action: #selector(SignupPressed), for: .touchUpInside)
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
@@ -66,6 +68,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
         EmailField.layer.borderWidth = 2
         SignupButton.layer.borderColor = UIColor.white.cgColor
         SignupButton.layer.borderWidth = 2
+        
         PasswordField.layer.borderColor = UIColor.white.cgColor
         PasswordField.layer.borderWidth = 2
         NameField.textColor = UIColor.white
@@ -216,6 +219,13 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                     data = result as! [String : AnyObject]
                     let name = data["name"] as! String
                     let id = data["id"] as! String
+                    let email = data["email"] as! String
+                    user?.updateEmail(to: email, completion: { (error) in
+                        if ((error) != nil)
+                        {
+                            print("Error: \(String(describing: error))")
+                        }
+                    })
                     self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
                     self.ref.child("Users").child(user!.uid).child("FacebookID").setValue(id)
                     
@@ -246,6 +256,9 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                 }
             })
         }
+    }
+    @IBAction func toLogin(_ sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     

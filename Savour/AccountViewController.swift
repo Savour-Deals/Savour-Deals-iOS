@@ -13,6 +13,7 @@ import MessageUI
 import AcknowList
 import OneSignal
 import UserNotifications
+import FBSDKCoreKit
 
 
 
@@ -102,6 +103,32 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             cell1.selectionStyle = UITableViewCellSelectionStyle.none
 
             return cell1
+        }else if indexPath.row == 1{
+            cell = tableView.dequeueReusableCell(withIdentifier: "seperate", for: indexPath)
+
+            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"friends"])
+            
+            graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+                
+                if ((error) != nil)
+                {
+                    print("Error: \(String(describing: error))")
+                }
+                else
+                {
+                    
+                    var data = result as! [String : AnyObject]
+                    data = data["friends"] as! [String : AnyObject]
+                    let friends = data["data"] as! NSArray
+                    if friends.count > 0{
+                        print(friends)
+                    }else{
+                        print("no friends sorry")
+                    }
+                }
+            })
+            cell.selectionStyle = UITableViewCellSelectionStyle.none
+
         }
         else if indexPath.row == 2 {
              cell = tableView.dequeueReusableCell(withIdentifier: "Contact", for: indexPath)
@@ -112,10 +139,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         else if indexPath.row == 4{
             cell = tableView.dequeueReusableCell(withIdentifier: "acknowledgements", for: indexPath)
         }
-        else{
-            cell = tableView.dequeueReusableCell(withIdentifier: "seperate", for: indexPath)
-            cell.selectionStyle = UITableViewCellSelectionStyle.none
-        }
+        
         return cell
     }
     

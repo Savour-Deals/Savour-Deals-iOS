@@ -16,4 +16,6 @@ var signalID = ""
 var notificationDeal = ""
 
 
-
+class restaurantCollecton {
+    var items = [restaurant]()
+}

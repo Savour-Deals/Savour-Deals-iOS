@@ -33,14 +33,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var showedNotiDeal = false
     var locationManager: CLLocationManager!
     var userLocation: CLLocation!
-
     
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var scrollFilter: UIScrollView!
     @IBOutlet weak var noDeals: UILabel!
     private let refreshControl = UIRefreshControl()
 
-    
     @IBOutlet weak var DealsTable: UITableView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -53,16 +51,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //setLocation()
         let user = Auth.auth().currentUser
         if user == nil {
             // No user is signed in.
             self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
-        //setLocation()
         loading.startAnimating()
         locationManager = CLLocationManager()
         requestLocationAccess()
-        //alreadyGoing = false
         ref = Database.database().reference()
         ref.keepSynced(true)
         //Check if forcetouch is available
@@ -98,7 +95,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
             self.locationManager!.startUpdatingLocation()
-//            userLocation = CLLocation(latitude: locationManager.location!.coordinate.latitude, longitude: locationManager.location!.coordinate.longitude)
             locationEnabled()
         case .denied, .restricted:
             locationDisabled()
@@ -239,13 +235,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // [START remove_auth_listener]
-        //Auth.auth().removeStateDidChangeListener(handle!)
-        // [END remove_auth_listener]
-    }
-    
     @objc private func refreshData(_ sender: Any) {
         // Fetch Data
         hasRefreshed = true
@@ -279,7 +268,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         loading.stopAnimating()
         if deals.filteredDeals.isEmpty{
             DealsTable.isHidden = true
-            //noDeals.isHidden = false
         }else{
             DealsTable.isHidden = false
             noDeals.isHidden = true
@@ -495,6 +483,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             VC.fromDetails = false
             VC.photo = VC.Deal?.restrauntPhoto
             VC.from = "deals"
+        }else if segue.identifier == "promptSegue"{
+            let VC = segue.destination as! LocationViewController
+            VC.sender = "home"
         }
     }
 }
