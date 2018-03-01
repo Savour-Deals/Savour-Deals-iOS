@@ -27,7 +27,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     var keyboardShowing = false
     @IBOutlet weak var LoginLabel: UILabel!
     @IBOutlet weak var LoginView: UIView!
-    
+    @IBOutlet weak var forgotPasswordbutton: UIButton!
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -48,6 +49,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             ref = Database.database().reference()
             FBSDKLoginManager().logOut()
             FBLoginButton.delegate = self
+            FBLoginButton.readPermissions = ["public_profile", "email", "user_friends"]
             NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         }
@@ -108,9 +110,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 break
             }
         }
-    }
-    @IBAction func toSignup(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
     }
     
     func isLoggingin(){
@@ -232,6 +231,13 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     data = result as! [String : AnyObject]
                     let name = data["name"] as! String
                     let id = data["id"] as! String
+                    let email = data["email"] as! String
+                    user?.updateEmail(to: email, completion: { (error) in
+                        if ((error) != nil)
+                        {
+                            print("Error: \(String(describing: error))")
+                        }
+                    })
                     self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
                     self.ref.child("Users").child(user!.uid).child("FacebookID").setValue(id)
 
@@ -261,6 +267,34 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     })
                 }
             })
+        }
+    }
+    @IBAction func sendResetEmail(_ sender: Any) {
+        if LoginEmail.text == ""{
+            let alert = UIAlertController(title: "Alert", message: "Please enter your email in the field below.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }else{
+            let email = LoginEmail.text!
+            Auth.auth().fetchProviders(forEmail: email, completion: { (provider, error) in
+                if provider == nil{
+                    let alert = UIAlertController(title: "Alert", message: "Account with the provided email was not found.", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }else if (provider?.contains("password"))!{
+                    Auth.auth().sendPasswordReset(withEmail: email) { (error) in
+                        let alert = UIAlertController(title: "Success!", message: "An email has been sent to \(email) to reset your password.", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }else{
+                    //Change this if we ever add more authentication services
+                    let alert = UIAlertController(title: "Alert", message: "Account was created using Facebook. Reset your password there and try again.", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+            
         }
     }
                 

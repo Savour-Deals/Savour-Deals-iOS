@@ -10,83 +10,87 @@ import UIKit
 import Firebase
 import FBSDKCoreKit
 import OneSignal
-
-
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
-
     var handle: AuthStateDidChangeListenerHandle?
-
     var window: UIWindow?
     var ref: DatabaseReference!
-
-
+    var locationManager: CLLocationManager?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        let notificationOpenedBlock: OSHandleNotificationActionBlock = { result in
-            let payload: OSNotificationPayload = result!.notification.payload
-            
-            print("Payload contains all of properties in notif is : " , payload)
-            print("Payload additionalData : " , payload.additionalData)
-            let dict = payload.additionalData! as! Dictionary<String, String>
-            notificationDeal = dict["deal"]!
-        }
-        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
-        
-        // Replace 'YOUR_APP_ID' with your OneSignal App ID.
-        OneSignal.initWithLaunchOptions(launchOptions,
-                                        appId: "f1c64902-ab03-4674-95e9-440f7c8f33d0",
-                                        handleNotificationAction: notificationOpenedBlock,
-                                        settings: onesignalInitSettings)
-        
-        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-        OneSignal.add(self as OSSubscriptionObserver)
-
-        
-        
-        
-        // Sync hashed email if you have a login system or collect it.
-        //   Will be used to reach the user at the most optimal time of day.
-        // OneSignal.syncHashedEmail(userEmail)
         FirebaseApp.configure()
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        //Database.database().isPersistenceEnabled = true
-        UINavigationBar.appearance().barStyle = .blackOpaque
-
-        //Setup Searchbar UI
-        UISearchBar.appearance().barTintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        //UISearchBar.appearance().tintColor = .white
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
-        if Auth.auth().currentUser != nil {
-            // User is signed in.
-            let user = Auth.auth().currentUser
-            self.ref = Database.database().reference()
-            self.ref.child("Users").child((user?.uid)!).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
-                // Get user value
-                let type = snapshot.value as? String ?? ""
-                if type == "Vendor"{
-                    let storyboard = UIStoryboard(name: "VendorHome", bundle: nil)
-                    let VenVC = storyboard.instantiateViewController(withIdentifier: "VenNav") as! UINavigationController
-                    self.window!.rootViewController = VenVC
-                }
-                else{
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
-                    tabVC.selectedIndex = 0
-                    self.window!.rootViewController = tabVC
-                }
-            })
-        
+        self.locationManager = CLLocationManager()
+        self.locationManager!.delegate = self
+        if launchOptions?[UIApplicationLaunchOptionsKey.location] != nil {
+            self.locationManager = CLLocationManager()
+            self.locationManager?.delegate = self
+            
+        } else {
+            
+            self.locationManager = CLLocationManager()
+            self.locationManager!.delegate = self    
+            
+            
+            let notificationOpenedBlock: OSHandleNotificationActionBlock = { result in
+                let payload: OSNotificationPayload = result!.notification.payload
+                print("Payload contains all of properties in notif is : " , payload)
+                print("Payload additionalData : " , payload.additionalData)
+                let dict = payload.additionalData! as! Dictionary<String, String>
+                notificationDeal = dict["deal"]!
+            }
+            let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+            
+            // Replace 'YOUR_APP_ID' with your OneSignal App ID.
+            OneSignal.initWithLaunchOptions(launchOptions,
+                                            appId: "f1c64902-ab03-4674-95e9-440f7c8f33d0",
+                                            handleNotificationAction: notificationOpenedBlock,
+                                            settings: onesignalInitSettings)
+            
+            OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+            OneSignal.add(self as OSSubscriptionObserver)
+            
+            // Sync hashed email if you have a login system or collect it.
+            //   Will be used to reach the user at the most optimal time of day.
+            // OneSignal.syncHashedEmail(userEmail)
+            FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+            UINavigationBar.appearance().barStyle = .blackOpaque
+            
+            //Setup Searchbar UI
+            UISearchBar.appearance().barTintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+            //UISearchBar.appearance().tintColor = .white
+            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+            handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
+            if Auth.auth().currentUser != nil {
+                // User is signed in.
+                let user = Auth.auth().currentUser
+                self.ref = Database.database().reference()
+                self.ref.child("Users").child((user?.uid)!).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
+                    // Get user value
+                    let type = snapshot.value as? String ?? ""
+                    if type == "Vendor"{
+                        let storyboard = UIStoryboard(name: "VendorHome", bundle: nil)
+                        let VenVC = storyboard.instantiateViewController(withIdentifier: "VenNav") as! UINavigationController
+                        self.window!.rootViewController = VenVC
+                    }
+                    else{
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
+                        tabVC.selectedIndex = 0
+                        self.window!.rootViewController = tabVC
+                    }
+                })
+                
+            }
+            else {
+                let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
+                let OnboardVC = storyboard.instantiateViewController(withIdentifier: "OnNav") as! UINavigationController
+                self.window!.rootViewController = OnboardVC
+                
+            }
+            UIApplication.shared.isStatusBarHidden = false
         }
-        else {
-            let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
-            let OnboardVC = storyboard.instantiateViewController(withIdentifier: "OnNav") as! UINavigationController
-            self.window!.rootViewController = OnboardVC
 
-        }
-        UIApplication.shared.isStatusBarHidden = false
         return true
     }
 
@@ -148,9 +152,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             print("Current playerId \(playerId)")
         }
     }
-    
-    
-
-
 }
+
+extension AppDelegate: CLLocationManagerDelegate {
+    // called when user Exits a monitored region
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        if region is CLCircularRegion {
+            // Do what you want if this information
+            self.handleEvent(forRegion: region)
+        }
+    }
+    
+    // called when user Enters a monitored region
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        if region is CLCircularRegion {
+            // Do what you want if this information
+            self.handleEvent(forRegion: region)
+            locationManager?.stopMonitoring(for: region)
+        }
+    }
+    
+    func handleEvent(forRegion region: CLRegion!) {
+        let localNotification = UILocalNotification()
+        localNotification.timeZone = NSTimeZone.local
+        localNotification.soundName = UILocalNotificationDefaultSoundName
+        localNotification.category = "Message"
+        self.ref.child("Restaurants").child(region.identifier).observeSingleEvent(of: .value, with: { (snapshot) in
+            let value = snapshot.value as! NSDictionary
+            let restrauntName = value["Name"] as? String ?? ""
+            localNotification.alertBody = "Make sure to check out the current deals we have for \(restrauntName)!"
+            if (snapshot.childSnapshot(forPath: "loyalty").exists()){
+                localNotification.alertBody = "\(localNotification.alertBody ?? "") Don't forget to check-in for loyalty points!"
+            }
+            localNotification.alertTitle = "Welcome to \(restrauntName)"
+            localNotification.fireDate = Date()
+            UIApplication.shared.scheduleLocalNotification(localNotification)
+        })
+    
+        
+    }
+}
+
 

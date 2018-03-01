@@ -39,7 +39,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>17</string>
+	<string>18</string>
 	<key>FacebookAppID</key>
 	<string>127494581197194</string>
 	<key>FacebookDisplayName</key>
@@ -60,6 +60,8 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>We need to use your camera for scanning QR codes.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Savour needs your location to find all the restaurants near you!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Savour needs your location to find all the restaurants near you!</string>
 	<key>NSPhotoLibraryUsageDescription</key>

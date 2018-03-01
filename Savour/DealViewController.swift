@@ -155,7 +155,7 @@ class DealViewController: UIViewController {
     }
     
     @IBAction func authenticatePressed(_ sender: Any) {
-            let alert = UIAlertController(title: "Cashier Approval", message: "This deal is valid for one person only. \n\nGive this message to the cashier to redeem your coupon. \n\nDiscount is not gaurenteed if the casheir does not see this message!", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Vendor Approval", message: "This deal is intended for one person only. \n\nShow this message to the vendor to redeem your coupon. \n\nThe deal is not guaranteed if the vendor does not see this message.", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (alert: UIAlertAction!) -> Void in
                 
             }

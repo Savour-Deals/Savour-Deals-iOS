@@ -22,16 +22,24 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in AccountViewController.tableView(_:cellForRowAt:):AccountViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "data">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "DealData.init(snap:ID:):Database.swift">
          <PersistentStrings>
             <PersistentString
-               value = "endTimeComponent.hour">
+               value = "nowHour.hour">
             </PersistentString>
             <PersistentString
                value = "restrauntName">
             </PersistentString>
             <PersistentString
-               value = "nowHour.hour">
+               value = "endTimeComponent.hour">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -178,7 +186,7 @@
                value = "self.navigationController">
             </PersistentString>
             <PersistentString
-               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
+               value = "self.buttonsView.subviews">
             </PersistentString>
             <PersistentString
                value = "button.backgroundColor">
@@ -193,10 +201,10 @@
                value = "UIColor.white">
             </PersistentString>
             <PersistentString
-               value = "snap.value">
+               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
             </PersistentString>
             <PersistentString
-               value = "self.buttonsView.subviews">
+               value = "snap.value">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -311,6 +319,12 @@
                value = "favorites">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in closure #1 in Deals.getDeals(byLocation:table:dealType:):Database.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in LoginViewController.sendResetEmail(_:):LoginViewController.swift">
       </ContextState>
       <ContextState
          contextName = "DetailsViewController.tableView(_:didSelectRowAt:):DetailsViewController.swift">
@@ -445,10 +459,10 @@
                value = "self.textBox.frame.height">
             </PersistentString>
             <PersistentString
-               value = "UIScreen.main.nativeBounds.height">
+               value = "textBox.frame.height">
             </PersistentString>
             <PersistentString
-               value = "textBox.frame.height">
+               value = "UIScreen.main.nativeBounds.height">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -494,10 +508,10 @@
          contextName = "specialized DealData.init(snap:ID:):Classes.swift">
          <PersistentStrings>
             <PersistentString
-               value = "value[&quot;redeemed&quot;] as? NSDictionary">
+               value = "redeemValue[ID]">
             </PersistentString>
             <PersistentString
-               value = "redeemValue[ID]">
+               value = "value[&quot;redeemed&quot;] as? NSDictionary">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -513,13 +527,13 @@
          contextName = "closure #1 in DealViewController.SetupUI():DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.img.frame.size.width/2">
+               value = "self.img.frame.size.height/2">
             </PersistentString>
             <PersistentString
                value = "self.img.frame.size.height">
             </PersistentString>
             <PersistentString
-               value = "self.img.frame.size.height/2">
+               value = "self.img.frame.size.width/2">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -568,18 +582,18 @@
          contextName = "FavoritesViewController.tableView(_:heightForRowAt:):FavoritesViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "OnboardingViewController.viewDidLoad():PageViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "arrayVC.count">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "LocationViewController.next():PageViewController.swift">
          <PersistentStrings>
             <PersistentString
                value = "sender">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "OnboardingViewController.viewDidLoad():PageViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "arrayVC.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -642,6 +656,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #3 in closure #2 in closure #1 in Deals.getDeals(byLocation:table:dealType:):Database.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "unfilteredDeals">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "AccountViewController.tableView(_:didSelectRowAt:):AccountViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -668,10 +690,10 @@
          contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "(self.Deal?.dealID)!">
+               value = "mainVC">
             </PersistentString>
             <PersistentString
-               value = "mainVC">
+               value = "(self.Deal?.dealID)!">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

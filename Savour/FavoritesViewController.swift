@@ -90,7 +90,9 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         let placeholderImage = UIImage(named: "placeholder.jpg")
         
         // Load the image using SDWebImage
-        imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
+        imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage, completion: { (img, err, typ, ref) in
+            cell.tempImg.isHidden = true
+        })
         cell.rName.text = cell.deal.restrauntName
         cell.dealDesc.text = cell.deal.dealDescription
         cell.validHours.text = ""
@@ -178,7 +180,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
 //    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        //let cell = tableView.cellForRow(at: indexPath) as! DealTableViewCell
         tableView.deselectRow(at: indexPath, animated: true)
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
@@ -186,7 +187,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         VC.Deal = favorites.favoriteDeals[indexPath.row]
         VC.fromDetails = false
         VC.photo = VC.Deal?.restrauntPhoto
-        //VC.index = FavMainIndex[deals[indexPath.row].dealID!]!
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationController?.pushViewController(VC, animated: true)
     }

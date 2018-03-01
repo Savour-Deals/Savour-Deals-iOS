@@ -17,23 +17,56 @@ class Deals{
     private var unfilteredDeals = [DealData]()
     private let ref = Database.database().reference()
     private let userid = Auth.auth().currentUser?.uid
+    private var monitoredRegions = [CLCircularRegion]()
     var filteredDeals = [DealData]()
     var favoriteIDs = Dictionary<String, String>()
-    
-    func getDeals(byLocation location: CLLocation, table: UITableView, dealType: String? = "All"){
-        let geofireRef = Database.database().reference().child("Restaurants_Location")
-        let geoFire = GeoFire(firebaseRef: geofireRef)
+
+    func getDeals(byLocation location: CLLocation, table: UITableView, dealType: String? = "All") -> [DealData]{
         let currentUnix = Date().timeIntervalSince1970
+        let group = DispatchGroup()
+        let locationManager = CLLocationManager()
        // let plusDay = currentUnix + 86400
         let expiredUnix = currentUnix
+        unfilteredDeals.removeAll()
+        ref.keepSynced(true)
         ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
             for entry in snapshot.children{
                 let snap = entry as! DataSnapshot
                 let value = snap.key
                 self.favoriteIDs[value] = value
             }
-            geoFire.query(at: location, withRadius: 85).observe(.keyEntered, with: { (key: String!, location: CLLocation!) in //~50 miles
-                self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: key).observeSingleEvent(of: .value, with: { (snapshot) in
+            var nearby = [restaurant]()
+            nearby = getRestaurants(byLocation: locationManager.location!)
+            nearby = nearby.sorted(by:{ (d1, d2) -> Bool in
+                if d1.distanceMiles! <= d2.distanceMiles! {
+                    return true
+                }else if  d1.distanceMiles! > d2.distanceMiles! {
+                    return false
+                }
+                return false
+            })
+            for region in self.monitoredRegions{
+                //remove all currently monitored locations
+                locationManager.stopMonitoring(for: region)
+            }
+            self.monitoredRegions.removeAll()
+            for place in nearby{
+                if self.monitoredRegions.count < 20{
+                    //monitor nearest 20 places
+                    // Your coordinates go here (lat, lon)
+                    let geofenceRegionCenter = place.location?.coordinate
+                    
+                    /* Create a region centered on desired location,
+                     choose a radius for the region (in meters)
+                     choose a unique identifier for that region */
+                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 20,identifier: place.restrauntID!)
+                    geofenceRegion.notifyOnEntry = true
+                    geofenceRegion.notifyOnExit = false
+                    locationManager.startMonitoring(for: geofenceRegion)
+                    self.monitoredRegions.append(geofenceRegion)
+                }
+                group.enter()
+                self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: place.restrauntID).observeSingleEvent(of: .value, with: { (snapshot) in
                     for entry in snapshot.children {
                         let snap = entry as! DataSnapshot
                         let temp = DealData(snap: snap, ID: self.userid!)
@@ -47,21 +80,22 @@ class Deals{
                                 }
                             }
                         }
-                        
                     }
-                    for deal in self.unfilteredDeals{
-                        if let _ = self.favoriteIDs[deal.dealID!]{
-                            deal.fav = true
-                        }
-                    }
-                    self.filter(byTitle: dealType!)
-                    self.sortDeals()
-                    table.reloadData()
+                    group.leave()
                 }){ (error) in
                     print(error.localizedDescription)
                 }
-            })
+            }
         })
+        group.wait()
+        for deal in self.unfilteredDeals{
+            if let _ = self.favoriteIDs[deal.dealID!]{
+                deal.fav = true
+            }
+        }
+        self.filter(byTitle: dealType!)
+        self.sortDeals()
+        return self.filteredDeals
     }
 
     func getDeals(table: UITableView, dealType: String? = "All"){
@@ -368,6 +402,9 @@ class DealData{
             if now > startTime && now < endTime{
                 self.validHours = "Valid until " + formatter.string(from: endTime)
                 self.valid = true
+            }else if startTime == endTime{
+                self.validHours = "Valid all day!"
+                self.valid = true
             }else{
                 self.validHours = "Valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
                 self.valid = false
@@ -417,61 +454,121 @@ class restaurant{
         var loyaltyCode: String
         var loyaltyCount: Int
         var loyaltyDeal: String
+        var loyaltyPoints = [Int]()
         
-        init(code: String = "", deal: String = "", count: Int = -1) {
+        init(code: String = "", deal: String = "", count: Int = -1, dict: NSDictionary=NSDictionary()) {
             self.loyaltyCount = count
             self.loyaltyCode = code
             self.loyaltyDeal = deal
+            if code != ""{
+                self.loyaltyPoints.append(dict["Sun"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["Mon"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["Tues"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["Wed"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["Thurs"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["Fri"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["Sat"] as? Int ?? 0)
+            }
         }
     }
     var loyalty: loyaltyStruct
     init(snap: DataSnapshot? = nil, ID: String, location: CLLocation? = nil, myLocation: CLLocation? = nil) {
-        let value = snap?.value as! NSDictionary
-        self.restrauntID = ID
-        self.restrauntName = value["Name"] as? String ?? ""
-        self.restrauntPhoto = value["Photo"] as? String ?? ""
-        self.description = value["Desc"] as? String ?? ""
-        self.address = value["Address"] as? String ?? ""
-        self.menu = value["Menu"] as? String ?? ""
-        self.restrauntPhoto = value["Photo"] as? String ?? ""
-        if location != nil{
-            self.location = location
-            self.distanceMiles = (location?.distance(from: myLocation!))!/1609
+        if let value = snap?.value as? NSDictionary{
+            self.restrauntID = ID
+            self.restrauntName = value["Name"] as? String ?? ""
+            self.restrauntPhoto = value["Photo"] as? String ?? ""
+            self.description = value["Desc"] as? String ?? ""
+            self.address = value["Address"] as? String ?? ""
+            self.menu = value["Menu"] as? String ?? ""
+            self.restrauntPhoto = value["Photo"] as? String ?? ""
+            if location != nil{
+                self.location = location
+                self.distanceMiles = (location?.distance(from: myLocation!))!/1609
+            }
+            //        if (snap?.childSnapshot(forPath: "HappyHours").childrenCount)! > 0 {
+            //            let hoursSnapshot = snap?.childSnapshot(forPath: "HappyHours").value as? NSDictionary
+            //            self.hoursArray.append(hoursSnapshot?["Mon"] as? String ?? "No Happy Hour")
+            //            self.hoursArray.append(hoursSnapshot?["Tues"] as? String ?? "No Happy Hour")
+            //            self.hoursArray.append(hoursSnapshot?["Wed"] as? String ?? "No Happy Hour")
+            //            self.hoursArray.append(hoursSnapshot?["Thurs"] as? String ?? "No Happy Hour")
+            //            self.hoursArray.append(hoursSnapshot?["Fri"] as? String ?? "No Happy Hour")
+            //            self.hoursArray.append(hoursSnapshot?["Sat"] as? String ?? "No Happy Hour")
+            //            self.hoursArray.append(hoursSnapshot?["Sun"] as? String ?? "No Happy Hour")
+            //        }
+            if (snap?.childSnapshot(forPath: "DailyHours").childrenCount)! > 0 {
+                let hoursSnapshot = snap?.childSnapshot(forPath: "DailyHours").value as? NSDictionary
+                self.dailyHours.append(hoursSnapshot?["Sun"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["Mon"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["Tues"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["Wed"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["Thurs"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["Fri"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["Sat"] as? String ?? "")
+            }
+            if (snap?.childSnapshot(forPath: "loyalty").exists())!{
+                let loyaltySnapshot = snap?.childSnapshot(forPath: "loyalty").value as? NSDictionary
+                let code = loyaltySnapshot!["loyaltyCode"] as? String ?? ""
+                let deal = loyaltySnapshot!["loyaltyDeal"] as? String ?? ""
+                let count = loyaltySnapshot!["loyaltyCount"] as? Int ?? -1
+                let pointsDict = loyaltySnapshot!["loyaltyPoints"] as? NSDictionary
+                loyalty = loyaltyStruct(code: code, deal: deal, count: count, dict: pointsDict!)
+            }else{loyalty = loyaltyStruct()}
+        }else{
+            self.restrauntID = ID
+            self.restrauntName = ""
+            self.restrauntPhoto = ""
+            self.description = ""
+            self.address = ""
+            self.menu = ""
+            self.restrauntPhoto = ""
+            self.loyalty = loyaltyStruct()
         }
-        if (snap?.childSnapshot(forPath: "HappyHours").childrenCount)! > 0 {
-            let hoursSnapshot = snap?.childSnapshot(forPath: "HappyHours").value as? NSDictionary
-            self.hoursArray.append(hoursSnapshot?["Mon"] as? String ?? "No Happy Hour")
-            self.hoursArray.append(hoursSnapshot?["Tues"] as? String ?? "No Happy Hour")
-            self.hoursArray.append(hoursSnapshot?["Wed"] as? String ?? "No Happy Hour")
-            self.hoursArray.append(hoursSnapshot?["Thurs"] as? String ?? "No Happy Hour")
-            self.hoursArray.append(hoursSnapshot?["Fri"] as? String ?? "No Happy Hour")
-            self.hoursArray.append(hoursSnapshot?["Sat"] as? String ?? "No Happy Hour")
-            self.hoursArray.append(hoursSnapshot?["Sun"] as? String ?? "No Happy Hour")
-        }
-        if (snap?.childSnapshot(forPath: "DailyHours").childrenCount)! > 0 {
-            let hoursSnapshot = snap?.childSnapshot(forPath: "DailyHours").value as? NSDictionary
-            self.dailyHours.append(hoursSnapshot?["Sun"] as? String ?? "")
-            self.dailyHours.append(hoursSnapshot?["Mon"] as? String ?? "")
-            self.dailyHours.append(hoursSnapshot?["Tues"] as? String ?? "")
-            self.dailyHours.append(hoursSnapshot?["Wed"] as? String ?? "")
-            self.dailyHours.append(hoursSnapshot?["Thurs"] as? String ?? "")
-            self.dailyHours.append(hoursSnapshot?["Fri"] as? String ?? "")
-            self.dailyHours.append(hoursSnapshot?["Sat"] as? String ?? "")
-        }
-        if (snap?.childSnapshot(forPath: "loyalty").exists())!{
-            let loyaltySnapshot = snap?.childSnapshot(forPath: "loyalty").value as? NSDictionary
-            let code = loyaltySnapshot!["loyaltyCode"] as? String ?? ""
-            let deal = loyaltySnapshot!["loyaltyDeal"] as? String ?? ""
-            let count = loyaltySnapshot!["loyaltyCount"] as? Int ?? -1
-            loyalty = loyaltyStruct(code: code, deal: deal, count: count)
-        }else{loyalty = loyaltyStruct()}
+        
     }
     
 }
 
 
-func getRestaurants(byLocation location: CLLocation){
-    
+func getRestaurants(byLocation location: CLLocation) -> [restaurant]{
+    var nearby = [String]()
+    var restaurants = [restaurant]()
+    let ref = Database.database().reference().child("Restaurants")
+    let geofireRef = Database.database().reference().child("Restaurants_Location")
+    let geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: 80.5)
+    let group = DispatchGroup()
+    geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
+        if !nearby.contains(key){
+            nearby.append(key)
+        }
+    })
+    geoFire.observeReady {
+        for key in nearby{
+            group.enter()
+            ref.queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .value, with: { (snapshot) in
+                for child in snapshot.children{
+                    let snap = child as! DataSnapshot
+                    let temp = restaurant(snap: snap, ID: key, location: location, myLocation: location)
+                    if !restaurants.contains(where: { $0.restrauntID  == temp.restrauntID }){
+                        restaurants.append(temp)
+                    }
+                    group.leave()
+                }
+                
+            })
+        }
+        
+    }
+    group.wait()
+    if restaurants.count > 0{
+        restaurants.sort(by: { (r1, r2) -> Bool in
+            if r1.distanceMiles! < r2.distanceMiles!{
+                return true
+            }else{
+                return false
+            }
+        })
+    }
+    return restaurants
 }
 
 
@@ -483,49 +580,49 @@ func getRestaurants(byLocation location: CLLocation){
 
 
 
-//class addresseClass{
-//    var address: String?
-//    var ID: String?
-//    init(add: String = "", id: String = ""){
-//        self.address = add
-//        self.ID = id
-//    }
-//}
-//var addresses = [addresseClass]()
-//var geocoder = CLGeocoder()  //Configure the geocoder as needed.
-//
-//
-//
-//func setLocation(){
-//
-//    let ref = Database.database().reference()
-//    ref.child("Restaurants").observeSingleEvent(of: .value, with: { (snapshot) in
-//        for entry in snapshot.children{
-//            let snap = entry as! DataSnapshot
-//            let value = snap.key
-//            let data = snap.value as! NSDictionary
-//            let temp = addresseClass.init(add: data["Address"] as? String ?? "", id: value)
-//            addresses.append(temp)
-//        }
-//        doGeoCoding()
-//    })
-//
-//}
-//func doGeoCoding(){
-//    let geofireRef = Database.database().reference().child("Restaurants_Location")
-//    let geoFire = GeoFire(firebaseRef: geofireRef)
-//    if addresses.count > 0{
-//        let temp = addresses.popLast()
-//        geocoder.geocodeAddressString((temp?.address!)!) { (placemarks, error) -> Void in
-//            if((error) != nil){
-//                print("Error", error ?? "")
-//            }
-//            if let placemark = placemarks?.first {
-//                let Location = placemark.location
-//                geoFire.setLocation(Location!, forKey: (temp?.ID!)!)
-//            }
-//            doGeoCoding()
-//        }
-//    }
-//}
+class addresseClass{
+    var address: String?
+    var ID: String?
+    init(add: String = "", id: String = ""){
+        self.address = add
+        self.ID = id
+    }
+}
+var addresses = [addresseClass]()
+var geocoder = CLGeocoder()  //Configure the geocoder as needed.
+
+
+
+func setLocation(){
+
+    let ref = Database.database().reference()
+    ref.child("Restaurants").observeSingleEvent(of: .value, with: { (snapshot) in
+        for entry in snapshot.children{
+            let snap = entry as! DataSnapshot
+            let value = snap.key
+            let data = snap.value as! NSDictionary
+            let temp = addresseClass.init(add: data["Address"] as? String ?? "", id: value)
+            addresses.append(temp)
+        }
+        doGeoCoding()
+    })
+
+}
+func doGeoCoding(){
+    let geofireRef = Database.database().reference().child("Restaurants_Location")
+    let geoFire = GeoFire(firebaseRef: geofireRef)
+    if addresses.count > 0{
+        let temp = addresses.popLast()
+        geocoder.geocodeAddressString((temp?.address!)!) { (placemarks, error) -> Void in
+            if((error) != nil){
+                print("Error", error ?? "")
+            }
+            if let placemark = placemarks?.first {
+                let Location = placemark.location
+                geoFire.setLocation(Location!, forKey: (temp?.ID!)!)
+            }
+            doGeoCoding()
+        }
+    }
+}
 

@@ -18,8 +18,10 @@ target 'Savour' do
   pod 'Charts'
   pod 'Firebase/Messaging'
   pod 'OneSignal'
- pod 'AcknowList'
- pod 'GeoFire'
+  pod 'AcknowList'
+  pod 'GeoFire'
+# pod 'Firebase/Firestore'
+
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 

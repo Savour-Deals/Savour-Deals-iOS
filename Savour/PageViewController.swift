@@ -129,6 +129,8 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 0)
         self.view.backgroundColor = UIColor.clear
         locationManager = CLLocationManager()
         acceptedLocation.layer.cornerRadius = acceptedLocation.frame.height/2
@@ -143,7 +145,7 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate{
 
     @IBAction func acceptedLocation(_ sender: Any) {
         locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestAlwaysAuthorization()
     }
     @IBAction func declinedLocation(_ sender: Any) {
         next()

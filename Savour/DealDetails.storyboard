@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -50,20 +51,15 @@
                                     <textView autoresizesSubviews="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RO2-Ob-ZGY">
                                         <rect key="frame" x="20" y="79" width="334" height="497"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <string key="text">This promotion is subject to vendor approval.
- 
+                                        <string key="text">Notice!
 
-You must use the coupon with the hour that you redeem it! 
+By selecting redeem you acknowledge that you understand the deal must be presented to the vendor today. If you do not want to use it today, but intend to use it on another day, simply favorite the discount and it will be saved under your favorites section. 
 
+Be aware that even if you favorite a discount, you must still redeem and use it before the expiry time.
 
-By selecting Redeem you acknowledge that you understand the discount must be used today. If you do not want to use it today, but intend to use another day, simply favorite the discount and it will be saved under your favorites section. 
- 
+This promotion is for individual use only and should be used for an individual’s food or drinks and not an entire groups purchase.
 
-Be aware that even if you favorite a discount you must still redeem and use it before the expiry time. 
-
-
-This promotion is for individual use only and shall be used for an individual's meal. This promotion is subject to vendor approval.
- </string>
+</string>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
