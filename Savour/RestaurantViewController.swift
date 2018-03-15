@@ -14,6 +14,7 @@ import SDWebImage
 import FirebaseStorageUI
 import OneSignal
 import AVFoundation
+import GTProgressBar
 
 class RestaurantViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -255,19 +256,20 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let cell = tableView.dequeueReusableCell(withIdentifier: "loyaltyCell", for: indexPath) as! loyaltyCell
             if self.thisRestaurant.loyalty.loyaltyCount > 0 {
                 cell.checkin.layer.cornerRadius = cell.checkin.frame.height/2
+                cell.progressBar.isHidden = false
                 let visitsLeft =  thisRestaurant.loyalty.loyaltyCount - loyaltyRedemptions
                 if visitsLeft == 0{
                     cell.animate()
                     cell.checkin.setTitle("Reedeem", for: .normal)
                     cell.loyaltyLabel.text = "You're ready to redeem your \(thisRestaurant.loyalty.loyaltyDeal)!"
                 }else{
-                    cell.loyaltyLabel.text = "Today's check-in would earn you \(thisRestaurant.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]) points towards a \(thisRestaurant.loyalty.loyaltyDeal)!"
+                    cell.loyaltyLabel.text = "Today: +\(thisRestaurant.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1])\n Reach points goal and recieve: a \(thisRestaurant.loyalty.loyaltyDeal)!"
                     if cell.isAnimating{
                         cell.stopAnimate()
                     }
                 }
                 cell.checkin.addTarget(self, action: #selector(self.checkin(_:)), for: .touchUpInside)
-                cell.progressBar.progress = Float(loyaltyRedemptions)/Float(thisRestaurant.loyalty.loyaltyCount)
+                cell.progressBar.progress = CGFloat(Float(loyaltyRedemptions)/Float(thisRestaurant.loyalty.loyaltyCount))
                 
                 cell.marker.text = "\(loyaltyRedemptions!)/\(thisRestaurant.loyalty.loyaltyCount)"
             }else{
@@ -435,13 +437,13 @@ class loyaltyCell: UITableViewCell {
     @IBOutlet weak var loyaltyLabel: UILabel!
     var isAnimating = false
     
-    @IBOutlet weak var progressBar: UIProgressView!
+    @IBOutlet weak var progressBar: GTProgressBar!
     @IBOutlet weak var marker: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        //progressBar.transform = progressBar.transform.scaledBy(x: 1, y: 20)
-        progressBar.layer.cornerRadius = progressBar.frame.height/2
-        progressBar.clipsToBounds = true
+//        //progressBar.transform = progressBar.transform.scaledBy(x: 1, y: 20)
+//        progressBar.layer.cornerRadius = progressBar.frame.height/2
+//        progressBar.clipsToBounds = true
     }
     
     func animate(){

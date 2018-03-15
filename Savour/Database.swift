@@ -17,15 +17,13 @@ class Deals{
     private var unfilteredDeals = [DealData]()
     private let ref = Database.database().reference()
     private let userid = Auth.auth().currentUser?.uid
-    private var monitoredRegions = [CLCircularRegion]()
     var filteredDeals = [DealData]()
     var favoriteIDs = Dictionary<String, String>()
 
-    func getDeals(byLocation location: CLLocation, table: UITableView, dealType: String? = "All") -> [DealData]{
+    func getDeals(byLocation location: CLLocation, dealType: String? = "All", completion: @escaping (Bool) -> ()){
         let currentUnix = Date().timeIntervalSince1970
         let group = DispatchGroup()
         let locationManager = CLLocationManager()
-       // let plusDay = currentUnix + 86400
         let expiredUnix = currentUnix
         unfilteredDeals.removeAll()
         ref.keepSynced(true)
@@ -36,66 +34,50 @@ class Deals{
                 self.favoriteIDs[value] = value
             }
             var nearby = [restaurant]()
-            nearby = getRestaurants(byLocation: locationManager.location!)
-            nearby = nearby.sorted(by:{ (d1, d2) -> Bool in
-                if d1.distanceMiles! <= d2.distanceMiles! {
-                    return true
-                }else if  d1.distanceMiles! > d2.distanceMiles! {
+            getRestaurants(byLocation: locationManager.location!,completion:{ (restaurants) in
+                nearby = restaurants
+                nearby = nearby.sorted(by:{ (d1, d2) -> Bool in
+                    if d1.distanceMiles! <= d2.distanceMiles! {
+                        return true
+                    }else if  d1.distanceMiles! > d2.distanceMiles! {
+                        return false
+                    }
                     return false
-                }
-                return false
-            })
-            for region in self.monitoredRegions{
-                //remove all currently monitored locations
-                locationManager.stopMonitoring(for: region)
-            }
-            self.monitoredRegions.removeAll()
-            for place in nearby{
-                if self.monitoredRegions.count < 20{
-                    //monitor nearest 20 places
-                    // Your coordinates go here (lat, lon)
-                    let geofenceRegionCenter = place.location?.coordinate
-                    
-                    /* Create a region centered on desired location,
-                     choose a radius for the region (in meters)
-                     choose a unique identifier for that region */
-                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 20,identifier: place.restrauntID!)
-                    geofenceRegion.notifyOnEntry = true
-                    geofenceRegion.notifyOnExit = false
-                    locationManager.startMonitoring(for: geofenceRegion)
-                    self.monitoredRegions.append(geofenceRegion)
-                }
-                group.enter()
-                self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: place.restrauntID).observeSingleEvent(of: .value, with: { (snapshot) in
-                    for entry in snapshot.children {
-                        let snap = entry as! DataSnapshot
-                        let temp = DealData(snap: snap, ID: self.userid!)
-                        if !self.unfilteredDeals.contains(where: {$0.dealID  == temp.dealID }){
-                            //if the deal is not expired or redeemed less than half an hour ago, show it
-                            if temp.endTime! > expiredUnix && !temp.redeemed! && temp.valid{
-                                self.unfilteredDeals.append(temp)
-                            }else if let time = temp.redeemedTime{
-                                if (Date().timeIntervalSince1970 - time) < 1800{
+                })
+                for place in nearby{
+                    group.enter()
+                    self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: place.restrauntID).observeSingleEvent(of: .value, with: { (snapshot) in
+                        for entry in snapshot.children {
+                            let snap = entry as! DataSnapshot
+                            let temp = DealData(snap: snap, ID: self.userid!)
+                            if !self.unfilteredDeals.contains(where: {$0.dealID  == temp.dealID }){
+                                //if the deal is not expired or redeemed less than half an hour ago, show it
+                                if temp.endTime! > expiredUnix && !temp.redeemed! && temp.valid{
                                     self.unfilteredDeals.append(temp)
+                                }else if let time = temp.redeemedTime{
+                                    if (Date().timeIntervalSince1970 - time) < 1800{
+                                        self.unfilteredDeals.append(temp)
+                                    }
                                 }
                             }
                         }
+                        group.leave()
+                    }){ (error) in
+                        print(error.localizedDescription)
                     }
-                    group.leave()
-                }){ (error) in
-                    print(error.localizedDescription)
                 }
-            }
+                group.notify(queue: DispatchQueue.main){
+                    for deal in self.unfilteredDeals{
+                        if let _ = self.favoriteIDs[deal.dealID!]{
+                            deal.fav = true
+                        }
+                    }
+                    self.filter(byTitle: dealType!)
+                    self.sortDeals()
+                    completion(true)
+                }
+            })
         })
-        group.wait()
-        for deal in self.unfilteredDeals{
-            if let _ = self.favoriteIDs[deal.dealID!]{
-                deal.fav = true
-            }
-        }
-        self.filter(byTitle: dealType!)
-        self.sortDeals()
-        return self.filteredDeals
     }
 
     func getDeals(table: UITableView, dealType: String? = "All"){
@@ -403,7 +385,7 @@ class DealData{
                 self.validHours = "Valid until " + formatter.string(from: endTime)
                 self.valid = true
             }else if startTime == endTime{
-                self.validHours = "Valid all day!"
+                self.validHours = ""//"Valid all day!"
                 self.valid = true
             }else{
                 self.validHours = "Valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
@@ -433,6 +415,64 @@ class DealData{
             }
             //favorites are set during the firebase calls
             self.fav = false
+        }
+    }
+    func updateTimes(){
+        let start = Date(timeIntervalSince1970: self.startTime!)
+        let end = Date(timeIntervalSince1970: self.endTime!)
+        let calendar = Calendar.current
+        let startTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: start), minute: calendar.component(.minute, from: start))
+        let endTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: end), minute: calendar.component(.minute, from: end))
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "h:mm a"
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
+        let now = Date()
+        let nowHour = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: now))
+        var startOfToday: Date!
+        if nowHour.hour! < 5{//To solve problem with checking for deals after midnight... might have better way
+            startOfToday = calendar.startOfDay(for: calendar.date(byAdding: .day, value: -1, to: now)!)
+        }else{
+            startOfToday = calendar.startOfDay(for: now)
+        }
+        let startTime    = calendar.date(byAdding: startTimeComponent, to: startOfToday)!
+        var endTime      = calendar.date(byAdding: endTimeComponent, to: startOfToday)!
+        if startTime > endTime {
+            //Deal goes past midnight (might be typical of bar's drink deals)
+            endTime = calendar.date(byAdding: .day, value: 1, to: endTime)!
+        }
+        if now > startTime && now < endTime{
+            self.validHours = "Valid until " + formatter.string(from: endTime)
+            self.valid = true
+        }else if startTime == endTime{
+            self.validHours = ""//"Valid all day!"
+            self.valid = true
+        }else{
+            self.validHours = "Valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+            self.valid = false
+        }
+        var isInInterval = false
+        if #available(iOS 10.0, *) {
+            let interval  =  DateInterval(start: start as Date, end: end as Date)
+            isInInterval = interval.contains(now)
+        } else {
+            isInInterval = now.timeIntervalSince1970 > start.timeIntervalSince1970 && now.timeIntervalSince1970 < end.timeIntervalSince1970
+        }
+        if (isInInterval){
+            let Components = calendar.dateComponents([.day, .hour, .minute], from: now, to: end)
+            if (now < end && now > start){
+                var leftTime = ""
+                if Components.day! != 0{
+                    leftTime = leftTime + String(describing: Components.day!) + " days left"
+                }
+                else if Components.hour! != 0{
+                    leftTime = leftTime + String(describing: Components.hour!) + "hours left"
+                }else{
+                    leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
+                }
+                self.countdown = leftTime
+            }
         }
     }
 }
@@ -529,25 +569,23 @@ class restaurant{
 }
 
 
-func getRestaurants(byLocation location: CLLocation) -> [restaurant]{
-    var nearby = [String]()
+func getRestaurants(byLocation location: CLLocation,completion: @escaping ([restaurant]) -> ()){
+    var nearby = [String:CLLocation]()
     var restaurants = [restaurant]()
     let ref = Database.database().reference().child("Restaurants")
     let geofireRef = Database.database().reference().child("Restaurants_Location")
-    let geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: 80.5)
-    let group = DispatchGroup()
+    let geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: 800)//put back to 80.5
     geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
-        if !nearby.contains(key){
-            nearby.append(key)
-        }
+        nearby[key] = thislocation
     })
     geoFire.observeReady {
-        for key in nearby{
+        let group = DispatchGroup()
+        for loc in nearby{
             group.enter()
-            ref.queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .value, with: { (snapshot) in
+            ref.queryOrderedByKey().queryEqual(toValue: loc.key).observeSingleEvent(of: .value, with: { (snapshot) in
                 for child in snapshot.children{
                     let snap = child as! DataSnapshot
-                    let temp = restaurant(snap: snap, ID: key, location: location, myLocation: location)
+                    let temp = restaurant(snap: snap, ID: loc.key, location: loc.value, myLocation: location)
                     if !restaurants.contains(where: { $0.restrauntID  == temp.restrauntID }){
                         restaurants.append(temp)
                     }
@@ -556,19 +594,19 @@ func getRestaurants(byLocation location: CLLocation) -> [restaurant]{
                 
             })
         }
-        
-    }
-    group.wait()
-    if restaurants.count > 0{
-        restaurants.sort(by: { (r1, r2) -> Bool in
-            if r1.distanceMiles! < r2.distanceMiles!{
-                return true
-            }else{
-                return false
+        group.notify(queue: DispatchQueue.main){
+            if restaurants.count > 0{
+                restaurants.sort(by: { (r1, r2) -> Bool in
+                    if r1.distanceMiles! < r2.distanceMiles!{
+                        return true
+                    }else{
+                        return false
+                    }
+                })
             }
-        })
+            completion(restaurants)
+        }
     }
-    return restaurants
 }
 
 

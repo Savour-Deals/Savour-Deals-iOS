@@ -51,7 +51,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //setLocation()
+        setLocation()
         let user = Auth.auth().currentUser
         if user == nil {
             // No user is signed in.
@@ -130,7 +130,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.view.viewWithTag(100)?.removeFromSuperview()
             }
             self.locationManager!.startUpdatingLocation()
-            self.userLocation = CLLocation(latitude: self.locationManager.location!.coordinate.latitude, longitude: self.locationManager.location!.coordinate.longitude)
+            self.userLocation = self.locationManager.location!//CLLocation(latitude: self.locationManager.location!.coordinate.latitude, longitude: self.locationManager.location!.coordinate.longitude)
             self.searchBar.isHidden = false
             //Filter by any buttons the user pressed.
             var title = ""
@@ -142,7 +142,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
             }
-            self.deals.getDeals(byLocation: self.userLocation, table: self.DealsTable, dealType: title)
+            self.deals.getDeals(byLocation: self.userLocation, dealType: title, completion:{ (success) in
+                self.DealsTable.reloadData()
+            })
         }
     }
     
@@ -201,7 +203,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if status == CLAuthorizationStatus.denied {
             locationDisabled()
         } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            locationEnabled()
+            if self.deals.filteredDeals.count<1{
+                locationEnabled()
+            }
+        }
+        for deal in deals.filteredDeals{
+            deal.updateTimes()
         }
     }
     
@@ -247,7 +254,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
         }
-        deals.getDeals(byLocation: userLocation, table: self.DealsTable, dealType: title)
+        self.deals.getDeals(byLocation: self.userLocation, dealType: title, completion:{ (success) in
+            self.DealsTable.reloadData()
+        })
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -401,6 +410,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
+        DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+
     }
     
     
@@ -427,6 +438,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
+        DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -441,6 +453,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
+        DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -462,6 +475,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 button.setTitleColor(UIColor.white, for: UIControlState.normal)
                 if button.title(for: .normal) == "All"{
                     button.backgroundColor = UIColor.white
+                    DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
                     button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
                 }
             }

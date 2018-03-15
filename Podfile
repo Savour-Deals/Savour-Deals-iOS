@@ -20,6 +20,8 @@ target 'Savour' do
   pod 'OneSignal'
   pod 'AcknowList'
   pod 'GeoFire'
+  pod "GTProgressBar"
+
 # pod 'Firebase/Firestore'
 
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
