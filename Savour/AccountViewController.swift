@@ -14,8 +14,7 @@ import AcknowList
 import OneSignal
 import UserNotifications
 import FBSDKCoreKit
-
-
+import FBSDKShareKit
 
 class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate{
 
@@ -71,6 +70,8 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     {
         if indexPath.row == 0{
             return 160
+        }else if indexPath.row == 1{
+            return 90
         }
         else{
             return 45
@@ -104,7 +105,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
 
             return cell1
         }else if indexPath.row == 1{
-            cell = tableView.dequeueReusableCell(withIdentifier: "seperate", for: indexPath)
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: "seperate", for: indexPath) as! friendsCell
 
             let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"friends"])
             
@@ -121,13 +122,13 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                     data = data["friends"] as! [String : AnyObject]
                     let friends = data["data"] as! NSArray
                     if friends.count > 0{
-                        print(friends)
+                        cell2.friendLabel.text = "You have \(friends.count) friend using Savour!\nClick here to invite more!"
                     }else{
-                        print("no friends sorry")
+                        cell2.friendLabel.text = "Click here to invite your Facebook friends to Savour Deals!"
                     }
                 }
             })
-            cell.selectionStyle = UITableViewCellSelectionStyle.none
+            return cell2
 
         }
         else if indexPath.row == 2 {
@@ -139,7 +140,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         else if indexPath.row == 4{
             cell = tableView.dequeueReusableCell(withIdentifier: "acknowledgements", for: indexPath)
         }
-        
         return cell
     }
     
@@ -160,9 +160,26 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             else{
                 self.present(mailComposeViewController, animated: true, completion: nil)
             }
-        }
-       
-        else if indexPath.row == 4{
+        }else if indexPath.row == 1{
+            //Use this to get current screenshot image
+//            UIGraphicsBeginImageContext(view.frame.size)
+//            view.layer.render(in: UIGraphicsGetCurrentContext()!)
+//            let image = UIGraphicsGetImageFromCurrentImageContext()
+//            UIGraphicsEndImageContext()
+            
+            let textToShare = "Check out Savour to get deals from local restaurants!"
+            
+            if let myWebsite = URL(string: "http://www.savourdeals.com/getsavour") {//Enter link to your app here
+                let objectsToShare = [myWebsite,textToShare] as [Any]
+                let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                
+                //Excluded Activities
+                activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+
+                
+                self.present(activityVC, animated: true, completion: nil)
+            }
+        }else if indexPath.row == 4{
             let path = Bundle.main.path(forResource: "Acknowledgements", ofType: "plist")
             let viewController = AcknowListViewController(acknowledgementsPlistPath: path)
             self.navigationController?.navigationBar.tintColor = UIColor.black
@@ -200,6 +217,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         // [END signout]
     }
+    
 
 }
 
@@ -218,6 +236,22 @@ class AccountCell: UITableViewCell {
     }
     
 }
+
+class friendsCell: UITableViewCell {
+    
+    @IBOutlet weak var friendLabel: UILabel!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+    }
+    
+}
+
 
 class accountNav: UINavigationController{
     override var preferredStatusBarStyle: UIStatusBarStyle {

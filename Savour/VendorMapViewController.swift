@@ -106,7 +106,7 @@ class VendorMapViewController: UIViewController{
             }
             self.locationManager!.startUpdatingLocation()
             self.listVC.searchBar.isHidden = false
-            self.getRestaurants()
+            self.getData()
         }
     }
     
@@ -119,7 +119,6 @@ class VendorMapViewController: UIViewController{
     func showMap(){
         listView.isHidden = true
         mapView.isHidden = false
-        
     }
     
     
@@ -151,57 +150,45 @@ class VendorMapViewController: UIViewController{
     }
     
     @objc func refreshData() {
-       getRestaurants()
+       getData()
     }
     
-    func getRestaurants(){
-        let geofireRef = Database.database().reference().child("Restaurants_Location")
-        ref = Database.database().reference().child("Restaurants")
-        let geoFire = GeoFire(firebaseRef: geofireRef)
-        restaurants.removeAll()
-        geoFire.query(at: locationManager.location!, withRadius: 80.5).observe(.keyEntered, with: { (key: String!, location: CLLocation!) in //50 miles
-            self.ref.queryOrderedByKey().queryEqual(toValue: key).observeSingleEvent(of: .value, with: { (snapshot) in
-                for child in snapshot.children{
-                    let snap = child as! DataSnapshot
-                    let temp = restaurant(snap: snap, ID: key, location: location, myLocation: self.locationManager.location!)
-                    if !restaurants.contains(where: { $0.restrauntID  == temp.restrauntID }){
-                        restaurants.append(temp)
+    func getData(){
+        getRestaurants(byLocation: self.locationManager.location!) { (nearbyRestaurants) in
+            restaurants = nearbyRestaurants
+            if restaurants.count < 0 {
+                let label = UILabel()
+                label.textAlignment = NSTextAlignment.center
+                label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
+                label.text = "No restaurants are nearby."
+                label.lineBreakMode = NSLineBreakMode.byWordWrapping
+                label.numberOfLines = 0
+                label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.tag = 100
+                self.listView.addSubview(label)
+                var constraints = [NSLayoutConstraint]()
+                constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
+                constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
+                constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
+                constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
+                NSLayoutConstraint.activate(constraints)
+                
+            }else if restaurants.count > 0{
+                self.listView.viewWithTag(100)?.removeFromSuperview()
+                self.mapVC.makeAnnotations()
+                self.listVC.delegateTable()
+                self.listVC.listTable.reloadData()
+                self.mapVC.flag = 1
+                restaurants.sort(by: { (r1, r2) -> Bool in
+                    if r1.distanceMiles! < r2.distanceMiles!{
+                        return true
+                    }else{
+                        return false
                     }
-                }
-                if restaurants.count < 0 {
-                    let label = UILabel()
-                    label.textAlignment = NSTextAlignment.center
-                    label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
-                    label.text = "No restaurants are nearby."
-                    label.lineBreakMode = NSLineBreakMode.byWordWrapping
-                    label.numberOfLines = 0
-                    label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-                    label.translatesAutoresizingMaskIntoConstraints = false
-                    label.tag = 100
-                    self.listView.addSubview(label)
-                    var constraints = [NSLayoutConstraint]()
-                    constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
-                    constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
-                    constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
-                    constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
-                    NSLayoutConstraint.activate(constraints)
-                    
-                }else if restaurants.count > 0{
-                    self.listView.viewWithTag(100)?.removeFromSuperview()
-                    self.mapVC.makeAnnotations()
-                    self.listVC.delegateTable()
-                    self.listVC.listTable.reloadData()
-                    self.mapVC.flag = 1
-                    restaurants.sort(by: { (r1, r2) -> Bool in
-                        if r1.distanceMiles! < r2.distanceMiles!{
-                            return true
-                        }else{
-                            return false
-                        }
-                    })
-                }
-            })
-        })
+                })
+            }
+        }
     }
 }
 

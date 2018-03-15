@@ -12,12 +12,16 @@ import FBSDKCoreKit
 import OneSignal
 import CoreLocation
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var handle: AuthStateDidChangeListenerHandle?
     var window: UIWindow?
     var ref: DatabaseReference!
     var locationManager: CLLocationManager?
+    var nearbyCount = 0
+    var monitoredRegions = [CLCircularRegion]()
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         self.locationManager = CLLocationManager()
@@ -25,12 +29,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         if launchOptions?[UIApplicationLaunchOptionsKey.location] != nil {
             self.locationManager = CLLocationManager()
             self.locationManager?.delegate = self
+            locationManager?.startMonitoringSignificantLocationChanges()
             
         } else {
             
             self.locationManager = CLLocationManager()
             self.locationManager!.delegate = self    
-            
+            locationManager?.startMonitoringSignificantLocationChanges()
             
             let notificationOpenedBlock: OSHandleNotificationActionBlock = { result in
                 let payload: OSNotificationPayload = result!.notification.payload
@@ -155,41 +160,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 }
 
 extension AppDelegate: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        var nearby = [restaurant]()
+        getRestaurants(byLocation: (locationManager?.location!)!,completion:{ (restaurants) in
+            nearby = restaurants
+            nearby = nearby.sorted(by:{ (d1, d2) -> Bool in
+            if d1.distanceMiles! <= d2.distanceMiles! {
+                return true
+            }else if  d1.distanceMiles! > d2.distanceMiles! {
+                return false
+            }
+                return false
+            })
+            for region in self.monitoredRegions{
+                //remove all currently monitored locations
+                self.locationManager?.stopMonitoring(for: region)
+            }
+            self.monitoredRegions.removeAll()
+            for place in nearby{
+                if self.monitoredRegions.count < 20{
+                    //monitor nearest 20 places
+                    // Your coordinates go here (lat, lon)
+                    let geofenceRegionCenter = place.location?.coordinate
+                
+                    /* Create a region centered on desired location,
+                     choose a radius for the region (in meters)
+                     choose a unique identifier for that region */
+                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 20,identifier: place.restrauntID!)
+                    geofenceRegion.notifyOnEntry = true
+                    geofenceRegion.notifyOnExit = false
+                    self.locationManager?.startMonitoring(for: geofenceRegion)
+                    self.monitoredRegions.append(geofenceRegion)
+                }
+            }
+        })
+    }
+    
     // called when user Exits a monitored region
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         if region is CLCircularRegion {
             // Do what you want if this information
-            self.handleEvent(forRegion: region)
+            self.handleEvent()
         }
     }
     
     // called when user Enters a monitored region
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        
         if region is CLCircularRegion {
-            // Do what you want if this information
-            self.handleEvent(forRegion: region)
-            locationManager?.stopMonitoring(for: region)
+            nearbyCount += nearbyCount
+            if nearbyCount > 4{
+                nearbyCount = 0
+                locationManager?.stopMonitoringSignificantLocationChanges()
+                // Do what you want if this information
+                self.handleEvent()
+                locationManager?.stopMonitoring(for: region)
+            }
         }
     }
     
-    func handleEvent(forRegion region: CLRegion!) {
+    func handleEvent() {
         let localNotification = UILocalNotification()
         localNotification.timeZone = NSTimeZone.local
         localNotification.soundName = UILocalNotificationDefaultSoundName
         localNotification.category = "Message"
-        self.ref.child("Restaurants").child(region.identifier).observeSingleEvent(of: .value, with: { (snapshot) in
-            let value = snapshot.value as! NSDictionary
-            let restrauntName = value["Name"] as? String ?? ""
-            localNotification.alertBody = "Make sure to check out the current deals we have for \(restrauntName)!"
-            if (snapshot.childSnapshot(forPath: "loyalty").exists()){
-                localNotification.alertBody = "\(localNotification.alertBody ?? "") Don't forget to check-in for loyalty points!"
-            }
-            localNotification.alertTitle = "Welcome to \(restrauntName)"
-            localNotification.fireDate = Date()
-            UIApplication.shared.scheduleLocalNotification(localNotification)
-        })
-    
-        
+        localNotification.alertBody = "Make sure to check out the current deals nearby!"
+        localNotification.alertBody = "\(localNotification.alertBody ?? "") Don't forget to check-in for loyalty points!"
+        localNotification.alertTitle = "Woah Check Out These Restaurants!"
+        localNotification.fireDate = Date()
+        UIApplication.shared.scheduleLocalNotification(localNotification)
     }
 }
 
