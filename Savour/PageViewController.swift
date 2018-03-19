@@ -16,11 +16,15 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var pageControl: UIPageControl!
+    var sender: ViewController!
+    
     var frame: CGRect = CGRect(x:0, y:0, width:0, height:0)
-    var gradientLayer: CAGradientLayer!
+    override var prefersStatusBarHidden: Bool{
+        return true
+    }
 
     lazy var arrayVC: [UIViewController] = {
-        return [ self.VCInstance(name: "WorksViewController"), self.VCInstance(name: "NotificationViewController"),self.VCInstance(name: "LocationViewController")]
+        return [ self.VCInstance(name: "WorksViewController"), self.VCInstance(name: "NotificationViewController"),self.VCInstance(name: "LocationViewController"),self.VCInstance(name: "SwipeViewController")]
     }()
     
     private func VCInstance(name: String) -> UIViewController {
@@ -33,6 +37,9 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
         
         setupUI()
         
@@ -56,11 +63,14 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.navigationBar.shadowImage = nil
+        self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        self.navigationController?.navigationBar.isTranslucent = true
+        sender.setup()
+    }
     func setupUI(){
-        gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.view.bounds
-        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.3023598031).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor]
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
+        
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 0)
     }
@@ -73,6 +83,10 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.y = 0.0
+        let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
+        if Int(pageNumber) > 0{
+            scrollView.isScrollEnabled = false
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -89,10 +103,15 @@ class WorksViewController: UIViewController{
 
     @IBOutlet weak var svrheight: NSLayoutConstraint!
     @IBOutlet weak var svrImg: UIImageView!
-    
+    var gradientLayer: CAGradientLayer!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.clear
+//        gradientLayer = CAGradientLayer()
+//        gradientLayer.frame = self.view.bounds
+//        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.3023598031).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor]
+//        self.view.layer.insertSublayer(gradientLayer, at: 0)
+//self.view.backgroundColor = UIColor.clear
         textSize()
     }
     
@@ -116,7 +135,8 @@ class WorksViewController: UIViewController{
 }
 
 class LocationViewController: UIViewController, CLLocationManagerDelegate{
-    
+    var gradientLayer: CAGradientLayer!
+
     var ref: DatabaseReference!
     @IBOutlet weak var declineLocation: UIButton!
     var locationManager: CLLocationManager!
@@ -129,9 +149,13 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        gradientLayer = CAGradientLayer()
+//        gradientLayer.frame = self.view.bounds
+//        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.3023598031).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor]
+//        self.view.layer.insertSublayer(gradientLayer, at: 0)
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 0)
-        self.view.backgroundColor = UIColor.clear
+        //self.view.backgroundColor = UIColor.clear
         locationManager = CLLocationManager()
         acceptedLocation.layer.cornerRadius = acceptedLocation.frame.height/2
         declineLocation.layer.cornerRadius = declineLocation.frame.height/2
@@ -152,10 +176,13 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate{
     }
     
     func next(){
-        if sender == ""{
-            self.parent?.performSegue(withIdentifier: "tabMain", sender: self)
-        }else{
+        if self.sender == "home"{
             dismiss(animated: true, completion: nil)
+        }else{
+            let parent = self.parent as! OnboardingViewController
+            parent.sender.setup()
+            parent.pageControl.currentPage = parent.pageControl.currentPage + 1
+            parent.changePage(sender: self)
         }
     }
     
@@ -165,14 +192,19 @@ class NotificationViewController: UIViewController{
     
     @IBOutlet weak var declinedNoti: UIButton!
     @IBOutlet weak var acceptNoti: UIButton!
-    
+    var gradientLayer: CAGradientLayer!
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.clear
+//        gradientLayer = CAGradientLayer()
+//        gradientLayer.frame = self.view.bounds
+//        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.3023598031).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor]
+//        self.view.layer.insertSublayer(gradientLayer, at: 0)
+//        self.view.backgroundColor = UIColor.clear
         acceptNoti.layer.cornerRadius = acceptNoti.frame.height/2
         declinedNoti.layer.cornerRadius = declinedNoti.frame.height/2
     }
@@ -195,5 +227,37 @@ class NotificationViewController: UIViewController{
     }
     
 }
+
+class SwipeViewController: UIViewController{
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    @IBOutlet weak var swipe: UIImageView!
+    
+    @IBOutlet weak var blurr: UIView!
+    @IBOutlet weak var done: UIButton!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        done.layer.cornerRadius = done.frame.height/2
+        swipe.image = #imageLiteral(resourceName: "swipe").withRenderingMode(.alwaysTemplate)
+        swipe.tintColor = UIColor.white
+
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        let orgY = self.view.center.y - self.view.frame.height/4
+        self.swipe.center.y = self.view.center.y + 100
+        UIView.animate(withDuration: 1.5, delay: 0.2, options: .repeat, animations: {
+            self.swipe.center.y = orgY
+        }, completion: nil)
+    }
+    
+    @IBAction func dismiss(_ sender: Any) {
+        Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Onboarded").setValue("true")
+        dismiss(animated: false, completion: nil)
+    }
+    
+}
+
 
 

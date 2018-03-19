@@ -168,19 +168,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
                         }
                         else{
-                            self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
-                                let boarded = snapshot.value as? String ?? ""
-                                if boarded != ""{
-                                    self.performSegue(withIdentifier: "MainS", sender: self)
-                                    self.endLoggingin()
-                                    
-                                }
-                                else{
-                                    self.performSegue(withIdentifier: "tutorial", sender: self)
-                                    self.endLoggingin()
-                                    
-                                }
-                            })
+                           
+                            self.performSegue(withIdentifier: "MainS", sender: self)
+                            self.endLoggingin()
                         }
                     })
                 }
@@ -252,19 +242,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     self.endLoggingin()
                 }
                 else{
-                    self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
-                            let boarded = snapshot.value as? String ?? ""
-                        if boarded != ""{
-                            self.performSegue(withIdentifier: "MainS", sender: self)
-                            self.endLoggingin()
-
-                        }
-                        else{
-                            self.performSegue(withIdentifier: "tutorial", sender: self)
-                            self.endLoggingin()
-
-                        }
-                    })
+                    self.performSegue(withIdentifier: "MainS", sender: self)
+                    self.endLoggingin()
                 }
             })
         }
