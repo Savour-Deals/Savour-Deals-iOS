@@ -33,6 +33,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var showedNotiDeal = false
     var locationManager: CLLocationManager!
     var userLocation: CLLocation!
+    var initialLoaded = false
     
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var scrollFilter: UIScrollView!
@@ -51,33 +52,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //For database, comment out before publish
         setLocation()
+
         let user = Auth.auth().currentUser
         if user == nil {
             // No user is signed in.
             self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
         loading.startAnimating()
-        locationManager = CLLocationManager()
-        requestLocationAccess()
         ref = Database.database().reference()
         ref.keepSynced(true)
-        //Check if forcetouch is available
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: self.DealsTable)
-        } else {
-            print("3D Touch Not Available")
+        self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
+            let boarded = snapshot.value as? String ?? ""
+            if boarded == ""{
+                self.performSegue(withIdentifier: "tutorial", sender: self)
+            }else{
+                self.setup()
+            }
+        })
+        
+    }
+    
+    func removeSubview(){
+        if let viewWithTag = self.view.viewWithTag(100) {
+            viewWithTag.removeFromSuperview()
         }
-        // Add Refresh Control to Table View
-        if #available(iOS 10.0, *) {
-            DealsTable.refreshControl = refreshControl
-        } else {
-            DealsTable.addSubview(refreshControl)
-        }
-        // Configure Refresh Control
-        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
-        setupSearchBar()
-        self.setupUI()
     }
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -148,7 +148,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    func setupUI(){
+    func setup(){
+        initialLoaded = true
+        self.locationManager = CLLocationManager()
+        self.requestLocationAccess()
+        //Check if forcetouch is available
+        if self.traitCollection.forceTouchCapability == .available {
+            self.registerForPreviewing(with: self, sourceView: self.DealsTable)
+        } else {
+            print("3D Touch Not Available")
+        }
+        // Add Refresh Control to Table View
+        if #available(iOS 10.0, *) {
+            self.DealsTable.refreshControl = self.refreshControl
+        } else {
+            self.DealsTable.addSubview(self.refreshControl)
+        }
+        // Configure Refresh Control
+        self.refreshControl.addTarget(self, action: #selector(self.refreshData(_:)), for: .valueChanged)
+        self.setupSearchBar()
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.view.backgroundColor = UIColor.white
         self.navigationController?.navigationItem.title = ""
@@ -231,7 +249,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     self.tabBarController?.tabBar.isHidden = true
                     self.performSegue(withIdentifier: "Vendor", sender: self)
                 }
-                else{
+                else if self.initialLoaded{
                     self.refreshUI()
                 }
             })
@@ -500,6 +518,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }else if segue.identifier == "promptSegue"{
             let VC = segue.destination as! LocationViewController
             VC.sender = "home"
+        }else if segue.identifier == "tutorial"{
+            let VC = segue.destination as! OnboardingViewController
+            VC.sender = self
         }
     }
 }

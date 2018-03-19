@@ -240,19 +240,8 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                     self.doneLoading()
                 }
                 else{
-                    self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
-                        let boarded = snapshot.value as? String ?? ""
-                        if boarded != ""{
-                            self.performSegue(withIdentifier: "signedUp", sender: self)
-                            self.doneLoading()
-                            
-                        }
-                        else{
-                            self.performSegue(withIdentifier: "tutorial", sender: self)
-                            self.doneLoading()
-                            
-                        }
-                    })
+                    self.performSegue(withIdentifier: "tutorial", sender: self)
+                    self.doneLoading()
                 }
             })
         }
