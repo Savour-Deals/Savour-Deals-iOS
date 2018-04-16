@@ -611,16 +611,26 @@
                                     <constraint firstItem="xpi-gH-99o" firstAttribute="leading" secondItem="7hx-v9-rA5" secondAttribute="trailing" id="ye8-mh-BjY"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Point camera at QR to check-in!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9xg-Zg-KBE">
+                                <rect key="frame" x="10" y="100" width="394" height="31.333333333333343"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
+                                <color key="textColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="o8P-x9-Xhb" firstAttribute="trailing" secondItem="Adl-T5-HzZ" secondAttribute="trailing" id="CDk-VK-RjF"/>
+                            <constraint firstItem="9xg-Zg-KBE" firstAttribute="leading" secondItem="o8P-x9-Xhb" secondAttribute="leading" constant="10" id="K2p-uA-ryu"/>
+                            <constraint firstItem="9xg-Zg-KBE" firstAttribute="top" secondItem="Adl-T5-HzZ" secondAttribute="bottom" constant="20" id="Lnt-W8-MjC"/>
                             <constraint firstItem="Adl-T5-HzZ" firstAttribute="leading" secondItem="o8P-x9-Xhb" secondAttribute="leading" id="Uui-qZ-mNZ"/>
+                            <constraint firstItem="o8P-x9-Xhb" firstAttribute="trailing" secondItem="9xg-Zg-KBE" secondAttribute="trailing" constant="10" id="cB4-tC-Pc6"/>
                             <constraint firstItem="Adl-T5-HzZ" firstAttribute="top" secondItem="o8P-x9-Xhb" secondAttribute="top" id="j69-Vk-IBo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="o8P-x9-Xhb"/>
                     </view>
                     <connections>
+                        <outlet property="textView" destination="9xg-Zg-KBE" id="aHT-Uz-9t2"/>
                         <outlet property="topbar" destination="Adl-T5-HzZ" id="VBo-KG-Sml"/>
                     </connections>
                 </viewController>

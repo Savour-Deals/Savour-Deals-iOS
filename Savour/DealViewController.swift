@@ -12,6 +12,7 @@ import FirebaseDatabase
 import FirebaseStorage
 import FirebaseAuth
 import OneSignal
+import CoreLocation
 
 
 
@@ -30,6 +31,9 @@ class DealViewController: UIViewController {
     var isTimerRunning = false
     var timerStartTime: Int!
     weak var shapeLayer: CAShapeLayer?
+    var thisRestaurant: restaurant?
+    var locationManager: CLLocationManager!
+    var userLocation: CLLocation!
     
     @IBOutlet weak var restaurantLabel: UILabel!
     @IBOutlet weak var dealCode: UILabel!
@@ -54,6 +58,9 @@ class DealViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.locationManager = CLLocationManager()
+        self.locationManager!.startUpdatingLocation()
+        self.userLocation = self.locationManager.location!
         if #available(iOS 11, *) {
             let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.DealView.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1.0, constant: -10.0)
             // activate the constraint
@@ -76,7 +83,7 @@ class DealViewController: UIViewController {
     
     func SetupUI(){
         pulsator.start()
-        
+        self.thisRestaurant = updateDistance(location: self.userLocation, restaurants: [self.thisRestaurant!])[0]
         self.navigationController?.navigationBar.tintColor = UIColor.white
         let imageView = UIImageView(image: UIImage(named: "Savour_White"))
         imageView.contentMode = UIViewContentMode.scaleAspectFit
@@ -84,8 +91,8 @@ class DealViewController: UIViewController {
         imageView.frame = titleView.bounds
         titleView.addSubview(imageView)
         self.navigationItem.titleView = titleView
-
-        moreBtn.layer.cornerRadius = 25
+        redeem.layer.cornerRadius = redeem.frame.height/2
+        moreBtn.layer.cornerRadius = moreBtn.frame.height/2
         infoView.layer.cornerRadius = 10
         textView.setContentOffset(CGPoint.zero, animated: false)
         
@@ -118,7 +125,6 @@ class DealViewController: UIViewController {
         pulsator.radius = 230
         if (Deal?.redeemed)!{
             self.redeem.isEnabled = false
-            redeem.layer.cornerRadius = 25
             self.redeem.setTitle("Already Redeemed!", for: .normal)
             self.redeem.layer.backgroundColor = UIColor.red.cgColor
             if timerLabel.text == ""{
@@ -131,10 +137,14 @@ class DealViewController: UIViewController {
                 self.redeemIndicator(color: UIColor.green.cgColor)
                 self.dealCode.text = self.Deal?.dealCode
             }
-        }
-        else{
+        }else if let rest = self.thisRestaurant?.distanceMiles, rest>0.1{
+            self.redeem.isEnabled = false
+            pulsator.backgroundColor =  UIColor.red.cgColor
+            self.redeem.setTitle("Go to Location to Redeem", for: .normal)
+            dealCode.text = "Looks like you're not nearby. Go to the location to redeem this deal!"
+            self.redeem.layer.backgroundColor = UIColor.red.cgColor
+        }else{
             pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-            redeem.layer.cornerRadius = 25
         }
         textView.contentOffset.y = 0
         if !(Deal?.valid)!{
@@ -150,7 +160,7 @@ class DealViewController: UIViewController {
         if segue.identifier == "RestaurantDetails" {
             self.title = ""
             let vc = segue.destination as! RestaurantViewController
-            vc.rID = self.Deal?.restrauntID
+            vc.thisRestaurant = self.thisRestaurant
         }
     }
     

@@ -99,7 +99,6 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
     }
     
     func doneLoading(){
-    
         loadingIndicator.stopAnimating()
         loadingView.isHidden = true
         loadingLabel.isHidden = true

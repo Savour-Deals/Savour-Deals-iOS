@@ -28,13 +28,6 @@ class DealTableViewCell: UITableViewCell {
         self.insetView.layer.shadowRadius = 2
         self.insetView.layer.shadowOpacity = 0.5
         self.insetView.layer.shadowOffset = CGSize(width: 6, height: 6)
-//        let maskPath = UIBezierPath(roundedRect: self.rImg.bounds,
-//                                    byRoundingCorners: [.topLeft, .topRight],
-//                                    cornerRadii: CGSize(width: 10.0, height: 10.0))
-//
-//        let shape = CAShapeLayer()
-//        shape.path = maskPath.cgPath
-//        self.rImg.layer.mask = shape
         self.insetView.layer.cornerRadius = 10
         self.rImg.clipsToBounds = true
         self.clipsToBounds = true

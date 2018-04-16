@@ -24,7 +24,7 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
     }
 
     lazy var arrayVC: [UIViewController] = {
-        return [ self.VCInstance(name: "WorksViewController"), self.VCInstance(name: "NotificationViewController"),self.VCInstance(name: "LocationViewController"),self.VCInstance(name: "SwipeViewController")]
+        return [ self.VCInstance(name: "PermissionViewController"), self.VCInstance(name: "SwipeViewController")]
     }()
     
     private func VCInstance(name: String) -> UIViewController {
@@ -62,15 +62,19 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         self.scrollView.contentSize = CGSize(width: self.view.frame.size.width * CGFloat(arrayVC.count), height: self.scrollView.frame.size.height)
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
     }
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        setupUI()
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.navigationBar.shadowImage = nil
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.isTranslucent = true
-        sender.setup()
     }
     func setupUI(){
-        
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 0)
     }
@@ -83,10 +87,6 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.y = 0.0
-        let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
-        if Int(pageNumber) > 0{
-            scrollView.isScrollEnabled = false
-        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -99,133 +99,65 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
 
 
 
-class WorksViewController: UIViewController{
-
-    @IBOutlet weak var svrheight: NSLayoutConstraint!
-    @IBOutlet weak var svrImg: UIImageView!
-    var gradientLayer: CAGradientLayer!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        gradientLayer = CAGradientLayer()
-//        gradientLayer.frame = self.view.bounds
-//        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.3023598031).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor]
-//        self.view.layer.insertSublayer(gradientLayer, at: 0)
-//self.view.backgroundColor = UIColor.clear
-        textSize()
-    }
-    
-    
-    func textSize(){
-        if UIDevice().userInterfaceIdiom == .phone {
-            let height = UIScreen.main.nativeBounds.height
-            if height > 1900{
-                print("largeBoi")
-            }else if height > 1136{
-                svrheight.constant = 150.0
-                view.layoutIfNeeded()
-                
-            }else{
-                svrheight.constant = 100.0
-                view.layoutIfNeeded()
-            }
-        }
-        
-    }
-}
-
-class LocationViewController: UIViewController, CLLocationManagerDelegate{
-    var gradientLayer: CAGradientLayer!
-
-    var ref: DatabaseReference!
-    @IBOutlet weak var declineLocation: UIButton!
+class PermissionViewController: UIViewController, CLLocationManagerDelegate{
     var locationManager: CLLocationManager!
-    @IBOutlet weak var acceptedLocation: UIButton!
+    var ref: DatabaseReference!
     var sender = ""
+    @IBOutlet weak var continueButton: UIButton!
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
+    @IBOutlet weak var locbutton: UIButton!
+    @IBOutlet weak var notiButton: UIButton!
+    @IBOutlet weak var locText: UILabel!
+    @IBOutlet weak var notiText: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-//        gradientLayer = CAGradientLayer()
-//        gradientLayer.frame = self.view.bounds
-//        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.3023598031).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor]
-//        self.view.layer.insertSublayer(gradientLayer, at: 0)
-        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 0)
-        //self.view.backgroundColor = UIColor.clear
-        locationManager = CLLocationManager()
-        acceptedLocation.layer.cornerRadius = acceptedLocation.frame.height/2
-        declineLocation.layer.cornerRadius = declineLocation.frame.height/2
         ref = Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Onboarded")
+        
+        continueButton.layer.cornerRadius = continueButton.frame.height/2
+        notiButton.layer.cornerRadius = notiButton.frame.height/2
+        locbutton.layer.cornerRadius = locbutton.frame.height/2
+        self.locationManager = CLLocationManager()
+
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        next()
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            self.locationManager!.startUpdatingLocation()
+            let parent = self.parent as! OnboardingViewController
+            parent.sender.setup()
+            parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            parent.navigationController?.navigationBar.shadowImage = UIImage()
+            parent.navigationController?.navigationBar.isTranslucent = true
+            parent.setupUI()
+        case .denied, .restricted, .notDetermined:
+            self.locText.text = "To turn on location later, go to:\n Settings → Savour Deals → Location."
+        }
+        self.continueButton.isEnabled = true
+        continueButton.alpha = 1.0
+        self.locbutton.backgroundColor = UIColor.gray
+        self.locbutton.isUserInteractionEnabled = false
     }
     
-
-    @IBAction func acceptedLocation(_ sender: Any) {
+    @IBAction func notiPress(_ sender: Any) {
+        OneSignal.promptForPushNotifications(userResponse: { accepted in
+            self.notiButton.isUserInteractionEnabled = false
+            self.notiButton.backgroundColor = UIColor.gray
+            if !accepted{
+                self.notiText.text = "To turn on notifications later, go to:\n Settings → Savour Deals → Notifications."
+            }
+        })
+    }
+    @IBAction func locPress(_ sender: Any) {
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
     }
-    @IBAction func declinedLocation(_ sender: Any) {
-        next()
-    }
     
-    func next(){
-        if self.sender == "home"{
-            dismiss(animated: true, completion: nil)
-        }else{
-            let parent = self.parent as! OnboardingViewController
-            parent.sender.setup()
-            parent.pageControl.currentPage = parent.pageControl.currentPage + 1
-            parent.changePage(sender: self)
-        }
-    }
-    
-}
-
-class NotificationViewController: UIViewController{
-    
-    @IBOutlet weak var declinedNoti: UIButton!
-    @IBOutlet weak var acceptNoti: UIButton!
-    var gradientLayer: CAGradientLayer!
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        gradientLayer = CAGradientLayer()
-//        gradientLayer.frame = self.view.bounds
-//        gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.3023598031).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor]
-//        self.view.layer.insertSublayer(gradientLayer, at: 0)
-//        self.view.backgroundColor = UIColor.clear
-        acceptNoti.layer.cornerRadius = acceptNoti.frame.height/2
-        declinedNoti.layer.cornerRadius = declinedNoti.frame.height/2
-    }
-   
-    @IBAction func acceptNoti(_ sender: Any) {
-        OneSignal.promptForPushNotifications(userResponse: { accepted in
-            print("User accepted notifications: \(accepted)")
-            self.next()
-        })
-    }
-    
-    @IBAction func declinedNoti(_ sender: Any) {
-        next()
-    }
-    
-    func next(){
+    @IBAction func next(_ sender: Any) {
         let parent = self.parent as! OnboardingViewController
         parent.pageControl.currentPage = parent.pageControl.currentPage + 1
         parent.changePage(sender: self)
     }
-    
 }
 
 class SwipeViewController: UIViewController{
@@ -235,13 +167,13 @@ class SwipeViewController: UIViewController{
     }
     @IBOutlet weak var swipe: UIImageView!
     
+    @IBOutlet weak var textView: UILabel!
     @IBOutlet weak var blurr: UIView!
-    @IBOutlet weak var done: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        done.layer.cornerRadius = done.frame.height/2
         swipe.image = #imageLiteral(resourceName: "swipe").withRenderingMode(.alwaysTemplate)
         swipe.tintColor = UIColor.white
+        textView.text = "Swipe to view all the current deals available.\n\nTap a heart to favorite a deal."
 
     }
     override func viewDidAppear(_ animated: Bool) {

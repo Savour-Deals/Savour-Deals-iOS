@@ -1,65 +1,65 @@
 PODS:
-  - AcknowList (1.5)
+  - AcknowList (1.6)
   - Bolts (1.9.0):
     - Bolts/AppLinks (= 1.9.0)
     - Bolts/Tasks (= 1.9.0)
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - Charts (3.0.5):
-    - Charts/Core (= 3.0.5)
-  - Charts/Core (3.0.5)
+  - Charts (3.1.1):
+    - Charts/Core (= 3.1.1)
+  - Charts/Core (3.1.1)
   - FBSDKCoreKit (4.31.1):
     - Bolts (~> 1.7)
   - FBSDKLoginKit (4.31.1):
     - FBSDKCoreKit
   - FBSDKShareKit (4.31.1):
     - FBSDKCoreKit (~> 4.31.1)
-  - Firebase (4.10.1):
-    - Firebase/Core (= 4.10.1)
-  - Firebase/Auth (4.10.1):
+  - Firebase (4.12.0):
+    - Firebase/Core (= 4.12.0)
+  - Firebase/Auth (4.12.0):
     - Firebase/Core
-    - FirebaseAuth (= 4.4.4)
-  - Firebase/Core (4.10.1):
+    - FirebaseAuth (= 4.6.0)
+  - Firebase/Core (4.12.0):
     - FirebaseAnalytics (= 4.1.0)
-    - FirebaseCore (= 4.0.17)
-  - Firebase/Database (4.10.1):
+    - FirebaseCore (= 4.0.19)
+  - Firebase/Database (4.12.0):
     - Firebase/Core
     - FirebaseDatabase (= 4.1.5)
-  - Firebase/Messaging (4.10.1):
+  - Firebase/Messaging (4.12.0):
     - Firebase/Core
-    - FirebaseMessaging (= 2.1.1)
-  - Firebase/Storage (4.10.1):
+    - FirebaseMessaging (= 2.2.0)
+  - Firebase/Storage (4.12.0):
     - Firebase/Core
-    - FirebaseStorage (= 2.1.3)
+    - FirebaseStorage (= 2.2.0)
   - FirebaseAnalytics (4.1.0):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
-  - FirebaseAuth (4.4.4):
+  - FirebaseAuth (4.6.0):
     - FirebaseAnalytics (~> 4.1)
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (4.0.17):
+  - FirebaseCore (4.0.19):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseDatabase (4.1.5):
     - FirebaseAnalytics (~> 4.1)
     - FirebaseCore (~> 4.0)
     - leveldb-library (~> 1.18)
-  - FirebaseInstanceID (2.0.9):
+  - FirebaseInstanceID (2.0.10):
     - FirebaseCore (~> 4.0)
-  - FirebaseMessaging (2.1.1):
+  - FirebaseMessaging (2.2.0):
     - FirebaseAnalytics (~> 4.1)
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
     - Protobuf (~> 3.5)
-  - FirebaseStorage (2.1.3):
+  - FirebaseStorage (2.2.0):
     - FirebaseAnalytics (~> 4.1)
     - FirebaseCore (~> 4.0)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseUI/Storage (4.5.4):
+  - FirebaseUI/Storage (4.5.5):
     - Firebase/Storage (~> 4.0)
     - SDWebImage (~> 4.0)
   - GeoFire (2.0.1):
@@ -76,41 +76,41 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.1.3)
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.3)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.3)
-  - GTMSessionFetcher/Core (1.1.14)
+  - GTMSessionFetcher/Core (1.1.15)
   - GTProgressBar (0.2.3)
   - leveldb-library (1.20)
-  - libwebp (0.6.0):
-    - libwebp/core (= 0.6.0)
-    - libwebp/dec (= 0.6.0)
-    - libwebp/demux (= 0.6.0)
-    - libwebp/dsp (= 0.6.0)
-    - libwebp/enc (= 0.6.0)
-    - libwebp/mux (= 0.6.0)
-    - libwebp/utils (= 0.6.0)
-    - libwebp/webp (= 0.6.0)
-  - libwebp/core (0.6.0):
+  - libwebp (0.6.1):
+    - libwebp/core (= 0.6.1)
+    - libwebp/dec (= 0.6.1)
+    - libwebp/demux (= 0.6.1)
+    - libwebp/dsp (= 0.6.1)
+    - libwebp/enc (= 0.6.1)
+    - libwebp/mux (= 0.6.1)
+    - libwebp/utils (= 0.6.1)
+    - libwebp/webp (= 0.6.1)
+  - libwebp/core (0.6.1):
     - libwebp/webp
-  - libwebp/dec (0.6.0):
+  - libwebp/dec (0.6.1):
     - libwebp/core
-  - libwebp/demux (0.6.0):
+  - libwebp/demux (0.6.1):
     - libwebp/core
-  - libwebp/dsp (0.6.0):
+  - libwebp/dsp (0.6.1):
     - libwebp/core
-  - libwebp/enc (0.6.0):
+  - libwebp/enc (0.6.1):
     - libwebp/core
-  - libwebp/mux (0.6.0):
+  - libwebp/mux (0.6.1):
     - libwebp/core
-  - libwebp/utils (0.6.0):
+  - libwebp/utils (0.6.1):
     - libwebp/core
-  - libwebp/webp (0.6.0)
+  - libwebp/webp (0.6.1)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - OneSignal (2.8.0)
+  - OneSignal (2.8.2)
   - Protobuf (3.5.0)
-  - Pulsator (0.4.1)
+  - Pulsator (0.5.1)
   - SDWebImage (4.3.3):
     - SDWebImage/Core (= 4.3.3)
   - SDWebImage/Core (4.3.3)
@@ -138,31 +138,31 @@ DEPENDENCIES:
   - SDWebImage/WebP
 
 SPEC CHECKSUMS:
-  AcknowList: 93c5dbde36f37ba7f74c8a92c8d9cfb52ed73e47
+  AcknowList: 2b27ccc75110be58be37424c4b08b07bdec628b4
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Charts: 45cdc985b764c838b35ee47eb1365d15735f6d1a
+  Charts: 90a4d61da0f6e06684c591e3bcab11940fe61736
   FBSDKCoreKit: e08ccfcefa7bc1347a07c276dac9bf6c7fe57024
   FBSDKLoginKit: 99797ac39252fef6f72600b886f6ee60b4b29cab
   FBSDKShareKit: e640c41c9fcd61929eeb3d0c21ad335103e7cb62
-  Firebase: 92c6ba593e32db0defde464a9adc981d5cb49f97
+  Firebase: d7fdf40e4d6c841849c52919f437fd3a0009ded0
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
-  FirebaseAuth: d040bb7a9db6dfc29d0e7ec82d48be51352b2581
-  FirebaseCore: 872307b001bbefda1dfa0dbfffa50a6919023d4a
+  FirebaseAuth: 85a1b118a89838efc6f6ab3f2b1f94747d72a915
+  FirebaseCore: ff49ebb37e0f63a570d78c4f1c1c0befe8659d5c
   FirebaseDatabase: 5f0bc6134c5c237cf55f9e1249d406770a75eafd
-  FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
-  FirebaseMessaging: db0e01c52ef7e1f42846431273558107d084ede4
-  FirebaseStorage: 9a863a2bb96c406958eeff7c2f1dfa9f44c44a13
-  FirebaseUI: a9465a3068e9ba9fbc024b1ee3981d9eaf6cec5e
+  FirebaseInstanceID: 8d20d890d65c917f9f7d9950b6e10a760ad34321
+  FirebaseMessaging: 75cdb862e86c30e0913a2ff307e48d49357c5b73
+  FirebaseStorage: 0c223481c8f89ed300cf1239ddd2d9833622c65f
+  FirebaseUI: 7f149d40db1a67c459df16540256b66d8f8e8c70
   GeoFire: 3e70a24019dc16816190f533c9cac0d1321c4a71
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
-  GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
+  GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
   GTProgressBar: ecfa9f2dfaca1b9b35811925f5bd53516ee591ae
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
-  libwebp: 1d5a07c2eb97f9c31bd5f154bb82efc0ea67c6a2
+  libwebp: 0f01098c6c17175391af621b2f14150f3ca16e16
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  OneSignal: bcaf98d8c5405e23a74518abc552dfe6fcb9538d
+  OneSignal: ab5c509192ca8390bdd3570a6261e6decf4c79c1
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
-  Pulsator: 89a18d0e0ee2f642bb83cb9dfb6b7eebc1dc6241
+  Pulsator: f465ca37212d826523fe8c79b07c1a4c1a941f5e
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
 
 PODFILE CHECKSUM: cd19f64f9a898381ce49fd4c47c44904e6414b76

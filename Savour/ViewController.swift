@@ -52,8 +52,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //For database, comment out before publish
-        setLocation()
 
         let user = Auth.auth().currentUser
         if user == nil {
@@ -63,14 +61,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         loading.startAnimating()
         ref = Database.database().reference()
         ref.keepSynced(true)
-        self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
-            let boarded = snapshot.value as? String ?? ""
-            if boarded == ""{
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined:
                 self.performSegue(withIdentifier: "tutorial", sender: self)
-            }else{
-                self.setup()
+            case .authorizedAlways, .authorizedWhenInUse, .restricted, .denied:
+                setup()
             }
-        })
+        } else {
+            self.performSegue(withIdentifier: "tutorial", sender: self)
+        }
+//        self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
+//            let boarded = snapshot.value as? String ?? ""
+//            if boarded == ""{
+//                self.performSegue(withIdentifier: "tutorial", sender: self)
+//            }else{
+//                self.setup()
+//            }
+//        })
         
     }
     
@@ -104,12 +112,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func locationDisabled(){
-        self.searchBar.isHidden = true
+        self.searchBar.isUserInteractionEnabled = false
         DealsTable.isHidden = true
+        buttonsView.isUserInteractionEnabled = false
         let label = UILabel()
         label.textAlignment = NSTextAlignment.center
         label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
-        label.text = "To use this feature, you must turn on location in:\n\n Settings -> Savour -> Location"
+        label.text = "To use this app, you must turn on location in:\n\n Settings -> Savour -> Location"
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.numberOfLines = 0
         label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
@@ -129,9 +138,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if let _ = self.view.viewWithTag(100){
                 self.view.viewWithTag(100)?.removeFromSuperview()
             }
+            self.searchBar.isUserInteractionEnabled = true
+            self.DealsTable.isHidden = false
+            self.buttonsView.isUserInteractionEnabled = true
             self.locationManager!.startUpdatingLocation()
             self.userLocation = self.locationManager.location!//CLLocation(latitude: self.locationManager.location!.coordinate.latitude, longitude: self.locationManager.location!.coordinate.longitude)
-            self.searchBar.isHidden = false
             //Filter by any buttons the user pressed.
             var title = ""
             for subview in self.buttonsView.subviews as [UIView] {
@@ -150,8 +161,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func setup(){
         initialLoaded = true
-        self.locationManager = CLLocationManager()
-        self.requestLocationAccess()
+        
         //Check if forcetouch is available
         if self.traitCollection.forceTouchCapability == .available {
             self.registerForPreviewing(with: self, sourceView: self.DealsTable)
@@ -181,7 +191,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.tabBarController?.tabBar.isHidden = false
-        
         for subview in self.buttonsView.subviews as [UIView] {
             if let button = subview as? UIButton {
                 button.layer.borderColor = UIColor.white.cgColor
@@ -194,6 +203,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
         }
+        self.locationManager = CLLocationManager()
+        self.requestLocationAccess()
+        
     }
     
     func refreshUI(){
@@ -360,19 +372,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
     }
     
-//    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//        if velocity.y>0{
-//            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
-//                self.navigationController?.setNavigationBarHidden(true, animated: true)
-//            }, completion: nil)
-//        }
-//        else{
-//            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
-//                self.navigationController?.setNavigationBarHidden(false, animated: true)
-//            }, completion: nil)
-//        }
-//    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         tableView.deselectRow(at: indexPath, animated: true)
         dealDetails(deal: deals.filteredDeals[indexPath.row])
@@ -385,6 +384,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             VC.hidesBottomBarWhenPushed = true
             VC.Deal = deal
             VC.fromDetails = false
+            VC.thisRestaurant = deals.restaurants[deal.restrauntID!]
             VC.photo = VC.Deal?.restrauntPhoto
             VC.from = "deals"
             //cleanup searchbar
@@ -428,7 +428,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        if deals.filteredDeals.count>0{
+            DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        }
 
     }
     
@@ -456,7 +458,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        if deals.filteredDeals.count>0{
+            DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -471,7 +475,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        if deals.filteredDeals.count>0{
+            DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -493,7 +499,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 button.setTitleColor(UIColor.white, for: UIControlState.normal)
                 if button.title(for: .normal) == "All"{
                     button.backgroundColor = UIColor.white
-                    DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+                    if deals.filteredDeals.count>0{
+                        DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+                    }
                     button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
                 }
             }
@@ -515,9 +523,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             VC.fromDetails = false
             VC.photo = VC.Deal?.restrauntPhoto
             VC.from = "deals"
-        }else if segue.identifier == "promptSegue"{
-            let VC = segue.destination as! LocationViewController
-            VC.sender = "home"
         }else if segue.identifier == "tutorial"{
             let VC = segue.destination as! OnboardingViewController
             VC.sender = self
@@ -534,6 +539,7 @@ extension ViewController:     UIViewControllerPreviewingDelegate {
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
         VC.Deal = deals.filteredDeals[indexPath.row]
+        VC.thisRestaurant = deals.restaurants[VC.Deal.restrauntID!]
         VC.fromDetails = false
         VC.photo = VC.Deal?.restrauntPhoto
         VC.preferredContentSize = CGSize(width: 0.0, height: 600)

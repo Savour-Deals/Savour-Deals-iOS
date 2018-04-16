@@ -20,7 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var ref: DatabaseReference!
     var locationManager: CLLocationManager?
     var nearbyCount = 0
-    var monitoredRegions = [CLCircularRegion]()
+    var monitoredRegions = [restaurant]()
+    var restaurants = [restaurant]()
+    var entered = [CLCircularRegion]()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
@@ -29,13 +31,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         if launchOptions?[UIApplicationLaunchOptionsKey.location] != nil {
             self.locationManager = CLLocationManager()
             self.locationManager?.delegate = self
-            locationManager?.startMonitoringSignificantLocationChanges()
+            locationManager?.startUpdatingLocation()
             
         } else {
             
             self.locationManager = CLLocationManager()
-            self.locationManager!.delegate = self    
-            locationManager?.startMonitoringSignificantLocationChanges()
+            self.locationManager!.delegate = self
+            if locationManager?.location != nil{
+                locationManager?.startUpdatingLocation()
+                getRestaurants(byLocation: (locationManager?.location)!, completion: { (nearbyRestaurants) in
+                    self.restaurants = nearbyRestaurants
+                })
+            }
             
             let notificationOpenedBlock: OSHandleNotificationActionBlock = { result in
                 let payload: OSNotificationPayload = result!.notification.payload
@@ -46,7 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             }
             let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
             
-            // Replace 'YOUR_APP_ID' with your OneSignal App ID.
             OneSignal.initWithLaunchOptions(launchOptions,
                                             appId: "f1c64902-ab03-4674-95e9-440f7c8f33d0",
                                             handleNotificationAction: notificationOpenedBlock,
@@ -122,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
    
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String!, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String?, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
         
         return handled
     }
@@ -162,70 +168,73 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 extension AppDelegate: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        var nearby = [restaurant]()
-        getRestaurants(byLocation: (locationManager?.location!)!,completion:{ (restaurants) in
-            nearby = restaurants
-            nearby = nearby.sorted(by:{ (d1, d2) -> Bool in
-            if d1.distanceMiles! <= d2.distanceMiles! {
-                return true
-            }else if  d1.distanceMiles! > d2.distanceMiles! {
-                return false
-            }
-                return false
+        if restaurants.count > 0{
+            var rest = updateDistance(location: (locationManager?.location)!, restaurants: restaurants)
+            rest = rest.sorted(by:{ (d1, d2) -> Bool in
+                if d1.distanceMiles! <= d2.distanceMiles! {
+                    return true
+                }else{
+                    return false
+                }
             })
-            for region in self.monitoredRegions{
-                //remove all currently monitored locations
-                self.locationManager?.stopMonitoring(for: region)
+            var nearby = rest.prefix(20)
+            if nearby[0].distanceMiles! > 50.0{
+                //update restaurants from firebase for the next pass if the nearest is too far away
+                getRestaurants(byLocation: (locationManager?.location)!, completion: { (nearbyrestaurants) in
+                    self.restaurants = nearbyrestaurants
+                })
             }
-            self.monitoredRegions.removeAll()
+            for place in monitoredRegions{
+                if !nearby.contains(where: { $0 === place }){
+                    self.locationManager?.stopMonitoring(for: CLCircularRegion(center: (place.location?.coordinate)!,radius: 100,identifier: place.restrauntID!))
+                }
+            }
             for place in nearby{
-                if self.monitoredRegions.count < 20{
+                if self.monitoredRegions.count < 20 && !self.monitoredRegions.contains(where: { $0 === place }){
                     //monitor nearest 20 places
                     // Your coordinates go here (lat, lon)
                     let geofenceRegionCenter = place.location?.coordinate
-                
+                    
                     /* Create a region centered on desired location,
                      choose a radius for the region (in meters)
                      choose a unique identifier for that region */
-                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 20,identifier: place.restrauntID!)
+                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 100,identifier: place.restrauntID!)
                     geofenceRegion.notifyOnEntry = true
                     geofenceRegion.notifyOnExit = false
                     self.locationManager?.startMonitoring(for: geofenceRegion)
-                    self.monitoredRegions.append(geofenceRegion)
+                    self.monitoredRegions.append(place)
                 }
             }
-        })
-    }
-    
-    // called when user Exits a monitored region
-    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        if region is CLCircularRegion {
-            // Do what you want if this information
-            self.handleEvent()
         }
     }
     
+    
     // called when user Enters a monitored region
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        
-        if region is CLCircularRegion {
-            nearbyCount += nearbyCount
-            if nearbyCount > 4{
-                nearbyCount = 0
-                locationManager?.stopMonitoringSignificantLocationChanges()
-                // Do what you want if this information
+        if region is CLCircularRegion && !entered.contains(where: {$0===region}){
+            //Only count if we have not entered here recently
+            locationManager?.stopMonitoring(for: region)
+            nearbyCount = nearbyCount + 1
+            if nearbyCount > 8{
                 self.handleEvent()
-                locationManager?.stopMonitoring(for: region)
+                locationManager?.stopUpdatingLocation()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 86400) {
+                    //after they're gone and left, we want to be able to send another notification
+                    self.locationManager?.startUpdatingLocation()
+                    self.nearbyCount = 0
+                    self.entered.removeAll()
+                }
             }
         }
     }
     
     func handleEvent() {
+        //send notification of nearby restaurants
         let localNotification = UILocalNotification()
         localNotification.timeZone = NSTimeZone.local
         localNotification.soundName = UILocalNotificationDefaultSoundName
         localNotification.category = "Message"
-        localNotification.alertBody = "Make sure to check out the current deals nearby!"
+        localNotification.alertBody = "Look at all the current deals nearby!"
         localNotification.alertBody = "\(localNotification.alertBody ?? "") Don't forget to check-in for loyalty points!"
         localNotification.alertTitle = "Woah Check Out These Restaurants!"
         localNotification.fireDate = Date()

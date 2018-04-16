@@ -18,7 +18,6 @@ import GTProgressBar
 
 class RestaurantViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var rID: String?
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
     var storage: Storage!
@@ -41,10 +40,6 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     var menu: String!
     var followString: String!
     var request: URLRequest?
-    
-
-
-  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,8 +83,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     
     func loadData(){
         //Set overall restraunt info
-        let id = rID
-        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(rID!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((thisRestaurant.restrauntID)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
                 let value = snapshot.value as? NSDictionary
                 self.loyaltyRedemptions = value?["count"] as? Int ?? 0
@@ -101,10 +95,9 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }){ (error) in
             print(error.localizedDescription)
         }
-        ref.child("Restaurants").child(id!).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Restaurants").child((thisRestaurant.restrauntID)!).observeSingleEvent(of: .value, with: { (snapshot) in
             
             //let value = snapshot.value as? NSDictionary
-            self.thisRestaurant = restaurant(snap: snapshot, ID: self.rID!)
             if snapshot.childSnapshot(forPath: "Followers").hasChild((Auth.auth().currentUser?.uid)!){
                 self.followString = "Following"
             }
@@ -137,7 +130,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }){ (error) in
             print(error.localizedDescription)
         }
-        deals.getDeals(forRestaurant: rID!, table: restaurantTable)
+        deals.getDeals(forRestaurant: self.thisRestaurant.restrauntID!, table: restaurantTable)
     }
     
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -200,7 +193,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             cell.directionsButton.layer.cornerRadius = 20
             cell.request = self.request
             cell.menu = self.thisRestaurant.menu
-            cell.rID = self.rID
+            cell.rID = self.thisRestaurant.restrauntID
             cell.rAddress = self.thisRestaurant.address!
             self.followButton = cell.followButton
             return cell
@@ -317,7 +310,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
                 self.loyaltyRedemptions = 0
                 self.redemptionTime = 0
-                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.restrauntID)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 sender.setTitle("Loyalty Check-In", for: .normal)
                 
                 self.restaurantTable.reloadData()
@@ -345,10 +338,10 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             self.redemptionTime = Date().timeIntervalSince1970
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
-            let followRef = Database.database().reference().child("Restaurants").child(self.rID!).child("Followers").child(uID!)
+            let followRef = Database.database().reference().child("Restaurants").child((self.thisRestaurant.restrauntID)!).child("Followers").child(uID!)
             followRef.setValue(status.subscriptionStatus.userId)
-            OneSignal.sendTags([(self.rID)! : "true"])
-            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child(self.rID!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+            OneSignal.sendTags([(self.thisRestaurant.restrauntID)! : "true"])
+            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.restrauntID)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
             self.followString = "Following"
             self.restaurantTable.reloadData()
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
@@ -512,7 +505,7 @@ class buttonCell: UITableViewCell {
         if self.followButton.currentTitle == "Follow"{
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
-            let followRef = Database.database().reference().child("Restaurants").child(self.rID!).child("Followers").child(uID!)
+            let followRef = Database.database().reference().child("Restaurants").child(rID!).child("Followers").child(uID!)
             followRef.setValue(status.subscriptionStatus.userId)
             OneSignal.sendTags([(rID)! : "true"])
             self.mainView.followString = "Following"
@@ -525,7 +518,7 @@ class buttonCell: UITableViewCell {
                 }
                 let approveAction = UIAlertAction(title: "OK", style: .default) { (alert: UIAlertAction!) -> Void in
                     let uID = Auth.auth().currentUser?.uid
-                    let loyaltyRef = Database.database().reference().child("Users").child(uID!).child((self.rID)!)
+                    let loyaltyRef = Database.database().reference().child("Users").child(uID!).child(self.rID!)
                     loyaltyRef.removeValue()
                     self.unfollow()
                 }
@@ -541,9 +534,9 @@ class buttonCell: UITableViewCell {
     
     func unfollow(){
         let uID = Auth.auth().currentUser?.uid
-        let followRef = Database.database().reference().child("Restaurants").child((self.rID)!).child("Followers").child(uID!)
+        let followRef = Database.database().reference().child("Restaurants").child(rID!).child("Followers").child(uID!)
         followRef.removeValue()
-        OneSignal.sendTags([(self.rID)! : "false"])
+        OneSignal.sendTags([rID! : "false"])
         self.mainView.followString = "Follow"
         self.followButton.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
         self.mainView.loyaltyRedemptions = 0
@@ -812,6 +805,7 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
         VC.Deal = deals.filteredDeals[indexPath.row]
         VC.photo = VC.Deal?.restrauntPhoto
         VC.fromDetails = true
+        VC.thisRestaurant = self.thisRestaurant
         self.title = ""
         self.navigationController?.pushViewController(VC, animated: true)
     }
@@ -831,7 +825,7 @@ extension UIView {
         while parentResponder != nil {
             parentResponder = parentResponder!.next
             if parentResponder is UIViewController {
-                return parentResponder as! UIViewController!
+                return parentResponder as! UIViewController?
             }
         }
         return nil

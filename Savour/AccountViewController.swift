@@ -21,6 +21,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
     var imgURL: String!
+    var friendsText = ""
 
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -44,6 +45,24 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.imgURL = nil
             }
             self.tableView.reloadData()
+        })
+        let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"friends"])
+        
+        graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+            
+            if ((error) != nil){
+                print("Error: \(String(describing: error))")
+            }else{
+                var data = result as! [String : AnyObject]
+                data = data["friends"] as! [String : AnyObject]
+                let friends = data["data"] as! NSArray
+                if friends.count > 0{
+                     self.friendsText = "You have \(friends.count) friend using Savour!\nClick here to invite more!"
+                }else{
+                    self.friendsText = "Click here to invite your Facebook friends to Savour Deals!"
+                }
+                self.tableView.reloadData()
+            }
         })
         let footerView = UIView()
         footerView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
@@ -95,49 +114,26 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell1.Img.layer.cornerRadius = cell1.Img.frame.size.width/2
                 cell1.Img.clipsToBounds = true
                 
-            }
-            else{
+            }else{
                 cell1.Img.image = #imageLiteral(resourceName: "Savour_FullColor")
             }
-            cell1.Welcome.text = "Welcome " + (user?.displayName)!
+            cell1.Welcome.text = (user?.displayName)!
             
             cell1.selectionStyle = UITableViewCellSelectionStyle.none
 
             return cell1
         }else if indexPath.row == 1{
             let cell2 = tableView.dequeueReusableCell(withIdentifier: "seperate", for: indexPath) as! friendsCell
-
-            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"friends"])
             
-            graphRequest.start(completionHandler: { (connection, result, error) -> Void in
-                
-                if ((error) != nil)
-                {
-                    print("Error: \(String(describing: error))")
-                }
-                else
-                {
-                    
-                    var data = result as! [String : AnyObject]
-                    data = data["friends"] as! [String : AnyObject]
-                    let friends = data["data"] as! NSArray
-                    if friends.count > 0{
-                        cell2.friendLabel.text = "You have \(friends.count) friend using Savour!\nClick here to invite more!"
-                    }else{
-                        cell2.friendLabel.text = "Click here to invite your Facebook friends to Savour Deals!"
-                    }
-                }
-            })
+            cell2.friendLabel.text = friendsText
+            
             return cell2
 
-        }
-        else if indexPath.row == 2 {
+        }else if indexPath.row == 2 {
              cell = tableView.dequeueReusableCell(withIdentifier: "Contact", for: indexPath)
-        }
-        else if indexPath.row == 3{
+        }else if indexPath.row == 3{
             cell = tableView.dequeueReusableCell(withIdentifier: "settings", for: indexPath)
-        }
-        else if indexPath.row == 4{
+        }else if indexPath.row == 4{
             cell = tableView.dequeueReusableCell(withIdentifier: "acknowledgements", for: indexPath)
         }
         return cell
@@ -161,22 +157,14 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.present(mailComposeViewController, animated: true, completion: nil)
             }
         }else if indexPath.row == 1{
-            //Use this to get current screenshot image
-//            UIGraphicsBeginImageContext(view.frame.size)
-//            view.layer.render(in: UIGraphicsGetCurrentContext()!)
-//            let image = UIGraphicsGetImageFromCurrentImageContext()
-//            UIGraphicsEndImageContext()
-            
+
             let textToShare = "Check out Savour to get deals from local restaurants!"
             
             if let myWebsite = URL(string: "http://www.savourdeals.com/getsavour") {//Enter link to your app here
                 let objectsToShare = [myWebsite,textToShare] as [Any]
                 let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-                
                 //Excluded Activities
                 activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
-
-                
                 self.present(activityVC, animated: true, completion: nil)
             }
         }else if indexPath.row == 4{
@@ -218,7 +206,21 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         // [END signout]
     }
     
-
+    @IBAction func geoFire(_ sender: Any) {
+        //For database, comment out before publish
+        setLocation()
+    }
+    @IBAction func updateTimes(_ sender: Any) {
+        let errorAlert = UIAlertController(title: "WARNING!!!!!", message: "Do not accidently hit ok. This will mess with your backend! Remove this before launch", preferredStyle: .alert)
+        let dismiss = UIAlertAction(title: "CANCEL", style: .default, handler: nil)
+        errorAlert.addAction(dismiss)
+        let okay = UIAlertAction(title: "Okay", style: .default) { (alert: UIAlertAction!) -> Void in
+            add_TwoMonth()
+        };
+        errorAlert.addAction(okay)
+        self.present(errorAlert, animated: true, completion: nil)
+    }
+    
 }
 
 class AccountCell: UITableViewCell {
