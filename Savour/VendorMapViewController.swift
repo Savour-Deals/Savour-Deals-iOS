@@ -20,6 +20,8 @@ class VendorMapViewController: UIViewController{
     @IBOutlet weak var segControl: UISegmentedControl!
     @IBOutlet weak var mapView: UIView!
     @IBOutlet weak var listView: UIView!
+    
+    var restaurantList = Dictionary<String,restaurant>()
 
     var listVC: listViewController!
     var mapVC: mapViewController!
@@ -132,12 +134,12 @@ class VendorMapViewController: UIViewController{
         if segue.identifier == "restaurant"{
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             let vc = segue.destination as! RestaurantViewController
-            vc.rID = sender as? String
+            vc.thisRestaurant = restaurantList[(sender as? String)!]
         }
-        if segue.identifier == "promptSegue"{
-            let vc = segue.destination as! LocationViewController
-            vc.sender = "map"
-        }
+//        if segue.identifier == "promptSegue"{
+//            let vc = segue.destination as! LocationViewController
+//            vc.sender = "map"
+//        }
     }
     
     @IBAction func segmentChanged(_ sender: Any) {
@@ -156,6 +158,9 @@ class VendorMapViewController: UIViewController{
     func getData(){
         getRestaurants(byLocation: self.locationManager.location!) { (nearbyRestaurants) in
             restaurants = nearbyRestaurants
+            for rest in restaurants{
+                self.restaurantList[rest.restrauntID!] = rest
+            }
             if restaurants.count < 0 {
                 let label = UILabel()
                 label.textAlignment = NSTextAlignment.center

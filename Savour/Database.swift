@@ -18,6 +18,7 @@ class Deals{
     private let ref = Database.database().reference()
     private let userid = Auth.auth().currentUser?.uid
     var filteredDeals = [DealData]()
+    var restaurants = Dictionary<String,restaurant>()
     var favoriteIDs = Dictionary<String, String>()
 
     func getDeals(byLocation location: CLLocation, dealType: String? = "All", completion: @escaping (Bool) -> ()){
@@ -36,6 +37,9 @@ class Deals{
             var nearby = [restaurant]()
             getRestaurants(byLocation: locationManager.location!,completion:{ (restaurants) in
                 nearby = restaurants
+                for rest in restaurants{
+                    self.restaurants[rest.restrauntID!] = rest
+                }
                 nearby = nearby.sorted(by:{ (d1, d2) -> Bool in
                     if d1.distanceMiles! <= d2.distanceMiles! {
                         return true
@@ -221,12 +225,19 @@ class Favorites{
     var favoriteDeals = [DealData]()
     private let ref = Database.database().reference()
     private let userid = Auth.auth().currentUser?.uid
+    var restaurants = Dictionary<String,restaurant>()
+    let locationManager = CLLocationManager()
 
     func getFavorites(table: UITableView){
         let group = DispatchGroup()
         var favoriteIDs = [String]()
         let userid = Auth.auth().currentUser?.uid
         let ref = Database.database().reference()
+        getRestaurants(byLocation: locationManager.location!,completion:{ (restaurants) in
+            for rest in restaurants{
+                self.restaurants[rest.restrauntID!] = rest
+            }
+        })
         ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
             for entry in snapshot.children{
                 let snap = entry as! DataSnapshot
@@ -315,8 +326,7 @@ class DealData{
             self.restrauntPhoto = ""
             self.endTime = 0
             self.startTime = 0
-            self.endDay = 0
-            self.startDay = 0
+
             self.dealType = ""
             self.dealID = ""
             self.fav = false
@@ -340,8 +350,6 @@ class DealData{
             self.restrauntPhoto = value["rPhotoLoc"] as? String ?? ""
             self.endTime = value["EndTime"] as? Double
             self.startTime = value["StartTime"] as? Double
-            self.endDay = value["EndDay"] as? Double
-            self.startDay = value["StartDay"] as? Double
             self.dealType = value["Filter"] as? String ?? ""
             self.dealID = snap?.key
             self.dealCode = value["code"] as? String ?? ""
@@ -567,8 +575,12 @@ class restaurant{
     }
     
 }
-
-
+func updateDistance(location: CLLocation, restaurants: [restaurant])-> [restaurant]{
+    for restaurant in restaurants{
+        restaurant.distanceMiles = (restaurant.location?.distance(from: location))!/1609
+    }
+    return restaurants
+}
 func getRestaurants(byLocation location: CLLocation,completion: @escaping ([restaurant]) -> ()){
     var nearby = [String:CLLocation]()
     var restaurants = [restaurant]()
@@ -610,14 +622,7 @@ func getRestaurants(byLocation location: CLLocation,completion: @escaping ([rest
 }
 
 
-
-
-
-
-
-
-
-
+//For some backend stuff, remove before release, migrate to managment app
 class addresseClass{
     var address: String?
     var ID: String?
@@ -626,13 +631,11 @@ class addresseClass{
         self.ID = id
     }
 }
+
 var addresses = [addresseClass]()
 var geocoder = CLGeocoder()  //Configure the geocoder as needed.
 
-
-
 func setLocation(){
-
     let ref = Database.database().reference()
     ref.child("Restaurants").observeSingleEvent(of: .value, with: { (snapshot) in
         for entry in snapshot.children{
@@ -644,8 +647,8 @@ func setLocation(){
         }
         doGeoCoding()
     })
-
 }
+
 func doGeoCoding(){
     let geofireRef = Database.database().reference().child("Restaurants_Location")
     let geoFire = GeoFire(firebaseRef: geofireRef)
@@ -664,3 +667,16 @@ func doGeoCoding(){
     }
 }
 
+func add_TwoMonth(){
+    let ref = Database.database().reference()
+    ref.child("Deals").observeSingleEvent(of: .value, with: { (snapshot) in
+        for entry in snapshot.children{
+            let snap = entry as! DataSnapshot
+            let value = snap.key
+            let data = snap.value as! NSDictionary
+            let end = data["EndTime"] as? Double
+            ref.child("Deals").child(value).child("EndTime").setValue(end!+5256000.0)
+        }
+    })
+
+}

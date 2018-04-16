@@ -187,6 +187,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         VC.Deal = favorites.favoriteDeals[indexPath.row]
         VC.fromDetails = false
         VC.photo = VC.Deal?.restrauntPhoto
+        VC.thisRestaurant = favorites.restaurants[VC.Deal.restrauntID!]
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationController?.pushViewController(VC, animated: true)
     }
@@ -212,12 +213,12 @@ extension FavoritesViewController: UIViewControllerPreviewingDelegate {
         VC.hidesBottomBarWhenPushed = true
         VC.Deal = favorites.favoriteDeals[indexPath.row]
         VC.fromDetails = false
+        VC.thisRestaurant = favorites.restaurants[VC.Deal.restrauntID!]
+
         VC.photo = VC.Deal?.restrauntPhoto
         VC.preferredContentSize =
             CGSize(width: 0.0, height: 600)
-        
         previewingContext.sourceRect = cell.frame
-        
         return VC
     }
     
