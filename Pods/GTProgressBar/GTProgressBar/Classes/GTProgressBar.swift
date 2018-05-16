@@ -214,6 +214,23 @@ public class GTProgressBar: UIView {
         }
     }
     
+    public var cornerType: GTProgressBarCornerType = GTProgressBarCornerType.rounded {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
+    
+    @IBInspectable
+    public var cornerTypeInt: Int = GTProgressBarCornerType.rounded.rawValue {
+        didSet {
+            let enumCornerType = GTProgressBarCornerType(rawValue: cornerTypeInt)
+            
+            if let type = enumCornerType {
+                self.cornerType = type
+            }
+        }
+    }
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         prepareSubviews()
@@ -301,6 +318,10 @@ public class GTProgressBar: UIView {
     }
     
     private func cornerRadiusFor(view: UIView) -> CGFloat {
+        if cornerType == .square {
+            return 0.0
+        }
+        
         if cornerRadius != 0.0 {
             return cornerRadius
         }

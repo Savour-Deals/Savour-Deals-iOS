@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Amm-oo-R0P">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Amm-oo-R0P">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--OnNav-->
         <scene sceneID="FWg-yy-GHi">
@@ -40,14 +35,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ewy-2T-Wiz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-771" y="79"/>
-        </scene>
-        <!--VendorHome-->
-        <scene sceneID="Ipc-00-7gs">
-            <objects>
-                <viewControllerPlaceholder storyboardName="VendorHome" id="KTa-cg-07q" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kv7-UE-mwI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2438" y="132"/>
         </scene>
         <!--Main-->
         <scene sceneID="uG0-7V-f1X">
@@ -246,7 +233,6 @@
                         <outlet property="loginIndicator" destination="7md-wY-E04" id="o0b-oF-Ot3"/>
                         <segue destination="B3h-fo-0gj" kind="show" identifier="MainS" id="cpY-ps-fjg"/>
                         <segue destination="B3h-fo-0gj" kind="show" identifier="Main" animates="NO" id="5XM-XU-AuX"/>
-                        <segue destination="KTa-cg-07q" kind="show" identifier="Vendor" id="Rx2-qF-6Ew"/>
                         <segue destination="GYD-KT-K8U" kind="show" identifier="tutorial" id="afN-rP-J9z"/>
                     </connections>
                 </viewController>
@@ -445,7 +431,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Qq-Ej-lGI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1071" y="46"/>
+            <point key="canvasLocation" x="1138" y="55"/>
         </scene>
     </scenes>
     <resources>
@@ -454,7 +440,7 @@
         <image name="stil-336188" width="3024" height="3780"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="afN-rP-J9z"/>
-        <segue reference="cpY-ps-fjg"/>
+        <segue reference="GOz-cQ-F9f"/>
+        <segue reference="sYg-Gu-Rk6"/>
     </inferredMetricsTieBreakers>
 </document>

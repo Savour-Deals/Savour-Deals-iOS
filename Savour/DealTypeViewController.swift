@@ -40,7 +40,7 @@ class DealTypeViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let VC = segue.destination as! DiscountViewController
-        VC.Dealtype = self.Dealtype
+        VC.type = self.Dealtype
         VC.resName = self.resName
     }
     

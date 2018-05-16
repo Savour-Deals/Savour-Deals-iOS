@@ -230,19 +230,8 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                     
                 }
             })
-            
-            self.ref.child("Users").child(user!.uid).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
-                // Get user value
-                let type = snapshot.value as? String ?? ""
-                if type == "Vendor"{
-                    self.performSegue(withIdentifier: "Vendor", sender: self)
-                    self.doneLoading()
-                }
-                else{
-                    self.performSegue(withIdentifier: "tutorial", sender: self)
-                    self.doneLoading()
-                }
-            })
+            self.performSegue(withIdentifier: "tutorial", sender: self)
+            self.doneLoading()
         }
     }
     @IBAction func toLogin(_ sender: Any) {

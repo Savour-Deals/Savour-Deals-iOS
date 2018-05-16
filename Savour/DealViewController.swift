@@ -36,7 +36,7 @@ class DealViewController: UIViewController {
     var userLocation: CLLocation!
     
     @IBOutlet weak var restaurantLabel: UILabel!
-    @IBOutlet weak var dealCode: UILabel!
+    @IBOutlet weak var code: UILabel!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var infoView: UIView!
     @IBOutlet var redeemedView: UIView!
@@ -102,7 +102,7 @@ class DealViewController: UIViewController {
         else{
             moreBtn.isHidden = false
         }
-        restaurantLabel.text = Deal?.restrauntName
+        restaurantLabel.text = Deal?.name
         dealLbl.text = Deal?.dealDescription
         if photo != ""{
             // Reference to an image file in Firebase Storage
@@ -119,7 +119,7 @@ class DealViewController: UIViewController {
                 self.img.layer.cornerRadius = self.img.frame.size.height/2
             })
         }
-        moreBtn.setTitle("See More From " + (Deal?.restrauntName)!, for: .normal)
+        moreBtn.setTitle("See More From " + (Deal?.name)!, for: .normal)
         imgbound.layer.insertSublayer(pulsator, below: imgbound.layer)
         pulsator.numPulse = 6
         pulsator.radius = 230
@@ -135,24 +135,22 @@ class DealViewController: UIViewController {
             }
             else{
                 self.redeemIndicator(color: UIColor.green.cgColor)
-                self.dealCode.text = self.Deal?.dealCode
+                self.code.text = self.Deal?.code
             }
-        }else if let rest = self.thisRestaurant?.distanceMiles, rest>0.1{
+        }else if let rest = self.thisRestaurant?.distanceMiles, rest>0.2{
             self.redeem.isEnabled = false
-            pulsator.backgroundColor =  UIColor.red.cgColor
+            pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
             self.redeem.setTitle("Go to Location to Redeem", for: .normal)
-            dealCode.text = "Looks like you're not nearby. Go to the location to redeem this deal!"
             self.redeem.layer.backgroundColor = UIColor.red.cgColor
         }else{
             pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         }
         textView.contentOffset.y = 0
-        if !(Deal?.valid)!{
+        if !(Deal?.active)!{
             self.redeem.setTitle("Deal Not Active", for: .normal)
-            self.dealCode.text = Deal.validHours
-            pulsator.backgroundColor = UIColor.red.cgColor
+            self.code.text = "This deal is valid " + Deal.code! + "."
             self.redeem.isEnabled = false
-            self.redeem.layer.backgroundColor = UIColor.red.cgColor
+            self.redeemIndicator(color: UIColor.red.cgColor)
         }
     }
     
@@ -172,7 +170,7 @@ class DealViewController: UIViewController {
             let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
                 let currTime = Date().timeIntervalSince1970
                 let uID = Auth.auth().currentUser?.uid
-                let ref = Database.database().reference().child("Deals").child((self.Deal?.dealID)!).child("redeemed").child(uID!)
+                let ref = Database.database().reference().child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
                 ref.setValue(currTime)
                 //set and draw checkmark
                 self.redeemIndicator(color: UIColor.green.cgColor)
@@ -184,15 +182,15 @@ class DealViewController: UIViewController {
                 self.self.Deal.redeemedTime = currTime
                 self.Deal?.redeemedTime = currTime
                 self.Deal?.redeemed = true
-                ref.child("Users").child(uID!).child("Favorites").child(self.Deal.dealID!).removeValue()
-                if self.Deal?.dealCode != ""{
-                    self.dealCode.textColor = UIColor.black
-                    self.dealCode.text = self.Deal?.dealCode
+                ref.child("Users").child(uID!).child("Favorites").child(self.Deal.id!).removeValue()
+                if self.Deal?.code != ""{
+                    self.code.textColor = UIColor.black
+                    self.code.text = self.Deal?.code
                 }
                 self.runTimer()
                 let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
                 if status.subscriptionStatus.userId != " "{
-                    let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.restrauntID)!).child("Followers").child(uID!)
+                    let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.id)!).child("Followers").child(uID!)
                     followRef.setValue(status.subscriptionStatus.userId)
 
                 }
@@ -208,10 +206,10 @@ class DealViewController: UIViewController {
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
-        self.dealCode.textColor = UIColor.black
+        self.code.textColor = UIColor.black
         timerLabel.text = timeString(time: timeSince) //This will update the label
         if (timeSince) > 1800 {
-            dealCode.text = ""
+            code.text = ""
             timerLabel.text = "Reedeemed over half an hour ago"
             redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
@@ -229,7 +227,7 @@ class DealViewController: UIViewController {
         let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
         timerLabel.text = timeString(time: timeSince) //This will update the label.
         if (timeSince) > 1800 {
-            dealCode.text = ""
+            code.text = ""
             timerLabel.text = "Reedeemed over half an hour ago"
             redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()

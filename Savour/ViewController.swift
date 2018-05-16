@@ -8,9 +8,6 @@
 
 import UIKit
 import FirebaseDatabase
-import FirebaseStorage
-import SDWebImage
-import FirebaseStorageUI
 import FirebaseAuth
 import CoreLocation
 
@@ -23,7 +20,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var loading: UIActivityIndicatorView!
     @IBOutlet var redeemedView: UIView!
     var handle: AuthStateDidChangeListenerHandle?
-    var storage: Storage!
     var ref: DatabaseReference!
     var hasRefreshed = false
     var statusBar: UIView!
@@ -52,13 +48,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.loading.startAnimating()
         let user = Auth.auth().currentUser
         if user == nil {
             // No user is signed in.
             self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
-        loading.startAnimating()
         ref = Database.database().reference()
         ref.keepSynced(true)
         if CLLocationManager.locationServicesEnabled() {
@@ -71,15 +66,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } else {
             self.performSegue(withIdentifier: "tutorial", sender: self)
         }
-//        self.ref.child("Users").child(user!.uid).child("Onboarded").observeSingleEvent(of: .value, with: { (snapshot) in
-//            let boarded = snapshot.value as? String ?? ""
-//            if boarded == ""{
-//                self.performSegue(withIdentifier: "tutorial", sender: self)
-//            }else{
-//                self.setup()
-//            }
-//        })
-        
     }
     
     func removeSubview(){
@@ -92,7 +78,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //callback to know when the user accepts or denies location services
         if status == CLAuthorizationStatus.denied {
             locationDisabled()
-        } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
+        }else if status == .authorizedAlways || status == .authorizedWhenInUse  {
             userLocation = CLLocation(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
             locationEnabled()
         }
@@ -131,6 +117,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
         constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
         NSLayoutConstraint.activate(constraints)
+        self.loading.stopAnimating()
     }
     
     func locationEnabled(){
@@ -154,7 +141,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
             self.deals.getDeals(byLocation: self.userLocation, dealType: title, completion:{ (success) in
+                if self.deals.filteredDeals.isEmpty && self.deals.filteredInactiveDeals.isEmpty{
+                    self.DealsTable.isHidden = true
+                    self.noDeals.isHidden = false
+                }else{
+                    self.DealsTable.isHidden = false
+                    self.noDeals.isHidden = true
+                }
                 self.DealsTable.reloadData()
+                self.loading.stopAnimating()
             })
         }
     }
@@ -233,11 +228,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if status == CLAuthorizationStatus.denied {
             locationDisabled()
         } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            if self.deals.filteredDeals.count<1{
+            if self.deals.filteredDeals.count + deals.filteredInactiveDeals.count<1{
                 locationEnabled()
             }
         }
         for deal in deals.filteredDeals{
+            deal.updateTimes()
+        }
+        for deal in deals.filteredInactiveDeals{
             deal.updateTimes()
         }
     }
@@ -286,6 +284,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         self.deals.getDeals(byLocation: self.userLocation, dealType: title, completion:{ (success) in
             self.DealsTable.reloadData()
+            //take care of any loading animations
+            if self.refreshControl.isRefreshing{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
+                    self.refreshControl.endRefreshing()
+                }
+            }
         })
     }
     
@@ -298,74 +302,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 showedNotiDeal = true
             }
         }
-        //take care of any loading animations
-        if refreshControl.isRefreshing{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
-                self.refreshControl.endRefreshing()
-            }
-        }
-        loading.stopAnimating()
-        if deals.filteredDeals.isEmpty{
-            DealsTable.isHidden = true
-        }else{
-            DealsTable.isHidden = false
-            noDeals.isHidden = true
-            loading.stopAnimating()
-        }
-        return deals.filteredDeals.count
+
+        return deals.filteredDeals.count + deals.filteredInactiveDeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
-        let deal = deals.filteredDeals[indexPath.row]
+        var deal:DealData!
+        if indexPath.row < deals.filteredDeals.count{
+            deal = deals.filteredDeals[indexPath.row]
+        }else{
+            deal = deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count]
+        }
         cell.deal = deal
         cell.tempImg.image = UIImage(named: placeholderImgs[count])
         count = count + 1
         if count > 2{
             count = 0
         }
-        if !cell.deal.fav!{
-            let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
-            cell.likeButton.setImage(image, for: .normal)
-            cell.likeButton.tintColor = UIColor.red
-        }
-        else{
-            let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
-            cell.likeButton.setImage(image, for: .normal)
-            cell.likeButton.tintColor = UIColor.red
-        }
-        let photo = deal.restrauntPhoto!
-        if photo != ""{
-            // Reference to an image file in Firebase Storage
-            let storage = Storage.storage()
-            let storageref = storage.reference(forURL: photo)
-
-            // UIImageView in your ViewController
-            let imageView: UIImageView = cell.rImg
-
-            // Placeholder image
-            let placeholderImage = UIImage(named: "placeholder.jpg")
-
-            // Load the image using SDWebImage
-            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage, completion: { (img, err, typ, ref) in
-                cell.tempImg.isHidden = true
-            })
-        }
-        cell.rName.text = deal.restrauntName
-        cell.dealDesc.text = deal.dealDescription
-        if deal.redeemed! {
-            cell.Countdown.text = "Deal Already Redeemed!"
-            cell.Countdown.textColor = UIColor.red
-            cell.validHours.text = ""
-
-        }
-        else{
-            cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
-            cell.Countdown.text = deal.countdown
-            cell.validHours.text = deal.validHours
-        }
-        cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
-        cell.tagImg.tintColor = cell.Countdown.textColor
+        cell.setupUI()
         
         return cell
 
@@ -374,7 +329,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         tableView.deselectRow(at: indexPath, animated: true)
-        dealDetails(deal: deals.filteredDeals[indexPath.row])
+        if indexPath.row < deals.filteredDeals.count {
+            dealDetails(deal: deals.filteredDeals[indexPath.row])
+        }else{
+            dealDetails(deal: deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count])
+        }
     }
     
     func dealDetails(deal: DealData){
@@ -384,8 +343,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             VC.hidesBottomBarWhenPushed = true
             VC.Deal = deal
             VC.fromDetails = false
-            VC.thisRestaurant = deals.restaurants[deal.restrauntID!]
-            VC.photo = VC.Deal?.restrauntPhoto
+            VC.thisRestaurant = deals.restaurants[deal.rID!]
+            VC.photo = VC.Deal?.photo
             VC.from = "deals"
             //cleanup searchbar
             if self.searchBar != nil{
@@ -420,7 +379,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
         let Title = button.currentTitle
         deals.filter(byTitle: Title!)
-        if deals.filteredDeals.count < 1 {
+        if deals.filteredDeals.count + deals.filteredInactiveDeals.count < 1 {
             self.DealsTable.isHidden = true
             self.noDeals.isHidden = false
         }else{
@@ -428,7 +387,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        if deals.filteredDeals.count>0{
+        if deals.filteredDeals.count + deals.filteredInactiveDeals.count>0{
             DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
         }
 
@@ -440,7 +399,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Setup the Search Controller
         searchBar = UISearchBar()
         searchBar.showsCancelButton = false
-        searchBar.placeholder = "Search Restaurants"
+        searchBar.placeholder = "Search Vendors"
         searchBar.delegate = self
         self.navigationItem.titleView = searchBar
         if #available(iOS 11.0, *) {
@@ -450,7 +409,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         deals.filter(byName: searchBar.text!)
-        if deals.filteredDeals.count < 1 {
+        if deals.filteredDeals.count + deals.filteredInactiveDeals.count < 1 {
             self.DealsTable.isHidden = true
             self.noDeals.isHidden = false
         }else{
@@ -458,7 +417,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        if deals.filteredDeals.count>0{
+        if deals.filteredDeals.count + deals.filteredInactiveDeals.count>0{
             DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
         }
     }
@@ -467,7 +426,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
         deals.filter(byName: searchBar.text!)
-        if deals.filteredDeals.count < 1 {
+        if deals.filteredDeals.count + deals.filteredInactiveDeals.count < 1 {
             self.DealsTable.isHidden = true
             self.noDeals.isHidden = false
         }else{
@@ -475,7 +434,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        if deals.filteredDeals.count>0{
+        if deals.filteredDeals.count + deals.filteredInactiveDeals.count>0{
             DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
         }
     }
@@ -483,7 +442,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
-        if deals.filteredDeals.count < 1 {
+        if deals.filteredDeals.count + deals.filteredInactiveDeals.count < 1 {
             self.DealsTable.isHidden = true
             self.noDeals.isHidden = false
         }else{
@@ -499,7 +458,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 button.setTitleColor(UIColor.white, for: UIControlState.normal)
                 if button.title(for: .normal) == "All"{
                     button.backgroundColor = UIColor.white
-                    if deals.filteredDeals.count>0{
+                    if deals.filteredDeals.count + deals.filteredInactiveDeals.count>0{
                         DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
                     }
                     button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
@@ -521,7 +480,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let dict = sender as! Dictionary<String,Any>
             VC.Deal = dict["deal"] as? DealData
             VC.fromDetails = false
-            VC.photo = VC.Deal?.restrauntPhoto
+            VC.photo = VC.Deal?.photo
             VC.from = "deals"
         }else if segue.identifier == "tutorial"{
             let VC = segue.destination as! OnboardingViewController
@@ -538,10 +497,14 @@ extension ViewController:     UIViewControllerPreviewingDelegate {
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
-        VC.Deal = deals.filteredDeals[indexPath.row]
-        VC.thisRestaurant = deals.restaurants[VC.Deal.restrauntID!]
+        if indexPath.row < deals.filteredDeals.count {
+            VC.Deal = deals.filteredDeals[indexPath.row]
+        }else{
+            VC.Deal = deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count]
+        }
+        VC.thisRestaurant = deals.restaurants[VC.Deal.rID!]
         VC.fromDetails = false
-        VC.photo = VC.Deal?.restrauntPhoto
+        VC.photo = VC.Deal?.photo
         VC.preferredContentSize = CGSize(width: 0.0, height: 600)
         previewingContext.sourceRect = cell.frame
         return VC

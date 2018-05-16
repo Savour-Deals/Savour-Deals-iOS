@@ -1,5 +1,4 @@
 //
-//  DealData.swift
 //  Savour
 //
 //  Created by Chris Patterson on 8/1/17.
@@ -18,6 +17,8 @@ class Deals{
     private let ref = Database.database().reference()
     private let userid = Auth.auth().currentUser?.uid
     var filteredDeals = [DealData]()
+    private var inactiveDeals = [DealData]()
+    var filteredInactiveDeals = [DealData]()
     var restaurants = Dictionary<String,restaurant>()
     var favoriteIDs = Dictionary<String, String>()
 
@@ -27,6 +28,7 @@ class Deals{
         let locationManager = CLLocationManager()
         let expiredUnix = currentUnix
         unfilteredDeals.removeAll()
+        inactiveDeals.removeAll()
         ref.keepSynced(true)
         ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
             for entry in snapshot.children{
@@ -38,7 +40,7 @@ class Deals{
             getRestaurants(byLocation: locationManager.location!,completion:{ (restaurants) in
                 nearby = restaurants
                 for rest in restaurants{
-                    self.restaurants[rest.restrauntID!] = rest
+                    self.restaurants[rest.id!] = rest
                 }
                 nearby = nearby.sorted(by:{ (d1, d2) -> Bool in
                     if d1.distanceMiles! <= d2.distanceMiles! {
@@ -50,14 +52,18 @@ class Deals{
                 })
                 for place in nearby{
                     group.enter()
-                    self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: place.restrauntID).observeSingleEvent(of: .value, with: { (snapshot) in
+                    self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: place.id).observeSingleEvent(of: .value, with: { (snapshot) in
                         for entry in snapshot.children {
                             let snap = entry as! DataSnapshot
                             let temp = DealData(snap: snap, ID: self.userid!)
-                            if !self.unfilteredDeals.contains(where: {$0.dealID  == temp.dealID }){
+                            if !self.unfilteredDeals.contains(where: {$0.id  == temp.id }) && !self.inactiveDeals.contains(where: {$0.id  == temp.id }){
                                 //if the deal is not expired or redeemed less than half an hour ago, show it
-                                if temp.endTime! > expiredUnix && !temp.redeemed! && temp.valid{
-                                    self.unfilteredDeals.append(temp)
+                                if temp.endTime! > expiredUnix && !temp.redeemed!{
+                                    if temp.active{
+                                        self.unfilteredDeals.append(temp)
+                                    }else{
+                                        self.inactiveDeals.append(temp)
+                                    }
                                 }else if let time = temp.redeemedTime{
                                     if (Date().timeIntervalSince1970 - time) < 1800{
                                         self.unfilteredDeals.append(temp)
@@ -72,8 +78,8 @@ class Deals{
                 }
                 group.notify(queue: DispatchQueue.main){
                     for deal in self.unfilteredDeals{
-                        if let _ = self.favoriteIDs[deal.dealID!]{
-                            deal.fav = true
+                        if let _ = self.favoriteIDs[deal.id!]{
+                            deal.favorited = true
                         }
                     }
                     self.filter(byTitle: dealType!)
@@ -82,52 +88,6 @@ class Deals{
                 }
             })
         })
-    }
-
-    func getDeals(table: UITableView, dealType: String? = "All"){
-        //Check if deal is favorited
-        let userid = Auth.auth().currentUser?.uid
-        let ref = Database.database().reference()
-        ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
-            for entry in snapshot.children{
-                let snap = entry as! DataSnapshot
-                let value = snap.key
-                self.favoriteIDs[value] = value
-            }
-            //once we have the favorites, we can get the deals
-            self.unfilteredDeals.removeAll()
-            let currentUnix = Date().timeIntervalSince1970
-            let plusDay = currentUnix + 86400
-            let expiredUnix = currentUnix
-            let sortedRef = self.ref.child("Deals").queryOrdered(byChild: "StartTime")
-            let filteredRef = sortedRef.queryEnding(atValue: plusDay, childKey: "StartTime")
-            filteredRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                for entry in snapshot.children {
-                    let snap = entry as! DataSnapshot
-                    let temp = DealData(snap: snap, ID: userid!)
-                    //if the deal is not expired or redeemed less than half an hour ago, show it
-                    if temp.endTime! > expiredUnix && !temp.redeemed! && temp.valid{
-                        self.unfilteredDeals.append(temp)
-                    }else if let time = temp.redeemedTime{
-                        if (Date().timeIntervalSince1970 - time) < 1800{
-                            self.unfilteredDeals.append(temp)
-                        }
-                    }
-                }
-                for deal in self.unfilteredDeals{
-                    if let _ = self.favoriteIDs[deal.dealID!]{
-                        deal.fav = true
-                    }
-                }
-                self.filter(byTitle: dealType!)
-                self.sortDeals()
-                table.reloadData()
-            }){ (error) in
-                print(error.localizedDescription)
-            }
-        }){ (error) in
-            print(error.localizedDescription)
-        }
     }
     
     func getDeals(forRestaurant restaurant: String, table: UITableView){
@@ -146,20 +106,28 @@ class Deals{
                     let snap = entry as! DataSnapshot
                     let temp = DealData(snap: snap, ID: userid!)
                     //if the deal is not expired or redeemed less than half an hour ago, show it
-                    if temp.endTime! > expiredUnix && !temp.redeemed! && temp.valid{
-                        self.unfilteredDeals.append(temp)
-                    }else if let time = temp.redeemedTime{
-                        if (Date().timeIntervalSince1970 - time) < 1800{
-                            self.unfilteredDeals.append(temp)
+                    if !self.unfilteredDeals.contains(where: {$0.id  == temp.id }) && !self.inactiveDeals.contains(where: {$0.id  == temp.id }){
+                        //if the deal is not expired or redeemed less than half an hour ago, show it
+                        if temp.endTime! > expiredUnix && !temp.redeemed!{
+                            if temp.active{
+                                self.unfilteredDeals.append(temp)
+                            }else{
+                                self.inactiveDeals.append(temp)
+                            }
+                        }else if let time = temp.redeemedTime{
+                            if (Date().timeIntervalSince1970 - time) < 1800{
+                                self.unfilteredDeals.append(temp)
+                            }
                         }
                     }
                 }
                 for deal in self.unfilteredDeals{
-                    if let _ = self.favoriteIDs[deal.dealID!]{
-                        deal.fav = true
+                    if let _ = self.favoriteIDs[deal.id!]{
+                        deal.favorited = true
                     }
                 }
                 self.filteredDeals = self.unfilteredDeals
+                self.filteredInactiveDeals = self.inactiveDeals
                 self.sortDeals()
                 table.reloadData()
             }){ (error) in
@@ -169,17 +137,21 @@ class Deals{
             print(error.localizedDescription)
         }
     }
-    
+   
     func filter(byTitle title: String){
         if title == "All" {
             filteredDeals = unfilteredDeals
+            filteredInactiveDeals = inactiveDeals
         }else if title == "%" || title == "$"{
             filteredDeals = unfilteredDeals.filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
+            filteredInactiveDeals = inactiveDeals.filter  { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
         }else if  title == "BOGO" {
             // Filter the results
             filteredDeals = unfilteredDeals.filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
+            filteredInactiveDeals = inactiveDeals.filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
         } else{
-            filteredDeals = unfilteredDeals.filter { ($0.dealType!.lowercased().contains(title.lowercased())) }
+            filteredDeals = unfilteredDeals.filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
+            filteredInactiveDeals = inactiveDeals.filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
         }
         sortDeals()
     }
@@ -187,20 +159,22 @@ class Deals{
     func filter(byName name: String){
         if name == "" {
             filteredDeals = unfilteredDeals
+            filteredInactiveDeals = inactiveDeals
         } else {
             // Filter the results
-            filteredDeals = unfilteredDeals.filter { ($0.restrauntName?.lowercased().contains(name.lowercased()))! }
+            filteredDeals = unfilteredDeals.filter { ($0.name?.lowercased().contains(name.lowercased()))! }
+            filteredInactiveDeals = inactiveDeals.filter { ($0.name?.lowercased().contains(name.lowercased()))! }
         }
     }
     
     func sortDeals(){
         filteredDeals = filteredDeals.sorted(by:{ (d1, d2) -> Bool in
-            if d1.valid && !d2.valid {
+            if d1.active && !d2.active {
                 return true
-            }else if !d1.valid && d2.valid{
+            }else if !d1.active && d2.active{
                 return false
             }
-            else if d1.valid == d2.valid {
+            else if d1.active == d2.active {
                 return CGFloat(d1.endTime!) < CGFloat(d2.endTime!)
             }
             return false
@@ -210,8 +184,7 @@ class Deals{
     func getNotificationDeal(dealID: String?) -> DealData?{
         if dealID != nil && unfilteredDeals.count > 0{
             for i in 0..<unfilteredDeals.count{
-                if unfilteredDeals[i].dealID == notificationDeal {//}&& !self.alreadyGoing{
-                    //self.alreadyGoing = true
+                if unfilteredDeals[i].id == notificationDeal {
                     return unfilteredDeals[i]
                 }
             }
@@ -226,16 +199,16 @@ class Favorites{
     private let ref = Database.database().reference()
     private let userid = Auth.auth().currentUser?.uid
     var restaurants = Dictionary<String,restaurant>()
-    let locationManager = CLLocationManager()
 
     func getFavorites(table: UITableView){
         let group = DispatchGroup()
         var favoriteIDs = [String]()
         let userid = Auth.auth().currentUser?.uid
         let ref = Database.database().reference()
+        let locationManager = CLLocationManager()
         getRestaurants(byLocation: locationManager.location!,completion:{ (restaurants) in
             for rest in restaurants{
-                self.restaurants[rest.restrauntID!] = rest
+                self.restaurants[rest.id!] = rest
             }
         })
         ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
@@ -252,7 +225,7 @@ class Favorites{
                     for child in snapshot.children{
                         let snap = child as! DataSnapshot
                         let temp = DealData(snap: snap, ID: userid!)
-                        temp.fav = true
+                        temp.favorited = true
                         //if the deal is not expired or redeemed less than half an hour ago, show it
                         if temp.endTime! > expiredUnix && !temp.redeemed!{
                             self.unfilteredDeals.append(temp)
@@ -262,7 +235,7 @@ class Favorites{
                             }
                         }else{
                             //if the deal is no longer active or was redeemed, we can remove the favorite
-                            ref.child("Users").child(userid!).child("Favorites").child(temp.restrauntID!).removeValue()
+                            ref.child("Users").child(userid!).child("Favorites").child(temp.id!).removeValue()
                         }
                     }
                     group.leave()
@@ -282,12 +255,12 @@ class Favorites{
     
     func sortDeals(){
         favoriteDeals = favoriteDeals.sorted(by:{ (d1, d2) -> Bool in
-            if d1.valid && !d2.valid {
+            if d1.active && !d2.active {
                 return true
-            }else if !d1.valid && d2.valid{
+            }else if !d1.active && d2.active{
                 return false
             }
-            else if d1.valid == d2.valid {
+            else if d1.active == d2.active {
                 return CGFloat(d1.endTime!) < CGFloat(d2.endTime!)
             }
             return false
@@ -296,63 +269,60 @@ class Favorites{
 }
 
 class DealData{
-    var restrauntName: String?
-    var restrauntID: String?
-    var restrauntPhoto: String?
+    var name: String?
+    var id: String?
+    var rID: String?
+    var photo: String?
     var dealDescription: String?
     var startTime: Double?
     var endTime: Double?
-    var startDay: Double?
-    var endDay: Double?
-    var likes: Int?
-    var dealID: String?
-    var fav: Bool?
+    var favorited: Bool?
     var redeemed: Bool?
     var redeemedTime: Double?
-    var dealType: String?
-    var dealCode: String?
-    var validHours: String?
-    var valid: Bool
+    var type: String?
+    var code: String?
+    var activeHours: String?
+    var activeDays = [Bool]()
+    var active: Bool
     var countdown: String?
-
-    
+    var daysLeft: Int?
     
     init(snap: DataSnapshot? = nil, ID: String) {
         if ID == ""{
-            self.restrauntID = ""
-            self.likes = 0
-            self.restrauntName = ""
+            self.rID = ""
+            self.name = ""
             self.dealDescription = ""
-            self.restrauntPhoto = ""
+            self.photo = ""
             self.endTime = 0
             self.startTime = 0
-
-            self.dealType = ""
-            self.dealID = ""
-            self.fav = false
-            self.dealCode = ""
+            self.type = ""
+            self.id = ""
+            self.favorited = false
+            self.code = ""
             self.redeemed = false
             self.redeemedTime = 0
-            self.validHours = ""
-            self.valid = false
+            self.activeHours = ""
+            self.active = false
+            for _ in 0...6{
+                self.activeDays.append(false)
+            }
         }
         else{
             let value = snap?.value as! NSDictionary
             if let rID = value["rID"] {
-                self.restrauntID = "\(rID)"
+                self.rID = "\(rID)"
             }
             else {
-                self.restrauntID = ""
+                self.id = ""
             }
-            self.likes = value["likes"] as? Int ?? 0
-            self.restrauntName = value["rName"] as? String ?? ""
+            self.name = value["rName"] as? String ?? ""
             self.dealDescription = value["dealDesc"] as? String ?? ""
-            self.restrauntPhoto = value["rPhotoLoc"] as? String ?? ""
+            self.photo = value["photo"] as? String ?? ""
             self.endTime = value["EndTime"] as? Double
             self.startTime = value["StartTime"] as? Double
-            self.dealType = value["Filter"] as? String ?? ""
-            self.dealID = snap?.key
-            self.dealCode = value["code"] as? String ?? ""
+            self.type = value["Filter"] as? String ?? ""
+            self.id = snap?.key
+            self.code = value["code"] as? String ?? ""
             if let redeemValue = value["redeemed"] as? NSDictionary{
                 if let time = redeemValue[ID]{
                     self.redeemed = true
@@ -365,6 +335,14 @@ class DealData{
                 self.redeemed = false
                 self.redeemedTime = 0
             }
+            let activeSnapshot = snap?.childSnapshot(forPath: "activeDays").value as? NSDictionary
+            self.activeDays.append(activeSnapshot?["Sun"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["Mon"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["Tues"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["Wed"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["Thurs"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["Fri"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["Sat"] as? Bool ?? false)
             let start = Date(timeIntervalSince1970: self.startTime!)
             let end = Date(timeIntervalSince1970: self.endTime!)
             let calendar = Calendar.current
@@ -389,15 +367,33 @@ class DealData{
                 //Deal goes past midnight (might be typical of bar's drink deals)
                 endTime = calendar.date(byAdding: .day, value: 1, to: endTime)!
             }
-            if now > startTime && now < endTime{
-                self.validHours = "Valid until " + formatter.string(from: endTime)
-                self.valid = true
-            }else if startTime == endTime{
-                self.validHours = ""//"Valid all day!"
-                self.valid = true
-            }else{
-                self.validHours = "Valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
-                self.valid = false
+            if self.activeDays[startTime.dayNumberOfWeek()!-1]{//Active today
+                if now > startTime && now < endTime{
+                    self.activeHours = "valid until " + formatter.string(from: endTime)
+                    self.active = true
+                }else if startTime == endTime{
+                    self.activeHours = ""//"active all day!"
+                    self.active = true
+                }else{
+                    self.activeHours = "valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                    self.code = " from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                    self.active = false
+                }
+            }else{//Not Active today
+                self.code = ""
+                for i in 1...6{
+                    if self.activeDays[i]{
+                        if self.code != ""{
+                            self.code = self.code! + " "
+                        }
+                        self.code = self.code! + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][i]
+                    }
+                }
+                if self.activeDays[0]{
+                    self.code = self.code! + " " + "Sunday"
+                }
+                self.code = (self.code?.replacingOccurrences(of: " ", with: ", "))!
+                self.active = false
             }
             var isInInterval = false
             if #available(iOS 10.0, *) {
@@ -410,6 +406,7 @@ class DealData{
                 let Components = calendar.dateComponents([.day, .hour, .minute], from: now, to: end)
                 if (now < end && now > start){
                     var leftTime = ""
+                    self.daysLeft = Components.day
                     if Components.day! != 0{
                         leftTime = leftTime + String(describing: Components.day!) + " days left"
                     }
@@ -421,10 +418,14 @@ class DealData{
                     self.countdown = leftTime
                 }
             }
+            else{
+                self.daysLeft = 0
+            }
             //favorites are set during the firebase calls
-            self.fav = false
+            self.favorited = false
         }
     }
+    
     func updateTimes(){
         let start = Date(timeIntervalSince1970: self.startTime!)
         let end = Date(timeIntervalSince1970: self.endTime!)
@@ -451,14 +452,36 @@ class DealData{
             endTime = calendar.date(byAdding: .day, value: 1, to: endTime)!
         }
         if now > startTime && now < endTime{
-            self.validHours = "Valid until " + formatter.string(from: endTime)
-            self.valid = true
-        }else if startTime == endTime{
-            self.validHours = ""//"Valid all day!"
-            self.valid = true
-        }else{
-            self.validHours = "Valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
-            self.valid = false
+            self.activeHours = "valid until " + formatter.string(from: endTime)
+            self.active = true
+        }
+        if self.activeDays[startTime.dayNumberOfWeek()!-1]{//Active today
+            if now > startTime && now < endTime{
+                self.activeHours = "valid until " + formatter.string(from: endTime)
+                self.active = true
+            }else if startTime == endTime{
+                self.activeHours = ""//"active all day!"
+                self.active = true
+            }else{
+                self.activeHours = "valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                self.code = " from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                self.active = false
+            }
+        }else{//Not Active today
+            self.code = ""
+            for i in 1...6{
+                if self.activeDays[i]{
+                    if self.code != ""{
+                        self.code = self.code! + " "
+                    }
+                    self.code = self.code! + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][i]
+                }
+            }
+            if self.activeDays[0]{
+                self.code = self.code! + " " + "Sunday"
+            }
+            self.code = (self.code?.replacingOccurrences(of: " ", with: ", "))!
+            self.active = false
         }
         var isInInterval = false
         if #available(iOS 10.0, *) {
@@ -486,9 +509,9 @@ class DealData{
 }
 
 class restaurant{
-    var restrauntName: String?
-    var restrauntID: String?
-    var restrauntPhoto: String?
+    var name: String?
+    var id: String?
+    var photo: String?
     var description: String?
     var address: String?
     var location: CLLocation?
@@ -522,13 +545,13 @@ class restaurant{
     var loyalty: loyaltyStruct
     init(snap: DataSnapshot? = nil, ID: String, location: CLLocation? = nil, myLocation: CLLocation? = nil) {
         if let value = snap?.value as? NSDictionary{
-            self.restrauntID = ID
-            self.restrauntName = value["Name"] as? String ?? ""
-            self.restrauntPhoto = value["Photo"] as? String ?? ""
+            self.id = ID
+            self.name = value["Name"] as? String ?? ""
+            self.photo = value["Photo"] as? String ?? ""
             self.description = value["Desc"] as? String ?? ""
             self.address = value["Address"] as? String ?? ""
             self.menu = value["Menu"] as? String ?? ""
-            self.restrauntPhoto = value["Photo"] as? String ?? ""
+            self.photo = value["Photo"] as? String ?? ""
             if location != nil{
                 self.location = location
                 self.distanceMiles = (location?.distance(from: myLocation!))!/1609
@@ -562,13 +585,12 @@ class restaurant{
                 loyalty = loyaltyStruct(code: code, deal: deal, count: count, dict: pointsDict!)
             }else{loyalty = loyaltyStruct()}
         }else{
-            self.restrauntID = ID
-            self.restrauntName = ""
-            self.restrauntPhoto = ""
+            self.id = ID
+            self.name = ""
+            self.photo = ""
             self.description = ""
             self.address = ""
             self.menu = ""
-            self.restrauntPhoto = ""
             self.loyalty = loyaltyStruct()
         }
         
@@ -586,7 +608,7 @@ func getRestaurants(byLocation location: CLLocation,completion: @escaping ([rest
     var restaurants = [restaurant]()
     let ref = Database.database().reference().child("Restaurants")
     let geofireRef = Database.database().reference().child("Restaurants_Location")
-    let geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: 800)//put back to 80.5
+    let geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: 80.5)
     geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
         nearby[key] = thislocation
     })
@@ -598,7 +620,7 @@ func getRestaurants(byLocation location: CLLocation,completion: @escaping ([rest
                 for child in snapshot.children{
                     let snap = child as! DataSnapshot
                     let temp = restaurant(snap: snap, ID: loc.key, location: loc.value, myLocation: location)
-                    if !restaurants.contains(where: { $0.restrauntID  == temp.restrauntID }){
+                    if !restaurants.contains(where: { $0.id  == temp.id }){
                         restaurants.append(temp)
                     }
                     group.leave()
@@ -621,52 +643,6 @@ func getRestaurants(byLocation location: CLLocation,completion: @escaping ([rest
     }
 }
 
-
-//For some backend stuff, remove before release, migrate to managment app
-class addresseClass{
-    var address: String?
-    var ID: String?
-    init(add: String = "", id: String = ""){
-        self.address = add
-        self.ID = id
-    }
-}
-
-var addresses = [addresseClass]()
-var geocoder = CLGeocoder()  //Configure the geocoder as needed.
-
-func setLocation(){
-    let ref = Database.database().reference()
-    ref.child("Restaurants").observeSingleEvent(of: .value, with: { (snapshot) in
-        for entry in snapshot.children{
-            let snap = entry as! DataSnapshot
-            let value = snap.key
-            let data = snap.value as! NSDictionary
-            let temp = addresseClass.init(add: data["Address"] as? String ?? "", id: value)
-            addresses.append(temp)
-        }
-        doGeoCoding()
-    })
-}
-
-func doGeoCoding(){
-    let geofireRef = Database.database().reference().child("Restaurants_Location")
-    let geoFire = GeoFire(firebaseRef: geofireRef)
-    if addresses.count > 0{
-        let temp = addresses.popLast()
-        geocoder.geocodeAddressString((temp?.address!)!) { (placemarks, error) -> Void in
-            if((error) != nil){
-                print("Error", error ?? "")
-            }
-            if let placemark = placemarks?.first {
-                let Location = placemark.location
-                geoFire.setLocation(Location!, forKey: (temp?.ID!)!)
-            }
-            doGeoCoding()
-        }
-    }
-}
-
 func add_TwoMonth(){
     let ref = Database.database().reference()
     ref.child("Deals").observeSingleEvent(of: .value, with: { (snapshot) in
@@ -678,5 +654,5 @@ func add_TwoMonth(){
             ref.child("Deals").child(value).child("EndTime").setValue(end!+5256000.0)
         }
     })
-
 }
+

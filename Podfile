@@ -15,7 +15,6 @@ target 'Savour' do
   pod 'FBSDKLoginKit'
   pod 'FBSDKShareKit'
   pod 'Pulsator'
-  pod 'Charts'
   pod 'Firebase/Messaging'
   pod 'OneSignal'
   pod 'AcknowList'
@@ -28,6 +27,9 @@ target 'Savour' do
   use_frameworks!
 
   # Pods for Savour
+# Pods for PodTest
+pod 'Fabric', '~> 1.7.6'
+pod 'Crashlytics', '~> 3.10.1'
 
 end
 

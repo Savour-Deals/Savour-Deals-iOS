@@ -23,7 +23,7 @@ class DiscountViewController: UIViewController {
     var BOGOvc: BogoController!
     var PercVC: PercentController!
     var DolVC: DollarController!
-    var Dealtype: String!
+    var type: String!
     var resName: String!
     var deal: DealData!
     @IBOutlet weak var nextButton: UIButton!
@@ -67,9 +67,9 @@ class DiscountViewController: UIViewController {
         }
         else{
             newDeal = DealData(ID: "")
-            newDeal.dealType = Dealtype
-            newDeal.restrauntName = self.resName
-            newDeal.restrauntID = Auth.auth().currentUser?.uid
+            newDeal.type = type
+            newDeal.name = self.resName
+            newDeal.id = Auth.auth().currentUser?.uid
         }
 
         if segmentCont.selectedSegmentIndex == 0 {
@@ -107,15 +107,15 @@ class DiscountViewController: UIViewController {
     }
     @IBAction func nextPressed(_ sender: Any) {
         if segmentCont.selectedSegmentIndex == 0 {
-            newDeal?.dealDescription = "Buy One Get One Free \(newDeal.dealType!)"
+            newDeal?.dealDescription = "Buy One Get One Free \(newDeal.type!)"
             self.performSegue(withIdentifier: "datePick", sender: nil)
         }
         else if segmentCont.selectedSegmentIndex == 1 {
-            newDeal?.dealDescription  = "\(PercVC.pickerDataSource[PercVC.pickerView.selectedRow(inComponent: 0)]) \(newDeal.dealType!)"
+            newDeal?.dealDescription  = "\(PercVC.pickerDataSource[PercVC.pickerView.selectedRow(inComponent: 0)]) \(newDeal.type!)"
             self.performSegue(withIdentifier: "datePick", sender: nil)
         }
         else if segmentCont.selectedSegmentIndex == 2 {
-            newDeal?.dealDescription  = "\(DolVC.pickerDataSource[DolVC.pickerView.selectedRow(inComponent: 0)]) \(newDeal.dealType!)"
+            newDeal?.dealDescription  = "\(DolVC.pickerDataSource[DolVC.pickerView.selectedRow(inComponent: 0)]) \(newDeal.type!)"
             self.performSegue(withIdentifier: "datePick", sender: nil)
         }
     }
@@ -291,12 +291,12 @@ class PhotoSelectController: UIViewController, UIImagePickerControllerDelegate, 
         imagePicker.delegate = self
         self.ref = Database.database().reference()
         storageRef = StorageReference()
-        if newDeal.restrauntPhoto != ""{
+        if newDeal.photo != ""{
             self.nextBtn.isEnabled = true
 
             // Reference to an image file in Firebase Storage
             let storage = Storage.storage()
-            let storageref = storage.reference(forURL: newDeal.restrauntPhoto!)
+            let storageref = storage.reference(forURL: newDeal.photo!)
             // Reference to an image file in Firebase Storage
             let reference = storageref
                     
@@ -321,10 +321,10 @@ class PhotoSelectController: UIViewController, UIImagePickerControllerDelegate, 
         working.startAnimating()
         self.ref.child("Deals").observeSingleEvent(of: .value, with: { (snapshot) in
             // set upload path for image
-            if newDeal.dealID != nil {
-                newDeal.dealID = "\(snapshot.childrenCount+1)"
+            if newDeal.id != nil {
+                newDeal.id = "\(snapshot.childrenCount+1)"
             }
-            let filePath = "Restaurants/\(Auth.auth().currentUser!.uid)/Photos/\(newDeal.dealID!)"
+            let filePath = "Restaurants/\(Auth.auth().currentUser!.uid)/Photos/\(newDeal.id!)"
             let metaData = StorageMetadata()
             metaData.contentType = "image/jpg"
             self.storageRef.child(filePath).putData(self.data as Data, metadata: metaData){(metaData,error) in
@@ -338,7 +338,7 @@ class PhotoSelectController: UIViewController, UIImagePickerControllerDelegate, 
 
                 }else{
                     let downloadURL = metaData!.downloadURL()!.absoluteString
-                    newDeal.restrauntPhoto = downloadURL
+                    newDeal.photo = downloadURL
                     self.performSegue(withIdentifier: "review", sender: nil)
                     self.nextBtn.isEnabled = true
                     working.stopAnimating()
@@ -419,7 +419,7 @@ class ReviewController: UIViewController{
         super.viewDidLoad()
         self.ref = Database.database().reference()
         rImg.image = img
-        rName.text = newDeal.restrauntName
+        rName.text = newDeal.name
         desc.text = newDeal.dealDescription
         let startD = Date(timeIntervalSince1970: newDeal.startTime!)
         date = startD
@@ -444,16 +444,16 @@ class ReviewController: UIViewController{
     }
     @IBAction func submitDeal(_ sender: Any) {
         let deal = [
-            "rID": newDeal.restrauntID!,
-            "rName":  newDeal.restrauntName!,
+            "rID": newDeal.id!,
+            "rName":  newDeal.name!,
             "dealDesc": newDeal.dealDescription!,
-            "rPhotoLoc":   newDeal.restrauntPhoto!,
+            "rPhotoLoc":   newDeal.photo!,
             "EndTime": newDeal.endTime!,
             "StartTime": newDeal.startTime!,
-            "Filter": newDeal.dealType!
+            "Filter": newDeal.type!
             ] as [String : Any]
         ref = Database.database().reference()
-        ref.child("Deals").child(newDeal.dealID!).setValue(deal)
+        ref.child("Deals").child(newDeal.id!).setValue(deal)
         self.navigationController?.dismiss(animated: true, completion: nil)
         ref.child("Restaurants").child((Auth.auth().currentUser?.uid)!).child("Followers").observeSingleEvent(of: .value, with: { (snapshot) in
             var users = [String]()
@@ -465,9 +465,9 @@ class ReviewController: UIViewController{
                 OneSignal.postNotification(
                     [
                         "include_player_ids" : users,
-                        "headings" : ["en": "New Deal From \(newDeal.restrauntName!)!"],
-                        "contents" : ["en": "\(newDeal.restrauntName!) just posted a new deal! Click here to check it out!"],
-                        "data" : ["deal": newDeal.dealID],
+                        "headings" : ["en": "New Deal From \(newDeal.name!)!"],
+                        "contents" : ["en": "\(newDeal.name!) just posted a new deal! Click here to check it out!"],
+                        "data" : ["deal": newDeal.id],
                         "send_after" : "\(self.date)"
                     ],
                     onSuccess: { (notificationData) in

@@ -159,13 +159,13 @@ class VendorMapViewController: UIViewController{
         getRestaurants(byLocation: self.locationManager.location!) { (nearbyRestaurants) in
             restaurants = nearbyRestaurants
             for rest in restaurants{
-                self.restaurantList[rest.restrauntID!] = rest
+                self.restaurantList[rest.id!] = rest
             }
-            if restaurants.count < 0 {
+            if restaurants.count <= 0 {
                 let label = UILabel()
                 label.textAlignment = NSTextAlignment.center
                 label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
-                label.text = "No restaurants are nearby."
+                label.text = "NO NEARBY RESTAURANTS."
                 label.lineBreakMode = NSLineBreakMode.byWordWrapping
                 label.numberOfLines = 0
                 label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
@@ -243,7 +243,7 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func makeAnnotations(){
         self.mapView.removeAnnotations(self.mapView.annotations)
         for i in 0..<restaurants.count{
-            let annotation = restaurantAnnotation(title: restaurants[i].restrauntName!, coordinate: (restaurants[i].location?.coordinate)!, rID: restaurants[i].restrauntID!)
+            let annotation = restaurantAnnotation(title: restaurants[i].name!, coordinate: (restaurants[i].location?.coordinate)!, rID: restaurants[i].id!)
             self.mapView.addAnnotation(annotation)
         }
         self.mapView.delegate = self
@@ -387,7 +387,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         let cell = tableView.dequeueReusableCell(withIdentifier: "restaurant", for: indexPath) as! restaurantCell
         cell.restaurant = myRestaurants[indexPath.row]
 
-        let photo = cell.restaurant.restrauntPhoto!
+        let photo = cell.restaurant.photo!
         if photo != ""{
             // Reference to an image file in Firebase Storage
             let storage = Storage.storage()
@@ -402,7 +402,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             // Load the image using SDWebImage
             imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
         }
-        cell.rName.text = cell.restaurant.restrauntName
+        cell.rName.text = cell.restaurant.name
         if let distance = cell.restaurant.distanceMiles{
             cell.distanceTxt.text = String(format:"%.1f", distance) + " miles away"
         }
@@ -416,13 +416,13 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath) as! restaurantCell
         let parent = self.parent as! VendorMapViewController
-        parent.performSegue(withIdentifier: "restaurant", sender: cell.restaurant.restrauntID)
+        parent.performSegue(withIdentifier: "restaurant", sender: cell.restaurant.id)
     }
     //SearchBar functions
     func setupSearchBar(){
         // Setup the Search Controller
         searchBar.showsCancelButton = false
-        searchBar.placeholder = "Search Restaurants"
+        searchBar.placeholder = "Search Vendors"
         searchBar.tintColor = UIColor.white
         searchBar.delegate = self
     }
@@ -432,7 +432,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             myRestaurants = restaurants
         } else {
             // Filter the results
-            myRestaurants = restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
+            myRestaurants = restaurants.filter { ($0.name?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
         listTable.reloadData()
     }
@@ -444,7 +444,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             myRestaurants = restaurants
         } else {
             // Filter the results
-            myRestaurants = restaurants.filter { ($0.restrauntName?.lowercased().contains(searchBar.text!.lowercased()))! }
+            myRestaurants = restaurants.filter { ($0.name?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
         listTable.reloadData()
     }

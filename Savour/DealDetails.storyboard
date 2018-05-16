@@ -145,10 +145,11 @@ This promotion is for individual use only and should be used for an individualâ€
                                             <action selector="infoPressed:" destination="U9a-dB-aq3" eventType="touchUpInside" id="cYl-b3-uIo"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This deal is intended for one person only!" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
-                                        <rect key="frame" x="5" y="583" width="404" height="18"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
+                                        <rect key="frame" x="20" y="558" width="374" height="43"/>
+                                        <string key="text">This deal is only valid for one person. BOGO free items are for equal or lesser value. If the vendor does not accept this deal, you should report them. </string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="o7o-6Q-F0e">
@@ -167,12 +168,12 @@ This promotion is for individual use only and should be used for an individualâ€
                                     <constraint firstItem="qlh-dk-vcz" firstAttribute="top" secondItem="dPP-Jv-J2f" secondAttribute="bottom" constant="10" id="5wj-uY-2Yk"/>
                                     <constraint firstItem="hub-RY-SRs" firstAttribute="width" secondItem="qlh-dk-vcz" secondAttribute="width" multiplier="0.5" id="6lh-pA-iaL"/>
                                     <constraint firstAttribute="trailing" secondItem="o7o-6Q-F0e" secondAttribute="trailing" constant="10" id="8DH-zI-Adx"/>
-                                    <constraint firstItem="9XN-zF-3A1" firstAttribute="leading" secondItem="zhn-Qz-hBb" secondAttribute="leading" constant="5" id="Ds7-RF-wBC"/>
+                                    <constraint firstItem="9XN-zF-3A1" firstAttribute="leading" secondItem="zhn-Qz-hBb" secondAttribute="leading" constant="20" id="Ds7-RF-wBC"/>
                                     <constraint firstItem="dPP-Jv-J2f" firstAttribute="top" secondItem="o7o-6Q-F0e" secondAttribute="bottom" constant="10" id="HiZ-xC-snz"/>
                                     <constraint firstItem="KvV-v9-jhB" firstAttribute="centerX" secondItem="zhn-Qz-hBb" secondAttribute="centerX" id="Kmt-OX-Z6P"/>
                                     <constraint firstItem="Pov-td-Kxk" firstAttribute="top" secondItem="zhn-Qz-hBb" secondAttribute="top" constant="20" id="MVh-S2-yX9"/>
                                     <constraint firstItem="dPP-Jv-J2f" firstAttribute="centerX" secondItem="zhn-Qz-hBb" secondAttribute="centerX" id="Qvs-6y-FKx"/>
-                                    <constraint firstAttribute="trailing" secondItem="9XN-zF-3A1" secondAttribute="trailing" constant="5" id="VG8-PV-wW7"/>
+                                    <constraint firstAttribute="trailing" secondItem="9XN-zF-3A1" secondAttribute="trailing" constant="20" id="VG8-PV-wW7"/>
                                     <constraint firstItem="qlh-dk-vcz" firstAttribute="centerY" secondItem="zhn-Qz-hBb" secondAttribute="centerY" constant="10" id="bgB-aU-ncE"/>
                                     <constraint firstItem="o7o-6Q-F0e" firstAttribute="leading" secondItem="zhn-Qz-hBb" secondAttribute="leading" constant="10" id="cM1-Qg-0OR"/>
                                     <constraint firstItem="qlh-dk-vcz" firstAttribute="centerX" secondItem="zhn-Qz-hBb" secondAttribute="centerX" id="fES-X8-haQ"/>
@@ -217,7 +218,7 @@ This promotion is for individual use only and should be used for an individualâ€
                     <connections>
                         <outlet property="DealView" destination="WcZ-Ck-nPH" id="1U9-w5-pLp"/>
                         <outlet property="blurView" destination="hpi-Nv-M1z" id="jvN-gc-1qT"/>
-                        <outlet property="dealCode" destination="9XN-zF-3A1" id="pKR-qm-ldO"/>
+                        <outlet property="code" destination="9XN-zF-3A1" id="9sf-0I-0Of"/>
                         <outlet property="dealLbl" destination="dPP-Jv-J2f" id="VZw-0c-hc9"/>
                         <outlet property="img" destination="qlh-dk-vcz" id="lzT-1e-QbT"/>
                         <outlet property="imgbound" destination="hub-RY-SRs" id="hgw-IZ-cuf"/>

@@ -75,81 +75,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             count = 0
         }
         cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
-        let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
-        cell.likeButton.setImage(image, for: .normal)
-        cell.likeButton.tintColor = UIColor.red
-        let photo = cell.deal.restrauntPhoto!
-        // Reference to an image file in Firebase Storage
-        let storage = Storage.storage()
-        let storageref = storage.reference(forURL: photo)
-        
-        // UIImageView in your ViewController
-        let imageView: UIImageView = cell.rImg
-        
-        // Placeholder image
-        let placeholderImage = UIImage(named: "placeholder.jpg")
-        
-        // Load the image using SDWebImage
-        imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage, completion: { (img, err, typ, ref) in
-            cell.tempImg.isHidden = true
-        })
-        cell.rName.text = cell.deal.restrauntName
-        cell.dealDesc.text = cell.deal.dealDescription
-        cell.validHours.text = ""
-        if cell.deal.redeemed! {
-            cell.Countdown.text = "Deal Already Redeemed!"
-            cell.Countdown.textColor = UIColor.red
-        }
-        else{
-            cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)
-            
-            
-            let start = Date(timeIntervalSince1970: cell.deal.startTime!)
-            let end = Date(timeIntervalSince1970: cell.deal.endTime!)
-            let current = Date()
-            var isInInterval = false
-            if #available(iOS 10.0, *) {
-                let interval  =  DateInterval(start: start as Date, end: end as Date)
-                isInInterval = interval.contains(current)
-            } else {
-                isInInterval = current.timeIntervalSince1970 > start.timeIntervalSince1970 && current.timeIntervalSince1970 < end.timeIntervalSince1970
-            }
-            if (isInInterval){
-                let cal = Calendar.current
-                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
-                if (current > end){
-                    cell.Countdown.text = "Deal Ended"
-                    cell.validHours.text = ""
-                }
-                else if (current<start){
-                    var startingTime = " "
-                    if Components.day! != 0{
-                        startingTime = startingTime + String(describing: Components.day!) + " days"
-                    }
-                    else if Components.hour! != 0{
-                        startingTime = startingTime + String(describing: Components.hour!) + "hours"
-                    }else{
-                        startingTime = startingTime + String(describing: Components.minute!) + "minutes"
-                    }
-                    cell.Countdown.text = "Starts in " + startingTime
-                }
-                else {
-                    var leftTime = ""
-                    if Components.day! != 0{
-                        leftTime = leftTime + String(describing: Components.day!) + " days left"
-                    }
-                    else if Components.hour! != 0{
-                        leftTime = leftTime + String(describing: Components.hour!) + " hours left"
-                    }else{
-                        leftTime = leftTime + String(describing: Components.minute!) + " minutes left"
-                    }
-                    cell.Countdown.text = leftTime
-                }
-                cell.validHours.text = cell.deal.validHours
-            }
-        }
-        cell.tagImg.image = cell.tagImg.image!.withRenderingMode(.alwaysTemplate)
-        cell.tagImg.tintColor = cell.Countdown.textColor
+        cell.setupUI()
         return cell
     }
     
@@ -160,7 +86,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             if let indexPath = FavTable.indexPathForRow(at: point) {
                 let cell = FavTable.cellForRow(at: indexPath) as? DealTableViewCell
                 let user = Auth.auth().currentUser?.uid
-                Database.database().reference().child("Users").child(user!).child("Favorites").child((cell?.deal.dealID!)!).removeValue()
+                Database.database().reference().child("Users").child(user!).child("Favorites").child((cell?.deal.id!)!).removeValue()
                 favorites.getFavorites(table: FavTable)
             }
         }
@@ -186,8 +112,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         VC.hidesBottomBarWhenPushed = true
         VC.Deal = favorites.favoriteDeals[indexPath.row]
         VC.fromDetails = false
-        VC.photo = VC.Deal?.restrauntPhoto
-        VC.thisRestaurant = favorites.restaurants[VC.Deal.restrauntID!]
+        VC.photo = VC.Deal?.photo
+        VC.thisRestaurant = favorites.restaurants[VC.Deal.rID!]
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.navigationController?.pushViewController(VC, animated: true)
     }
@@ -213,9 +139,8 @@ extension FavoritesViewController: UIViewControllerPreviewingDelegate {
         VC.hidesBottomBarWhenPushed = true
         VC.Deal = favorites.favoriteDeals[indexPath.row]
         VC.fromDetails = false
-        VC.thisRestaurant = favorites.restaurants[VC.Deal.restrauntID!]
-
-        VC.photo = VC.Deal?.restrauntPhoto
+        VC.thisRestaurant = favorites.restaurants[VC.Deal.rID!]
+        VC.photo = VC.Deal?.photo
         VC.preferredContentSize =
             CGSize(width: 0.0, height: 600)
         previewingContext.sourceRect = cell.frame
