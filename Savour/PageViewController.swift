@@ -11,6 +11,8 @@ import FirebaseAuth
 import FirebaseDatabase
 import OneSignal
 import CoreLocation
+import SafariServices
+
 
 class OnboardingViewController: UIViewController, UIScrollViewDelegate {
 
@@ -105,6 +107,8 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
     var sender = ""
     @IBOutlet weak var continueButton: UIButton!
     
+    @IBOutlet weak var privacyButton: UIButton!
+    @IBOutlet weak var TOSButton: UIButton!
     @IBOutlet weak var locbutton: UIButton!
     @IBOutlet weak var notiButton: UIButton!
     @IBOutlet weak var locText: UILabel!
@@ -151,6 +155,23 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
     @IBAction func locPress(_ sender: Any) {
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
+    }
+    @IBAction func openWeb(_ sender: Any) {
+        if let sender = sender as? UIButton {
+            sender.isEnabled = false
+            let title = sender.title(for: .normal)
+            var url = "http://www.savourdeals.com"
+            if title == "Privacy Policy"{
+                url = "http://savourdeals.com/index.php/terms-of-use/"
+            } else if title == "Terms of Use"{
+                url = "http://savourdeals.com/index.php/privacy-policy/"
+            }
+            let svc = SFSafariViewController(url: URL(string:url)!)
+            svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+            self.present(svc, animated: true, completion: nil)
+            sender.isEnabled = true
+        }
+        
     }
     
     @IBAction func next(_ sender: Any) {

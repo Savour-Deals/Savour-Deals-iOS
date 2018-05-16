@@ -6,42 +6,42 @@ PODS:
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - Charts (3.1.1):
-    - Charts/Core (= 3.1.1)
-  - Charts/Core (3.1.1)
-  - FBSDKCoreKit (4.31.1):
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - Fabric (1.7.6)
+  - FBSDKCoreKit (4.33.0):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.31.1):
+  - FBSDKLoginKit (4.33.0):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.31.1):
-    - FBSDKCoreKit (~> 4.31.1)
-  - Firebase (4.12.0):
-    - Firebase/Core (= 4.12.0)
-  - Firebase/Auth (4.12.0):
+  - FBSDKShareKit (4.33.0):
+    - FBSDKCoreKit (~> 4.33.0)
+  - Firebase (4.13.0):
+    - Firebase/Core (= 4.13.0)
+  - Firebase/Auth (4.13.0):
     - Firebase/Core
-    - FirebaseAuth (= 4.6.0)
-  - Firebase/Core (4.12.0):
-    - FirebaseAnalytics (= 4.1.0)
-    - FirebaseCore (= 4.0.19)
-  - Firebase/Database (4.12.0):
+    - FirebaseAuth (= 4.6.1)
+  - Firebase/Core (4.13.0):
+    - FirebaseAnalytics (= 4.2.0)
+    - FirebaseCore (= 4.0.20)
+  - Firebase/Database (4.13.0):
     - Firebase/Core
     - FirebaseDatabase (= 4.1.5)
-  - Firebase/Messaging (4.12.0):
+  - Firebase/Messaging (4.13.0):
     - Firebase/Core
     - FirebaseMessaging (= 2.2.0)
-  - Firebase/Storage (4.12.0):
+  - Firebase/Storage (4.13.0):
     - Firebase/Core
     - FirebaseStorage (= 2.2.0)
-  - FirebaseAnalytics (4.1.0):
+  - FirebaseAnalytics (4.2.0):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
     - nanopb (~> 0.3)
-  - FirebaseAuth (4.6.0):
-    - FirebaseAnalytics (~> 4.1)
+  - FirebaseAuth (4.6.1):
+    - FirebaseAnalytics (~> 4.2)
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseCore (4.0.19):
+  - FirebaseCore (4.0.20):
     - GoogleToolboxForMac/NSData+zlib (~> 2.1)
   - FirebaseDatabase (4.1.5):
     - FirebaseAnalytics (~> 4.1)
@@ -64,20 +64,20 @@ PODS:
     - SDWebImage (~> 4.0)
   - GeoFire (2.0.1):
     - Firebase/Database (~> 4.0)
-  - GoogleToolboxForMac/DebugUtils (2.1.3):
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GoogleToolboxForMac/Defines (2.1.3)
-  - GoogleToolboxForMac/Logger (2.1.3):
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GoogleToolboxForMac/NSData+zlib (2.1.3):
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.3):
-    - GoogleToolboxForMac/DebugUtils (= 2.1.3)
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.3)
-  - GoogleToolboxForMac/NSString+URLArguments (2.1.3)
+  - GoogleToolboxForMac/DebugUtils (2.1.4):
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+  - GoogleToolboxForMac/Defines (2.1.4)
+  - GoogleToolboxForMac/Logger (2.1.4):
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+  - GoogleToolboxForMac/NSData+zlib (2.1.4):
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.4):
+    - GoogleToolboxForMac/DebugUtils (= 2.1.4)
+    - GoogleToolboxForMac/Defines (= 2.1.4)
+    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.4)
+  - GoogleToolboxForMac/NSString+URLArguments (2.1.4)
   - GTMSessionFetcher/Core (1.1.15)
-  - GTProgressBar (0.2.3)
+  - GTProgressBar (0.2.4)
   - leveldb-library (1.20)
   - libwebp (0.6.1):
     - libwebp/core (= 0.6.1)
@@ -108,7 +108,7 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - OneSignal (2.8.2)
+  - OneSignal (2.8.4)
   - Protobuf (3.5.0)
   - Pulsator (0.5.1)
   - SDWebImage (4.3.3):
@@ -120,7 +120,8 @@ PODS:
 
 DEPENDENCIES:
   - AcknowList
-  - Charts
+  - Crashlytics (~> 3.10.1)
+  - Fabric (~> 1.7.6)
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
@@ -140,31 +141,32 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AcknowList: 2b27ccc75110be58be37424c4b08b07bdec628b4
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Charts: 90a4d61da0f6e06684c591e3bcab11940fe61736
-  FBSDKCoreKit: e08ccfcefa7bc1347a07c276dac9bf6c7fe57024
-  FBSDKLoginKit: 99797ac39252fef6f72600b886f6ee60b4b29cab
-  FBSDKShareKit: e640c41c9fcd61929eeb3d0c21ad335103e7cb62
-  Firebase: d7fdf40e4d6c841849c52919f437fd3a0009ded0
-  FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
-  FirebaseAuth: 85a1b118a89838efc6f6ab3f2b1f94747d72a915
-  FirebaseCore: ff49ebb37e0f63a570d78c4f1c1c0befe8659d5c
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
+  FBSDKCoreKit: 572b047a7e029bc44542bcf8a59414e7ff2b543e
+  FBSDKLoginKit: 88cb456349cfb3b554427ce4f8b43729d85dfb40
+  FBSDKShareKit: b7b5002833a4104fbecad75e8e4e082e91c7a08a
+  Firebase: 5ec5e863d269d82d66b4bf56856726f8fb8f0fb3
+  FirebaseAnalytics: 7ef69e76a5142f643aeb47c780e1cdce4e23632e
+  FirebaseAuth: bf22cacf22c60ab454bf2636f556d8892b10b53f
+  FirebaseCore: 90cb1c53d69b556f112a1bf72b5fcfaad7650790
   FirebaseDatabase: 5f0bc6134c5c237cf55f9e1249d406770a75eafd
   FirebaseInstanceID: 8d20d890d65c917f9f7d9950b6e10a760ad34321
   FirebaseMessaging: 75cdb862e86c30e0913a2ff307e48d49357c5b73
   FirebaseStorage: 0c223481c8f89ed300cf1239ddd2d9833622c65f
   FirebaseUI: 7f149d40db1a67c459df16540256b66d8f8e8c70
   GeoFire: 3e70a24019dc16816190f533c9cac0d1321c4a71
-  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
+  GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
-  GTProgressBar: ecfa9f2dfaca1b9b35811925f5bd53516ee591ae
+  GTProgressBar: 1d79e4a627e997263b612c7e6589126dfe5645b8
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   libwebp: 0f01098c6c17175391af621b2f14150f3ca16e16
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  OneSignal: ab5c509192ca8390bdd3570a6261e6decf4c79c1
+  OneSignal: 7218a5a787f6685de81bdb487e696439e8c8f59b
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   Pulsator: f465ca37212d826523fe8c79b07c1a4c1a941f5e
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
 
-PODFILE CHECKSUM: cd19f64f9a898381ce49fd4c47c44904e6414b76
+PODFILE CHECKSUM: bac1a98c14bff061a53c136e602e53fb0e4ddc38
 
 COCOAPODS: 1.4.0

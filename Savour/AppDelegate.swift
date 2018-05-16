@@ -186,7 +186,7 @@ extension AppDelegate: CLLocationManagerDelegate {
             }
             for place in monitoredRegions{
                 if !nearby.contains(where: { $0 === place }){
-                    self.locationManager?.stopMonitoring(for: CLCircularRegion(center: (place.location?.coordinate)!,radius: 100,identifier: place.restrauntID!))
+                    self.locationManager?.stopMonitoring(for: CLCircularRegion(center: (place.location?.coordinate)!,radius: 100,identifier: place.id!))
                 }
             }
             for place in nearby{
@@ -198,7 +198,7 @@ extension AppDelegate: CLLocationManagerDelegate {
                     /* Create a region centered on desired location,
                      choose a radius for the region (in meters)
                      choose a unique identifier for that region */
-                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 100,identifier: place.restrauntID!)
+                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 100,identifier: place.id!)
                     geofenceRegion.notifyOnEntry = true
                     geofenceRegion.notifyOnExit = false
                     self.locationManager?.startMonitoring(for: geofenceRegion)

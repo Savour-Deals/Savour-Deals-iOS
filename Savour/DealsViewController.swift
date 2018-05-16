@@ -59,7 +59,7 @@ class DealsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot
                 let temp = DealData(snap: snap, ID: (Auth.auth().currentUser?.uid)!) // convert my snapshot into my type
-                if temp.restrauntID == Auth.auth().currentUser?.uid{
+                if temp.id == Auth.auth().currentUser?.uid{
                     if currentUnix < temp.endTime! && currentUnix > temp.startTime! {
                         self.activeDeals.append(temp)
                     }
@@ -118,7 +118,7 @@ class DealsViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell")! as! VendorDealCell
         cell.deal = groups[indexPath.section].deals[indexPath.row]
-        let photo = cell.deal.restrauntPhoto!
+        let photo = cell.deal.photo!
         if photo != ""{
             // Reference to an image file in Firebase Storage
             let storage = Storage.storage()
@@ -133,7 +133,7 @@ class DealsViewController: UIViewController, UITableViewDelegate, UITableViewDat
             // Load the image using SDWebImage
             imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
         }
-        cell.rName.text = cell.deal.restrauntName
+        cell.rName.text = cell.deal.name
         cell.dealDesc.text = cell.deal.dealDescription
         if groups[indexPath.section].status == "Active Deals"{
             cell.Countdown.textColor = #colorLiteral(red: 0.9443297386, green: 0.5064610243, blue: 0.3838719726, alpha: 1)

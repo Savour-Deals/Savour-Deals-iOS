@@ -36,6 +36,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         let user = Auth.auth().currentUser
         let ref = Database.database().reference().child("Users").child((user?.uid)!).child("FacebookID")
+        self.friendsText = "Click here to invite your friends to Savour Deals!"
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
                 let value = snapshot.value as! String
@@ -206,10 +207,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         // [END signout]
     }
     
-    @IBAction func geoFire(_ sender: Any) {
-        //For database, comment out before publish
-        setLocation()
-    }
     @IBAction func updateTimes(_ sender: Any) {
         let errorAlert = UIAlertController(title: "WARNING!!!!!", message: "Do not accidently hit ok. This will mess with your backend! Remove this before launch", preferredStyle: .alert)
         let dismiss = UIAlertAction(title: "CANCEL", style: .default, handler: nil)

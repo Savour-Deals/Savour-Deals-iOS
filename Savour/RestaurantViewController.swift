@@ -15,6 +15,8 @@ import FirebaseStorageUI
 import OneSignal
 import AVFoundation
 import GTProgressBar
+import SafariServices
+
 
 class RestaurantViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -83,7 +85,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     
     func loadData(){
         //Set overall restraunt info
-        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((thisRestaurant.restrauntID)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((thisRestaurant.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
                 let value = snapshot.value as? NSDictionary
                 self.loyaltyRedemptions = value?["count"] as? Int ?? 0
@@ -95,7 +97,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }){ (error) in
             print(error.localizedDescription)
         }
-        ref.child("Restaurants").child((thisRestaurant.restrauntID)!).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Restaurants").child((thisRestaurant.id)!).observeSingleEvent(of: .value, with: { (snapshot) in
             
             //let value = snapshot.value as? NSDictionary
             if snapshot.childSnapshot(forPath: "Followers").hasChild((Auth.auth().currentUser?.uid)!){
@@ -105,12 +107,12 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 self.followString = "Follow"
             }
             
-            self.rName.text = self.thisRestaurant.restrauntName
+            self.rName.text = self.thisRestaurant.name
             
-            if self.thisRestaurant.restrauntPhoto != ""{
+            if self.thisRestaurant.photo != ""{
                 // Reference to an image file in Firebase Storage
                 let storage = Storage.storage()
-                let storageref = storage.reference(forURL: self.thisRestaurant.restrauntPhoto!)
+                let storageref = storage.reference(forURL: self.thisRestaurant.photo!)
                 // Reference to an image file in Firebase Storage
                 let reference = storageref
         
@@ -130,7 +132,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }){ (error) in
             print(error.localizedDescription)
         }
-        deals.getDeals(forRestaurant: self.thisRestaurant.restrauntID!, table: restaurantTable)
+        deals.getDeals(forRestaurant: self.thisRestaurant.id!, table: restaurantTable)
     }
     
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -158,7 +160,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             
         }
         else if indexPath.row == 5{
-            if deals.filteredDeals.count > 0{
+            if deals.filteredDeals.count + deals.filteredInactiveDeals.count > 0{
                 return 150
             }else{
                 return 0
@@ -193,7 +195,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             cell.directionsButton.layer.cornerRadius = 20
             cell.request = self.request
             cell.menu = self.thisRestaurant.menu
-            cell.rID = self.thisRestaurant.restrauntID
+            cell.rID = self.thisRestaurant.id
             cell.rAddress = self.thisRestaurant.address!
             self.followButton = cell.followButton
             return cell
@@ -275,7 +277,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: "labelCell", for: indexPath) as! labelCell
             cell.label.text = "Current Offers"
-            if deals.filteredDeals.count <= 0 {
+            if deals.filteredDeals.count + deals.filteredInactiveDeals.count <= 0 {
                 cell.label.text = "No Current Offers"
             }
             return cell
@@ -296,7 +298,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let VC = storyboard.instantiateInitialViewController() as! DealViewController
             VC.hidesBottomBarWhenPushed = true
             VC.Deal = deals.filteredDeals[indexPath.row - 5]
-            VC.photo = VC.Deal?.restrauntPhoto
+            VC.photo = VC.Deal?.photo
             VC.fromDetails = true
             self.title = ""
             self.navigationController?.pushViewController(VC, animated: true)
@@ -310,7 +312,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
                 self.loyaltyRedemptions = 0
                 self.redemptionTime = 0
-                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.restrauntID)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 sender.setTitle("Loyalty Check-In", for: .normal)
                 
                 self.restaurantTable.reloadData()
@@ -338,10 +340,10 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             self.redemptionTime = Date().timeIntervalSince1970
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
-            let followRef = Database.database().reference().child("Restaurants").child((self.thisRestaurant.restrauntID)!).child("Followers").child(uID!)
+            let followRef = Database.database().reference().child("Restaurants").child((self.thisRestaurant.id)!).child("Followers").child(uID!)
             followRef.setValue(status.subscriptionStatus.userId)
-            OneSignal.sendTags([(self.thisRestaurant.restrauntID)! : "true"])
-            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.restrauntID)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+            OneSignal.sendTags([(self.thisRestaurant.id)! : "true"])
+            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
             self.followString = "Following"
             self.restaurantTable.reloadData()
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
@@ -478,11 +480,9 @@ class buttonCell: UITableViewCell {
     
     @IBAction func openMenu(_ sender: Any) {
         menuButton.isEnabled = false
-        if #available(iOS 10.0, *) {
-            UIApplication.shared.open(URL(string: menu)!, options: [:], completionHandler: nil)
-        } else {
-            UIApplication.shared.openURL(URL(string: menu)!)
-        }
+        let svc = SFSafariViewController(url: URL(string:menu)!)
+        svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+        self.parentViewController?.present(svc, animated: true, completion: nil)
         menuButton.isEnabled = true
     }
     
@@ -701,16 +701,16 @@ class CollectionDealCell: UICollectionViewCell{
     
     @IBAction func FavoriteToggled(_ sender: Any) {
         //If favorite star was hit, add or remove to favorites
-        if deal.fav!{
-            deal.fav = false
-            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.dealID!).removeValue()
+        if deal.favorited!{
+            deal.favorited = false
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.id!).removeValue()
             let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
             FavButton.setImage(image, for: .normal)
             FavButton.tintColor = UIColor.red
         }
         else{
-            deal.fav = true
-            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.dealID!).setValue(deal.dealID!)
+            deal.favorited = true
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.id!).setValue(deal.id!)
             let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
             FavButton.setImage(image, for: .normal)
             FavButton.tintColor = UIColor.red
@@ -720,26 +720,27 @@ class CollectionDealCell: UICollectionViewCell{
 
 extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView,numberOfItemsInSection section: Int) -> Int {
-        return deals.filteredDeals.count
+        return deals.filteredDeals.count + deals.filteredInactiveDeals.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dealCell",for: indexPath) as! CollectionDealCell
-        let deal = deals.filteredDeals[indexPath.row]
-        cell.deal = deal
-    
-        //cell.validHours.text = ""
-        cell.dealDescription.text = deal.dealDescription
-        if deal.redeemed! {
+        if indexPath.row < deals.filteredDeals.count{
+            cell.deal = deals.filteredDeals[indexPath.row]
+        }else{
+            cell.deal = deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count]
+        }
+        cell.dealDescription.text = cell.deal.dealDescription
+        if cell.deal.redeemed! {
             cell.timeLabel.text = "Deal Already Redeemed!"
             cell.timeLabel.textAlignment = .center
             cell.FavButton.isHidden = true
         }else{
             cell.timeLabel.textAlignment = .left
             cell.FavButton.isHidden = false
-            let start = Date(timeIntervalSince1970: deal.startTime!)
-            let end = Date(timeIntervalSince1970: deal.endTime!)
+            let start = Date(timeIntervalSince1970: cell.deal.startTime!)
+            let end = Date(timeIntervalSince1970: cell.deal.endTime!)
             let current = Date()
             var isInInterval = false
             if #available(iOS 10.0, *) {
@@ -769,8 +770,8 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
                 cell.timeLabel.text = "Starts in " + String(describing: Components.day!) + "days"
             }
         }
-        cell.validHours.text = deal.validHours
-        if cell.deal.fav!{
+        cell.validHours.text = cell.deal.activeHours
+        if cell.deal.favorited!{
             let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
             cell.FavButton.setImage(image, for: .normal)
             cell.FavButton.tintColor = UIColor.red
@@ -779,10 +780,10 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
             cell.FavButton.setImage(image, for: .normal)
             cell.FavButton.tintColor = UIColor.red
         }
-        if deal.restrauntPhoto != ""{
+        if cell.deal.photo != ""{
             // Reference to an image file in Firebase Storage
             let storage = Storage.storage()
-            let storageref = storage.reference(forURL: deal.restrauntPhoto!)
+            let storageref = storage.reference(forURL: cell.deal.photo!)
             // Reference to an image file in Firebase Storage
             let reference = storageref
             
@@ -795,6 +796,26 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
             // Load the image using SDWebImage
             imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
         }
+        if let viewWithTag = cell.insetView.viewWithTag(300){
+            viewWithTag.removeFromSuperview()
+        }
+        if !cell.deal.active{
+            let view = UIView(frame: CGRect(x: cell.insetView.frame.origin.x, y: cell.insetView.frame.origin.y, width: cell.insetView.frame.width, height: cell.insetView.frame.height))
+            view.backgroundColor = UIColor.gray.withAlphaComponent(0.7)
+            view.tag = 300
+            view.layer.cornerRadius = 10
+            let label = UILabel(frame: CGRect(x: cell.insetView.frame.origin.x, y: cell.insetView.frame.origin.y, width: cell.insetView.frame.width-40, height: cell.insetView.frame.height))
+            label.textAlignment = NSTextAlignment.center
+            label.numberOfLines = 0
+            label.center = view.center
+            label.baselineAdjustment = .alignCenters
+            label.lineBreakMode = NSLineBreakMode.byWordWrapping
+            label.text = "Deal unavailable"
+            label.textColor = UIColor.white
+            view.addSubview(label)
+            cell.insetView.addSubview(view)
+            cell.insetView.bringSubview(toFront: cell.FavButton)
+        }
         return cell
     }
     
@@ -802,8 +823,12 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
-        VC.Deal = deals.filteredDeals[indexPath.row]
-        VC.photo = VC.Deal?.restrauntPhoto
+        if indexPath.row < deals.filteredDeals.count{
+            VC.Deal = deals.filteredDeals[indexPath.row]
+        }else{
+            VC.Deal = deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count]
+        }
+        VC.photo = VC.Deal?.photo
         VC.fromDetails = true
         VC.thisRestaurant = self.thisRestaurant
         self.title = ""
@@ -847,7 +872,7 @@ extension UIView {
         VC.hidesBottomBarWhenPushed = true
         VC.Deal = Deals[indexPath.row]
         VC.fromDetails = true
-        VC.photo = VC.Deal?.restrauntPhoto
+        VC.photo = VC.Deal?.photo
         VC.preferredContentSize =
             CGSize(width: 0.0, height: 600)
         

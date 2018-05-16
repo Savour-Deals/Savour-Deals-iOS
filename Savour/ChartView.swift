@@ -50,7 +50,7 @@ class ChartView: UIViewController {
     }
     
     func getRedeems(){
-        ref = Database.database().reference().child("Deals").child((self.deal?.dealID)!).child("redeemed")
+        ref = Database.database().reference().child("Deals").child((self.deal?.id)!).child("redeemed")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot

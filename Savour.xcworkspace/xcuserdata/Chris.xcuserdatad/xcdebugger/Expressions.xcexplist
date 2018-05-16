@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "RestaurantViewController.tableView(_:heightForRowAt:):RestaurantViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "deals.filteredDeals.count + deals.filteredInactiveDeals.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ViewController.loadFavorites(user : User) -&gt; ():ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -33,10 +41,16 @@
          contextName = "DealData.init(snap:ID:):Database.swift">
          <PersistentStrings>
             <PersistentString
-               value = "endTimeComponent.hour">
+               value = "endTime.dayNumberOfWeek()!">
+            </PersistentString>
+            <PersistentString
+               value = "endTime.dayNumberOfWeek()">
             </PersistentString>
             <PersistentString
                value = "restrauntName">
+            </PersistentString>
+            <PersistentString
+               value = "endTimeComponent.hour">
             </PersistentString>
             <PersistentString
                value = "nowHour.hour">
@@ -186,7 +200,7 @@
                value = "self.navigationController">
             </PersistentString>
             <PersistentString
-               value = "snap.value">
+               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
             </PersistentString>
             <PersistentString
                value = "button.backgroundColor">
@@ -201,7 +215,7 @@
                value = "UIColor.white">
             </PersistentString>
             <PersistentString
-               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
+               value = "snap.value">
             </PersistentString>
             <PersistentString
                value = "self.buttonsView.subviews">
@@ -210,6 +224,9 @@
       </ContextState>
       <ContextState
          contextName = "AppDelegate.(application(UIApplication, didFinishLaunchingWithOptions : [UIApplicationLaunchOptionsKey : Any]?) -&gt; Bool).(closure #1):AppDelegate.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.dealDetails(deal:):ViewController.swift">
       </ContextState>
       <ContextState
          contextName = "DetailsViewController.tableView(_:cellForRowAt:):DetailsViewController.swift">
@@ -277,6 +294,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ViewController.tableView(_:cellForRowAt:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexPath.row-deals.filteredDeals.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "FavoritesViewController.deals.getter:FavoritesViewController.swift">
       </ContextState>
       <ContextState
@@ -305,6 +330,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "DealTableViewCell.setupUI():DealTableViewCell.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "label.text">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "FavoritesViewController.tableView(_:numberOfRowsInSection:):FavoritesViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -319,6 +352,9 @@
                value = "favorites">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "DealViewController.SetupUI():DealViewController.swift">
       </ContextState>
       <ContextState
          contextName = "closure #2 in closure #1 in Deals.getDeals(byLocation:table:dealType:):Database.swift">
@@ -353,6 +389,14 @@
       </ContextState>
       <ContextState
          contextName = "closure #2 in closure #1 in FavoritesViewController.loadFavorites():FavoritesViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "RestaurantViewController.collectionView(_:numberOfItemsInSection:):RestaurantViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "deals.filteredDeals.count + deals.inactiveDeals.count">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "DetailsViewController.previewingContext(UIViewControllerPreviewing, viewControllerForLocation : CGPoint) -&gt; UIViewController?:DetailsPreviewDelegate.swift">
@@ -685,6 +729,9 @@
       </ContextState>
       <ContextState
          contextName = "StartTimeController.viewDidLoad():DealInformationViews.swift">
+      </ContextState>
+      <ContextState
+         contextName = "FavoritesViewController.tableView(_:didSelectRowAt:):FavoritesViewController.swift">
       </ContextState>
       <ContextState
          contextName = "DealTableViewCell.likePressed(_:):DealTableViewCell.swift">
