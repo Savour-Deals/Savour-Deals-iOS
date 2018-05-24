@@ -74,6 +74,21 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         if count > 2{
             count = 0
         }
+        let photo = cell.deal?.photo!
+        if photo != ""{
+            // Reference to an image file in Firebase Storage
+            //            let storage = Storage.storage()
+            //            let storageref = storage.reference(forURL: photo!)
+            
+            // UIImageView in your ViewController
+            let imageView: UIImageView = cell.rImg
+            cell.tempImg.image = UIImage(named: placeholderImgs[count])
+            
+            // Load the image using SDWebImage
+            imageView.sd_setImage(with: URL(string:photo!), completed: { (img, err, typ, ref) in
+                cell.tempImg.isHidden = true
+            })
+        }
         cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
         cell.setupUI()
         return cell

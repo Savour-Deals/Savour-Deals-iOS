@@ -101,15 +101,15 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginButton.layer.cornerRadius = rounded
         LoginView.layer.cornerRadius = rounded
         // Obtain all constraints for the button:
-        let layoutConstraintsArr = FBLoginButton.constraints
-        // Iterate over array and test constraints until we find the correct one:
-        for lc in layoutConstraintsArr { // or attribute is NSLayoutAttributeHeight etc.
-            if ( lc.constant == 28 ){
-                // Then disable it...
-                lc.isActive = false
-                break
-            }
-        }
+//        let layoutConstraintsArr = FBLoginButton.constraints
+//        // Iterate over array and test constraints until we find the correct one:
+//        for lc in layoutConstraintsArr { // or attribute is NSLayoutAttributeHeight etc.
+//            if ( lc.constant == 28 ){
+//                // Then disable it...
+//                lc.isActive = false
+//                break
+//            }
+//        }
     }
     
     func isLoggingin(){

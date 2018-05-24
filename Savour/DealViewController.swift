@@ -105,17 +105,10 @@ class DealViewController: UIViewController {
         restaurantLabel.text = Deal?.name
         dealLbl.text = Deal?.dealDescription
         if photo != ""{
-            // Reference to an image file in Firebase Storage
-            let storage = Storage.storage()
-            let storageref = storage.reference(forURL: photo!)
-            
             let imageView: UIImageView = img
             
-            // Placeholder image
-            let placeholderImage = UIImage(named: "placeholder.jpg")
-            
             // Load the image using SDWebImage
-            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage, completion: { (_, err,_ , _) in
+            imageView.sd_setImage(with: URL(string:photo!), completed: { (img, err, typ, ref) in
                 self.img.layer.cornerRadius = self.img.frame.size.height/2
             })
         }
@@ -137,7 +130,7 @@ class DealViewController: UIViewController {
                 self.redeemIndicator(color: UIColor.green.cgColor)
                 self.code.text = self.Deal?.code
             }
-        }else if let rest = self.thisRestaurant?.distanceMiles, rest>0.2{
+        }else if let rest = self.thisRestaurant?.distanceMiles, rest>0.1{
             self.redeem.isEnabled = false
             pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
             self.redeem.setTitle("Go to Location to Redeem", for: .normal)
@@ -235,7 +228,6 @@ class DealViewController: UIViewController {
     }
     
     @IBAction func infoPressed(_ sender: Any) {
-        self.redeem.isEnabled = false
         self.moreBtn.isEnabled = false
         self.infoView.isHidden = false
         self.blurView.isHidden = false
@@ -260,7 +252,6 @@ class DealViewController: UIViewController {
                         self.blurView.transform = scaleTrans
                         self.infoView.transform = scaleTrans
         }, completion: {(value: Bool) in
-            self.redeem.isEnabled = true
             self.moreBtn.isEnabled = true
             self.infoView.isHidden = true
             self.blurView.isHidden = true

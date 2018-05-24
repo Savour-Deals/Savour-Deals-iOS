@@ -110,12 +110,6 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             self.rName.text = self.thisRestaurant.name
             
             if self.thisRestaurant.photo != ""{
-                // Reference to an image file in Firebase Storage
-                let storage = Storage.storage()
-                let storageref = storage.reference(forURL: self.thisRestaurant.photo!)
-                // Reference to an image file in Firebase Storage
-                let reference = storageref
-        
                 // UIImageView in your ViewController
                 let imageView: UIImageView = self.rImg
         
@@ -123,7 +117,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 let placeholderImage = UIImage(named: "placeholder.jpg")
         
                 // Load the image using SDWebImage
-                imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
+                imageView.sd_setImage(with: URL(string: self.thisRestaurant.photo!), placeholderImage: placeholderImage)
             }
             self.restaurantTable.delegate = self
             self.restaurantTable.dataSource = self
@@ -252,8 +246,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             if self.thisRestaurant.loyalty.loyaltyCount > 0 {
                 cell.checkin.layer.cornerRadius = cell.checkin.frame.height/2
                 cell.progressBar.isHidden = false
-                let visitsLeft =  thisRestaurant.loyalty.loyaltyCount - loyaltyRedemptions
-                if visitsLeft == 0{
+                if thisRestaurant.loyalty.loyaltyCount < loyaltyRedemptions{
                     cell.animate()
                     cell.checkin.setTitle("Reedeem", for: .normal)
                     cell.loyaltyLabel.text = "You're ready to redeem your \(thisRestaurant.loyalty.loyaltyDeal)!"
@@ -306,37 +299,31 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     }
   
     @objc func checkin(_ sender:UIButton!){
-        if self.loyaltyRedemptions == self.thisRestaurant.loyalty.loyaltyCount{
-            
+        if self.loyaltyRedemptions >= self.thisRestaurant.loyalty.loyaltyCount{
             let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
             redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
-                self.loyaltyRedemptions = 0
+                self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisRestaurant.loyalty.loyaltyCount
                 self.redemptionTime = 0
                 self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 sender.setTitle("Loyalty Check-In", for: .normal)
-                
                 self.restaurantTable.reloadData()
             }))
             redeemAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
             self.present(redeemAlert, animated: true)
-
         }else{
-//            if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
+            if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
                 performSegue(withIdentifier: "QRsegue", sender: self)
-//            }else{
-//                let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to get another loyalty visit!", preferredStyle: .alert)
-//                erroralert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-//                self.present(erroralert, animated: true)
-//            }
+            }else{
+                let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to get another loyalty visit!", preferredStyle: .alert)
+                erroralert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                self.present(erroralert, animated: true)
+            }
         }
     }
     
     func checkCode(code: String){
         if code == self.thisRestaurant.loyalty.loyaltyCode{
             self.loyaltyRedemptions = self.loyaltyRedemptions + self.thisRestaurant.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]
-            if self.loyaltyRedemptions > self.thisRestaurant.loyalty.loyaltyCount{
-                self.loyaltyRedemptions = self.thisRestaurant.loyalty.loyaltyCount
-            }
             self.redemptionTime = Date().timeIntervalSince1970
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
@@ -436,9 +423,6 @@ class loyaltyCell: UITableViewCell {
     @IBOutlet weak var marker: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-//        //progressBar.transform = progressBar.transform.scaledBy(x: 1, y: 20)
-//        progressBar.layer.cornerRadius = progressBar.frame.height/2
-//        progressBar.clipsToBounds = true
     }
     
     func animate(){
@@ -480,9 +464,18 @@ class buttonCell: UITableViewCell {
     
     @IBAction func openMenu(_ sender: Any) {
         menuButton.isEnabled = false
-        let svc = SFSafariViewController(url: URL(string:menu)!)
-        svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-        self.parentViewController?.present(svc, animated: true, completion: nil)
+        if menu != ""{
+            let svc = SFSafariViewController(url: URL(string:menu)!)
+            svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+            self.parentViewController?.present(svc, animated: true, completion: nil)
+        }else{
+            let alert = UIAlertController(title: "Sorry!", message: "Looks like this vendor has not yet made their menu avaliable to us! Sorry for the inconvenience.", preferredStyle: .alert)
+            let approveAction = UIAlertAction(title: "😢 Okay", style: .default) { (alert: UIAlertAction!) -> Void in
+
+            }
+            alert.addAction(approveAction)
+            self.parentViewController?.present(alert, animated: true, completion:nil)
+        }
         menuButton.isEnabled = true
     }
     

@@ -375,8 +375,8 @@ class DealData{
                     self.activeHours = ""//"active all day!"
                     self.active = true
                 }else{
-                    self.activeHours = "valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
-                    self.code = " from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                    self.activeHours = ""//"valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                    self.code = "from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
                     self.active = false
                 }
             }else{//Not Active today
@@ -642,17 +642,3 @@ func getRestaurants(byLocation location: CLLocation,completion: @escaping ([rest
         }
     }
 }
-
-func add_TwoMonth(){
-    let ref = Database.database().reference()
-    ref.child("Deals").observeSingleEvent(of: .value, with: { (snapshot) in
-        for entry in snapshot.children{
-            let snap = entry as! DataSnapshot
-            let value = snap.key
-            let data = snap.value as! NSDictionary
-            let end = data["EndTime"] as? Double
-            ref.child("Deals").child(value).child("EndTime").setValue(end!+5256000.0)
-        }
-    })
-}
-
