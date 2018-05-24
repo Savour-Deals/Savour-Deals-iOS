@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.666792"
+            timestampString = "548828343.528023"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "75"
@@ -698,11 +698,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.6676069"
+            timestampString = "548828343.528537"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "authenticatePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -842,7 +842,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/LoginViewController.swift"
-            timestampString = "548127485.7899981"
+            timestampString = "548828343.5287091"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "221"
@@ -858,7 +858,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/PageViewController.swift"
-            timestampString = "548109948.362058"
+            timestampString = "548828343.528764"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "56"
@@ -874,7 +874,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/PageViewController.swift"
-            timestampString = "548109948.362429"
+            timestampString = "548828343.528813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "55"
@@ -890,7 +890,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/PageViewController.swift"
-            timestampString = "548109948.362685"
+            timestampString = "548828343.5288579"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "57"
@@ -922,7 +922,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.7901241"
+            timestampString = "548828343.528922"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "309"
@@ -938,11 +938,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/FavoritesViewController.swift"
-            timestampString = "548127485.790206"
+            timestampString = "548828343.528983"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
             landmarkName = "FavoritesViewController"
             landmarkType = "3">
             <Locations>
@@ -986,11 +986,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/FavoritesViewController.swift"
-            timestampString = "548127485.7902631"
+            timestampString = "548828343.52903"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
             landmarkName = "removePressed(sender:event:)"
             landmarkType = "7">
             <Locations>
@@ -1066,7 +1066,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.790349"
+            timestampString = "548828343.5291049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "48"
@@ -1082,7 +1082,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.7904119"
+            timestampString = "548828343.529162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
@@ -1098,7 +1098,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.668219"
+            timestampString = "548828343.529211"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "59"
@@ -1114,11 +1114,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.790491"
+            timestampString = "548828343.5292701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "396"
-            endingLineNumber = "396"
+            startingLineNumber = "411"
+            endingLineNumber = "411"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1130,7 +1130,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.790555"
+            timestampString = "548828343.529321"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "176"
@@ -1146,11 +1146,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealTableViewCell.swift"
-            timestampString = "548127485.7906179"
+            timestampString = "548828343.529373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "setupUI()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1162,11 +1162,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.668633"
+            timestampString = "548828343.529418"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
             landmarkName = "authenticatePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1178,11 +1178,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.668969"
+            timestampString = "548828343.529465"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
             landmarkName = "authenticatePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1194,11 +1194,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.669382"
+            timestampString = "548828343.529512"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "authenticatePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1210,11 +1210,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.669674"
+            timestampString = "548828343.529559"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
             landmarkName = "authenticatePressed(_:)"
             landmarkType = "7">
             <Locations>
@@ -1258,11 +1258,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.6699491"
+            timestampString = "548828343.529605"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "192"
-            endingLineNumber = "192"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
             landmarkName = "authenticatePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1273,44 +1273,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.295517"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "159"
-            endingLineNumber = "159"
-            landmarkName = "tableView(_:didSelectRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.295571"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
-            landmarkName = "tableView(_:didSelectRowAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.963613"
+            timestampString = "548828343.529654"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "431"
-            endingLineNumber = "431"
+            startingLineNumber = "429"
+            endingLineNumber = "429"
             landmarkName = "searchBar(_:textDidChange:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1322,11 +1290,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.963672"
+            timestampString = "548828343.529701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "438"
-            endingLineNumber = "438"
+            startingLineNumber = "436"
+            endingLineNumber = "436"
             landmarkName = "searchBar(_:textDidChange:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1338,11 +1306,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.963727"
+            timestampString = "548828343.5297461"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "442"
-            endingLineNumber = "442"
+            startingLineNumber = "440"
+            endingLineNumber = "440"
             landmarkName = "searchBarSearchButtonClicked(_:)"
             landmarkType = "7">
             <Locations>
@@ -1386,7 +1354,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.963779"
+            timestampString = "548828343.5298131"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "248"
@@ -1402,11 +1370,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.9638309"
+            timestampString = "548828343.529863"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "449"
-            endingLineNumber = "449"
+            startingLineNumber = "447"
+            endingLineNumber = "447"
             landmarkName = "searchBarSearchButtonClicked(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1418,7 +1386,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.963881"
+            timestampString = "548828343.5299079"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "335"
@@ -1614,7 +1582,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/TabBarViewController.swift"
-            timestampString = "548025482.913119"
+            timestampString = "548823012.416749"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "19"
@@ -1694,11 +1662,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.296239"
+            timestampString = "548828343.5301369"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1710,11 +1678,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.29629"
+            timestampString = "548828343.530615"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "AccountViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1726,11 +1694,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.296338"
+            timestampString = "548828343.531126"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1742,11 +1710,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.296386"
+            timestampString = "548828343.531588"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1758,11 +1726,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.296433"
+            timestampString = "548828343.53193"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
             landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1774,11 +1742,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.2964799"
+            timestampString = "548828343.532272"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1790,11 +1758,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.296527"
+            timestampString = "548828343.532618"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2030,11 +1998,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.296693"
+            timestampString = "548828343.533079"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2094,7 +2062,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.670555"
+            timestampString = "548828343.533433"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "82"
@@ -2190,11 +2158,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.296851"
+            timestampString = "548828343.533551"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2222,11 +2190,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.670909"
+            timestampString = "548828343.533877"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "SetupUI()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2254,11 +2222,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealViewController.swift"
-            timestampString = "548109618.671432"
+            timestampString = "548828343.533945"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
             landmarkName = "SetupUI()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2270,7 +2238,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.9649169"
+            timestampString = "548828343.533999"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "54"
@@ -2286,7 +2254,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.964973"
+            timestampString = "548828343.534048"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "56"
@@ -2302,7 +2270,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.965026"
+            timestampString = "548828343.534093"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "49"
@@ -2318,7 +2286,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.965077"
+            timestampString = "548828343.5341361"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "64"
@@ -2334,7 +2302,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.9651279"
+            timestampString = "548828343.534179"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "74"
@@ -2350,7 +2318,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.965178"
+            timestampString = "548828343.53422"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "111"
@@ -2366,7 +2334,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.965229"
+            timestampString = "548828343.534268"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "106"
@@ -2446,7 +2414,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/PageViewController.swift"
-            timestampString = "548109948.363622"
+            timestampString = "548828343.534369"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "33"
@@ -2462,11 +2430,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/PageViewController.swift"
-            timestampString = "548109948.363889"
+            timestampString = "548828343.534417"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "openWeb(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2478,11 +2446,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/PageViewController.swift"
-            timestampString = "548109948.364169"
+            timestampString = "548828343.5344599"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "openWeb(_:)"
             landmarkType = "7">
             <Locations>
@@ -2619,7 +2587,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.792056"
+            timestampString = "548828343.534543"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "273"
@@ -2635,7 +2603,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/FavoritesViewController.swift"
-            timestampString = "548127485.7921211"
+            timestampString = "548828343.5346"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "64"
@@ -2651,7 +2619,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/FavoritesViewController.swift"
-            timestampString = "548127485.792176"
+            timestampString = "548828343.534644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "42"
@@ -2667,7 +2635,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.792231"
+            timestampString = "548828343.53469"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "204"
@@ -2715,7 +2683,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.792292"
+            timestampString = "548828343.53474"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "237"
@@ -2731,7 +2699,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.792348"
+            timestampString = "548828343.5347821"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "243"
@@ -2747,11 +2715,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.297392"
+            timestampString = "548828343.534825"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "342"
-            endingLineNumber = "342"
+            startingLineNumber = "357"
+            endingLineNumber = "357"
             landmarkName = "notificationToggles(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2763,11 +2731,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/RestaurantViewController.swift"
-            timestampString = "548127485.792426"
+            timestampString = "548828343.5351239"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
             landmarkName = "loadData()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2779,7 +2747,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/LoginViewController.swift"
-            timestampString = "548127485.7928489"
+            timestampString = "548828343.535182"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "236"
@@ -2795,11 +2763,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.6837471"
+            timestampString = "548828343.53523"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
             landmarkName = "handleEvent()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2811,11 +2779,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.684157"
+            timestampString = "548828343.535285"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
             landmarkName = "AppDelegate"
             landmarkType = "3">
             <Locations>
@@ -2874,7 +2842,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.792948"
+            timestampString = "548828343.535331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "294"
@@ -2890,7 +2858,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.793016"
+            timestampString = "548828343.535382"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "616"
@@ -2938,7 +2906,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.793075"
+            timestampString = "548828343.5354249"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "295"
@@ -2954,7 +2922,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.793136"
+            timestampString = "548828343.535475"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "45"
@@ -3002,7 +2970,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.793192"
+            timestampString = "548828343.535519"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "619"
@@ -3050,7 +3018,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.7932481"
+            timestampString = "548828343.535561"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "620"
@@ -3066,7 +3034,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.793305"
+            timestampString = "548828343.535604"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "629"
@@ -3082,7 +3050,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.7933609"
+            timestampString = "548828343.535646"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "88"
@@ -3130,7 +3098,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.793418"
+            timestampString = "548828343.535688"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
@@ -3146,7 +3114,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.793473"
+            timestampString = "548828343.535731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "486"
@@ -3162,7 +3130,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.793528"
+            timestampString = "548828343.5357749"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "263"
@@ -3178,7 +3146,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.793587"
+            timestampString = "548828343.535822"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "57"
@@ -3194,39 +3162,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.793645"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.793702"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.793759"
+            timestampString = "548828343.535872"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "60"
@@ -3241,12 +3177,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.793817"
+            filePath = "Savour/AccountViewController.swift"
+            timestampString = "548828343.535919"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -3258,39 +3194,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.298425"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.298473"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "61"
-            endingLineNumber = "61"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Savour/AccountViewController.swift"
-            timestampString = "548126211.29852"
+            timestampString = "548828343.5362149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "63"
@@ -3305,8 +3209,24 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
+            filePath = "Savour/AccountViewController.swift"
+            timestampString = "548828343.536504"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.79392"
+            timestampString = "548828343.536785"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "59"
@@ -3322,27 +3242,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.685112"
+            timestampString = "548828343.536837"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
-            landmarkName = "locationManager(_:didEnterRegion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.68543"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3354,7 +3258,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/PageViewController.swift"
-            timestampString = "548109948.364722"
+            timestampString = "548828343.536903"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "75"
@@ -3370,7 +3274,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/PageViewController.swift"
-            timestampString = "548109948.36497"
+            timestampString = "548828343.536945"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
@@ -3386,11 +3290,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.685798"
+            timestampString = "548828343.536994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3402,11 +3306,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.686107"
+            timestampString = "548828343.537037"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3418,11 +3322,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.686413"
+            timestampString = "548828343.53708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3434,11 +3338,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.686712"
+            timestampString = "548828343.537124"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
             <Locations>
@@ -3482,11 +3386,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.687006"
+            timestampString = "548828343.537203"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
             <Locations>
@@ -3530,11 +3434,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.687305"
+            timestampString = "548828343.537246"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3546,11 +3450,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.687607"
+            timestampString = "548828343.537288"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "206"
-            endingLineNumber = "206"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3562,11 +3466,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.687884"
+            timestampString = "548828343.5373321"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
             <Locations>
@@ -3625,11 +3529,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.6882041"
+            timestampString = "548828343.537383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3641,11 +3545,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.688486"
+            timestampString = "548828343.5374269"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3657,11 +3561,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.688766"
+            timestampString = "548828343.5374711"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
             <Locations>
@@ -3705,11 +3609,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.689047"
+            timestampString = "548828343.537514"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3721,11 +3625,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.6893409"
+            timestampString = "548828343.537557"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
+            startingLineNumber = "184"
+            endingLineNumber = "184"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3737,11 +3641,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.689626"
+            timestampString = "548828343.537599"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3753,11 +3657,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.689893"
+            timestampString = "548828343.537641"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3769,11 +3673,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.69016"
+            timestampString = "548828343.537684"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
             landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "7">
             <Locations>
@@ -3817,45 +3721,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.690421"
+            timestampString = "548828343.537728"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
             landmarkName = "locationManager(_:didEnterRegion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Savour.AppDelegate.locationManager(__ObjC.CLLocationManager, didEnterRegion: __ObjC.CLRegion) -&gt; ()"
-                  moduleName = "Savour"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Chris/Documents/Savour/Savour/AppDelegate.swift"
-                  timestampString = "543387941.056505"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "212"
-                  endingLineNumber = "212"
-                  offsetFromSymbolStart = "36">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__ObjC.CLCircularRegion) -&gt; Swift.Bool in implicit closure #1 : @autoclosure () throws -&gt; Swift.Bool in Savour.AppDelegate.locationManager(__ObjC.CLLocationManager, didEnterRegion: __ObjC.CLRegion) -&gt; ()"
-                  moduleName = "Savour"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Chris/Documents/Savour/Savour/AppDelegate.swift"
-                  timestampString = "543387941.059201"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "212"
-                  endingLineNumber = "212"
-                  offsetFromSymbolStart = "20">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3865,11 +3737,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/FavoritesViewController.swift"
-            timestampString = "548127485.79424"
+            timestampString = "548828343.537773"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3881,7 +3753,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.794301"
+            timestampString = "548828343.537815"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "613"
@@ -3897,7 +3769,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.794359"
+            timestampString = "548828343.537858"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "101"
@@ -3913,7 +3785,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.7944191"
+            timestampString = "548828343.537905"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "202"
@@ -3929,7 +3801,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.794476"
+            timestampString = "548828343.537951"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "641"
@@ -3945,7 +3817,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.794533"
+            timestampString = "548828343.537994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "205"
@@ -3961,7 +3833,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.794592"
+            timestampString = "548828343.538044"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "623"
@@ -4009,7 +3881,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.794646"
+            timestampString = "548828343.538085"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "624"
@@ -4025,7 +3897,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.794703"
+            timestampString = "548828343.538126"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "632"
@@ -4041,7 +3913,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.794758"
+            timestampString = "548828343.538166"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "631"
@@ -4089,7 +3961,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.794811"
+            timestampString = "548828343.5382071"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "625"
@@ -4105,7 +3977,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.794867"
+            timestampString = "548828343.538247"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "203"
@@ -4121,7 +3993,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.794925"
+            timestampString = "548828343.53829"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "40"
@@ -4169,7 +4041,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.7949851"
+            timestampString = "548828343.53833"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "41"
@@ -4185,7 +4057,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.79504"
+            timestampString = "548828343.5383691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "53"
@@ -4201,7 +4073,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.795096"
+            timestampString = "548828343.5384099"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "80"
@@ -4217,7 +4089,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.7951519"
+            timestampString = "548828343.538451"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "144"
@@ -4233,7 +4105,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.968448"
+            timestampString = "548828343.538496"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "168"
@@ -4249,7 +4121,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.968497"
+            timestampString = "548828343.538538"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "159"
@@ -4297,7 +4169,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/VendorMapViewController.swift"
-            timestampString = "548126962.968545"
+            timestampString = "548828343.5385799"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "164"
@@ -4313,7 +4185,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.795254"
+            timestampString = "548828343.5386209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "315"
@@ -4329,7 +4201,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.795316"
+            timestampString = "548828343.538664"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "370"
@@ -4345,7 +4217,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.795372"
+            timestampString = "548828343.538704"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "383"
@@ -4361,7 +4233,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.795428"
+            timestampString = "548828343.538744"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "339"
@@ -4377,11 +4249,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/FavoritesViewController.swift"
-            timestampString = "548127485.795483"
+            timestampString = "548828343.538783"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4393,11 +4265,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/FavoritesViewController.swift"
-            timestampString = "548127485.795534"
+            timestampString = "548828343.5388221"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4409,11 +4281,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.795584"
+            timestampString = "548828343.538861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "477"
-            endingLineNumber = "477"
+            startingLineNumber = "492"
+            endingLineNumber = "492"
             landmarkName = "prepare(for:sender:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4425,11 +4297,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.7956409"
+            timestampString = "548828343.538906"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "340"
-            endingLineNumber = "340"
+            startingLineNumber = "355"
+            endingLineNumber = "355"
             landmarkName = "dealDetails(deal:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4441,11 +4313,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealTableViewCell.swift"
-            timestampString = "548127485.7957"
+            timestampString = "548828343.538977"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "setupUI()"
             landmarkType = "7">
             <Locations>
@@ -4489,11 +4361,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/DealTableViewCell.swift"
-            timestampString = "548127485.795774"
+            timestampString = "548828343.539031"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
             landmarkName = "setupUI()"
             landmarkType = "7">
          </BreakpointContent>
@@ -4505,12 +4377,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/RestaurantViewController.swift"
-            timestampString = "548127485.795854"
+            timestampString = "548828343.539142"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "723"
-            endingLineNumber = "723"
-            landmarkName = "collectionView(_:numberOfItemsInSection:)"
+            startingLineNumber = "719"
+            endingLineNumber = "719"
+            landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4521,7 +4393,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/Database.swift"
-            timestampString = "548127485.7961971"
+            timestampString = "548828343.539215"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "115"
@@ -4537,11 +4409,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/RestaurantViewController.swift"
-            timestampString = "548127485.796258"
+            timestampString = "548828343.539282"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "728"
-            endingLineNumber = "728"
+            startingLineNumber = "724"
+            endingLineNumber = "724"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4553,11 +4425,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/RestaurantViewController.swift"
-            timestampString = "548127485.796582"
+            timestampString = "548828343.539335"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "729"
-            endingLineNumber = "729"
+            startingLineNumber = "725"
+            endingLineNumber = "725"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4569,11 +4441,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/RestaurantViewController.swift"
-            timestampString = "548127485.796903"
+            timestampString = "548828343.539374"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "803"
-            endingLineNumber = "803"
+            startingLineNumber = "799"
+            endingLineNumber = "799"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4585,11 +4457,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/RestaurantViewController.swift"
-            timestampString = "548127485.797218"
+            timestampString = "548828343.539452"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "816"
-            endingLineNumber = "816"
+            startingLineNumber = "812"
+            endingLineNumber = "812"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4601,11 +4473,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.691504"
+            timestampString = "548828343.5394911"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
             landmarkName = "AppDelegate"
             landmarkType = "3">
             <Locations>
@@ -4617,7 +4489,7 @@
                   moduleName = "Savour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Chris/Documents/Savour/Savour/AppDelegate.swift"
-                  timestampString = "548111541.856408"
+                  timestampString = "548222147.7722811"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -4632,12 +4504,12 @@
                   moduleName = "Savour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Chris/Documents/Savour/Savour/AppDelegate.swift"
-                  timestampString = "548111541.858251"
+                  timestampString = "548222147.774918"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
                   endingLineNumber = "0"
-                  offsetFromSymbolStart = "12">
+                  offsetFromSymbolStart = "3">
                </Location>
                <Location
                   shouldBeEnabled = "No"
@@ -4647,12 +4519,12 @@
                   moduleName = "Savour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Chris/Documents/Savour/Savour/AppDelegate.swift"
-                  timestampString = "548111541.860033"
+                  timestampString = "548222147.777367"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "18"
                   endingLineNumber = "18"
-                  offsetFromSymbolStart = "52">
+                  offsetFromSymbolStart = "41">
                </Location>
                <Location
                   shouldBeEnabled = "No"
@@ -4662,12 +4534,12 @@
                   moduleName = "Savour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Chris/Documents/Savour/Savour/AppDelegate.swift"
-                  timestampString = "548111541.861796"
+                  timestampString = "548222147.78009"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "17"
                   endingLineNumber = "17"
-                  offsetFromSymbolStart = "12">
+                  offsetFromSymbolStart = "13">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -4679,11 +4551,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.6917959"
+            timestampString = "548828343.539535"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
             landmarkName = "AppDelegate"
             landmarkType = "3">
             <Locations>
@@ -4742,11 +4614,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.69207"
+            timestampString = "548828343.539577"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
             landmarkName = "AppDelegate"
             landmarkType = "3">
             <Locations>
@@ -4801,11 +4673,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/ViewController.swift"
-            timestampString = "548127485.797578"
+            timestampString = "548828343.53962"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "82"
@@ -4821,11 +4693,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/AppDelegate.swift"
-            timestampString = "548111594.692412"
+            timestampString = "548828343.5396661"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
             landmarkName = "AppDelegate"
             landmarkType = "3">
             <Locations>
@@ -4884,12 +4756,188 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Savour/RestaurantViewController.swift"
-            timestampString = "548127485.797662"
+            timestampString = "548828343.539709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
             landmarkName = "tableView(_:heightForRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/ViewController.swift"
+            timestampString = "548828343.539758"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/AppDelegate.swift"
+            timestampString = "548828343.539803"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
+            landmarkName = "locationManager(_:didEnterRegion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Savour.AppDelegate.locationManager(__ObjC.CLLocationManager, didEnterRegion: __ObjC.CLRegion) -&gt; ()"
+                  moduleName = "Savour"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Chris/Documents/Savour/Savour/AppDelegate.swift"
+                  timestampString = "548639770.8071769"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "214"
+                  endingLineNumber = "214"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__ObjC.CLCircularRegion) -&gt; Swift.Bool in implicit closure #1 : @autoclosure () throws -&gt; Swift.Bool in Savour.AppDelegate.locationManager(__ObjC.CLLocationManager, didEnterRegion: __ObjC.CLRegion) -&gt; ()"
+                  moduleName = "Savour"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Chris/Documents/Savour/Savour/AppDelegate.swift"
+                  timestampString = "548639770.81012"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "214"
+                  endingLineNumber = "214"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/AppDelegate.swift"
+            timestampString = "548828343.539845"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
+            landmarkName = "locationManager(_:didEnterRegion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/AppDelegate.swift"
+            timestampString = "548828343.539892"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
+            landmarkName = "userNotificationCenter(_:didReceive:withCompletionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/AppDelegate.swift"
+            timestampString = "548828343.5399359"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "246"
+            endingLineNumber = "246"
+            landmarkName = "userNotificationCenter(_:didReceive:withCompletionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/AppDelegate.swift"
+            timestampString = "548828343.539979"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
+            landmarkName = "userNotificationCenter(_:didReceive:withCompletionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/AppDelegate.swift"
+            timestampString = "548828343.5400209"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
+            landmarkName = "userNotificationCenter(_:didReceive:withCompletionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/AppDelegate.swift"
+            timestampString = "548828343.540062"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
+            landmarkName = "userNotificationCenter(_:didReceive:withCompletionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Savour/AppDelegate.swift"
+            timestampString = "548828343.5401109"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "userNotificationCenter(_:didReceive:withCompletionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

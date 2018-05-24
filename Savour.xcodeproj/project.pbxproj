@@ -32,6 +32,7 @@
 		834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E151F315BA8002D7198 /* SignUpViewController.swift */; };
 		834C1E1A1F3187AA002D7198 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E191F3187AA002D7198 /* Database.swift */; };
 		834C1E1C1F3194B6002D7198 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */; };
+		836FE96F20AD3B0A00E08B31 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 834F1A822045179E002AA6FD /* Location.gpx */; };
 		83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */; };
 		83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6E1F2ED1FD00E315FB /* LoginViewController.swift */; };
 		83802D721F2ED1FD00E315FB /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D701F2ED1FD00E315FB /* Onboarding.storyboard */; };
@@ -386,6 +387,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				836FE96F20AD3B0A00E08B31 /* Location.gpx in Resources */,
 				83344FA220082F1900126465 /* OpenSans-SemiBoldItalic.ttf in Resources */,
 				83344F9D20082F1900126465 /* OpenSans-Bold.ttf in Resources */,
 				83802D771F2ED1FD00E315FB /* LaunchScreen.storyboard in Resources */,

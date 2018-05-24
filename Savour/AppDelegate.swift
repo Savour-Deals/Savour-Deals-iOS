@@ -11,6 +11,7 @@ import Firebase
 import FBSDKCoreKit
 import OneSignal
 import CoreLocation
+import UserNotifications
 
 
 @UIApplicationMain
@@ -23,9 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var monitoredRegions = [restaurant]()
     var restaurants = [restaurant]()
     var entered = [CLCircularRegion]()
+    var canSendNoti = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        if #available(iOS 10.0, *) {
+            let center = UNUserNotificationCenter.current()
+            center.delegate = self
+        }//if not ios >=10, dont worry. just wont put user in vendors tab
         self.locationManager = CLLocationManager()
         self.locationManager!.delegate = self
         if launchOptions?[UIApplicationLaunchOptionsKey.location] != nil {
@@ -69,35 +75,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             
             //Setup Searchbar UI
             UISearchBar.appearance().barTintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-            //UISearchBar.appearance().tintColor = .white
             UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
             handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
+            var storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
             if Auth.auth().currentUser != nil {
                 // User is signed in.
-                let user = Auth.auth().currentUser
-                self.ref = Database.database().reference()
-                self.ref.child("Users").child((user?.uid)!).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
-                    // Get user value
-                    let type = snapshot.value as? String ?? ""
-                    if type == "Vendor"{
-                        let storyboard = UIStoryboard(name: "VendorHome", bundle: nil)
-                        let VenVC = storyboard.instantiateViewController(withIdentifier: "VenNav") as! UINavigationController
-                        self.window!.rootViewController = VenVC
-                    }
-                    else{
-                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
-                        tabVC.selectedIndex = 0
-                        self.window!.rootViewController = tabVC
-                    }
-                })
-                
-            }
-            else {
-                let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
+                tabVC.selectedIndex = 0
+                self.window!.rootViewController = tabVC
+            }else{
+                storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
                 let OnboardVC = storyboard.instantiateViewController(withIdentifier: "OnNav") as! UINavigationController
                 self.window!.rootViewController = OnboardVC
-                
             }
             UIApplication.shared.isStatusBarHidden = false
         }
@@ -198,9 +187,9 @@ extension AppDelegate: CLLocationManagerDelegate {
                     /* Create a region centered on desired location,
                      choose a radius for the region (in meters)
                      choose a unique identifier for that region */
-                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 100,identifier: place.id!)
+                    let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter!,radius: 250,identifier: place.id!)
                     geofenceRegion.notifyOnEntry = true
-                    geofenceRegion.notifyOnExit = false
+                    geofenceRegion.notifyOnExit = true
                     self.locationManager?.startMonitoring(for: geofenceRegion)
                     self.monitoredRegions.append(place)
                 }
@@ -212,20 +201,27 @@ extension AppDelegate: CLLocationManagerDelegate {
     // called when user Enters a monitored region
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if region is CLCircularRegion && !entered.contains(where: {$0===region}){
-            //Only count if we have not entered here recently
-            locationManager?.stopMonitoring(for: region)
-            nearbyCount = nearbyCount + 1
-            if nearbyCount > 8{
-                self.handleEvent()
-                locationManager?.stopUpdatingLocation()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 86400) {
-                    //after they're gone and left, we want to be able to send another notification
-                    self.locationManager?.startUpdatingLocation()
-                    self.nearbyCount = 0
-                    self.entered.removeAll()
+            nearbyCount = nearbyCount + 1 //Increment if we are in range of a location
+            if nearbyCount > 2{
+                if self.canSendNoti{
+                    self.canSendNoti = false
+                    self.handleEvent()
+                    locationManager?.stopUpdatingLocation() //Dont update if we dont need it
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 86400) {
+                        //after they're gone and left, we want to be able to send another notification
+                        self.locationManager?.startUpdatingLocation()
+                        self.canSendNoti = true
+                        self.nearbyCount = 0
+                        self.entered.removeAll()
+                    }
                 }
             }
         }
+    }
+    
+    //called when user exits a monitored region
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        nearbyCount = nearbyCount - 1 //decrement if left range of location
     }
     
     func handleEvent() {
@@ -236,9 +232,41 @@ extension AppDelegate: CLLocationManagerDelegate {
         localNotification.category = "Message"
         localNotification.alertBody = "Look at all the current deals nearby!"
         localNotification.alertBody = "\(localNotification.alertBody ?? "") Don't forget to check-in for loyalty points!"
-        localNotification.alertTitle = "Woah Check Out These Restaurants!"
+        localNotification.alertTitle = "Woah You're Near Some Hot Deals!"
         localNotification.fireDate = Date()
+        localNotification.userInfo = ["info": 2]
         UIApplication.shared.scheduleLocalNotification(localNotification)
+    }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void){
+        switch response.notification.request.content.userInfo["info"] as! Int{
+        case 2: //2 = got to Vendor page
+            if let tabVC = self.window!.rootViewController as? UITabBarController{
+                tabVC.selectedIndex = 2
+            }else{
+                UINavigationBar.appearance().barStyle = .blackOpaque
+                //Setup Searchbar UI
+                UISearchBar.appearance().barTintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
+                tabVC.selectedIndex = 2
+                self.window!.rootViewController = tabVC
+            }
+            break
+        default:
+            break
+        }
+    }
+    
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void){
+        completionHandler([.alert, .badge, .sound])
     }
 }
 

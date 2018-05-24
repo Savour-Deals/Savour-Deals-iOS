@@ -15,6 +15,8 @@ import OneSignal
 import UserNotifications
 import FBSDKCoreKit
 import FBSDKShareKit
+import SafariServices
+
 
 class AccountViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate{
 
@@ -118,7 +120,11 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             }else{
                 cell1.Img.image = #imageLiteral(resourceName: "Savour_FullColor")
             }
-            cell1.Welcome.text = (user?.displayName)!
+            if let name = user?.displayName{
+                cell1.Welcome.text = name
+            }else{
+                cell1.Welcome.text = "My Account"
+            }
             
             cell1.selectionStyle = UITableViewCellSelectionStyle.none
 
@@ -143,20 +149,40 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 2{
-            let mailComposeViewController = configureMailController()
-            if !MFMailComposeViewController.canSendMail() {
-                let email = "info@savourdeals.com"
-                let url = URL(string: "mailto:\(email)")
-                if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(url!)
-                } else {
-                    UIApplication.shared.openURL(url!)
+            let optionMenu = UIAlertController(title: nil, message: "Choose method", preferredStyle: .actionSheet)
+            
+            let deleteAction = UIAlertAction(title: "Mail App", style: .default, handler: {
+                (alert: UIAlertAction!) -> Void in
+                let mailComposeViewController = self.configureMailController()
+                if !MFMailComposeViewController.canSendMail() {
+                    let email = "info@savourdeals.com"
+                    let url = URL(string: "mailto:\(email)")
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(url!)
+                    } else {
+                        UIApplication.shared.openURL(url!)
+                    }
+                    return
                 }
-                return
-            }
-            else{
-                self.present(mailComposeViewController, animated: true, completion: nil)
-            }
+                else{
+                    self.present(mailComposeViewController, animated: true, completion: nil)
+                }
+            })
+            let saveAction = UIAlertAction(title: "Savourdeals.com", style: .default, handler: {
+                (alert: UIAlertAction!) -> Void in
+                let svc = SFSafariViewController(url: URL(string:"http://savourdeals.com/index.php/contact/")!)
+                svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+                self.present(svc, animated: true, completion: nil)
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+            })
+
+            optionMenu.addAction(deleteAction)
+            optionMenu.addAction(saveAction)
+            optionMenu.addAction(cancelAction)
+            
+            self.present(optionMenu, animated: true, completion: nil)
         }else if indexPath.row == 1{
 
             let textToShare = "Check out Savour to get deals from local restaurants!"
@@ -205,17 +231,6 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             print ("Error signing out: %@", signOutError)
         }
         // [END signout]
-    }
-    
-    @IBAction func updateTimes(_ sender: Any) {
-        let errorAlert = UIAlertController(title: "WARNING!!!!!", message: "Do not accidently hit ok. This will mess with your backend! Remove this before launch", preferredStyle: .alert)
-        let dismiss = UIAlertAction(title: "CANCEL", style: .default, handler: nil)
-        errorAlert.addAction(dismiss)
-        let okay = UIAlertAction(title: "Okay", style: .default) { (alert: UIAlertAction!) -> Void in
-            add_TwoMonth()
-        };
-        errorAlert.addAction(okay)
-        self.present(errorAlert, animated: true, completion: nil)
     }
     
 }

@@ -389,9 +389,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
         let photo = cell.restaurant.photo!
         if photo != ""{
-            // Reference to an image file in Firebase Storage
-            let storage = Storage.storage()
-            let storageref = storage.reference(forURL: photo)
+
             
             // UIImageView in your ViewController
             let imageView: UIImageView = cell.rImg
@@ -400,7 +398,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             let placeholderImage = UIImage(named: "placeholder.jpg")
             
             // Load the image using SDWebImage
-            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage)
+            imageView.sd_setImage(with: URL(string: photo), placeholderImage: placeholderImage)
         }
         cell.rName.text = cell.restaurant.name
         if let distance = cell.restaurant.distanceMiles{

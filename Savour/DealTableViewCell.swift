@@ -54,25 +54,9 @@ class DealTableViewCell: UITableViewCell {
             self.likeButton.setImage(image, for: .normal)
             self.likeButton.tintColor = UIColor.red
         }
-        let photo = deal?.photo!
-        if photo != ""{
-            // Reference to an image file in Firebase Storage
-            let storage = Storage.storage()
-            let storageref = storage.reference(forURL: photo!)
-            
-            // UIImageView in your ViewController
-            let imageView: UIImageView = self.rImg
-            
-            // Placeholder image
-            let placeholderImage = UIImage(named: "placeholder.jpg")
-            
-            // Load the image using SDWebImage
-            imageView.sd_setImage(with: storageref, placeholderImage: placeholderImage, completion: { (img, err, typ, ref) in
-                self.tempImg.isHidden = true
-            })
-        }
         self.rName.text = deal.name
         self.dealDesc.text = deal.dealDescription
+        self.validHours.text = deal.activeHours
         if deal.redeemed! {
             self.Countdown.text = "Deal Already Redeemed!"
             self.Countdown.textColor = UIColor.red
@@ -82,7 +66,6 @@ class DealTableViewCell: UITableViewCell {
         else if self.deal.daysLeft! < 8{
             self.countdownView.isHidden = false
             self.Countdown.text = deal.countdown
-            self.validHours.text = deal.activeHours
         }else{
             self.countdownView.isHidden = true
         }

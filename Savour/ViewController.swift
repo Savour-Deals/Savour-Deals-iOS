@@ -93,7 +93,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         case .denied, .restricted:
             locationDisabled()
         default:
-            performSegue(withIdentifier: "promptSegue", sender: "home")
+            performSegue(withIdentifier: "tutorial", sender: self)
         }
     }
     
@@ -316,6 +316,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         cell.deal = deal
         cell.tempImg.image = UIImage(named: placeholderImgs[count])
+        let photo = deal?.photo!
+        if photo != ""{
+            // Reference to an image file in Firebase Storage
+//            let storage = Storage.storage()
+//            let storageref = storage.reference(forURL: photo!)
+            
+            // UIImageView in your ViewController
+            let imageView: UIImageView = cell.rImg
+            cell.tempImg.image = UIImage(named: placeholderImgs[count])
+            
+            // Load the image using SDWebImage
+            imageView.sd_setImage(with: URL(string:photo!), completed: { (img, err, typ, ref) in
+                cell.tempImg.isHidden = true
+            })
+        }
         count = count + 1
         if count > 2{
             count = 0

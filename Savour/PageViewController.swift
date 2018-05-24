@@ -121,7 +121,6 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
         notiButton.layer.cornerRadius = notiButton.frame.height/2
         locbutton.layer.cornerRadius = locbutton.frame.height/2
         self.locationManager = CLLocationManager()
-
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -133,23 +132,23 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
             parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
             parent.navigationController?.navigationBar.shadowImage = UIImage()
             parent.navigationController?.navigationBar.isTranslucent = true
+            self.continueButton.isEnabled = true
+            continueButton.alpha = 1.0
             parent.setupUI()
         case .denied, .restricted, .notDetermined:
             self.locText.text = "To turn on location later, go to:\n Settings → Savour Deals → Location."
         }
-        self.continueButton.isEnabled = true
-        continueButton.alpha = 1.0
         self.locbutton.backgroundColor = UIColor.gray
         self.locbutton.isUserInteractionEnabled = false
     }
     
     @IBAction func notiPress(_ sender: Any) {
         OneSignal.promptForPushNotifications(userResponse: { accepted in
-            self.notiButton.isUserInteractionEnabled = false
             self.notiButton.backgroundColor = UIColor.gray
             if !accepted{
                 self.notiText.text = "To turn on notifications later, go to:\n Settings → Savour Deals → Notifications."
             }
+            self.notiButton.isUserInteractionEnabled = false
         })
     }
     @IBAction func locPress(_ sender: Any) {
