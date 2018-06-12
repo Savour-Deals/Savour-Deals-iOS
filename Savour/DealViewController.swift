@@ -16,10 +16,11 @@ import CoreLocation
 
 
 
-class DealViewController: UIViewController {
+class DealViewController: UIViewController,CLLocationManagerDelegate {
 
     @IBOutlet weak var blurView: UIVisualEffectView!
     var Deal: DealData!
+    var dealsData: DealsData!
     var fromDetails: Bool!
     let pulsator = Pulsator()
     var from: String?
@@ -31,7 +32,7 @@ class DealViewController: UIViewController {
     var isTimerRunning = false
     var timerStartTime: Int!
     weak var shapeLayer: CAShapeLayer?
-    var thisRestaurant: restaurant?
+    var thisVendor: VendorData?
     var locationManager: CLLocationManager!
     var userLocation: CLLocation!
     
@@ -59,8 +60,7 @@ class DealViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.locationManager = CLLocationManager()
-        self.locationManager!.startUpdatingLocation()
-        self.userLocation = self.locationManager.location!
+        locationManager!.startUpdatingLocation()
         if #available(iOS 11, *) {
             let verticalSpace = NSLayoutConstraint(item: self.redeem, attribute: .bottom, relatedBy: .equal, toItem: self.DealView.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1.0, constant: -10.0)
             // activate the constraint
@@ -81,9 +81,11 @@ class DealViewController: UIViewController {
         self.title = ""
     }
     
+    
     func SetupUI(){
         pulsator.start()
-        self.thisRestaurant = updateDistance(location: self.userLocation, restaurants: [self.thisRestaurant!])[0]
+        self.userLocation = self.locationManager.location!
+        self.thisVendor = updateDistance(location: self.userLocation, vendor: self.thisVendor!)
         self.navigationController?.navigationBar.tintColor = UIColor.white
         let imageView = UIImageView(image: UIImage(named: "Savour_White"))
         imageView.contentMode = UIViewContentMode.scaleAspectFit
@@ -130,28 +132,30 @@ class DealViewController: UIViewController {
                 self.redeemIndicator(color: UIColor.green.cgColor)
                 self.code.text = self.Deal?.code
             }
-        }else if let rest = self.thisRestaurant?.distanceMiles, rest>0.1{
+        }else if let rest = self.thisVendor?.distanceMiles, rest>0.1{
             self.redeem.isEnabled = false
             pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
             self.redeem.setTitle("Go to Location to Redeem", for: .normal)
             self.redeem.layer.backgroundColor = UIColor.red.cgColor
+        }else if !(Deal?.active)!{
+            self.redeem.setTitle("Deal Not Active", for: .normal)
+            self.code.text = "This deal is valid " + Deal.code! + "."
+            self.redeem.layer.backgroundColor = UIColor.red.cgColor
+            self.redeem.isEnabled = false
+            self.redeemIndicator(color: UIColor.red.cgColor)
         }else{
             pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         }
         textView.contentOffset.y = 0
-        if !(Deal?.active)!{
-            self.redeem.setTitle("Deal Not Active", for: .normal)
-            self.code.text = "This deal is valid " + Deal.code! + "."
-            self.redeem.isEnabled = false
-            self.redeemIndicator(color: UIColor.red.cgColor)
-        }
+
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RestaurantDetails" {
             self.title = ""
             let vc = segue.destination as! RestaurantViewController
-            vc.thisRestaurant = self.thisRestaurant
+            vc.thisVendor = self.thisVendor
+            vc.dealsData = self.dealsData
         }
     }
     
@@ -183,9 +187,9 @@ class DealViewController: UIViewController {
                 self.runTimer()
                 let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
                 if status.subscriptionStatus.userId != " "{
-                    let followRef = Database.database().reference().child("Restaurants").child((self.Deal?.id)!).child("Followers").child(uID!)
-                    followRef.setValue(status.subscriptionStatus.userId)
-
+                    //Redundant following for user and rest
+                    Database.database().reference().child("Restaurants").child((self.thisVendor?.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
+                    Database.database().reference().child("Users").child(uID!).child("following").child((self.thisVendor?.id!)!).setValue(true)
                 }
             }
             alert.addAction(cancelAction)

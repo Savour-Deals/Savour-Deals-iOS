@@ -12,260 +12,234 @@ import FirebaseAuth
 import MapKit
 import GeoFire
 
-class Deals{
-    private var unfilteredDeals = [DealData]()
+class DealsData{
+    private let locationManager = CLLocationManager()
     private let ref = Database.database().reference()
     private let userid = Auth.auth().currentUser?.uid
-    var filteredDeals = [DealData]()
-    private var inactiveDeals = [DealData]()
-    var filteredInactiveDeals = [DealData]()
-    var restaurants = Dictionary<String,restaurant>()
-    var favoriteIDs = Dictionary<String, String>()
+    
+    private var activeDeals = Dictionary<String,DealData>()
+    private var inactiveDeals = Dictionary<String,DealData>()
 
-    func getDeals(byLocation location: CLLocation, dealType: String? = "All", completion: @escaping (Bool) -> ()){
+    var vendorsData:VendorsData!
+    
+    private var favoriteIDs = Dictionary<String, String>()
+    
+    private var favoritesLoaded = false
+    private var dealsLoaded = false
+    var loadingComplete = false
+    
+    init(completion: @escaping (Bool) -> Void){
         let currentUnix = Date().timeIntervalSince1970
-        let group = DispatchGroup()
-        let locationManager = CLLocationManager()
+        let group1 = DispatchGroup()
+        let group2 = DispatchGroup()
         let expiredUnix = currentUnix
-        unfilteredDeals.removeAll()
-        inactiveDeals.removeAll()
-        ref.keepSynced(true)
-        ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
-            for entry in snapshot.children{
-                let snap = entry as! DataSnapshot
-                let value = snap.key
-                self.favoriteIDs[value] = value
-            }
-            var nearby = [restaurant]()
-            getRestaurants(byLocation: locationManager.location!,completion:{ (restaurants) in
-                nearby = restaurants
-                for rest in restaurants{
-                    self.restaurants[rest.id!] = rest
-                }
-                nearby = nearby.sorted(by:{ (d1, d2) -> Bool in
-                    if d1.distanceMiles! <= d2.distanceMiles! {
-                        return true
-                    }else if  d1.distanceMiles! > d2.distanceMiles! {
-                        return false
+        vendorsData = VendorsData(completion: { (success) in
+            if success{
+                self.ref.keepSynced(true)
+
+                self.ref.child("Users").child(self.userid!).child("Favorites").observe(.value, with: { (snapshot) in
+                    for entry in snapshot.children{
+                        let snap = entry as! DataSnapshot
+                        let key = snap.key
+                        if let _ = snap.value{
+                            //Get Favorites
+                            self.favoriteIDs[key] = key
+                        }else{
+                            //Remove Favorite
+                            self.favoriteIDs.removeValue(forKey: key)
+                        }
                     }
-                    return false
-                })
-                for place in nearby{
-                    group.enter()
-                    self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: place.id).observeSingleEvent(of: .value, with: { (snapshot) in
+                    self.dealsLoaded = true
+                    if self.favoritesLoaded && self.dealsLoaded{
+                        self.loadingComplete = true
+                    }
+                }){ (error) in
+                    print(error.localizedDescription)
+                }
+                group1.notify(queue: .main) {
+                    print("Finished gathering favorites.")
+                }
+                //Get Deals
+                let vendors = self.vendorsData.getVendors()
+                for vendor in vendors{
+                    self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: vendor.id).observe(.value, with: { (snapshot) in
                         for entry in snapshot.children {
+                            group2.enter()
                             let snap = entry as! DataSnapshot
-                            let temp = DealData(snap: snap, ID: self.userid!)
-                            if !self.unfilteredDeals.contains(where: {$0.id  == temp.id }) && !self.inactiveDeals.contains(where: {$0.id  == temp.id }){
+                            if let _ = snap.value{
+                                let temp = DealData(snap: snap, ID: self.userid!)
+                                if self.favoriteIDs[temp.id!] != nil{
+                                    temp.favorited = true
+                                }else{
+                                    temp.favorited = false
+                                }
                                 //if the deal is not expired or redeemed less than half an hour ago, show it
                                 if temp.endTime! > expiredUnix && !temp.redeemed!{
                                     if temp.active{
-                                        self.unfilteredDeals.append(temp)
+                                        self.activeDeals[temp.id!] = temp
                                     }else{
-                                        self.inactiveDeals.append(temp)
+                                        self.inactiveDeals[temp.id!] = temp
                                     }
                                 }else if let time = temp.redeemedTime{
                                     if (Date().timeIntervalSince1970 - time) < 1800{
-                                        self.unfilteredDeals.append(temp)
+                                        self.activeDeals[temp.id!] = temp
                                     }
                                 }
+                            }else{
+                                let snap = entry as! DataSnapshot
+                                let key = snap.key
+                                self.activeDeals.removeValue(forKey: key)
+                                self.inactiveDeals.removeValue(forKey: key)
                             }
+                            group2.leave()
                         }
-                        group.leave()
                     }){ (error) in
                         print(error.localizedDescription)
                     }
-                }
-                group.notify(queue: DispatchQueue.main){
-                    for deal in self.unfilteredDeals{
-                        if let _ = self.favoriteIDs[deal.id!]{
-                            deal.favorited = true
-                        }
+                    group2.notify(queue: .main) {
+                        print("Finished gathering deals.")
+                        completion(true)
                     }
-                    self.filter(byTitle: dealType!)
-                    self.sortDeals()
-                    completion(true)
                 }
-            })
+            }else{
+                //error initializing vendorsData
+                completion(false)
+            }
         })
+        
+    }
+
+    
+    //Check if these return by reference
+    func getDeals(dealType: String? = "All") -> ([DealData],[DealData]){
+        var active = Array(activeDeals.values)
+        var inactive = Array(inactiveDeals.values)
+        sortDeals(array: &active)
+        sortDeals(array: &inactive)
+        return (active,inactive)
     }
     
-    func getDeals(forRestaurant restaurant: String, table: UITableView){
-        let userid = Auth.auth().currentUser?.uid
-        let ref = Database.database().reference()
-        ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
-            for entry in snapshot.children{
-                let snap = entry as! DataSnapshot
-                let value = snap.key
-                self.favoriteIDs[value] = value
-            }
-            self.unfilteredDeals.removeAll()
-            let expiredUnix = Date().timeIntervalSince1970 - 24*60*60
-            ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: restaurant).observeSingleEvent(of: .value, with: { (snapshot) in
-                for entry in snapshot.children {
-                    let snap = entry as! DataSnapshot
-                    let temp = DealData(snap: snap, ID: userid!)
-                    //if the deal is not expired or redeemed less than half an hour ago, show it
-                    if !self.unfilteredDeals.contains(where: {$0.id  == temp.id }) && !self.inactiveDeals.contains(where: {$0.id  == temp.id }){
-                        //if the deal is not expired or redeemed less than half an hour ago, show it
-                        if temp.endTime! > expiredUnix && !temp.redeemed!{
-                            if temp.active{
-                                self.unfilteredDeals.append(temp)
-                            }else{
-                                self.inactiveDeals.append(temp)
-                            }
-                        }else if let time = temp.redeemedTime{
-                            if (Date().timeIntervalSince1970 - time) < 1800{
-                                self.unfilteredDeals.append(temp)
-                            }
-                        }
-                    }
-                }
-                for deal in self.unfilteredDeals{
-                    if let _ = self.favoriteIDs[deal.id!]{
-                        deal.favorited = true
-                    }
-                }
-                self.filteredDeals = self.unfilteredDeals
-                self.filteredInactiveDeals = self.inactiveDeals
-                self.sortDeals()
-                table.reloadData()
-            }){ (error) in
-                print(error.localizedDescription)
-            }
-        }){ (error) in
-            print(error.localizedDescription)
-        }
+    func getDeals(forRestaurant restaurant: String) -> ([DealData],[DealData]){
+        var active = Array(activeDeals.values).filter { $0.rID == restaurant }
+        var inactive = Array(inactiveDeals.values).filter { $0.rID == restaurant }
+        sortDeals(array: &active)
+        sortDeals(array: &inactive)
+        return (active,inactive)
+    }
+    
+    func getFavorites() -> ([DealData],[DealData]){
+        let active = Array(activeDeals.values).filter { $0.favorited == true }
+        let inactive = Array(inactiveDeals.values).filter { $0.favorited == true }
+        return (active,inactive)
     }
    
-    func filter(byTitle title: String){
+    func filter(byTitle title: String) -> ([DealData],[DealData]){
+        var inactive = [DealData]()
+        var active = [DealData]()
         if title == "All" {
-            filteredDeals = unfilteredDeals
-            filteredInactiveDeals = inactiveDeals
+            active = Array(activeDeals.values)
+            inactive = Array(inactiveDeals.values)
         }else if title == "%" || title == "$"{
-            filteredDeals = unfilteredDeals.filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
-            filteredInactiveDeals = inactiveDeals.filter  { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
+            active = Array(activeDeals.values).filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
+            inactive = Array(inactiveDeals.values).filter  { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
         }else if  title == "BOGO" {
             // Filter the results
-            filteredDeals = unfilteredDeals.filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
-            filteredInactiveDeals = inactiveDeals.filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
+            active = Array(activeDeals.values).filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
+            inactive = Array(inactiveDeals.values).filter { ($0.dealDescription!.lowercased().contains("Buy One Get One".lowercased())) }
         } else{
-            filteredDeals = unfilteredDeals.filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
-            filteredInactiveDeals = inactiveDeals.filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
+            active = Array(activeDeals.values).filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
+            inactive = Array(inactiveDeals.values).filter { ($0.dealDescription!.lowercased().contains(title.lowercased())) }
         }
-        sortDeals()
+        sortDeals(array: &active)
+        sortDeals(array: &inactive)
+        return (active,inactive)
     }
     
-    func filter(byName name: String){
+    func filter(byName name: String) -> ([DealData],[DealData]){
+        var inactive = [DealData]()
+        var active = [DealData]()
         if name == "" {
-            filteredDeals = unfilteredDeals
-            filteredInactiveDeals = inactiveDeals
+            active = Array(activeDeals.values)
+            inactive = Array(inactiveDeals.values)
         } else {
             // Filter the results
-            filteredDeals = unfilteredDeals.filter { ($0.name?.lowercased().contains(name.lowercased()))! }
-            filteredInactiveDeals = inactiveDeals.filter { ($0.name?.lowercased().contains(name.lowercased()))! }
+            active = Array(activeDeals.values).filter { ($0.name?.lowercased().contains(name.lowercased()))! }
+            inactive = Array(inactiveDeals.values).filter { ($0.name?.lowercased().contains(name.lowercased()))! }
         }
+        return (active,inactive)
     }
     
-    func sortDeals(){
-        filteredDeals = filteredDeals.sorted(by:{ (d1, d2) -> Bool in
-            if d1.active && !d2.active {
-                return true
-            }else if !d1.active && d2.active{
-                return false
-            }
-            else if d1.active == d2.active {
-                return CGFloat(d1.endTime!) < CGFloat(d2.endTime!)
-            }
-            return false
+    func sortDeals(array: inout [DealData]){
+        array = array.sorted(by:{ (d1, d2) -> Bool in
+            return CGFloat(d1.endTime!) < CGFloat(d2.endTime!)
         })
     }
     
     func getNotificationDeal(dealID: String?) -> DealData?{
-        if dealID != nil && unfilteredDeals.count > 0{
-            for i in 0..<unfilteredDeals.count{
-                if unfilteredDeals[i].id == notificationDeal {
-                    return unfilteredDeals[i]
-                }
-            }
+        if dealID != nil && activeDeals.count > 0{
+            return activeDeals[dealID!]
         }
         return nil
     }
 }
 
-class Favorites{
-    private var unfilteredDeals = [DealData]()
-    var favoriteDeals = [DealData]()
-    private let ref = Database.database().reference()
-    private let userid = Auth.auth().currentUser?.uid
-    var restaurants = Dictionary<String,restaurant>()
-
-    func getFavorites(table: UITableView){
-        let group = DispatchGroup()
-        var favoriteIDs = [String]()
-        let userid = Auth.auth().currentUser?.uid
-        let ref = Database.database().reference()
-        let locationManager = CLLocationManager()
-        getRestaurants(byLocation: locationManager.location!,completion:{ (restaurants) in
-            for rest in restaurants{
-                self.restaurants[rest.id!] = rest
-            }
-        })
-        ref.child("Users").child(userid!).child("Favorites").observeSingleEvent(of: .value, with: { (snapshot) in
-            for entry in snapshot.children{
-                let snap = entry as! DataSnapshot
-                let value = snap.key
-                favoriteIDs.append(value)
-            }
-            self.unfilteredDeals.removeAll()
-            let expiredUnix = Date().timeIntervalSince1970 - 24*60*60
-            for favoriteID in favoriteIDs{
-                group.enter()
-                ref.child("Deals").queryOrderedByKey().queryEqual(toValue: favoriteID).observeSingleEvent(of: .value, with: { (snapshot) in
+class VendorsData{
+    var vendors = Dictionary<String,VendorData>()
+    private var geoFire: GFCircleQuery!
+    private let locationManager = CLLocationManager()
+    
+    init(completion: @escaping (Bool) -> Void){
+        locationManager.startUpdatingLocation()
+        let ref = Database.database().reference().child("Restaurants")
+        let geofireRef = Database.database().reference().child("Restaurants_Location")
+        var count = 0
+        if let location = locationManager.location{
+            geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: 80.5)
+            geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
+                count = count + 1
+                ref.queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
                     for child in snapshot.children{
                         let snap = child as! DataSnapshot
-                        let temp = DealData(snap: snap, ID: userid!)
-                        temp.favorited = true
-                        //if the deal is not expired or redeemed less than half an hour ago, show it
-                        if temp.endTime! > expiredUnix && !temp.redeemed!{
-                            self.unfilteredDeals.append(temp)
-                        }else if let time = temp.redeemedTime{
-                            if (Date().timeIntervalSince1970 - time) < 1800{
-                                self.unfilteredDeals.append(temp)
-                            }
-                        }else{
-                            //if the deal is no longer active or was redeemed, we can remove the favorite
-                            ref.child("Users").child(userid!).child("Favorites").child(temp.id!).removeValue()
-                        }
+                        self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: location)
                     }
-                    group.leave()
-                }){ (error) in
-                    print(error.localizedDescription)
-                }
-            }
-            group.notify(queue: DispatchQueue.main) {
-                self.favoriteDeals = self.unfilteredDeals
-                self.sortDeals()
-                table.reloadData()
-            }
-        }){ (error) in
-            print(error.localizedDescription)
+                    count = count - 1
+                    if count == 0{
+                        completion(true)
+                    }
+                })
+            })
+            geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in //50 miles
+                self.vendors.removeValue(forKey: key)
+            })
+        }else{
+            //could not get location!!
+            print("Vendors Failed to load. Location error!")
+            completion(false)
         }
     }
     
-    func sortDeals(){
-        favoriteDeals = favoriteDeals.sorted(by:{ (d1, d2) -> Bool in
-            if d1.active && !d2.active {
-                return true
-            }else if !d1.active && d2.active{
-                return false
-            }
-            else if d1.active == d2.active {
-                return CGFloat(d1.endTime!) < CGFloat(d2.endTime!)
-            }
-            return false
-        })
+    func getVendors() -> [VendorData]{
+        return Array(vendors.values)
     }
+    
+    func getVendorsByID(id: String) -> (VendorData?){
+        if let _ = vendors[id]{
+            return vendors[id]!
+        }
+        //If here, could not find vendor. Do something for this issue
+        return VendorData(ID: "")
+    }
+    
+    func updateDistances(location: CLLocation){
+        for vendor in vendors{
+            vendor.value.distanceMiles = (vendor.value.location?.distance(from: location))!/1609
+        }
+        geoFire.center = location
+    }
+}
+func updateDistance(location: CLLocation, vendor: VendorData) -> (VendorData){
+    vendor.distanceMiles = (vendor.location?.distance(from: location))!/1609
+    return vendor
 }
 
 class DealData{
@@ -309,12 +283,7 @@ class DealData{
         }
         else{
             let value = snap?.value as! NSDictionary
-            if let rID = value["rID"] {
-                self.rID = "\(rID)"
-            }
-            else {
-                self.id = ""
-            }
+            self.rID = value["rID"] as? String ?? ""
             self.name = value["rName"] as? String ?? ""
             self.dealDescription = value["dealDesc"] as? String ?? ""
             self.photo = value["photo"] as? String ?? ""
@@ -508,9 +477,9 @@ class DealData{
     }
 }
 
-class restaurant{
+class VendorData{
     var name: String?
-    var id: String?
+    var id: String!
     var photo: String?
     var description: String?
     var address: String?
@@ -520,7 +489,6 @@ class restaurant{
     var followers: Int?
     var hoursArray = [String]()
     var dailyHours = [String]()
-    var Deals = [DealData]()
     struct loyaltyStruct{
         var loyaltyCode: String
         var loyaltyCount: Int
@@ -552,10 +520,7 @@ class restaurant{
             self.address = value["Address"] as? String ?? ""
             self.menu = value["Menu"] as? String ?? ""
             self.photo = value["Photo"] as? String ?? ""
-            if location != nil{
-                self.location = location
-                self.distanceMiles = (location?.distance(from: myLocation!))!/1609
-            }
+            
             //        if (snap?.childSnapshot(forPath: "HappyHours").childrenCount)! > 0 {
             //            let hoursSnapshot = snap?.childSnapshot(forPath: "HappyHours").value as? NSDictionary
             //            self.hoursArray.append(hoursSnapshot?["Mon"] as? String ?? "No Happy Hour")
@@ -584,6 +549,20 @@ class restaurant{
                 let pointsDict = loyaltySnapshot!["loyaltyPoints"] as? NSDictionary
                 loyalty = loyaltyStruct(code: code, deal: deal, count: count, dict: pointsDict!)
             }else{loyalty = loyaltyStruct()}
+            if location != nil{//If we already have location from firebase
+                self.location = location
+                self.distanceMiles = (location?.distance(from: myLocation!))!/1609
+            }else{
+                let geoCoder = CLGeocoder()
+                geoCoder.geocodeAddressString(self.address!) { (placemarks, error) in
+                    if let location = placemarks?.first?.location{
+                        self.location = location
+                        self.distanceMiles = (location.distance(from: myLocation!))/1609
+                    }else{
+                        //error with location!
+                    }
+                }
+            }
         }else{
             self.id = ID
             self.name = ""
@@ -596,49 +575,4 @@ class restaurant{
         
     }
     
-}
-func updateDistance(location: CLLocation, restaurants: [restaurant])-> [restaurant]{
-    for restaurant in restaurants{
-        restaurant.distanceMiles = (restaurant.location?.distance(from: location))!/1609
-    }
-    return restaurants
-}
-func getRestaurants(byLocation location: CLLocation,completion: @escaping ([restaurant]) -> ()){
-    var nearby = [String:CLLocation]()
-    var restaurants = [restaurant]()
-    let ref = Database.database().reference().child("Restaurants")
-    let geofireRef = Database.database().reference().child("Restaurants_Location")
-    let geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: 80.5)
-    geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
-        nearby[key] = thislocation
-    })
-    geoFire.observeReady {
-        let group = DispatchGroup()
-        for loc in nearby{
-            group.enter()
-            ref.queryOrderedByKey().queryEqual(toValue: loc.key).observeSingleEvent(of: .value, with: { (snapshot) in
-                for child in snapshot.children{
-                    let snap = child as! DataSnapshot
-                    let temp = restaurant(snap: snap, ID: loc.key, location: loc.value, myLocation: location)
-                    if !restaurants.contains(where: { $0.id  == temp.id }){
-                        restaurants.append(temp)
-                    }
-                    group.leave()
-                }
-                
-            })
-        }
-        group.notify(queue: DispatchQueue.main){
-            if restaurants.count > 0{
-                restaurants.sort(by: { (r1, r2) -> Bool in
-                    if r1.distanceMiles! < r2.distanceMiles!{
-                        return true
-                    }else{
-                        return false
-                    }
-                })
-            }
-            completion(restaurants)
-        }
-    }
 }

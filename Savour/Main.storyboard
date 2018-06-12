@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KlB-Ro-HJC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KlB-Ro-HJC">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -29,33 +29,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ySv-nY-HY2">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No favorites. Press a deal's heart to save it here." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DcR-21-Xya">
-                                        <rect key="frame" x="30" y="310.66666666666669" width="354" height="50.333333333333314"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
-                                        <color key="textColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icons8-like" translatesAutoresizingMaskIntoConstraints="NO" id="srd-X5-DW4">
-                                        <rect key="frame" x="187" y="260.66666666666669" width="40" height="40"/>
-                                        <color key="tintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="8VM-b9-RZX"/>
-                                            <constraint firstAttribute="width" constant="40" id="Jty-Sx-9Dw"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="DcR-21-Xya" firstAttribute="centerY" secondItem="ySv-nY-HY2" secondAttribute="centerY" id="9gm-II-Cai"/>
-                                    <constraint firstItem="DcR-21-Xya" firstAttribute="leading" secondItem="ySv-nY-HY2" secondAttribute="leading" constant="30" id="B7g-ao-5ci"/>
-                                    <constraint firstItem="DcR-21-Xya" firstAttribute="top" secondItem="srd-X5-DW4" secondAttribute="bottom" constant="10" id="BMP-nI-k0g"/>
-                                    <constraint firstItem="srd-X5-DW4" firstAttribute="centerX" secondItem="ySv-nY-HY2" secondAttribute="centerX" id="D3E-vL-ghn"/>
-                                    <constraint firstAttribute="trailing" secondItem="DcR-21-Xya" secondAttribute="trailing" constant="30" id="dBY-Is-2bJ"/>
-                                </constraints>
-                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="FavoritesTable" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Db4-Fv-50S">
                                 <rect key="frame" x="0.0" y="0.0" width="412" height="625"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -206,6 +179,33 @@
                                     <outlet property="delegate" destination="Ota-ub-3wT" id="9Xf-pg-l7c"/>
                                 </connections>
                             </tableView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ySv-nY-HY2">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="None of your favorites are nearby. Press a deal's heart to save it here." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DcR-21-Xya">
+                                        <rect key="frame" x="30" y="310.66666666666669" width="354" height="50.333333333333314"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
+                                        <color key="textColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icons8-like" translatesAutoresizingMaskIntoConstraints="NO" id="srd-X5-DW4">
+                                        <rect key="frame" x="187" y="260.66666666666669" width="40" height="40"/>
+                                        <color key="tintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="8VM-b9-RZX"/>
+                                            <constraint firstAttribute="width" constant="40" id="Jty-Sx-9Dw"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="DcR-21-Xya" firstAttribute="centerY" secondItem="ySv-nY-HY2" secondAttribute="centerY" id="9gm-II-Cai"/>
+                                    <constraint firstItem="DcR-21-Xya" firstAttribute="leading" secondItem="ySv-nY-HY2" secondAttribute="leading" constant="30" id="B7g-ao-5ci"/>
+                                    <constraint firstItem="DcR-21-Xya" firstAttribute="top" secondItem="srd-X5-DW4" secondAttribute="bottom" constant="10" id="BMP-nI-k0g"/>
+                                    <constraint firstItem="srd-X5-DW4" firstAttribute="centerX" secondItem="ySv-nY-HY2" secondAttribute="centerX" id="D3E-vL-ghn"/>
+                                    <constraint firstAttribute="trailing" secondItem="DcR-21-Xya" secondAttribute="trailing" constant="30" id="dBY-Is-2bJ"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -289,7 +289,7 @@
                         <outlet property="listView" destination="Zv6-go-tpR" id="qK7-bS-xBt"/>
                         <outlet property="mapView" destination="vuz-P6-xHS" id="zv4-U9-ISh"/>
                         <outlet property="segControl" destination="aw5-xx-Tx6" id="udH-As-Oh3"/>
-                        <segue destination="OcR-b5-Pw6" kind="show" identifier="restaurant" id="aXd-GO-Vma"/>
+                        <segue destination="OcR-b5-Pw6" kind="show" identifier="vendor" id="aXd-GO-Vma"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QzW-aZ-Xn3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -773,8 +773,8 @@
                                     <outlet property="delegate" destination="Pjj-6M-8kj" id="4rW-S9-yEE"/>
                                 </connections>
                             </tableView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NO DEALS NEARBY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZPY-Ae-TFI">
-                                <rect key="frame" x="113.33333333333333" y="324" width="187.66666666666669" height="24"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No deals nearby. Swipe to reload." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZPY-Ae-TFI">
+                                <rect key="frame" x="45.666666666666657" y="324" width="323" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
                                 <color key="textColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1117,7 +1117,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexBackgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="restaurant" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="restaurant" rowHeight="215" id="HTB-ne-fin" customClass="restaurantCell" customModule="Savour" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="vendor" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="vendor" rowHeight="215" id="HTB-ne-fin" customClass="vendorCell" customModule="Savour" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="215"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="HTB-ne-fin" id="u9A-m1-Sco">
@@ -1189,8 +1189,8 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NO NEARBY RESTAURANTS" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OcU-cu-m7F">
-                                <rect key="frame" x="72.333333333333343" y="299.66666666666669" width="269.66666666666663" height="24"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No restaurants nearby. Swipe to refresh." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OcU-cu-m7F">
+                                <rect key="frame" x="10.333333333333343" y="299.66666666666669" width="393.66666666666663" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
                                 <color key="textColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1283,6 +1283,6 @@
         <image name="icons8-user_male_circle_filled" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="het-DN-Jp4"/>
+        <segue reference="wXP-pv-GBh"/>
     </inferredMetricsTieBreakers>
 </document>

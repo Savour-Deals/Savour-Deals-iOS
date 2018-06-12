@@ -21,9 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var ref: DatabaseReference!
     var locationManager: CLLocationManager?
     var nearbyCount = 0
-    var monitoredRegions = [restaurant]()
-    var restaurants = [restaurant]()
+    var monitoredRegions = [VendorData]()
+    var vendors = [VendorData]()
     var entered = [CLCircularRegion]()
+    var vendorsData: VendorsData!
     var canSendNoti = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -45,8 +46,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             self.locationManager!.delegate = self
             if locationManager?.location != nil{
                 locationManager?.startUpdatingLocation()
-                getRestaurants(byLocation: (locationManager?.location)!, completion: { (nearbyRestaurants) in
-                    self.restaurants = nearbyRestaurants
+                
+                vendorsData = VendorsData(completion: { (success) in
+                    if success{
+                        self.vendors = self.vendorsData.getVendors()
+                    }else{
+                        //error getting vendors
+                    }
                 })
             }
             
@@ -157,8 +163,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 extension AppDelegate: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if restaurants.count > 0{
-            var rest = updateDistance(location: (locationManager?.location)!, restaurants: restaurants)
+        if vendors.count > 0{
+            vendorsData.updateDistances(location: (locationManager?.location)!)
+            var rest = vendorsData.getVendors()
             rest = rest.sorted(by:{ (d1, d2) -> Bool in
                 if d1.distanceMiles! <= d2.distanceMiles! {
                     return true
@@ -169,9 +176,7 @@ extension AppDelegate: CLLocationManagerDelegate {
             var nearby = rest.prefix(20)
             if nearby[0].distanceMiles! > 50.0{
                 //update restaurants from firebase for the next pass if the nearest is too far away
-                getRestaurants(byLocation: (locationManager?.location)!, completion: { (nearbyrestaurants) in
-                    self.restaurants = nearbyrestaurants
-                })
+                self.vendors = vendorsData.getVendors()
             }
             for place in monitoredRegions{
                 if !nearby.contains(where: { $0 === place }){

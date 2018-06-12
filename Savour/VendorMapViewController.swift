@@ -13,7 +13,7 @@ import FirebaseDatabase
 import FirebaseStorage
 import GeoFire
 
-fileprivate var restaurants = [restaurant]()
+fileprivate var vendors = [VendorData]()
 
 class VendorMapViewController: UIViewController{
 
@@ -21,13 +21,15 @@ class VendorMapViewController: UIViewController{
     @IBOutlet weak var mapView: UIView!
     @IBOutlet weak var listView: UIView!
     
-    var restaurantList = Dictionary<String,restaurant>()
+    var vendorList = Dictionary<String,VendorData>()
 
     var listVC: listViewController!
     var mapVC: mapViewController!
     var ref: DatabaseReference!
     var locationManager: CLLocationManager!
     var distanceFilter = 50.0
+    var dealsData: DealsData!
+    var vendorsData: VendorsData!
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -115,7 +117,6 @@ class VendorMapViewController: UIViewController{
     func showList(){
         listView.isHidden = false
         mapView.isHidden = true
-        
     }
     
     func showMap(){
@@ -131,10 +132,11 @@ class VendorMapViewController: UIViewController{
         if segue.identifier == "map"{
             mapVC = segue.destination as! mapViewController
         }
-        if segue.identifier == "restaurant"{
+        if segue.identifier == "vendor"{
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             let vc = segue.destination as! RestaurantViewController
-            vc.thisRestaurant = restaurantList[(sender as? String)!]
+            vc.thisVendor = vendorList[(sender as? String)!]
+            vc.dealsData = self.dealsData
         }
 //        if segue.identifier == "promptSegue"{
 //            let vc = segue.destination as! LocationViewController
@@ -156,43 +158,25 @@ class VendorMapViewController: UIViewController{
     }
     
     func getData(){
-        getRestaurants(byLocation: self.locationManager.location!) { (nearbyRestaurants) in
-            restaurants = nearbyRestaurants
-            for rest in restaurants{
-                self.restaurantList[rest.id!] = rest
-            }
-            if restaurants.count <= 0 {
-                let label = UILabel()
-                label.textAlignment = NSTextAlignment.center
-                label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
-                label.text = "NO NEARBY RESTAURANTS."
-                label.lineBreakMode = NSLineBreakMode.byWordWrapping
-                label.numberOfLines = 0
-                label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-                label.translatesAutoresizingMaskIntoConstraints = false
-                label.tag = 100
-                self.listView.addSubview(label)
-                var constraints = [NSLayoutConstraint]()
-                constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
-                constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
-                constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
-                constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
-                NSLayoutConstraint.activate(constraints)
-                
-            }else if restaurants.count > 0{
-                self.listView.viewWithTag(100)?.removeFromSuperview()
-                self.mapVC.makeAnnotations()
-                self.listVC.delegateTable()
-                self.listVC.listTable.reloadData()
-                self.mapVC.flag = 1
-                restaurants.sort(by: { (r1, r2) -> Bool in
-                    if r1.distanceMiles! < r2.distanceMiles!{
-                        return true
-                    }else{
-                        return false
-                    }
-                })
-            }
+        vendorsData.updateDistances(location: locationManager.location!)
+        vendors = vendorsData.getVendors()
+        for rest in vendors{
+            self.vendorList[rest.id!] = rest
+        }
+        if vendors.count <= 0 {
+//                self.listVC.noRest.isHidden = false
+        }else if vendors.count > 0{
+            self.mapVC.flag = 1
+            vendors.sort(by: { (r1, r2) -> Bool in
+                if r1.distanceMiles! < r2.distanceMiles!{
+                    return true
+                }else{
+                    return false
+                }
+            })
+            self.mapVC.makeAnnotations()
+            self.listVC.delegateTable()
+            self.listVC.listTable.reloadData()
         }
     }
 }
@@ -242,17 +226,17 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func makeAnnotations(){
         self.mapView.removeAnnotations(self.mapView.annotations)
-        for i in 0..<restaurants.count{
-            let annotation = restaurantAnnotation(title: restaurants[i].name!, coordinate: (restaurants[i].location?.coordinate)!, rID: restaurants[i].id!)
+        for i in 0..<vendors.count{
+            let annotation = vendorAnnotation(title: vendors[i].name!, coordinate: (vendors[i].location?.coordinate)!, rID: vendors[i].id!)
             self.mapView.addAnnotation(annotation)
         }
         self.mapView.delegate = self
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let identifier = "restaurant"
+        let identifier = "vendor"
         
-        if annotation is restaurantAnnotation {
+        if annotation is vendorAnnotation {
             if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) {
                 annotationView.annotation = annotation
                 return annotationView
@@ -270,10 +254,10 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
         
     internal func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        let location = view.annotation as! restaurantAnnotation
+        let location = view.annotation as! vendorAnnotation
         let placeRID = location.rID
         let parent = self.parent as! VendorMapViewController
-        parent.performSegue(withIdentifier: "restaurant", sender: placeRID)
+        parent.performSegue(withIdentifier: "vendor", sender: placeRID)
     }
     
     
@@ -293,7 +277,7 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 }
 
-class restaurantAnnotation: NSObject, MKAnnotation {
+class vendorAnnotation: NSObject, MKAnnotation {
     var title: String?
     var coordinate: CLLocationCoordinate2D
     var rID: String
@@ -310,7 +294,7 @@ class restaurantAnnotation: NSObject, MKAnnotation {
 class listViewController: UIViewController, UITableViewDelegate,UITableViewDataSource, UISearchBarDelegate{
     var storageRef: Storage!
     @IBOutlet weak var listTable: UITableView!
-    var myRestaurants = [restaurant]()
+    var myVendors = [VendorData]()
     @IBOutlet weak var searchBar: UISearchBar!
     var statusBar: UIView!
     @IBOutlet weak var noRest: UILabel!
@@ -327,7 +311,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             listTable.addSubview(refreshControl)
         }
         // Configure Refresh Control
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Restaurants", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Vendors", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
         refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         refreshControl.addTarget(self, action: #selector(self.refreshingData(_:)), for: .valueChanged)
         setupSearchBar()
@@ -340,7 +324,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
             let parent = self.parent as! VendorMapViewController
             parent.refreshData()
-            self.myRestaurants = restaurants
+            self.myVendors = vendors
             self.listTable.reloadData()
             self.refreshControl.endRefreshing()
         }
@@ -353,7 +337,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
   
     func delegateTable(){
-        myRestaurants = restaurants
+        myVendors = vendors
         listTable.dataSource = self
         listTable.delegate = self
         listTable.reloadData()
@@ -373,21 +357,19 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if restaurants.count < 1 {
+        if myVendors.count < 1 {
             self.noRest.isHidden = false
-            self.listTable.isHidden = true
         }else{
             self.noRest.isHidden = true
-            self.listTable.isHidden = false
         }
-        return myRestaurants.count
+        return myVendors.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "restaurant", for: indexPath) as! restaurantCell
-        cell.restaurant = myRestaurants[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "vendor", for: indexPath) as! vendorCell
+        cell.vendor = myVendors[indexPath.row]
 
-        let photo = cell.restaurant.photo!
+        let photo = cell.vendor.photo!
         if photo != ""{
 
             
@@ -400,8 +382,8 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             // Load the image using SDWebImage
             imageView.sd_setImage(with: URL(string: photo), placeholderImage: placeholderImage)
         }
-        cell.rName.text = cell.restaurant.name
-        if let distance = cell.restaurant.distanceMiles{
+        cell.rName.text = cell.vendor.name
+        if let distance = cell.vendor.distanceMiles{
             cell.distanceTxt.text = String(format:"%.1f", distance) + " miles away"
         }
         else{
@@ -412,9 +394,9 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let cell = tableView.cellForRow(at: indexPath) as! restaurantCell
+        let cell = tableView.cellForRow(at: indexPath) as! vendorCell
         let parent = self.parent as! VendorMapViewController
-        parent.performSegue(withIdentifier: "restaurant", sender: cell.restaurant.id)
+        parent.performSegue(withIdentifier: "vendor", sender: cell.vendor.id)
     }
     //SearchBar functions
     func setupSearchBar(){
@@ -427,10 +409,10 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text! == "" {
-            myRestaurants = restaurants
+            myVendors = vendors
         } else {
             // Filter the results
-            myRestaurants = restaurants.filter { ($0.name?.lowercased().contains(searchBar.text!.lowercased()))! }
+            myVendors = vendors.filter { ($0.name?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
         listTable.reloadData()
     }
@@ -439,10 +421,10 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
         if searchBar.text! == "" {
-            myRestaurants = restaurants
+            myVendors = vendors
         } else {
             // Filter the results
-            myRestaurants = restaurants.filter { ($0.name?.lowercased().contains(searchBar.text!.lowercased()))! }
+            myVendors = vendors.filter { ($0.name?.lowercased().contains(searchBar.text!.lowercased()))! }
         }
         listTable.reloadData()
     }
@@ -460,11 +442,11 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
 }
 
-class restaurantCell: UITableViewCell{
+class vendorCell: UITableViewCell{
     @IBOutlet weak var rImg: UIImageView!
     @IBOutlet weak var insetView: UIView!
     @IBOutlet weak var rName: UILabel!
-    var restaurant: restaurant!
+    var vendor: VendorData!
     @IBOutlet weak var distanceTxt: UILabel!
     
     override func awakeFromNib() {
