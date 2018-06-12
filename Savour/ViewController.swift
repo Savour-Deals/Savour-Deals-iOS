@@ -25,12 +25,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var statusBar: UIView!
     var count = 0
     let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
-    var deals = Deals()
+    var dealsData: DealsData!
+    var vendorsData: VendorsData!
+    
+    var activeDeals = [DealData]()
+    var inactiveDeals = [DealData]()
     var showedNotiDeal = false
     var locationManager: CLLocationManager!
     var userLocation: CLLocation!
     var initialLoaded = false
     
+    @IBOutlet weak var retryButton: UIButton!
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var scrollFilter: UIScrollView!
     @IBOutlet weak var noDeals: UILabel!
@@ -61,7 +66,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             case .notDetermined:
                 self.performSegue(withIdentifier: "tutorial", sender: self)
             case .authorizedAlways, .authorizedWhenInUse, .restricted, .denied:
-                setup()
+                //Setup Deal Data for entire app
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+                DispatchQueue.global().sync {
+                    tabBarController.dealSetup(completion: { (success) in
+                        self.setup()
+                    })
+                }
             }
         } else {
             self.performSegue(withIdentifier: "tutorial", sender: self)
@@ -71,6 +83,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func removeSubview(){
         if let viewWithTag = self.view.viewWithTag(100) {
             viewWithTag.removeFromSuperview()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let user = Auth.auth().currentUser
+        if user != nil {
+            // User is signed in.
+            self.ref.child("Users").child((user?.uid)!).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                let type = snapshot.value as? String ?? ""
+                if type == "Vendor"{
+                    self.navigationController?.navigationBar.isHidden = true
+                    self.tabBarController?.tabBar.isHidden = true
+                    self.performSegue(withIdentifier: "Vendor", sender: self)
+                }
+                else if self.initialLoaded{
+                    self.refreshUI()
+                }
+            })
+        }
+        else {
+            // No user is signed in.
+            self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
     }
     
@@ -99,7 +135,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func locationDisabled(){
         self.searchBar.isUserInteractionEnabled = false
-        DealsTable.isHidden = true
         buttonsView.isUserInteractionEnabled = false
         let label = UILabel()
         label.textAlignment = NSTextAlignment.center
@@ -126,10 +161,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.view.viewWithTag(100)?.removeFromSuperview()
             }
             self.searchBar.isUserInteractionEnabled = true
-            self.DealsTable.isHidden = false
             self.buttonsView.isUserInteractionEnabled = true
             self.locationManager!.startUpdatingLocation()
-            self.userLocation = self.locationManager.location!//CLLocation(latitude: self.locationManager.location!.coordinate.latitude, longitude: self.locationManager.location!.coordinate.longitude)
+            self.userLocation = self.locationManager.location!
             //Filter by any buttons the user pressed.
             var title = ""
             for subview in self.buttonsView.subviews as [UIView] {
@@ -140,23 +174,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
             }
-            self.deals.getDeals(byLocation: self.userLocation, dealType: title, completion:{ (success) in
-                if self.deals.filteredDeals.isEmpty && self.deals.filteredInactiveDeals.isEmpty{
-                    self.DealsTable.isHidden = true
-                    self.noDeals.isHidden = false
-                }else{
-                    self.DealsTable.isHidden = false
-                    self.noDeals.isHidden = true
-                }
-                self.DealsTable.reloadData()
-                self.loading.stopAnimating()
-            })
+            (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(dealType: title)
+            if self.activeDeals.isEmpty && self.inactiveDeals.isEmpty{
+                self.noDeals.isHidden = false
+                
+            }else{
+                self.noDeals.isHidden = true
+                
+            }
+            self.DealsTable.reloadData()
+            self.loading.stopAnimating()
         }
     }
     
     func setup(){
-        initialLoaded = true
-        
         //Check if forcetouch is available
         if self.traitCollection.forceTouchCapability == .available {
             self.registerForPreviewing(with: self, sourceView: self.DealsTable)
@@ -200,7 +231,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         self.locationManager = CLLocationManager()
         self.requestLocationAccess()
-        
+        initialLoaded = true
     }
     
     func refreshUI(){
@@ -228,45 +259,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if status == CLAuthorizationStatus.denied {
             locationDisabled()
         } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            if self.deals.filteredDeals.count + deals.filteredInactiveDeals.count<1{
+            if self.activeDeals.count + inactiveDeals.count<1{
                 locationEnabled()
             }
         }
-        for deal in deals.filteredDeals{
+        for deal in activeDeals{
             deal.updateTimes()
         }
-        for deal in deals.filteredInactiveDeals{
+        for deal in inactiveDeals{
             deal.updateTimes()
         }
-    }
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let user = Auth.auth().currentUser
-        if user != nil {
-            // User is signed in.
-            self.ref.child("Users").child((user?.uid)!).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
-                // Get user value
-                let type = snapshot.value as? String ?? ""
-                if type == "Vendor"{
-                    self.navigationController?.navigationBar.isHidden = true
-                    self.tabBarController?.tabBar.isHidden = true
-                    self.performSegue(withIdentifier: "Vendor", sender: self)
-                }
-                else if self.initialLoaded{
-                    self.refreshUI()
-                }
-            })
-        }
-        else {
-            // No user is signed in.
-            self.performSegue(withIdentifier: "Onboarding", sender: self)
+        if initialLoaded{
+            handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
+            if self.activeDeals.isEmpty && self.inactiveDeals.isEmpty{
+                self.noDeals.isHidden = false
+            }else{
+                self.noDeals.isHidden = true
+                self.DealsTable.reloadData()
+            }
         }
     }
     
@@ -282,46 +292,50 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
         }
-        self.deals.getDeals(byLocation: self.userLocation, dealType: title, completion:{ (success) in
-            self.DealsTable.reloadData()
-            //take care of any loading animations
-            if self.refreshControl.isRefreshing{
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
-                    self.refreshControl.endRefreshing()
+        (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(dealType: title)
+        //take care of any loading animations
+        if self.refreshControl.isRefreshing{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
+                self.refreshControl.endRefreshing()
+                if self.activeDeals.isEmpty && self.inactiveDeals.isEmpty{
+                    self.noDeals.isHidden = false
+                    
+                }else{
+                    self.noDeals.isHidden = true
                 }
             }
-        })
+        }
+        self.DealsTable.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //check if user clicked a notification and segue if they did
         if !showedNotiDeal{
-            //If a user clicked a deal notification, segue to that deal
-            if let notiDeal = deals.getNotificationDeal(dealID: notificationDeal){
-                self.dealDetails(deal: notiDeal)
-                showedNotiDeal = true
+            if let _ = dealsData{
+                //If a user clicked a deal notification, segue to that deal
+                if let notiDeal = dealsData.getNotificationDeal(dealID: notificationDeal){
+                    self.dealDetails(deal: notiDeal)
+                    showedNotiDeal = true
+                }
             }
+
         }
 
-        return deals.filteredDeals.count + deals.filteredInactiveDeals.count
+        return activeDeals.count + inactiveDeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dealCell", for: indexPath) as! DealTableViewCell
         var deal:DealData!
-        if indexPath.row < deals.filteredDeals.count{
-            deal = deals.filteredDeals[indexPath.row]
+        if indexPath.row < activeDeals.count{
+            deal = activeDeals[indexPath.row]
         }else{
-            deal = deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count]
+            deal = inactiveDeals[indexPath.row-activeDeals.count]
         }
         cell.deal = deal
         cell.tempImg.image = UIImage(named: placeholderImgs[count])
         let photo = deal?.photo!
         if photo != ""{
-            // Reference to an image file in Firebase Storage
-//            let storage = Storage.storage()
-//            let storageref = storage.reference(forURL: photo!)
-            
             // UIImageView in your ViewController
             let imageView: UIImageView = cell.rImg
             cell.tempImg.image = UIImage(named: placeholderImgs[count])
@@ -338,16 +352,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.setupUI()
         
         return cell
-
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row < deals.filteredDeals.count {
-            dealDetails(deal: deals.filteredDeals[indexPath.row])
+        if indexPath.row < activeDeals.count {
+            dealDetails(deal: activeDeals[indexPath.row])
         }else{
-            dealDetails(deal: deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count])
+            dealDetails(deal: inactiveDeals[indexPath.row-activeDeals.count])
         }
     }
     
@@ -358,7 +370,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             VC.hidesBottomBarWhenPushed = true
             VC.Deal = deal
             VC.fromDetails = false
-            VC.thisRestaurant = deals.restaurants[deal.rID!]
+            VC.dealsData = self.dealsData
+            VC.thisVendor = vendorsData.getVendorsByID(id: VC.Deal.rID!)
             VC.photo = VC.Deal?.photo
             VC.from = "deals"
             //cleanup searchbar
@@ -393,16 +406,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         button.backgroundColor = UIColor.white
         button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
         let Title = button.currentTitle
-        deals.filter(byTitle: Title!)
-        if deals.filteredDeals.count + deals.filteredInactiveDeals.count < 1 {
-            self.DealsTable.isHidden = true
+        (activeDeals, inactiveDeals) = dealsData.filter(byTitle: Title!)
+        if activeDeals.count + inactiveDeals.count < 1 {
             self.noDeals.isHidden = false
         }else{
-            self.DealsTable.isHidden = false
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        if deals.filteredDeals.count + deals.filteredInactiveDeals.count>0{
+        if activeDeals.count + inactiveDeals.count>0{
             DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
         }
 
@@ -423,16 +434,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        deals.filter(byName: searchBar.text!)
-        if deals.filteredDeals.count + deals.filteredInactiveDeals.count < 1 {
-            self.DealsTable.isHidden = true
+        (self.activeDeals, self.inactiveDeals) = dealsData.filter(byName: searchBar.text!)
+        if activeDeals.count + inactiveDeals.count < 1 {
             self.noDeals.isHidden = false
         }else{
-            self.DealsTable.isHidden = false
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        if deals.filteredDeals.count + deals.filteredInactiveDeals.count>0{
+        if activeDeals.count + inactiveDeals.count>0{
             DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
         }
     }
@@ -440,16 +449,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
-        deals.filter(byName: searchBar.text!)
-        if deals.filteredDeals.count + deals.filteredInactiveDeals.count < 1 {
-            self.DealsTable.isHidden = true
+        (activeDeals, inactiveDeals) = dealsData.filter(byName: searchBar.text!)
+        if activeDeals.count + inactiveDeals.count < 1 {
             self.noDeals.isHidden = false
         }else{
-            self.DealsTable.isHidden = false
             self.noDeals.isHidden = true
         }
         DealsTable.reloadData()
-        if deals.filteredDeals.count + deals.filteredInactiveDeals.count>0{
+        if activeDeals.count + inactiveDeals.count>0{
             DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
         }
     }
@@ -457,11 +464,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
-        if deals.filteredDeals.count + deals.filteredInactiveDeals.count < 1 {
-            self.DealsTable.isHidden = true
+        (activeDeals, inactiveDeals) = dealsData.filter(byName: "All")
+        if activeDeals.count + inactiveDeals.count < 1 {
             self.noDeals.isHidden = false
         }else{
-            self.DealsTable.isHidden = false
             self.noDeals.isHidden = true
         }
     }
@@ -473,7 +479,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 button.setTitleColor(UIColor.white, for: UIControlState.normal)
                 if button.title(for: .normal) == "All"{
                     button.backgroundColor = UIColor.white
-                    if deals.filteredDeals.count + deals.filteredInactiveDeals.count>0{
+                    if activeDeals.count + inactiveDeals.count>0{
                         DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
                     }
                     button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
@@ -495,6 +501,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let dict = sender as! Dictionary<String,Any>
             VC.Deal = dict["deal"] as? DealData
             VC.fromDetails = false
+            VC.dealsData = self.dealsData
+
             VC.photo = VC.Deal?.photo
             VC.from = "deals"
         }else if segue.identifier == "tutorial"{
@@ -512,13 +520,14 @@ extension ViewController:     UIViewControllerPreviewingDelegate {
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
-        if indexPath.row < deals.filteredDeals.count {
-            VC.Deal = deals.filteredDeals[indexPath.row]
+        if indexPath.row < activeDeals.count {
+            VC.Deal = activeDeals[indexPath.row]
         }else{
-            VC.Deal = deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count]
+            VC.Deal = inactiveDeals[indexPath.row-activeDeals.count]
         }
-        VC.thisRestaurant = deals.restaurants[VC.Deal.rID!]
+        VC.thisVendor = vendorsData.getVendorsByID(id: VC.Deal.rID!)
         VC.fromDetails = false
+        VC.dealsData = self.dealsData
         VC.photo = VC.Deal?.photo
         VC.preferredContentSize = CGSize(width: 0.0, height: 600)
         previewingContext.sourceRect = cell.frame

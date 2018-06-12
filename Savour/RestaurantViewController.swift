@@ -23,12 +23,14 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
     var storage: Storage!
-    var deals = Deals()
+    var dealsData: DealsData!
+    var activeDeals = [DealData]()
+    var inactiveDeals = [DealData]()
     var indices = [Int]()
     var cachedImageViewSize: CGRect!
     var cachedTextPoint: CGPoint!
     var loyaltyCode: String!
-    var thisRestaurant: restaurant!
+    var thisVendor: VendorData!
     var loyaltyRedemptions: Int!
     var redemptionTime: Double!
     var expandedCells: [Bool] = [false, false]
@@ -76,7 +78,15 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
  
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = true
-        self.restaurantTable.reloadData()
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.childSnapshot(forPath: "following").hasChild((self.thisVendor.id)!){
+                self.followString = "Following"
+            }
+            else{
+                self.followString = "Follow"
+            }
+            self.restaurantTable.reloadData()
+        })
     }
     
     @IBAction func backSwipe(_ sender: Any) {
@@ -84,8 +94,8 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func loadData(){
-        //Set overall restraunt info
-        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((thisRestaurant.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
+        //Set overall restraunt info TODO: COMBINE THESE
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((thisVendor.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
                 let value = snapshot.value as? NSDictionary
                 self.loyaltyRedemptions = value?["count"] as? Int ?? 0
@@ -97,19 +107,19 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }){ (error) in
             print(error.localizedDescription)
         }
-        ref.child("Restaurants").child((thisRestaurant.id)!).observeSingleEvent(of: .value, with: { (snapshot) in
-            
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { (snapshot) in
             //let value = snapshot.value as? NSDictionary
-            if snapshot.childSnapshot(forPath: "Followers").hasChild((Auth.auth().currentUser?.uid)!){
+            if snapshot.childSnapshot(forPath: "following").hasChild((self.thisVendor.id)!){
                 self.followString = "Following"
             }
             else{
                 self.followString = "Follow"
             }
+        })
+        ref.child("Restaurants").child((thisVendor.id)!).observeSingleEvent(of: .value, with: { (snapshot) in
+            self.rName.text = self.thisVendor.name
             
-            self.rName.text = self.thisRestaurant.name
-            
-            if self.thisRestaurant.photo != ""{
+            if self.thisVendor.photo != ""{
                 // UIImageView in your ViewController
                 let imageView: UIImageView = self.rImg
         
@@ -117,7 +127,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 let placeholderImage = UIImage(named: "placeholder.jpg")
         
                 // Load the image using SDWebImage
-                imageView.sd_setImage(with: URL(string: self.thisRestaurant.photo!), placeholderImage: placeholderImage)
+                imageView.sd_setImage(with: URL(string: self.thisVendor.photo!), placeholderImage: placeholderImage)
             }
             self.restaurantTable.delegate = self
             self.restaurantTable.dataSource = self
@@ -126,7 +136,8 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }){ (error) in
             print(error.localizedDescription)
         }
-        deals.getDeals(forRestaurant: self.thisRestaurant.id!, table: restaurantTable)
+        (activeDeals,inactiveDeals) = dealsData.getDeals(forRestaurant: self.thisVendor.id!)
+        self.restaurantTable.reloadData()
     }
     
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -135,7 +146,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }else if indexPath.row == 1{
             return UITableViewAutomaticDimension
         }else if indexPath.row == 2{
-            if self.thisRestaurant.hoursArray.count > 0{
+            if self.thisVendor.hoursArray.count > 0{
                 if expandedCells[1]{
                     return UITableViewAutomaticDimension
                 }else {
@@ -145,7 +156,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 return 0
             }
         }else if indexPath.row == 3{
-            if self.thisRestaurant.loyalty.loyaltyCount > 0{
+            if self.thisVendor.loyalty.loyaltyCount > 0{
                 return UITableViewAutomaticDimension
             }
             else{
@@ -154,7 +165,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             
         }
         else if indexPath.row == 5{
-            if deals.filteredDeals.count + deals.filteredInactiveDeals.count > 0{
+            if self.activeDeals.count + self.inactiveDeals.count > 0{
                 return 150
             }else{
                 return 0
@@ -173,10 +184,11 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let cell = tableView.dequeueReusableCell(withIdentifier: "buttonCell", for: indexPath) as! buttonCell
             cell.followButton.setTitle(self.followString, for: .normal)
             cell.mainView = self
-            if self.thisRestaurant.loyalty.loyaltyCount > 0 {
+            if self.thisVendor.loyalty.loyaltyCount > 0 {
                 cell.hasLoyalty = true
             }
             if self.followString == "Follow"{
+                self.redemptionTime = 0
                 cell.followButton.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
             }else{
                 cell.followButton.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
@@ -188,17 +200,17 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             cell.menuButton.layer.cornerRadius = 20
             cell.directionsButton.layer.cornerRadius = 20
             cell.request = self.request
-            cell.menu = self.thisRestaurant.menu
-            cell.rID = self.thisRestaurant.id
-            cell.rAddress = self.thisRestaurant.address!
+            cell.menu = self.thisVendor.menu
+            cell.rID = self.thisVendor.id
+            cell.rAddress = self.thisVendor.address!
             self.followButton = cell.followButton
             return cell
         }
         else if indexPath.row == 1{
             let cell = tableView.dequeueReusableCell(withIdentifier: "descCell", for: indexPath) as! aboutCell
-            cell.label.text = "\n" +  self.thisRestaurant.description!
-            cell.address.text = thisRestaurant.address!
-            cell.todayHours.text = thisRestaurant.dailyHours[Date().dayNumberOfWeek()!-1]
+            cell.label.text = "\n" +  self.thisVendor.description!
+            cell.address.text = thisVendor.address!
+            cell.todayHours.text = thisVendor.dailyHours[Date().dayNumberOfWeek()!-1]
             if expandedCells[0]{
                 cell.label.numberOfLines = 0
                 cell.label.lineBreakMode = .byWordWrapping
@@ -212,8 +224,8 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }
         else if indexPath.row == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! happyHourCell
-            if self.thisRestaurant.hoursArray.count > 0{
-                let thisHoursArray = self.thisRestaurant.hoursArray
+            if self.thisVendor.hoursArray.count > 0{
+                let thisHoursArray = self.thisVendor.hoursArray
                 let mutableAttributedString = NSMutableAttributedString()
                 let leftAlign = NSMutableParagraphStyle()
                 leftAlign.alignment = .left
@@ -243,23 +255,23 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }
         else if indexPath.row == 3{
             let cell = tableView.dequeueReusableCell(withIdentifier: "loyaltyCell", for: indexPath) as! loyaltyCell
-            if self.thisRestaurant.loyalty.loyaltyCount > 0 {
+            if self.thisVendor.loyalty.loyaltyCount > 0 {
                 cell.checkin.layer.cornerRadius = cell.checkin.frame.height/2
                 cell.progressBar.isHidden = false
-                if thisRestaurant.loyalty.loyaltyCount < loyaltyRedemptions{
+                if thisVendor.loyalty.loyaltyCount < loyaltyRedemptions{
                     cell.animate()
                     cell.checkin.setTitle("Reedeem", for: .normal)
-                    cell.loyaltyLabel.text = "You're ready to redeem your \(thisRestaurant.loyalty.loyaltyDeal)!"
+                    cell.loyaltyLabel.text = "You're ready to redeem your \(thisVendor.loyalty.loyaltyDeal)!"
                 }else{
-                    cell.loyaltyLabel.text = "Today: +\(thisRestaurant.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1])\n Reach points goal and recieve: a \(thisRestaurant.loyalty.loyaltyDeal)!"
+                    cell.loyaltyLabel.text = "Today: +\(thisVendor.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1])\n Reach points goal and recieve: a \(thisVendor.loyalty.loyaltyDeal)!"
                     if cell.isAnimating{
                         cell.stopAnimate()
                     }
                 }
                 cell.checkin.addTarget(self, action: #selector(self.checkin(_:)), for: .touchUpInside)
-                cell.progressBar.progress = CGFloat(Float(loyaltyRedemptions)/Float(thisRestaurant.loyalty.loyaltyCount))
+                cell.progressBar.progress = CGFloat(Float(loyaltyRedemptions)/Float(thisVendor.loyalty.loyaltyCount))
                 
-                cell.marker.text = "\(loyaltyRedemptions!)/\(thisRestaurant.loyalty.loyaltyCount)"
+                cell.marker.text = "\(loyaltyRedemptions!)/\(thisVendor.loyalty.loyaltyCount)"
             }else{
                 cell.checkin.isHidden = true
                 cell.loyaltyLabel.isHidden = true
@@ -270,7 +282,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: "labelCell", for: indexPath) as! labelCell
             cell.label.text = "Current Offers"
-            if deals.filteredDeals.count + deals.filteredInactiveDeals.count <= 0 {
+            if activeDeals.count + inactiveDeals.count <= 0 {
                 cell.label.text = "No Current Offers"
             }
             return cell
@@ -290,7 +302,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
             let VC = storyboard.instantiateInitialViewController() as! DealViewController
             VC.hidesBottomBarWhenPushed = true
-            VC.Deal = deals.filteredDeals[indexPath.row - 5]
+            VC.Deal = activeDeals[indexPath.row - 5]
             VC.photo = VC.Deal?.photo
             VC.fromDetails = true
             self.title = ""
@@ -299,12 +311,12 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     }
   
     @objc func checkin(_ sender:UIButton!){
-        if self.loyaltyRedemptions >= self.thisRestaurant.loyalty.loyaltyCount{
+        if self.loyaltyRedemptions >= self.thisVendor.loyalty.loyaltyCount{
             let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
             redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
-                self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisRestaurant.loyalty.loyaltyCount
+                self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
                 self.redemptionTime = 0
-                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 sender.setTitle("Loyalty Check-In", for: .normal)
                 self.restaurantTable.reloadData()
             }))
@@ -322,19 +334,21 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func checkCode(code: String){
-        if code == self.thisRestaurant.loyalty.loyaltyCode{
-            self.loyaltyRedemptions = self.loyaltyRedemptions + self.thisRestaurant.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]
+        if code == self.thisVendor.loyalty.loyaltyCode{
+            self.loyaltyRedemptions = self.loyaltyRedemptions + self.thisVendor.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]
             self.redemptionTime = Date().timeIntervalSince1970
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
-            let followRef = Database.database().reference().child("Restaurants").child((self.thisRestaurant.id)!).child("Followers").child(uID!)
-            followRef.setValue(status.subscriptionStatus.userId)
-            OneSignal.sendTags([(self.thisRestaurant.id)! : "true"])
-            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisRestaurant.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
-            self.followString = "Following"
-            self.restaurantTable.reloadData()
+            //Redundant following for user and rest
+            Database.database().reference().child("Restaurants").child((self.thisVendor.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
+            Database.database().reference().child("Users").child(uID!).child("following").child(self.thisVendor.id!).setValue(true)
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
-            successAlert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            successAlert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {(_) in
+                OneSignal.sendTags([(self.thisVendor.id)! : "true"])
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                self.followString = "Following"
+                self.restaurantTable.reloadData()
+            }))
             self.present(successAlert, animated: true)
         }else{
             let erroralert = UIAlertController(title: "Incorrect code!", message: "The Check-In QRcode you used was incorrect. Please try again.", preferredStyle: .alert)
@@ -498,8 +512,9 @@ class buttonCell: UITableViewCell {
         if self.followButton.currentTitle == "Follow"{
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
-            let followRef = Database.database().reference().child("Restaurants").child(rID!).child("Followers").child(uID!)
-            followRef.setValue(status.subscriptionStatus.userId)
+            //Redundant following for user and rest
+            Database.database().reference().child("Restaurants").child(rID!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
+            Database.database().reference().child("Users").child(uID!).child("following").child(rID!).setValue(true)
             OneSignal.sendTags([(rID)! : "true"])
             self.mainView.followString = "Following"
             self.mainView.restaurantTable.reloadData()
@@ -527,8 +542,9 @@ class buttonCell: UITableViewCell {
     
     func unfollow(){
         let uID = Auth.auth().currentUser?.uid
-        let followRef = Database.database().reference().child("Restaurants").child(rID!).child("Followers").child(uID!)
-        followRef.removeValue()
+        //Redundant unfollowing for user and rest
+        Database.database().reference().child("Restaurants").child(rID!).child("Followers").child(uID!).removeValue()
+        Database.database().reference().child("Users").child(uID!).child("following").child(rID!).removeValue()
         OneSignal.sendTags([rID! : "false"])
         self.mainView.followString = "Follow"
         self.followButton.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
@@ -713,16 +729,16 @@ class CollectionDealCell: UICollectionViewCell{
 
 extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView,numberOfItemsInSection section: Int) -> Int {
-        return deals.filteredDeals.count + deals.filteredInactiveDeals.count
+        return activeDeals.count + inactiveDeals.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dealCell",for: indexPath) as! CollectionDealCell
-        if indexPath.row < deals.filteredDeals.count{
-            cell.deal = deals.filteredDeals[indexPath.row]
+        if indexPath.row < activeDeals.count{
+            cell.deal = activeDeals[indexPath.row]
         }else{
-            cell.deal = deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count]
+            cell.deal = inactiveDeals[indexPath.row-activeDeals.count]
         }
         cell.dealDescription.text = cell.deal.dealDescription
         if cell.deal.redeemed! {
@@ -816,14 +832,14 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
         let storyboard = UIStoryboard(name: "DealDetails", bundle: nil)
         let VC = storyboard.instantiateInitialViewController() as! DealViewController
         VC.hidesBottomBarWhenPushed = true
-        if indexPath.row < deals.filteredDeals.count{
-            VC.Deal = deals.filteredDeals[indexPath.row]
+        if indexPath.row < activeDeals.count{
+            VC.Deal = activeDeals[indexPath.row]
         }else{
-            VC.Deal = deals.filteredInactiveDeals[indexPath.row-deals.filteredDeals.count]
+            VC.Deal = inactiveDeals[indexPath.row-activeDeals.count]
         }
         VC.photo = VC.Deal?.photo
         VC.fromDetails = true
-        VC.thisRestaurant = self.thisRestaurant
+        VC.thisVendor = self.thisVendor
         self.title = ""
         self.navigationController?.pushViewController(VC, animated: true)
     }

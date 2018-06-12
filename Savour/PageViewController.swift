@@ -128,13 +128,21 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
         case .authorizedAlways, .authorizedWhenInUse:
             self.locationManager!.startUpdatingLocation()
             let parent = self.parent as! OnboardingViewController
-            parent.sender.setup()
-            parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            parent.navigationController?.navigationBar.shadowImage = UIImage()
-            parent.navigationController?.navigationBar.isTranslucent = true
-            self.continueButton.isEnabled = true
-            continueButton.alpha = 1.0
-            parent.setupUI()
+            
+            //Setup Deal Data for entire app
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+            DispatchQueue.global().sync {
+                tabBarController.dealSetup(completion: { (success) in
+                    parent.sender.setup()
+                    parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                    parent.navigationController?.navigationBar.shadowImage = UIImage()
+                    parent.navigationController?.navigationBar.isTranslucent = true
+                    self.continueButton.isEnabled = true
+                    self.continueButton.alpha = 1.0
+                    parent.setupUI()
+                })
+            }
         case .denied, .restricted, .notDetermined:
             self.locText.text = "To turn on location later, go to:\n Settings → Savour Deals → Location."
         }

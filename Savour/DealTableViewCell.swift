@@ -59,7 +59,7 @@ class DealTableViewCell: UITableViewCell {
         self.validHours.text = deal.activeHours
         if deal.redeemed! {
             self.Countdown.text = "Deal Already Redeemed!"
-            self.Countdown.textColor = UIColor.red
+            self.Countdown.textColor = UIColor.white
             self.validHours.text = ""
             self.countdownView.isHidden = false
         }
