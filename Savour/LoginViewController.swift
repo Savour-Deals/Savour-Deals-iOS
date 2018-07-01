@@ -41,7 +41,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         super.viewDidLoad()
         if Auth.auth().currentUser != nil {
             // User is signed in.
-            self.performSegue(withIdentifier: "Main", sender: self)
+            self.gotoMain()
         }
         else {
             // No user is signed in.
@@ -61,20 +61,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         self.navigationController!.setNavigationBarHidden(true, animated: true)
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
-        // [START auth_listener]
-        handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-            // [START_EXCLUDE]
-            // [END_EXCLUDE]
-        }
-        // [END auth_listener]
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // [START remove_auth_listener]
-        Auth.auth().removeStateDidChangeListener(handle!)
-        // [END remove_auth_listener]
     }
 
         
@@ -159,7 +149,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                         self.present(alert, animated: true, completion: nil)
                         return
                     }
-                    self.performSegue(withIdentifier: "MainS", sender: self)
+                    self.gotoMain()
                     self.endLoggingin()
                 }
             // [END_EXCLUDE]
@@ -221,7 +211,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
 
                 }
             })
-            self.performSegue(withIdentifier: "MainS", sender: self)
+            self.gotoMain()
             self.endLoggingin()
         }
     }
@@ -252,6 +242,15 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             })
             
         }
+    }
+    
+    func gotoMain(){
+        //Set root as our tab view controller
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
+        tabVC.selectedIndex = 0
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window!.rootViewController = tabVC
     }
                 
     @objc func keyboardWillShow(notification: NSNotification){

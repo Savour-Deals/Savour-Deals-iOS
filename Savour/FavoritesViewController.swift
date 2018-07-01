@@ -43,17 +43,55 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
-        setupUI()
+        let sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
+
+        let status = CLLocationManager.authorizationStatus()
+        if status == CLAuthorizationStatus.denied {
+            self.setupUI()
+        } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
+            //Setup Deal Data for entire app
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                if !tabBarController.finishedSetup{
+                    Toast.showNegativeMessage(message: "Favorites seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                }
+            }
+            DispatchQueue.global().sync {
+                tabBarController.dealSetup(completion: { (success) in
+                    //Allow us to refresh when opened from background
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.setupUI), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+                    //Finish view setup
+                    tabBarController.tabBar.isUserInteractionEnabled = true
+                    UIViewController.removeSpinner(spinner: sv)
+                    self.setupUI()
+                })
+            }
+        }
     }
     
-    func setupUI(){
+    deinit { //Remove background observer
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func setupUI(){
         self.navigationController?.navigationItem.title = "Favorites"
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
         statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        let (activeFav,inactiveFav) = dealsData.getFavorites()
+        var activeFav = [DealData]()
+        var inactiveFav = [DealData]()
+        if dealsData != nil{
+            (activeFav,inactiveFav) = dealsData.getFavorites()
+            for deal in activeFav{
+                deal.updateDistance(vendor: self.vendorsData.getVendorsByID(id: deal.rID!)!)
+            }
+            for deal in inactiveFav{
+                deal.updateDistance(vendor: self.vendorsData.getVendorsByID(id: deal.rID!)!)
+            }
+        }
         self.favDeals.removeAll()
         for deal in activeFav{
             if !self.favDeals.contains(where: { $0.id == deal.id }){
@@ -70,12 +108,24 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (favDeals.isEmpty){
+        if favDeals.isEmpty{
             emptyView.isHidden = false
         }else{
             emptyView.isHidden = true
         }
         return favDeals.count
+    }
+    
+    //These two functions prevent jitter of tableview when popping back to this view
+    var cellHeights: [IndexPath : CGFloat] = [:]
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cellHeights[indexPath] = cell.frame.size.height
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let height = cellHeights[indexPath] else { return 70.0 }
+        return height
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -112,6 +162,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 Database.database().reference().child("Users").child(user!).child("Favorites").child((cell?.deal.id!)!).removeValue()
                 favDeals.remove(at: indexPath.item)
                 self.FavTable.reloadData()
+                if favDeals.count < 2 && favDeals.count > 0{
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    self.FavTable.scrollToRow(at: indexPath, at: .top, animated: true)
+                }
             }
         }
     }

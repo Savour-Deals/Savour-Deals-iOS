@@ -95,7 +95,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     
     func loadData(){
         //Set overall restraunt info TODO: COMBINE THESE
-        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((thisVendor.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((thisVendor.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
                 let value = snapshot.value as? NSDictionary
                 self.loyaltyRedemptions = value?["count"] as? Int ?? 0
@@ -104,6 +104,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 self.loyaltyRedemptions = 0
                 self.redemptionTime = 0.0
             }
+            self.reloadTable()
         }){ (error) in
             print(error.localizedDescription)
         }
@@ -115,6 +116,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             else{
                 self.followString = "Follow"
             }
+            self.reloadTable()
         })
         ref.child("Restaurants").child((thisVendor.id)!).observeSingleEvent(of: .value, with: { (snapshot) in
             self.rName.text = self.thisVendor.name
@@ -129,15 +131,21 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 // Load the image using SDWebImage
                 imageView.sd_setImage(with: URL(string: self.thisVendor.photo!), placeholderImage: placeholderImage)
             }
-            self.restaurantTable.delegate = self
-            self.restaurantTable.dataSource = self
-            self.restaurantTable.reloadData()
-            self.restaurantTable.isHidden = false
+            self.reloadTable()
         }){ (error) in
             print(error.localizedDescription)
         }
         (activeDeals,inactiveDeals) = dealsData.getDeals(forRestaurant: self.thisVendor.id!)
-        self.restaurantTable.reloadData()
+        self.reloadTable()
+    }
+    
+    func reloadTable(){
+        if loyaltyRedemptions != nil && followString != nil {
+            self.restaurantTable.delegate = self
+            self.restaurantTable.dataSource = self
+            self.restaurantTable.reloadData()
+            self.restaurantTable.isHidden = false
+        }
     }
     
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -210,7 +218,11 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let cell = tableView.dequeueReusableCell(withIdentifier: "descCell", for: indexPath) as! aboutCell
             cell.label.text = "\n" +  self.thisVendor.description!
             cell.address.text = thisVendor.address!
-            cell.todayHours.text = thisVendor.dailyHours[Date().dayNumberOfWeek()!-1]
+            if thisVendor.dailyHours.count == 7{
+                cell.todayHours.text = thisVendor.dailyHours[Date().dayNumberOfWeek()!-1]
+            }else{
+                cell.todayHours.text = "Not Available"
+            }
             if expandedCells[0]{
                 cell.label.numberOfLines = 0
                 cell.label.lineBreakMode = .byWordWrapping
@@ -336,7 +348,6 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     func checkCode(code: String){
         if code == self.thisVendor.loyalty.loyaltyCode{
             self.loyaltyRedemptions = self.loyaltyRedemptions + self.thisVendor.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]
-            self.redemptionTime = Date().timeIntervalSince1970
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
             //Redundant following for user and rest
@@ -345,7 +356,8 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
             successAlert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {(_) in
                 OneSignal.sendTags([(self.thisVendor.id)! : "true"])
-                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                self.redemptionTime = Date().timeIntervalSince1970
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 self.followString = "Following"
                 self.restaurantTable.reloadData()
             }))

@@ -81,7 +81,6 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         self.title = ""
     }
     
-    
     func SetupUI(){
         pulsator.start()
         self.userLocation = self.locationManager.location!
@@ -132,12 +131,13 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                 self.redeemIndicator(color: UIColor.green.cgColor)
                 self.code.text = self.Deal?.code
             }
-        }else if let rest = self.thisVendor?.distanceMiles, rest>0.1{
-            self.redeem.isEnabled = false
+        }else if let rest = self.thisVendor?.distanceMiles, rest>0.1 && (Deal?.active)!{
+            self.redeem.isEnabled = true
             pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
             self.redeem.setTitle("Go to Location to Redeem", for: .normal)
             self.redeem.layer.backgroundColor = UIColor.red.cgColor
         }else if !(Deal?.active)!{
+            pulsator.backgroundColor = UIColor.red.cgColor
             self.redeem.setTitle("Deal Not Active", for: .normal)
             self.code.text = "This deal is valid " + Deal.code! + "."
             self.redeem.layer.backgroundColor = UIColor.red.cgColor
@@ -147,7 +147,6 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
             pulsator.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         }
         textView.contentOffset.y = 0
-
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -160,44 +159,57 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
     }
     
     @IBAction func authenticatePressed(_ sender: Any) {
-        let alert = UIAlertController(title: "Vendor Approval", message: "This deal is intended for one person only. \n\nShow this message to the vendor to redeem your coupon. \n\nThe deal is not guaranteed if the vendor does not see this message.", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (alert: UIAlertAction!) -> Void in
-                
-            }
-            let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
-                let currTime = Date().timeIntervalSince1970
-                let uID = Auth.auth().currentUser?.uid
-                let ref = Database.database().reference().child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
-                ref.setValue(currTime)
-                //set and draw checkmark
-                self.redeemIndicator(color: UIColor.green.cgColor)
-                
-                self.redeem.isEnabled = false
-                self.redeem.setTitle("Already Redeemed!", for: .normal)
-                self.redeem.layer.backgroundColor = UIColor.red.cgColor
-                self.Deal.redeemed = true
-                self.self.Deal.redeemedTime = currTime
-                self.Deal?.redeemedTime = currTime
-                self.Deal?.redeemed = true
-                ref.child("Users").child(uID!).child("Favorites").child(self.Deal.id!).removeValue()
-                if self.Deal?.code != ""{
-                    self.code.textColor = UIColor.black
-                    self.code.text = self.Deal?.code
-                }
-                self.runTimer()
-                let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
-                if status.subscriptionStatus.userId != " "{
-                    //Redundant following for user and rest
-                    Database.database().reference().child("Restaurants").child((self.thisVendor?.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
-                    Database.database().reference().child("Users").child(uID!).child("following").child((self.thisVendor?.id!)!).setValue(true)
+        if self.redeem.title(for: .normal) == "Go to Location to Redeem"{
+            let baseUrl: String = "http://maps.apple.com/?q="
+            let encodedName = self.thisVendor?.address?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            let finalUrl = baseUrl + encodedName!
+            if let url = URL(string: finalUrl)
+            {
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
                 }
             }
-            alert.addAction(cancelAction)
-            alert.addAction(approveAction)
-            self.present(alert, animated: true, completion:nil)
+        }else{
+            let alert = UIAlertController(title: "Vendor Approval", message: "This deal is intended for one person only. \n\nShow this message to the vendor to redeem your coupon. \n\nThe deal is not guaranteed if the vendor does not see this message.", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: .destructive) { (alert: UIAlertAction!) -> Void in
+                    
+                }
+                let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
+                    let currTime = Date().timeIntervalSince1970
+                    let uID = Auth.auth().currentUser?.uid
+                    let ref = Database.database().reference().child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
+                    ref.setValue(currTime)
+                    //set and draw checkmark
+                    self.redeemIndicator(color: UIColor.green.cgColor)
+                    
+                    self.redeem.isEnabled = false
+                    self.redeem.setTitle("Already Redeemed!", for: .normal)
+                    self.redeem.layer.backgroundColor = UIColor.red.cgColor
+                    self.Deal.redeemed = true
+                    self.self.Deal.redeemedTime = currTime
+                    self.Deal?.redeemedTime = currTime
+                    self.Deal?.redeemed = true
+                    ref.child("Users").child(uID!).child("Favorites").child(self.Deal.id!).removeValue()
+                    if self.Deal?.code != ""{
+                        self.code.textColor = UIColor.black
+                        self.code.text = self.Deal?.code
+                    }
+                    self.runTimer()
+                    let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
+                    if status.subscriptionStatus.userId != " "{
+                        //Redundant following for user and rest
+                        Database.database().reference().child("Restaurants").child((self.thisVendor?.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
+                        Database.database().reference().child("Users").child(uID!).child("following").child((self.thisVendor?.id!)!).setValue(true)
+                    }
+                    StoreReviewHelper().requestReview()
+                }
+                alert.addAction(cancelAction)
+                alert.addAction(approveAction)
+                self.present(alert, animated: true, completion:nil)
+        }
     }
-    
-    
     
     //Timer functions
     func runTimer() {

@@ -30,6 +30,7 @@ class VendorMapViewController: UIViewController{
     var distanceFilter = 50.0
     var dealsData: DealsData!
     var vendorsData: VendorsData!
+    var sv: UIView!
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -40,6 +41,8 @@ class VendorMapViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
+
         listVC.parentView = self
         if segControl.selectedSegmentIndex == 0 {
             showList()
@@ -48,38 +51,45 @@ class VendorMapViewController: UIViewController{
             showMap()
         }
         locationManager = CLLocationManager()
-        requestLocationAccess()
-    }
-    
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        //callback to know when the user accepts or denies location services
-        if status == CLAuthorizationStatus.denied {
-            locationDisabled()
-        } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            locationEnabled()
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+            if !tabBarController.finishedSetup{
+                Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
+            }
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        //dont call requestlocation or the user can get into a loop here
-        let status = CLLocationManager.authorizationStatus()
-        if status == CLAuthorizationStatus.denied {
-            locationDisabled()
-        } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            locationEnabled()
-        }
+        requestLocationAccess()
     }
 
     func requestLocationAccess() {
         let status = CLLocationManager.authorizationStatus()
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
-            locationEnabled()
+            //Setup Deal Data for entire app
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+            DispatchQueue.global().sync {
+                tabBarController.dealSetup(completion: { (success) in
+                    //Allow us to refresh when opened from background
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.locationEnabled), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+                    //Finish view setup
+                    tabBarController.tabBar.isUserInteractionEnabled = true
+                    UIViewController.removeSpinner(spinner: self.sv)
+                    self.locationEnabled()
+                })
+            }
         case .denied, .restricted:
             locationDisabled()
         default:
             performSegue(withIdentifier: "promptSegue", sender: "vendors")
         }
+    }
+    
+    deinit { //Remove background observer
+        NotificationCenter.default.removeObserver(self)
     }
     
     func locationDisabled(){
@@ -103,12 +113,11 @@ class VendorMapViewController: UIViewController{
         NSLayoutConstraint.activate(constraints)
     }
     
-    func locationEnabled(){
+    @objc func locationEnabled(){
         DispatchQueue.main.async {
             if let _ = self.listView.viewWithTag(100){
                 self.listView.viewWithTag(100)?.removeFromSuperview()
             }
-            self.locationManager!.startUpdatingLocation()
             self.listVC.searchBar.isHidden = false
             self.getData()
         }
@@ -138,10 +147,6 @@ class VendorMapViewController: UIViewController{
             vc.thisVendor = vendorList[(sender as? String)!]
             vc.dealsData = self.dealsData
         }
-//        if segue.identifier == "promptSegue"{
-//            let vc = segue.destination as! LocationViewController
-//            vc.sender = "map"
-//        }
     }
     
     @IBAction func segmentChanged(_ sender: Any) {
@@ -176,8 +181,8 @@ class VendorMapViewController: UIViewController{
             })
             self.mapVC.makeAnnotations()
             self.listVC.delegateTable()
-            self.listVC.listTable.reloadData()
         }
+        self.listVC.listTable.reloadData()
     }
 }
 
