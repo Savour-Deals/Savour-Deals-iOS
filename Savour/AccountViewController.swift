@@ -141,7 +141,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         }else if indexPath.row == 3{
             cell = tableView.dequeueReusableCell(withIdentifier: "settings", for: indexPath)
         }else if indexPath.row == 4{
-            cell = tableView.dequeueReusableCell(withIdentifier: "acknowledgements", for: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "vendor", for: indexPath)
         }
         return cell
     }
@@ -149,45 +149,49 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 2{
-            let optionMenu = UIAlertController(title: nil, message: "Choose method", preferredStyle: .actionSheet)
+//            let optionMenu = UIAlertController(title: nil, message: "Choose method", preferredStyle: .actionSheet)
+//            
+//            let mailAction = UIAlertAction(title: "Mail App", style: .default, handler: {
+//                (alert: UIAlertAction!) -> Void in
+//                let mailComposeViewController = self.configureMailController()
+//                if !MFMailComposeViewController.canSendMail() {
+//                    let email = "info@savourdeals.com"
+//                    let url = URL(string: "mailto:\(email)")
+//                    if #available(iOS 10.0, *) {
+//                        UIApplication.shared.open(url!)
+//                    } else {
+//                        UIApplication.shared.openURL(url!)
+//                    }
+//                    return
+//                }
+//                else{
+//                    self.present(mailComposeViewController, animated: true, completion: nil)
+//                }
+//            })
+//            let webAction = UIAlertAction(title: "Savourdeals.com", style: .default, handler: {
+//                (alert: UIAlertAction!) -> Void in
+//                let svc = SFSafariViewController(url: URL(string:"https://www.savourdeals.com/contact/")!)
+//                svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+//                self.present(svc, animated: true, completion: nil)
+//            })
+//            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+//                (alert: UIAlertAction!) -> Void in
+//            })
+//
+//            optionMenu.addAction(mailAction)
+//            optionMenu.addAction(webAction)
+//            optionMenu.addAction(cancelAction)
+//            
+//            self.present(optionMenu, animated: true, completion: nil)
             
-            let deleteAction = UIAlertAction(title: "Mail App", style: .default, handler: {
-                (alert: UIAlertAction!) -> Void in
-                let mailComposeViewController = self.configureMailController()
-                if !MFMailComposeViewController.canSendMail() {
-                    let email = "info@savourdeals.com"
-                    let url = URL(string: "mailto:\(email)")
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(url!)
-                    } else {
-                        UIApplication.shared.openURL(url!)
-                    }
-                    return
-                }
-                else{
-                    self.present(mailComposeViewController, animated: true, completion: nil)
-                }
-            })
-            let saveAction = UIAlertAction(title: "Savourdeals.com", style: .default, handler: {
-                (alert: UIAlertAction!) -> Void in
-                let svc = SFSafariViewController(url: URL(string:"http://savourdeals.com/index.php/contact/")!)
-                svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-                self.present(svc, animated: true, completion: nil)
-            })
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-                (alert: UIAlertAction!) -> Void in
-            })
-
-            optionMenu.addAction(deleteAction)
-            optionMenu.addAction(saveAction)
-            optionMenu.addAction(cancelAction)
-            
-            self.present(optionMenu, animated: true, completion: nil)
+            let svc = SFSafariViewController(url: URL(string:"https://www.savourdeals.com/contact/")!)
+            svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+            self.present(svc, animated: true, completion: nil)
         }else if indexPath.row == 1{
 
             let textToShare = "Check out Savour to get deals from local restaurants!"
             
-            if let myWebsite = URL(string: "http://www.savourdeals.com/getsavour") {//Enter link to your app here
+            if let myWebsite = URL(string: "https://www.savourdeals.com/getsavour") {//Enter link to your app here
                 let objectsToShare = [myWebsite,textToShare] as [Any]
                 let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
                 //Excluded Activities
@@ -195,10 +199,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.present(activityVC, animated: true, completion: nil)
             }
         }else if indexPath.row == 4{
-            let path = Bundle.main.path(forResource: "Acknowledgements", ofType: "plist")
-            let viewController = AcknowListViewController(acknowledgementsPlistPath: path)
-            self.navigationController?.navigationBar.tintColor = UIColor.black
-            self.navigationController?.pushViewController(viewController, animated: true)
+            
         }
        
     }
@@ -226,7 +227,12 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()
-            self.performSegue(withIdentifier: "OnboardingSegue", sender: self)
+            
+            let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
+            let OnboardVC = storyboard.instantiateViewController(withIdentifier: "OnNav") as! UINavigationController
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.window!.rootViewController = OnboardVC
+//            self.performSegue(withIdentifier: "OnboardingSegue", sender: self)
         } catch let signOutError as NSError {
             print ("Error signing out: %@", signOutError)
         }
@@ -325,6 +331,16 @@ class settingsViewController: UITableViewController{
         return UITableViewAutomaticDimension
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row == 1{
+            let path = Bundle.main.path(forResource: "Acknowledgements", ofType: "plist")
+            let viewController = AcknowListViewController(acknowledgementsPlistPath: path)
+            self.navigationController?.navigationBar.tintColor = UIColor.black
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
+    }
+    
     @IBAction func notificationToggles(_ sender: Any) {
         if notificationSwitch.isOn{
             if #available(iOS 10.0, *) {
@@ -355,6 +371,31 @@ class settingsViewController: UITableViewController{
         }else{
             OneSignal.setSubscription(false)
         }
+    }
+}
+
+class BecomeVendorViewController: UIViewController{
+    
+    
+    @IBOutlet weak var moreButton: UIButton!
+    @IBOutlet weak var signupButton: UIButton!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        signupButton.layer.cornerRadius = signupButton.frame.height/2
+        moreButton.layer.cornerRadius = moreButton.frame.height/2
+    }
+    @IBAction func morePressed(_ sender: Any) {
+        openURL(url: "https://www.savourdeals.com/vendorsinfo/")
+    }
+    @IBAction func signupPressed(_ sender: Any) {
+        openURL(url: "https://www.savourdeals.com/signup/")
+    }
+    
+    func openURL(url: String){
+        let svc = SFSafariViewController(url: URL(string:url)!)
+        svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
+        self.present(svc, animated: true, completion: nil)
     }
 }
 

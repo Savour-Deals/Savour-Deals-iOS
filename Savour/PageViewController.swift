@@ -64,6 +64,7 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         self.scrollView.contentSize = CGSize(width: self.view.frame.size.width * CGFloat(arrayVC.count), height: self.scrollView.frame.size.height)
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
@@ -76,6 +77,7 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.isTranslucent = true
     }
+    
     func setupUI(){
         let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 0)
@@ -98,9 +100,6 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
 
 }
 
-
-
-
 class PermissionViewController: UIViewController, CLLocationManagerDelegate{
     var locationManager: CLLocationManager!
     var ref: DatabaseReference!
@@ -113,6 +112,7 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
     @IBOutlet weak var notiButton: UIButton!
     @IBOutlet weak var locText: UILabel!
     @IBOutlet weak var notiText: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Onboarded")
@@ -128,19 +128,17 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
         case .authorizedAlways, .authorizedWhenInUse:
             self.locationManager!.startUpdatingLocation()
             let parent = self.parent as! OnboardingViewController
-            
             //Setup Deal Data for entire app
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
             DispatchQueue.global().sync {
                 tabBarController.dealSetup(completion: { (success) in
-                    parent.sender.setup()
+                    parent.sender.finishLoad(tabBarController: tabBarController)
                     parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
                     parent.navigationController?.navigationBar.shadowImage = UIImage()
                     parent.navigationController?.navigationBar.isTranslucent = true
                     self.continueButton.isEnabled = true
                     self.continueButton.alpha = 1.0
-                    parent.setupUI()
                 })
             }
         case .denied, .restricted, .notDetermined:
@@ -167,11 +165,11 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
         if let sender = sender as? UIButton {
             sender.isEnabled = false
             let title = sender.title(for: .normal)
-            var url = "http://www.savourdeals.com"
+            var url = "https://www.savourdeals.com"
             if title == "Privacy Policy"{
-                url = "http://savourdeals.com/index.php/terms-of-use/"
+                url = "https://www.savourdeals.com/terms-of-use/"
             } else if title == "Terms of Use"{
-                url = "http://savourdeals.com/index.php/privacy-policy/"
+                url = "https://www.savourdeals.com/privacy-policy/"
             }
             let svc = SFSafariViewController(url: URL(string:url)!)
             svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical

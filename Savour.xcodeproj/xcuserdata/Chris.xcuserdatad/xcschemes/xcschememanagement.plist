@@ -9,10 +9,23 @@
 			<key>orderHint</key>
 			<integer>18</integer>
 		</dict>
-		<key>Savour.xcscheme</key>
+		<key>Savour 2.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>19</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>83802D681F2ED1FD00E315FB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8397B2C01F951D3400EC392C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

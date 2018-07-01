@@ -32,6 +32,9 @@
 		834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E151F315BA8002D7198 /* SignUpViewController.swift */; };
 		834C1E1A1F3187AA002D7198 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E191F3187AA002D7198 /* Database.swift */; };
 		834C1E1C1F3194B6002D7198 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */; };
+		836AFD0F20DCA5BA002DA873 /* ratingsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836AFD0E20DCA5BA002DA873 /* ratingsHelper.swift */; };
+		836AFD2620DDAF85002DA873 /* SavourDealsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836AFD2520DDAF85002DA873 /* SavourDealsUITests.swift */; };
+		836AFD3320DDB4AA002DA873 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836AFD3220DDB4AA002DA873 /* SnapshotHelper.swift */; };
 		836FE96F20AD3B0A00E08B31 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 834F1A822045179E002AA6FD /* Location.gpx */; };
 		83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */; };
 		83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6E1F2ED1FD00E315FB /* LoginViewController.swift */; };
@@ -46,10 +49,18 @@
 		83BC91EA1F8C12DC0031C372 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BC91E91F8C12DC0031C372 /* PageViewController.swift */; };
 		83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
+		83E4839520D0BF08009B4C3B /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E4839420D0BF08009B4C3B /* extensions.swift */; };
 		D8BA1170FEDB0BD1FDC4147D /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93783548216AAF666D4844DD /* Pods_OneSignalNotificationServiceExtension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		836AFD2820DDAF85002DA873 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83802D611F2ED1FD00E315FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83802D681F2ED1FD00E315FB;
+			remoteInfo = Savour;
+		};
 		8397B2C61F951D3400EC392C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83802D611F2ED1FD00E315FB /* Project object */;
@@ -103,6 +114,11 @@
 		834C1E191F3187AA002D7198 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Database.swift; sourceTree = "<group>"; };
 		834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DealTableViewCell.swift; sourceTree = "<group>"; };
 		834F1A822045179E002AA6FD /* Location.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Location.gpx; sourceTree = "<group>"; };
+		836AFD0E20DCA5BA002DA873 /* ratingsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ratingsHelper.swift; sourceTree = "<group>"; };
+		836AFD2320DDAF85002DA873 /* SavourDealsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SavourDealsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		836AFD2520DDAF85002DA873 /* SavourDealsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavourDealsUITests.swift; sourceTree = "<group>"; };
+		836AFD2720DDAF85002DA873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		836AFD3220DDB4AA002DA873 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		83802D691F2ED1FD00E315FB /* Savour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Savour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		83802D6E1F2ED1FD00E315FB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -121,12 +137,20 @@
 		83DBBE371F747945007B58DD /* leveldb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = leveldb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		83DDDBB41F4157EC00B14FEB /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		83DDDBB91F428CB100B14FEB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		83E4839420D0BF08009B4C3B /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		93783548216AAF666D4844DD /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B71047018234E33720347934 /* Pods-Savour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.debug.xcconfig"; sourceTree = "<group>"; };
 		B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.release.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		836AFD2020DDAF85002DA873 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		83802D661F2ED1FD00E315FB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -180,12 +204,22 @@
 			isa = PBXGroup;
 			children = (
 				83802D701F2ED1FD00E315FB /* Onboarding.storyboard */,
-				834C1E151F315BA8002D7198 /* SignUpViewController.swift */,
 				83BC91E91F8C12DC0031C372 /* PageViewController.swift */,
+				834C1E151F315BA8002D7198 /* SignUpViewController.swift */,
 				83BC91E71F8C0FB20031C372 /* tutorial.storyboard */,
 				83802D6E1F2ED1FD00E315FB /* LoginViewController.swift */,
 			);
 			name = Onboarding;
+			sourceTree = "<group>";
+		};
+		836AFD2420DDAF85002DA873 /* SavourDealsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				836AFD3220DDB4AA002DA873 /* SnapshotHelper.swift */,
+				836AFD2520DDAF85002DA873 /* SavourDealsUITests.swift */,
+				836AFD2720DDAF85002DA873 /* Info.plist */,
+			);
+			path = SavourDealsUITests;
 			sourceTree = "<group>";
 		};
 		83802D601F2ED1FD00E315FB = {
@@ -193,6 +227,7 @@
 			children = (
 				83802D6B1F2ED1FD00E315FB /* Savour */,
 				8397B2C21F951D3400EC392C /* OneSignalNotificationServiceExtension */,
+				836AFD2420DDAF85002DA873 /* SavourDealsUITests */,
 				83802D6A1F2ED1FD00E315FB /* Products */,
 				9843D2A17469187CACDB6A4C /* Frameworks */,
 				E3369BFE56DB7D02F0FFA0FF /* Pods */,
@@ -204,6 +239,7 @@
 			children = (
 				83802D691F2ED1FD00E315FB /* Savour.app */,
 				8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */,
+				836AFD2320DDAF85002DA873 /* SavourDealsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -214,6 +250,8 @@
 				83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */,
 				83B0F94D1F32C64C00759C34 /* Savour.entitlements */,
 				83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */,
+				83E4839420D0BF08009B4C3B /* extensions.swift */,
+				836AFD0E20DCA5BA002DA873 /* ratingsHelper.swift */,
 				834F1A822045179E002AA6FD /* Location.gpx */,
 				832E26FE1F86E642009B8277 /* GoogleService-Info.plist */,
 				83446AA71F3C067900CBE73E /* DealDetails */,
@@ -242,9 +280,9 @@
 			isa = PBXGroup;
 			children = (
 				834C1E111F31518F002D7198 /* Main.storyboard */,
+				834C1E191F3187AA002D7198 /* Database.swift */,
 				83446AA11F3BDC6400CBE73E /* AccountViewController.swift */,
 				834C1E131F3151A4002D7198 /* ViewController.swift */,
-				834C1E191F3187AA002D7198 /* Database.swift */,
 				833D55E71FB6A91A00C66125 /* TabBarViewController.swift */,
 				833756381F9E7F4E00336744 /* VendorMapViewController.swift */,
 				83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */,
@@ -279,6 +317,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		836AFD2220DDAF85002DA873 /* SavourDealsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 836AFD2A20DDAF85002DA873 /* Build configuration list for PBXNativeTarget "SavourDealsUITests" */;
+			buildPhases = (
+				836AFD1F20DDAF85002DA873 /* Sources */,
+				836AFD2020DDAF85002DA873 /* Frameworks */,
+				836AFD2120DDAF85002DA873 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				836AFD2920DDAF85002DA873 /* PBXTargetDependency */,
+			);
+			name = SavourDealsUITests;
+			productName = SavourDealsUITests;
+			productReference = 836AFD2320DDAF85002DA873 /* SavourDealsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		83802D681F2ED1FD00E315FB /* Savour */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83802D7B1F2ED1FD00E315FB /* Build configuration list for PBXNativeTarget "Savour" */;
@@ -291,6 +347,7 @@
 				5F6D7E9D62B0C52D1A65114D /* [CP] Copy Pods Resources */,
 				8397B2CC1F951D3400EC392C /* Embed App Extensions */,
 				834A45E420A2D33300A0A031 /* ShellScript */,
+				836AFD1020DCAE87002DA873 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -327,10 +384,16 @@
 		83802D611F2ED1FD00E315FB /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0930;
+				LastSwiftUpdateCheck = 0940;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Chris Patterson";
 				TargetAttributes = {
+					836AFD2220DDAF85002DA873 = {
+						CreatedOnToolsVersion = 9.4;
+						DevelopmentTeam = C5FUB5PT9S;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 83802D681F2ED1FD00E315FB;
+					};
 					83802D681F2ED1FD00E315FB = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = C5FUB5PT9S;
@@ -378,11 +441,19 @@
 			targets = (
 				83802D681F2ED1FD00E315FB /* Savour */,
 				8397B2C01F951D3400EC392C /* OneSignalNotificationServiceExtension */,
+				836AFD2220DDAF85002DA873 /* SavourDealsUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		836AFD2120DDAF85002DA873 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		83802D671F2ED1FD00E315FB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -462,6 +533,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
+		};
+		836AFD1020DCAE87002DA873 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
 		};
 		E86C244E482D842BC617C82B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -548,6 +632,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		836AFD1F20DDAF85002DA873 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				836AFD2620DDAF85002DA873 /* SavourDealsUITests.swift in Sources */,
+				836AFD3320DDB4AA002DA873 /* SnapshotHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		83802D651F2ED1FD00E315FB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -558,10 +651,12 @@
 				833756391F9E7F4E00336744 /* VendorMapViewController.swift in Sources */,
 				83446AAB1F3C130400CBE73E /* DealViewController.swift in Sources */,
 				83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */,
+				836AFD0F20DCA5BA002DA873 /* ratingsHelper.swift in Sources */,
 				834C1E161F315BA8002D7198 /* SignUpViewController.swift in Sources */,
 				834C1E1A1F3187AA002D7198 /* Database.swift in Sources */,
 				833D55E81FB6A91A00C66125 /* TabBarViewController.swift in Sources */,
 				83BC91EA1F8C12DC0031C372 /* PageViewController.swift in Sources */,
+				83E4839520D0BF08009B4C3B /* extensions.swift in Sources */,
 				83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */,
 				83446AA01F381BC500CBE73E /* FavoritesViewController.swift in Sources */,
 				83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */,
@@ -580,6 +675,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		836AFD2920DDAF85002DA873 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83802D681F2ED1FD00E315FB /* Savour */;
+			targetProxy = 836AFD2820DDAF85002DA873 /* PBXContainerItemProxy */;
+		};
 		8397B2C71F951D3400EC392C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8397B2C01F951D3400EC392C /* OneSignalNotificationServiceExtension */;
@@ -607,7 +707,28 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		83802D791F2ED1FD00E315FB /* Debug */ = {
+		836AFD2C20DDAF85002DA873 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C5FUB5PT9S;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SavourDealsUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.CP.SavourDealsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Savour;
+			};
+			name = Release;
+		};
+		836AFD2D20DDB0E3002DA873 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -639,17 +760,12 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -657,12 +773,86 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Debug;
+		};
+		836AFD2E20DDB0E3002DA873 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Savour/Savour.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C5FUB5PT9S;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = Savour/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		836AFD2F20DDB0E3002DA873 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09AF41A9D1B4F9CB19534A88 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C5FUB5PT9S;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		836AFD3120DDB0E3002DA873 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C5FUB5PT9S;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SavourDealsUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.CP.SavourDealsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Savour;
 			};
 			name = Debug;
 		};
@@ -718,38 +908,6 @@
 			};
 			name = Release;
 		};
-		83802D7C1F2ED1FD00E315FB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B71047018234E33720347934 /* Pods-Savour.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Savour/Savour.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = C5FUB5PT9S;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				INFOPLIST_FILE = Savour/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		83802D7D1F2ED1FD00E315FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */;
@@ -767,6 +925,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_OPTIMIZATION_LEVEL = 3;
 				INFOPLIST_FILE = Savour/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -774,32 +933,12 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
-		};
-		8397B2CA1F951D3400EC392C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 11FC412B5DFD4025E307D473 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = C5FUB5PT9S;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour.OneSignalNotificationServiceExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
 		};
 		8397B2CB1F951D3400EC392C /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -825,32 +964,41 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		836AFD2A20DDAF85002DA873 /* Build configuration list for PBXNativeTarget "SavourDealsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				836AFD2C20DDAF85002DA873 /* Release */,
+				836AFD3120DDB0E3002DA873 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		83802D641F2ED1FD00E315FB /* Build configuration list for PBXProject "Savour" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				83802D791F2ED1FD00E315FB /* Debug */,
 				83802D7A1F2ED1FD00E315FB /* Release */,
+				836AFD2D20DDB0E3002DA873 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		83802D7B1F2ED1FD00E315FB /* Build configuration list for PBXNativeTarget "Savour" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				83802D7C1F2ED1FD00E315FB /* Debug */,
 				83802D7D1F2ED1FD00E315FB /* Release */,
+				836AFD2E20DDB0E3002DA873 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		8397B2C91F951D3400EC392C /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8397B2CA1F951D3400EC392C /* Debug */,
 				8397B2CB1F951D3400EC392C /* Release */,
+				836AFD2F20DDB0E3002DA873 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

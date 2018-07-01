@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U9a-dB-aq3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U9a-dB-aq3">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -531,7 +531,7 @@
                         <outlet property="imgbound" destination="hub-RY-SRs" id="hgw-IZ-cuf"/>
                         <outlet property="infoView" destination="7A3-BV-eil" id="kmt-bB-Y4o"/>
                         <outlet property="moreBtn" destination="YrQ-GR-Dun" id="BKU-Jo-ThW"/>
-                        <outlet property="redeem" destination="g2z-lR-J3D" id="tCr-Be-Usv"/>
+                        <outlet property="redeem" destination="g2z-lR-J3D" id="0QA-Jm-5a8"/>
                         <outlet property="restaurantLabel" destination="o7o-6Q-F0e" id="TlH-ln-zwT"/>
                         <outlet property="textView" destination="RO2-Ob-ZGY" id="3o7-Zx-dn8"/>
                         <outlet property="timerLabel" destination="KvV-v9-jhB" id="Wfg-hZ-ien"/>

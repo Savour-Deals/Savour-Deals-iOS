@@ -10,8 +10,9 @@ import UIKit
 
 class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
-    var data: DealsData!
+    var deals: DealsData!
     var vendors: VendorsData!
+    var finishedSetup = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,24 +20,29 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func dealSetup(completion: @escaping (Bool) -> Void){
-        data = DealsData(completion: { (success) in
-            self.vendors = VendorsData(completion: { (succ) in
-                let firstTab = self.viewControllers![0] as! UINavigationController
-                let firstView = firstTab.topViewController as! ViewController
-                let secondTab = self.viewControllers![1] as! UINavigationController
-                let secondView = secondTab.topViewController as! FavoritesViewController
-                let thirdTab = self.viewControllers![2] as! UINavigationController
-                let thirdView = thirdTab.topViewController as! VendorMapViewController
-                
-                firstView.dealsData = self.data
-                secondView.dealsData = self.data
-                thirdView.dealsData = self.data
-                firstView.vendorsData = self.vendors
-                secondView.vendorsData = self.vendors
-                thirdView.vendorsData = self.vendors
-                completion(true)
+        if deals == nil{
+            deals = DealsData(completion: { (success) in
+                self.vendors = VendorsData(completion: { (succ) in
+                    let firstTab = self.viewControllers![0] as! UINavigationController
+                    let firstView = firstTab.topViewController as! ViewController
+                    let secondTab = self.viewControllers![1] as! UINavigationController
+                    let secondView = secondTab.topViewController as! FavoritesViewController
+                    let thirdTab = self.viewControllers![2] as! UINavigationController
+                    let thirdView = thirdTab.topViewController as! VendorMapViewController
+                    
+                    firstView.dealsData = self.deals
+                    secondView.dealsData = self.deals
+                    thirdView.dealsData = self.deals
+                    firstView.vendorsData = self.vendors
+                    secondView.vendorsData = self.vendors
+                    thirdView.vendorsData = self.vendors
+                    self.finishedSetup = true
+                    completion(true)
+                })
             })
-        })
+        }else{
+            completion(true)
+        }
     }
     
     public func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool{

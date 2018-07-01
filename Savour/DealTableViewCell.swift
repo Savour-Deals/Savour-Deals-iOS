@@ -54,7 +54,7 @@ class DealTableViewCell: UITableViewCell {
             self.likeButton.setImage(image, for: .normal)
             self.likeButton.tintColor = UIColor.red
         }
-        self.rName.text = deal.name
+        self.rName.text = deal.name! + " - " + String(format:"%.1f", deal.distanceMiles!) + " miles"
         self.dealDesc.text = deal.dealDescription
         self.validHours.text = deal.activeHours
         if deal.redeemed! {

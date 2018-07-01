@@ -41,7 +41,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
         super.viewDidLoad()
         if Auth.auth().currentUser != nil {
             // User is signed in.
-            self.performSegue(withIdentifier: "Main", sender: self)
+            self.gotoMain()
         }
         else {
             // No user is signed in.
@@ -161,8 +161,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
             }
             
             self.ref.child("Users").child(user!.uid).child("Onboarded").setValue("true")
-            self.performSegue(withIdentifier: "tutorial", sender: self)
-
+            self.gotoMain()
         }
         // [END_EXCLUDE]
     }
@@ -230,12 +229,21 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                     
                 }
             })
-            self.performSegue(withIdentifier: "tutorial", sender: self)
             self.doneLoading()
+            self.gotoMain()
         }
     }
     @IBAction func toLogin(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func gotoMain(){
+        //Set root as our tab view controller
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
+        tabVC.selectedIndex = 0
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window!.rootViewController = tabVC
     }
     
     

@@ -17,7 +17,6 @@ import CoreLocation
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate{
 
     var searchBar: UISearchBar!
-    @IBOutlet weak var loading: UIActivityIndicatorView!
     @IBOutlet var redeemedView: UIView!
     var handle: AuthStateDidChangeListenerHandle?
     var ref: DatabaseReference!
@@ -27,15 +26,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
     var dealsData: DealsData!
     var vendorsData: VendorsData!
-    
+        
     var activeDeals = [DealData]()
     var inactiveDeals = [DealData]()
-    var showedNotiDeal = false
     var locationManager: CLLocationManager!
     var userLocation: CLLocation!
     var initialLoaded = false
+    var sv: UIView!
     
-    @IBOutlet weak var retryButton: UIButton!
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var scrollFilter: UIScrollView!
     @IBOutlet weak var noDeals: UILabel!
@@ -53,7 +51,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.loading.startAnimating()
+        sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
         let user = Auth.auth().currentUser
         if user == nil {
             // No user is signed in.
@@ -61,6 +59,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         ref = Database.database().reference()
         ref.keepSynced(true)
+        self.setup()
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .notDetermined:
@@ -69,9 +68,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 //Setup Deal Data for entire app
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                    if !tabBarController.finishedSetup{
+                        Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                    }
+                }
                 DispatchQueue.global().sync {
                     tabBarController.dealSetup(completion: { (success) in
-                        self.setup()
+                        self.finishLoad(tabBarController: tabBarController)
                     })
                 }
             }
@@ -80,10 +84,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    deinit { //Remove background observer
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     func removeSubview(){
         if let viewWithTag = self.view.viewWithTag(100) {
             viewWithTag.removeFromSuperview()
         }
+    }
+    
+    func finishLoad(tabBarController: TabBarViewController){
+        //Allow us to refresh when opened from background
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name:NSNotification.Name.NotificationDealIsAvailable, object: nil)
+        //Finish view setup
+        tabBarController.tabBar.isUserInteractionEnabled = true
+        self.locationManager = CLLocationManager()
+        self.requestLocationAccess()
+        self.initialLoaded = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,7 +119,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     self.performSegue(withIdentifier: "Vendor", sender: self)
                 }
                 else if self.initialLoaded{
-                    self.refreshUI()
+                    self.navigationController?.setNavigationBarHidden(false, animated: true)
+                    self.navigationController?.navigationBar.tintColor = UIColor.white
+                    self.navigationController?.view.backgroundColor = UIColor.white
+                    self.navigationController?.navigationItem.title = ""
+                    
+                    UIApplication.shared.statusBarStyle = .lightContent
+                    
+                    self.refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+                    self.refreshControl.tintColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
+                    
+                    self.statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+                    self.statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                    
+                    self.self.tabBarController?.tabBar.isHidden = false
+                    
+                    self.searchBar.endEditing(true)
+                    self.searchBar.showsCancelButton = false
+                    self.searchBar.text = ""
+                    self.refresh()
                 }
             })
         }
@@ -109,6 +146,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
     }
+
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         //callback to know when the user accepts or denies location services
@@ -152,7 +190,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
         constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
         NSLayoutConstraint.activate(constraints)
-        self.loading.stopAnimating()
+        UIViewController.removeSpinner(spinner: sv)
     }
     
     func locationEnabled(){
@@ -174,7 +212,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
             }
-            (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(dealType: title)
+            (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(byType: title)
             if self.activeDeals.isEmpty && self.inactiveDeals.isEmpty{
                 self.noDeals.isHidden = false
                 
@@ -183,7 +221,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
             }
             self.DealsTable.reloadData()
-            self.loading.stopAnimating()
+            UIViewController.removeSpinner(spinner: self.sv)
         }
     }
     
@@ -229,31 +267,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
         }
-        self.locationManager = CLLocationManager()
-        self.requestLocationAccess()
-        initialLoaded = true
     }
     
-    func refreshUI(){
+    
+    //These two functions prevent jitter of tableview when popping back to this view
+    var cellHeights: [IndexPath : CGFloat] = [:]
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cellHeights[indexPath] = cell.frame.size.height
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let height = cellHeights[indexPath] else { return 70.0 }
+        return height
+    }
+    
+    @objc func refresh(){
         hasRefreshed = true
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.view.backgroundColor = UIColor.white
-        self.navigationController?.navigationItem.title = ""
-        
-        UIApplication.shared.statusBarStyle = .lightContent
-        
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
-        refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.tabBarController?.tabBar.isHidden = false
-        
-        searchBar.endEditing(true)
-        searchBar.showsCancelButton = false
-        searchBar.text = ""
         //dont call requestlocation or the user can get into a loop here
         let status = CLLocationManager.authorizationStatus()
         if status == CLAuthorizationStatus.denied {
@@ -263,12 +293,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 locationEnabled()
             }
         }
-        for deal in activeDeals{
-            deal.updateTimes()
-        }
-        for deal in inactiveDeals{
-            deal.updateTimes()
-        }
+        refreshData(self)
         if initialLoaded{
             handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
             if self.activeDeals.isEmpty && self.inactiveDeals.isEmpty{
@@ -292,7 +317,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
         }
-        (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(dealType: title)
+        if searchBar.text != ""{
+            (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(byName: searchBar.text)
+        }else{
+            (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(byType: title)
+        }
+        for deal in self.activeDeals{
+            deal.updateDistance(vendor: self.vendorsData.getVendorsByID(id: deal.rID!)!)
+        }
+        for deal in self.inactiveDeals{
+            deal.updateDistance(vendor: self.vendorsData.getVendorsByID(id: deal.rID!)!)
+        }
+        dealsData.sortDeals(array: &self.activeDeals)
+        dealsData.sortDeals(array: &self.inactiveDeals)
         //take care of any loading animations
         if self.refreshControl.isRefreshing{
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
@@ -304,23 +341,33 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     self.noDeals.isHidden = true
                 }
             }
+        }else{
+            if self.activeDeals.isEmpty && self.inactiveDeals.isEmpty{
+                self.noDeals.isHidden = false
+                
+            }else{
+                self.noDeals.isHidden = true
+            }
         }
         self.DealsTable.reloadData()
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @objc func showNotificationDeal(){
         //check if user clicked a notification and segue if they did
-        if !showedNotiDeal{
+        if notificationDeal != ""{
             if let _ = dealsData{
                 //If a user clicked a deal notification, segue to that deal
+                //If cold start, this wont work from the custom notification
                 if let notiDeal = dealsData.getNotificationDeal(dealID: notificationDeal){
                     self.dealDetails(deal: notiDeal)
-                    showedNotiDeal = true
+                    notificationDeal = ""
                 }
             }
-
         }
-
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        showNotificationDeal()
         return activeDeals.count + inactiveDeals.count
     }
     
@@ -464,15 +511,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
-        (activeDeals, inactiveDeals) = dealsData.filter(byName: "All")
+        (activeDeals,inactiveDeals) = self.dealsData.getDeals(byName: searchBar.text)
+        DealsTable.reloadData()
+    }
+    
+    func selectAllButton(){
+        (activeDeals,inactiveDeals) = self.dealsData.getDeals()
         if activeDeals.count + inactiveDeals.count < 1 {
             self.noDeals.isHidden = false
         }else{
             self.noDeals.isHidden = true
         }
-    }
-    
-    func selectAllButton(){
+        DealsTable.reloadData()
         for subview in self.buttonsView.subviews as [UIView] {
             if let button = subview as? UIButton {
                 button.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
@@ -487,11 +537,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
     }
- 
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = true
         selectAllButton()
+        
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -512,7 +562,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 }
 
-extension ViewController:     UIViewControllerPreviewingDelegate {
+extension ViewController: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = DealsTable.indexPathForRow(at: location),
             let cell = DealsTable.cellForRow(at: indexPath) as? DealTableViewCell else {
