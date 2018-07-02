@@ -33,6 +33,8 @@ class DealsData{
     
     init(completion: @escaping (Bool) -> Void){
         let currentUnix = Date().timeIntervalSince1970
+        let comp: DateComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        let startOfToday = Calendar.current.date(from: comp)!.timeIntervalSince1970
         let favGroup = DispatchGroup()
         let expiredUnix = currentUnix
         var favLoaded = false
@@ -116,7 +118,7 @@ class DealsData{
                                     temp.favorited = false
                                 }
                                 //if the deal is not expired or redeemed less than half an hour ago, show it
-                                if temp.endTime! > expiredUnix && !temp.redeemed!{
+                                if (temp.endTime! > expiredUnix || temp.endTime == startOfToday) && !temp.redeemed!{
                                     if temp.active{
                                         self.activeDeals[temp.id!] = temp
                                         self.inactiveDeals.removeValue(forKey: temp.id!)
@@ -458,8 +460,8 @@ class DealData{
             }else{
                 startOfToday = calendar.startOfDay(for: now)
             }
-            let startTime    = calendar.date(byAdding: startTimeComponent, to: startOfToday)!
-            var endTime      = calendar.date(byAdding: endTimeComponent, to: startOfToday)!
+            let startTime = calendar.date(byAdding: startTimeComponent, to: startOfToday)!
+            var endTime = calendar.date(byAdding: endTimeComponent, to: startOfToday)!
             if startTime > endTime {
                 //Deal goes past midnight (might be typical of bar's drink deals)
                 endTime = calendar.date(byAdding: .day, value: 1, to: endTime)!
@@ -492,6 +494,8 @@ class DealData{
                 self.code = (self.code?.replacingOccurrences(of: " ", with: ", "))!
                 self.active = false
             }
+            
+            //Get countdown string and days left
             var isInInterval = false
             if #available(iOS 10.0, *) {
                 let interval  =  DateInterval(start: start as Date, end: end as Date)
@@ -499,27 +503,29 @@ class DealData{
             } else {
                 isInInterval = now.timeIntervalSince1970 > start.timeIntervalSince1970 && now.timeIntervalSince1970 < end.timeIntervalSince1970
             }
-            if (isInInterval){
-                let Components = calendar.dateComponents([.day, .hour, .minute], from: now, to: end)
-                if (now < end && now > start){
-                    var leftTime = ""
-                    self.daysLeft = Components.day
-                    if Components.day! != 0{
-                        leftTime = leftTime + String(describing: Components.day!) + " days left"
-                    }
-                    else if Components.hour! != 0{
-                        leftTime = leftTime + String(describing: Components.hour!) + "hours left"
-                    }else{
-                        leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
-                    }
-                    self.countdown = leftTime
+            self.daysLeft = calendar.dateComponents([.day, .hour, .minute], from: Date().startOfDay, to: end).day
+            if startTimeComponent == endTimeComponent{
+                if daysLeft! > 1{
+                    self.countdown = "\(daysLeft!) days left"
+                }else if daysLeft! == 1{
+                    self.countdown = "Deal expires tomorrow!"
+                }else{
+                    self.countdown = "Deal expires today!"
                 }
-            }
-            else{
+            }else if (isInInterval){
+                if (now < end && now > start){
+                    if daysLeft! > 1{
+                        self.countdown = "\(daysLeft!) days left"
+                    }else if daysLeft! == 1{
+                        self.countdown = "Deal expires tomorrow!"
+                    }else{
+                        self.countdown = "Deal expires today!"
+                    }
+                }
+            }else{
+                self.countdown = "Deal expires today!"
                 self.daysLeft = 0
             }
-            //favorites are set during the firebase calls
-            self.favorited = false
         }
     }
     
@@ -548,6 +554,8 @@ class DealData{
             //Deal goes past midnight (might be typical of bar's drink deals)
             endTime = calendar.date(byAdding: .day, value: 1, to: endTime)!
         }
+        
+        
         if now > startTime && now < endTime{
             self.activeHours = "valid until " + formatter.string(from: endTime)
             self.active = true
@@ -580,6 +588,8 @@ class DealData{
             self.code = (self.code?.replacingOccurrences(of: " ", with: ", "))!
             self.active = false
         }
+        
+        //Get countdown string and days left
         var isInInterval = false
         if #available(iOS 10.0, *) {
             let interval  =  DateInterval(start: start as Date, end: end as Date)
@@ -587,20 +597,28 @@ class DealData{
         } else {
             isInInterval = now.timeIntervalSince1970 > start.timeIntervalSince1970 && now.timeIntervalSince1970 < end.timeIntervalSince1970
         }
-        if (isInInterval){
-            let Components = calendar.dateComponents([.day, .hour, .minute], from: now, to: end)
-            if (now < end && now > start){
-                var leftTime = ""
-                if Components.day! != 0{
-                    leftTime = leftTime + String(describing: Components.day!) + " days left"
-                }
-                else if Components.hour! != 0{
-                    leftTime = leftTime + String(describing: Components.hour!) + "hours left"
-                }else{
-                    leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
-                }
-                self.countdown = leftTime
+        self.daysLeft = calendar.dateComponents([.day, .hour, .minute], from: Date().startOfDay, to: end).day
+        if startTimeComponent == endTimeComponent{
+            if daysLeft! > 1{
+                self.countdown = "\(daysLeft!) days left"
+            }else if daysLeft! == 1{
+                self.countdown = "Deal expires tomorrow!"
+            }else{
+                self.countdown = "Deal expires today!"
             }
+        }else if (isInInterval){
+            if (now < end && now > start){
+                if daysLeft! > 1{
+                    self.countdown = "\(daysLeft!) days left"
+                }else if daysLeft! == 1{
+                    self.countdown = "Deal expires tomorrow!"
+                }else{
+                    self.countdown = "Deal expires today!"
+                }
+            }
+        }else{
+            self.countdown = "Deal expires today!"
+            self.daysLeft = 0
         }
     }
     

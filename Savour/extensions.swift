@@ -11,6 +11,19 @@ import UIKit
 
 let Defaults = UserDefaults.standard
 
+extension Date {
+    var startOfDay: Date {
+        return Calendar.current.startOfDay(for: self)
+    }
+    
+    var endOfDay: Date? {
+        var components = DateComponents()
+        components.day = 1
+        components.second = -1
+        return Calendar.current.date(byAdding: components, to: startOfDay)
+    }
+}
+
 extension UIViewController {
     class func displaySpinner(onView : UIView, color: UIColor) -> UIView {
         let spinnerView = UIView.init(frame: onView.bounds)
