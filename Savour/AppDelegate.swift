@@ -205,9 +205,11 @@ extension AppDelegate: CLLocationManagerDelegate {
                 }
             })
             var nearby = rest.prefix(20)
-            if nearby[0].distanceMiles! > 50.0{
-                //update restaurants from firebase for the next pass if the nearest is too far away
-                self.vendors = vendorsData.getVendors()
+            if let _ = nearby[0].distanceMiles{
+                if nearby[0].distanceMiles! > 50.0{
+                    //update restaurants from firebase for the next pass if the nearest is too far away
+                    self.vendors = vendorsData.getVendors()
+                }
             }
             for place in monitoredRegions{
                 if !nearby.contains(where: { $0 === place }){
