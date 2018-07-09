@@ -88,23 +88,29 @@ class DealsData{
                 self.vendors.removeValue(forKey: key)
                 for deal in self.activeDeals{
                     if deal.value.rID == key{
-                        self.activeDeals.removeValue(forKey: key)
+                        self.activeDeals.removeValue(forKey: deal.key)
                     }
                 }
                 for deal in self.inactiveDeals{
                     if deal.value.rID == key{
-                        self.inactiveDeals.removeValue(forKey: key)
+                        self.inactiveDeals.removeValue(forKey: deal.key)
                     }
                 }
             })
             self.geoFire.observeReady({
-                print("All initial vendor data has been loaded and events have been fired!")
-                vendorGroup.leave()
+                if !vendorLoaded{
+                    print("All initial vendor data has been loaded and events have been fired!")
+                    vendorGroup.leave()
+                }
             })
             vendorGroup.notify(queue: .main){
                 vendorLoaded = true
                 let dealGroup = DispatchGroup()
                 var dealsLoaded = false
+                if self.vendors.count < 1 {
+                    dealGroup.enter()
+                    dealGroup.leave()//When we found no vendors, just leave
+                }
                 for vendor in self.vendors {
                     dealGroup.enter()
                     self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: vendor.key).observe(.value, with: { (snapshot) in
@@ -150,6 +156,12 @@ class DealsData{
                     completion(true)
                 }
             }
+        }
+    }
+    
+    func updateLocation(location: CLLocation){
+        if let _ = geoFire{
+            self.geoFire.center = location
         }
     }
     
@@ -318,6 +330,7 @@ class VendorsData{
                     count = count - 1
                     if count == 0 && !self.initialLoaded{
                         self.initialLoaded = true
+                        print("Vendors Loaded")
                         completion(true)
                     }
                 })
@@ -325,10 +338,22 @@ class VendorsData{
             geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in //50 miles
                 self.vendors.removeValue(forKey: key)
             })
+            geoFire.observeReady {
+                if !self.initialLoaded{
+                    print("No vendors found")
+                    completion(true)
+                }
+            }
         }else{
             //could not get location!!
             print("Vendors Failed to load. Location error!")
             completion(false)
+        }
+    }
+    
+    func updateLocation(location: CLLocation){
+        if let _ = geoFire{
+            self.geoFire.center = location
         }
     }
     
@@ -348,7 +373,6 @@ class VendorsData{
         for vendor in vendors{
             vendor.value.distanceMiles = (vendor.value.location?.distance(from: location))!/1609
         }
-        geoFire.center = location
     }
 }
 
@@ -623,7 +647,9 @@ class DealData{
     }
     
     func updateDistance(vendor: VendorData){
-        self.distanceMiles = (vendor.location?.distance(from: locationManager.location!))!/1609
+        if let _ = vendor.location{
+            self.distanceMiles = (vendor.location?.distance(from: locationManager.location!))!/1609
+        }
     }
 }
 

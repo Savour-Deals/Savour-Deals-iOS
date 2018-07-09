@@ -164,12 +164,12 @@ class VendorMapViewController: UIViewController{
     
     func getData(){
         vendorsData.updateDistances(location: locationManager.location!)
-        vendors = vendorsData.getVendors()
+        vendors = self.vendorsData.getVendors()
         for rest in vendors{
             self.vendorList[rest.id!] = rest
         }
         if vendors.count <= 0 {
-//                self.listVC.noRest.isHidden = false
+            self.listVC.noRest.isHidden = false
         }else if vendors.count > 0{
             self.mapVC.flag = 1
             vendors.sort(by: { (r1, r2) -> Bool in
@@ -180,6 +180,7 @@ class VendorMapViewController: UIViewController{
                 }
             })
             self.mapVC.makeAnnotations()
+            self.listVC.myVendors = vendors
             self.listVC.delegateTable()
         }
         self.listVC.listTable.reloadData()
@@ -329,8 +330,6 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { () -> Void in
             let parent = self.parent as! VendorMapViewController
             parent.refreshData()
-            self.myVendors = vendors
-            self.listTable.reloadData()
             self.refreshControl.endRefreshing()
         }
     }
@@ -362,6 +361,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        self.myVendors = vendors
         if myVendors.count < 1 {
             self.noRest.isHidden = false
         }else{
@@ -376,8 +376,6 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
 
         let photo = cell.vendor.photo!
         if photo != ""{
-
-            
             // UIImageView in your ViewController
             let imageView: UIImageView = cell.rImg
             
@@ -390,8 +388,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
         cell.rName.text = cell.vendor.name
         if let distance = cell.vendor.distanceMiles{
             cell.distanceTxt.text = String(format:"%.1f", distance) + " miles away"
-        }
-        else{
+        }else{
             cell.distanceTxt.text = ""
         }
         return cell
