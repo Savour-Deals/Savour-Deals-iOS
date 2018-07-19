@@ -194,6 +194,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 extension AppDelegate: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        vendorsData.updateLocation(location: (locationManager?.location)!)
+        vendors = self.vendorsData.getVendors()
         if vendors.count > 0{
             vendorsData.updateDistances(location: (locationManager?.location)!)
             var rest = vendorsData.getVendors()
@@ -219,7 +221,6 @@ extension AppDelegate: CLLocationManagerDelegate {
             for place in nearby{
                 if self.monitoredRegions.count < 20 && !self.monitoredRegions.contains(where: { $0 === place }){
                     //monitor nearest 20 places
-                    // Your coordinates go here (lat, lon)
                     let geofenceRegionCenter = place.location?.coordinate
                     
                     /* Create a region centered on desired location,
