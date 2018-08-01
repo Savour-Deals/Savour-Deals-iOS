@@ -39,12 +39,12 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if Auth.auth().currentUser != nil {
-            // User is signed in.
+        if isUserVerified(user: Auth.auth().currentUser) {
+            // User is signed in and verified.
             self.gotoMain()
         }
         else {
-            // No user is signed in.
+            // No user is not verified or signed in.
             ref = Database.database().reference()
             FBSDKLoginManager().logOut()
             fbButton.delegate = self
@@ -136,37 +136,50 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
             // [START create_user]
             //let userDict = ["Username": username]
             Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
-            // [START_EXCLUDE]
-            if let error = error {
-                let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-            self.ref = Database.database().reference()
-            
-            self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
-            if let user = user {
-                let changeRequest = user.createProfileChangeRequest()
+                // [START_EXCLUDE]
+                user?.sendEmailVerification(completion: { (err) in
+                    if err != nil{
+                        print(err!)
+                    }
+                })
+                if let error = error {
+                    let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }
+                self.ref = Database.database().reference()
                 
-                changeRequest.displayName = name
-                //changeRequest.photoURL =
-                changeRequest.commitChanges { error in
-                    if error != nil {
-                        // An error happened.
-                    } else {
-                        // Profile updated.
+                self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
+                self.ref.child("Users").child(user!.uid).child("Email").setValue(email)
+                if let user = user {
+                    let changeRequest = user.createProfileChangeRequest()
+                    
+                    changeRequest.displayName = name
+                    //changeRequest.photoURL =
+                    changeRequest.commitChanges { error in
+                        if error != nil {
+                            // An error happened.
+                        } else {
+                            // Profile updated.
+                        }
                     }
                 }
+                let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertActionStyle.default, handler: { (alert: UIAlertAction!) in
+                    user?.sendEmailVerification(completion: { (err) in
+                        if err != nil{
+                            print(err!)
+                        }
+                    })
+                }))
+                self.present(alert, animated: true, completion: nil)
             }
-            
-            self.ref.child("Users").child(user!.uid).child("Onboarded").setValue("true")
-            self.gotoMain()
+            // [END_EXCLUDE]
         }
-        // [END_EXCLUDE]
-    }
-    // [END create_user]
-    else {
+        // [END create_user]
+        else {
             let alert = UIAlertController(title: "Alert", message: "Username or password can't be empty", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -203,21 +216,20 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                 print(error.debugDescription)
                 return
             }
-            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large)"])
+            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large), birthday"])
             
             graphRequest.start(completionHandler: { (connection, result, error) -> Void in
-                
                 if ((error) != nil)
                 {
                     print("Error: \(String(describing: error))")
                 }
                 else
                 {
-                    
                     data = result as! [String : AnyObject]
                     let name = data["name"] as! String
                     let id = data["id"] as! String
                     let email = data["email"] as! String
+                    let birthday = data["birthday"]
                     user?.updateEmail(to: email, completion: { (error) in
                         if ((error) != nil)
                         {
@@ -226,7 +238,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                     })
                     self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
                     self.ref.child("Users").child(user!.uid).child("FacebookID").setValue(id)
-                    
+                    self.ref.child("Users").child(user!.uid).child("Birthday").setValue(birthday)
                 }
             })
             self.doneLoading()

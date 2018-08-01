@@ -88,12 +88,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
                 locationManager?.startUpdatingLocation()
             }
            
-            if Auth.auth().currentUser != nil {
-                // User is signed in.
+            if isUserVerified(user: Auth.auth().currentUser){
+                // User is signed in and verified.
                 if let tabVC = self.window!.rootViewController as? UITabBarController{
                     tabVC.selectedIndex = 0
                 }else{
-                    // User is signed in.
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
                     tabVC.selectedIndex = 0
@@ -118,11 +117,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        if Auth.auth().currentUser != nil {
+        if isUserVerified(user: Auth.auth().currentUser){
+            // User is signed in and verified.
             if let tabVC = self.window!.rootViewController as? UITabBarController{
                 self.window!.rootViewController = tabVC
             }else{
-                // User is signed in.
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
                 tabVC.selectedIndex = 0
@@ -152,8 +151,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         //App entered through Forcetouch quick action
-        if Auth.auth().currentUser != nil {
-            // User is signed in.
+        if isUserVerified(user: Auth.auth().currentUser){
+            // User is signed in and verified.
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
             switch (shortcutItem.localizedTitle){
