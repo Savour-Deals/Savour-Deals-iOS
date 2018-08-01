@@ -52,10 +52,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
-        let user = Auth.auth().currentUser
-        if user == nil {
-            // No user is signed in.
-            self.performSegue(withIdentifier: "Onboarding", sender: self)
+        if !isUserVerified(user: Auth.auth().currentUser){
+            // User not verified or not signed in.
+            let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
+            let OnboardVC = storyboard.instantiateViewController(withIdentifier: "OnNav") as! UINavigationController
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.window!.rootViewController = OnboardVC
         }
         ref = Database.database().reference()
         ref.keepSynced(true)

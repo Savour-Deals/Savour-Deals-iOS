@@ -41,6 +41,7 @@
 		83802D721F2ED1FD00E315FB /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D701F2ED1FD00E315FB /* Onboarding.storyboard */; };
 		83802D741F2ED1FD00E315FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83802D731F2ED1FD00E315FB /* Assets.xcassets */; };
 		83802D771F2ED1FD00E315FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D751F2ED1FD00E315FB /* LaunchScreen.storyboard */; };
+		83899B5A210933AF009A72BC /* GoogleService-Info-PROD.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83899B59210933AF009A72BC /* GoogleService-Info-PROD.plist */; };
 		8397B2C41F951D3400EC392C /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8397B2C31F951D3400EC392C /* NotificationService.swift */; };
 		8397B2C81F951D3400EC392C /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		83BA5CCD1FFB3E6F009C7880 /* Acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */; };
@@ -126,6 +127,7 @@
 		83802D731F2ED1FD00E315FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83802D761F2ED1FD00E315FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83802D781F2ED1FD00E315FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83899B59210933AF009A72BC /* GoogleService-Info-PROD.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-PROD.plist"; sourceTree = "<group>"; };
 		8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8397B2C31F951D3400EC392C /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		8397B2C51F951D3400EC392C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				83E4839420D0BF08009B4C3B /* extensions.swift */,
 				836AFD0E20DCA5BA002DA873 /* ratingsHelper.swift */,
 				834F1A822045179E002AA6FD /* Location.gpx */,
+				83899B59210933AF009A72BC /* GoogleService-Info-PROD.plist */,
 				832E26FE1F86E642009B8277 /* GoogleService-Info.plist */,
 				83446AA71F3C067900CBE73E /* DealDetails */,
 				834C1E101F315172002D7198 /* Onboarding */,
@@ -478,6 +481,7 @@
 				83446AA91F3C06AB00CBE73E /* DealDetails.storyboard in Resources */,
 				83344FA620082F1900126465 /* OpenSans-Light.ttf in Resources */,
 				83344FA120082F1900126465 /* OpenSans-ExtraBold.ttf in Resources */,
+				83899B5A210933AF009A72BC /* GoogleService-Info-PROD.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

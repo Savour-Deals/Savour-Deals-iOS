@@ -39,12 +39,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if Auth.auth().currentUser != nil {
-            // User is signed in.
+        if isUserVerified(user: Auth.auth().currentUser){
+            // User is signed in or verified.
             self.gotoMain()
-        }
-        else {
-            // No user is signed in.
+        }else {
+            // user is not verified or signed in.
             setUpUI()
             ref = Database.database().reference()
             FBSDKLoginManager().logOut()
@@ -149,8 +148,25 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                         self.present(alert, animated: true, completion: nil)
                         return
                     }
-                    self.gotoMain()
-                    self.endLoggingin()
+                    if (user?.isEmailVerified)!{
+                        //Were gucci. They verified
+                        self.gotoMain()
+                        self.endLoggingin()
+                    }else{
+                        //not verified. Remind the user
+                        let alert = UIAlertController(title: "Unverified Account!", message: "Please check your email to verify your account. Then come back and try again.", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                        alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertActionStyle.default, handler: { (alert: UIAlertAction!) in
+                            user?.sendEmailVerification(completion: { (err) in
+                                if err != nil{
+                                    print(err!)
+                                }
+                            })
+                        }))
+                        self.present(alert, animated: true, completion: nil)
+                        self.endLoggingin()
+                    }
+
                 }
             // [END_EXCLUDE]
             }
@@ -185,7 +201,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 print(error.debugDescription)
                 return
             }
-            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large)"])
+            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large), birthday"])
             
             graphRequest.start(completionHandler: { (connection, result, error) -> Void in
                 
@@ -200,6 +216,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     let name = data["name"] as! String
                     let id = data["id"] as! String
                     let email = data["email"] as! String
+                    let birthday = data["birthday"]
                     user?.updateEmail(to: email, completion: { (error) in
                         if ((error) != nil)
                         {
@@ -208,6 +225,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     })
                     self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
                     self.ref.child("Users").child(user!.uid).child("FacebookID").setValue(id)
+                    self.ref.child("Users").child(user!.uid).child("Birthday").setValue(birthday)
 
                 }
             })
