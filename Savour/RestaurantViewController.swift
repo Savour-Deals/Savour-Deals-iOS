@@ -801,13 +801,7 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
             cell.FavButton.setImage(image, for: .normal)
             cell.FavButton.tintColor = UIColor.red
         }
-        if cell.deal.photo != ""{
-            // Reference to an image file in Firebase Storage
-            let storage = Storage.storage()
-            let storageref = storage.reference(forURL: cell.deal.photo!)
-            // Reference to an image file in Firebase Storage
-            let reference = storageref
-            
+        if cell.deal.photo != ""{            
             // UIImageView in your ViewController
             let imageView: UIImageView = cell.dealImg
             
@@ -815,7 +809,8 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
             let placeholderImage = UIImage(named: "placeholder.jpg")
             
             // Load the image using SDWebImage
-            imageView.sd_setImage(with: reference, placeholderImage: placeholderImage)
+            imageView.sd_setImage(with: URL(string: cell.deal.photo!), placeholderImage: placeholderImage)
+//            imageView.sd_setImage(with: URL(cell.deal.photo!), placeholderImage: placeholderImage)
         }
         if let viewWithTag = cell.insetView.viewWithTag(300){
             viewWithTag.removeFromSuperview()
