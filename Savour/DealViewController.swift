@@ -200,8 +200,8 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
                     if status.subscriptionStatus.userId != " "{
                         //Redundant following for user and rest
-                        Database.database().reference().child("Restaurants").child((self.thisVendor?.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
-                        Database.database().reference().child("Users").child(uID!).child("following").child((self.thisVendor?.id!)!).setValue(true)
+                        Database.database().reference().child("Vendors").child((self.thisVendor?.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
+                        Database.database().reference().child("Users").child(uID!).child("Following").child((self.thisVendor?.id!)!).setValue(true)
                     }
                     StoreReviewHelper().requestReview()
                 }
