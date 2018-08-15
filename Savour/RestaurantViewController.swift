@@ -79,7 +79,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = true
         ref.child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.childSnapshot(forPath: "following").hasChild((self.thisVendor.id)!){
+            if snapshot.childSnapshot(forPath: "Following").hasChild((self.thisVendor.id)!){
                 self.followString = "Following"
             }
             else{
@@ -95,7 +95,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     
     func loadData(){
         //Set overall restraunt info TODO: COMBINE THESE
-        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((thisVendor.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("Loyalty").child((thisVendor.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
                 let value = snapshot.value as? NSDictionary
                 self.loyaltyRedemptions = value?["count"] as? Int ?? 0
@@ -110,7 +110,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }
         ref.child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { (snapshot) in
             //let value = snapshot.value as? NSDictionary
-            if snapshot.childSnapshot(forPath: "following").hasChild((self.thisVendor.id)!){
+            if snapshot.childSnapshot(forPath: "Following").hasChild((self.thisVendor.id)!){
                 self.followString = "Following"
             }
             else{
@@ -118,7 +118,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             }
             self.reloadTable()
         })
-        ref.child("Restaurants").child((thisVendor.id)!).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Vendors").child((thisVendor.id)!).observeSingleEvent(of: .value, with: { (snapshot) in
             self.rName.text = self.thisVendor.name
             
             if self.thisVendor.photo != ""{
@@ -351,13 +351,13 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
             //Redundant following for user and rest
-            Database.database().reference().child("Restaurants").child((self.thisVendor.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
-            Database.database().reference().child("Users").child(uID!).child("following").child(self.thisVendor.id!).setValue(true)
+            Database.database().reference().child("Vendors").child((self.thisVendor.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
+            Database.database().reference().child("Users").child(uID!).child("Following").child(self.thisVendor.id!).setValue(true)
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
             successAlert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {(_) in
                 OneSignal.sendTags([(self.thisVendor.id)! : "true"])
                 self.redemptionTime = Date().timeIntervalSince1970
-                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("Loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 self.followString = "Following"
                 self.restaurantTable.reloadData()
             }))
@@ -525,8 +525,8 @@ class buttonCell: UITableViewCell {
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
             //Redundant following for user and rest
-            Database.database().reference().child("Restaurants").child(rID!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
-            Database.database().reference().child("Users").child(uID!).child("following").child(rID!).setValue(true)
+            Database.database().reference().child("Vendors").child(rID!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
+            Database.database().reference().child("Users").child(uID!).child("Following").child(rID!).setValue(true)
             OneSignal.sendTags([(rID)! : "true"])
             self.mainView.followString = "Following"
             self.mainView.restaurantTable.reloadData()
@@ -555,8 +555,8 @@ class buttonCell: UITableViewCell {
     func unfollow(){
         let uID = Auth.auth().currentUser?.uid
         //Redundant unfollowing for user and rest
-        Database.database().reference().child("Restaurants").child(rID!).child("Followers").child(uID!).removeValue()
-        Database.database().reference().child("Users").child(uID!).child("following").child(rID!).removeValue()
+        Database.database().reference().child("Vendors").child(rID!).child("Followers").child(uID!).removeValue()
+        Database.database().reference().child("Users").child(uID!).child("Following").child(rID!).removeValue()
         OneSignal.sendTags([rID! : "false"])
         self.mainView.followString = "Follow"
         self.followButton.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
@@ -760,36 +760,7 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
         }else{
             cell.timeLabel.textAlignment = .left
             cell.FavButton.isHidden = false
-            let start = Date(timeIntervalSince1970: cell.deal.startTime!)
-            let end = Date(timeIntervalSince1970: cell.deal.endTime!)
-            let current = Date()
-            var isInInterval = false
-            if #available(iOS 10.0, *) {
-                let interval  =  DateInterval(start: start as Date, end: end as Date)
-                isInInterval = interval.contains(current)
-            } else {
-                isInInterval = current.timeIntervalSince1970 > start.timeIntervalSince1970 && current.timeIntervalSince1970 < end.timeIntervalSince1970
-            }
-            if (isInInterval){
-                let cal = Calendar.current
-                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: end)
-                var leftTime = ""
-                if Components.day! != 0{
-                    leftTime = leftTime + String(describing: Components.day!) + " days left"
-                }
-                else if Components.hour! != 0{
-                    leftTime = leftTime + String(describing: Components.hour!) + "hours left"
-                }else{
-                    leftTime = leftTime + String(describing: Components.minute!) + "minutes left"
-                }
-                cell.timeLabel.text = leftTime
-            }else if (current > end){
-                cell.timeLabel.text = "Deal Ended"
-            }else{
-                let cal = Calendar.current
-                let Components = cal.dateComponents([.day, .hour, .minute], from: current, to: start)
-                cell.timeLabel.text = "Starts in " + String(describing: Components.day!) + "days"
-            }
+            cell.timeLabel.text = cell.deal.countdown
         }
         cell.validHours.text = cell.deal.activeHours
         if cell.deal.favorited!{
@@ -810,7 +781,6 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
             
             // Load the image using SDWebImage
             imageView.sd_setImage(with: URL(string: cell.deal.photo!), placeholderImage: placeholderImage)
-//            imageView.sd_setImage(with: URL(cell.deal.photo!), placeholderImage: placeholderImage)
         }
         if let viewWithTag = cell.insetView.viewWithTag(300){
             viewWithTag.removeFromSuperview()

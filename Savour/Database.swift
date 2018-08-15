@@ -64,14 +64,14 @@ class DealsData{
             favLoaded = true
             let vendorGroup = DispatchGroup()
             var vendorLoaded = false
-            let geofireRef = Database.database().reference().child("Restaurants_Location")
+            let geofireRef = Database.database().reference().child("Vendors_Location")
             self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: 80.5)
             vendorGroup.enter()
             self.geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
                 if !vendorLoaded{
                     vendorGroup.enter()
                 }
-                Database.database().reference().child("Restaurants").queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
+                Database.database().reference().child("Vendors").queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
                     for child in snapshot.children{
                         let snap = child as! DataSnapshot
                         self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: locationManager.location)
@@ -315,8 +315,8 @@ class VendorsData{
     
     init(completion: @escaping (Bool) -> Void){
         locationManager.startUpdatingLocation()
-        let ref = Database.database().reference().child("Restaurants")
-        let geofireRef = Database.database().reference().child("Restaurants_Location")
+        let ref = Database.database().reference().child("Vendors")
+        let geofireRef = Database.database().reference().child("Vendors_Location")
         var count = 0
         if let location = locationManager.location{
             geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: 80.5)
@@ -696,7 +696,6 @@ class VendorData{
             self.description = value["Desc"] as? String ?? ""
             self.address = value["Address"] as? String ?? ""
             self.menu = value["Menu"] as? String ?? ""
-            self.photo = value["Photo"] as? String ?? ""
             
             //        if (snap?.childSnapshot(forPath: "HappyHours").childrenCount)! > 0 {
             //            let hoursSnapshot = snap?.childSnapshot(forPath: "HappyHours").value as? NSDictionary
@@ -718,14 +717,16 @@ class VendorData{
                 self.dailyHours.append(hoursSnapshot?["Fri"] as? String ?? "")
                 self.dailyHours.append(hoursSnapshot?["Sat"] as? String ?? "")
             }
-            if (snap?.childSnapshot(forPath: "loyalty").exists())!{
-                let loyaltySnapshot = snap?.childSnapshot(forPath: "loyalty").value as? NSDictionary
+            if (snap?.childSnapshot(forPath: "Loyalty/loyaltyDeal").exists())!{
+                let loyaltySnapshot = snap?.childSnapshot(forPath: "Loyalty").value as? NSDictionary
                 let code = loyaltySnapshot!["loyaltyCode"] as? String ?? ""
                 let deal = loyaltySnapshot!["loyaltyDeal"] as? String ?? ""
                 let count = loyaltySnapshot!["loyaltyCount"] as? Int ?? -1
                 let pointsDict = loyaltySnapshot!["loyaltyPoints"] as? NSDictionary
                 loyalty = loyaltyStruct(code: code, deal: deal, count: count, dict: pointsDict!)
-            }else{loyalty = loyaltyStruct()}
+            }else{
+                loyalty = loyaltyStruct()
+            }
             if location != nil{//If we already have location from firebase
                 self.location = location
                 self.distanceMiles = (location?.distance(from: myLocation!))!/1609
