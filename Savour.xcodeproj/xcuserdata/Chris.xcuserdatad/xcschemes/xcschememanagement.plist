@@ -6,17 +6,19 @@
 	<dict>
 		<key>OneSignalNotificationServiceExtension.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>18</integer>
-		</dict>
-		<key>Savour 2.xcscheme</key>
-		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>19</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>836AFD2220DDAF85002DA873</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>83802D681F2ED1FD00E315FB</key>
 		<dict>
 			<key>primary</key>

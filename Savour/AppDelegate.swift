@@ -28,7 +28,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var canSendNoti = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
+        var filePath:String!
+        #if DEBUG
+        print("[FIREBASE] Development mode.")
+        filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist", inDirectory: "Debug")
+        #else
+        print("[FIREBASE] Production mode.")
+        filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist", inDirectory: "Release")
+        #endif
+        
+        let options = FirebaseOptions.init(contentsOfFile: filePath)!
+        FirebaseApp.configure(options: options)
         
         let notificationOpenedBlock: OSHandleNotificationActionBlock = { result in
             let payload: OSNotificationPayload = result!.notification.payload

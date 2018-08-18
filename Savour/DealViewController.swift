@@ -13,6 +13,7 @@ import FirebaseStorage
 import FirebaseAuth
 import OneSignal
 import CoreLocation
+import FirebaseFunctions
 
 
 
@@ -35,6 +36,8 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
     var thisVendor: VendorData?
     var locationManager: CLLocationManager!
     var userLocation: CLLocation!
+    lazy var functions = Functions.functions()
+
     
     @IBOutlet weak var restaurantLabel: UILabel!
     @IBOutlet weak var code: UILabel!
@@ -179,8 +182,21 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                 let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
                     let currTime = Date().timeIntervalSince1970
                     let uID = Auth.auth().currentUser?.uid
+                    
+                    //Note redemption time
                     let ref = Database.database().reference().child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
                     ref.setValue(currTime)
+                    
+                    //Call Firebase cloud functions to increment stripe counter
+                    self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId]) { (result, error) in
+                        if let _ = error as NSError? {
+                            //error handle
+                        }
+                        if let text = (result?.data as? [String: Any])?["text"] as? String {
+                            print(text)
+                        }
+                    }
+                    
                     //set and draw checkmark
                     self.redeemIndicator(color: UIColor.green.cgColor)
                     

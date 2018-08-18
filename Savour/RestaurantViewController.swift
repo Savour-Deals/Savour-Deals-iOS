@@ -16,6 +16,8 @@ import OneSignal
 import AVFoundation
 import GTProgressBar
 import SafariServices
+import FirebaseFunctions
+
 
 
 class RestaurantViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -35,6 +37,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     var redemptionTime: Double!
     var expandedCells: [Bool] = [false, false]
     var followButton: UIButton!
+    lazy var functions = Functions.functions()
     
     @IBOutlet weak var overview: UIView!
     @IBOutlet weak var ContentView: UIView!
@@ -79,7 +82,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = true
         ref.child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { (snapshot) in
-            if snapshot.childSnapshot(forPath: "Following").hasChild((self.thisVendor.id)!){
+            if snapshot.childSnapshot(forPath: "following").hasChild((self.thisVendor.id)!){
                 self.followString = "Following"
             }
             else{
@@ -95,7 +98,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     
     func loadData(){
         //Set overall restraunt info TODO: COMBINE THESE
-        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("Loyalty").child((thisVendor.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((thisVendor.id)!).child("redemptions").observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
                 let value = snapshot.value as? NSDictionary
                 self.loyaltyRedemptions = value?["count"] as? Int ?? 0
@@ -110,7 +113,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }
         ref.child("Users").child((Auth.auth().currentUser?.uid)!).observeSingleEvent(of: .value, with: { (snapshot) in
             //let value = snapshot.value as? NSDictionary
-            if snapshot.childSnapshot(forPath: "Following").hasChild((self.thisVendor.id)!){
+            if snapshot.childSnapshot(forPath: "following").hasChild((self.thisVendor.id)!){
                 self.followString = "Following"
             }
             else{
@@ -154,15 +157,15 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }else if indexPath.row == 1{
             return UITableViewAutomaticDimension
         }else if indexPath.row == 2{
-            if self.thisVendor.hoursArray.count > 0{
-                if expandedCells[1]{
-                    return UITableViewAutomaticDimension
-                }else {
-                    return 60
-                }
-            }else{
+//            if self.thisVendor.hoursArray.count > 0{
+//                if expandedCells[1]{
+//                    return UITableViewAutomaticDimension
+//                }else {
+//                    return 60
+//                }
+//            }else{
                 return 0
-            }
+//            }
         }else if indexPath.row == 3{
             if self.thisVendor.loyalty.loyaltyCount > 0{
                 return UITableViewAutomaticDimension
@@ -236,33 +239,33 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         }
         else if indexPath.row == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! happyHourCell
-            if self.thisVendor.hoursArray.count > 0{
-                let thisHoursArray = self.thisVendor.hoursArray
-                let mutableAttributedString = NSMutableAttributedString()
-                let leftAlign = NSMutableParagraphStyle()
-                leftAlign.alignment = .left
-                let attrs = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy), NSAttributedStringKey.paragraphStyle: leftAlign]
-                let header = NSMutableAttributedString(string:"Happy Hours\n", attributes:attrs)
-                var hours = "Monday: " + thisHoursArray[0] + "\n"
-                hours = hours + "Tuesday: " + thisHoursArray[1] + "\n"
-                hours = hours + "Wednesday: " + thisHoursArray[2] + "\n"
-                hours = hours + "Thursday: " + thisHoursArray[3] + "\n"
-                hours = hours + "Friday: " + thisHoursArray[4] + "\n"
-                hours = hours + "Saturday: " + thisHoursArray[5] + "\n"
-                hours = hours + "Sunday: " + thisHoursArray[6] + "\n"
-                let center = NSMutableParagraphStyle()
-                center.alignment = .center
-                let attrs1 = [NSAttributedStringKey.foregroundColor : UIColor.darkGray, NSAttributedStringKey.paragraphStyle: center, NSAttributedStringKey.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.regular)]
-                let hourCenter = NSMutableAttributedString(string:hours, attributes:attrs1)
-                mutableAttributedString.append(header)
-                mutableAttributedString.append(hourCenter)
-                cell.happyhours.attributedText = mutableAttributedString
-                if expandedCells[1]{
-                    cell.show.text = "Hide hours..."
-                }else{
-                    cell.show.text = "Show hours..."
-                }
-            }
+//            if self.thisVendor.hoursArray.count > 0{
+//                let thisHoursArray = self.thisVendor.hoursArray
+//                let mutableAttributedString = NSMutableAttributedString()
+//                let leftAlign = NSMutableParagraphStyle()
+//                leftAlign.alignment = .left
+//                let attrs = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy), NSAttributedStringKey.paragraphStyle: leftAlign]
+//                let header = NSMutableAttributedString(string:"Happy Hours\n", attributes:attrs)
+//                var hours = "Monday: " + thisHoursArray[0] + "\n"
+//                hours = hours + "Tuesday: " + thisHoursArray[1] + "\n"
+//                hours = hours + "Wednesday: " + thisHoursArray[2] + "\n"
+//                hours = hours + "Thursday: " + thisHoursArray[3] + "\n"
+//                hours = hours + "Friday: " + thisHoursArray[4] + "\n"
+//                hours = hours + "Saturday: " + thisHoursArray[5] + "\n"
+//                hours = hours + "Sunday: " + thisHoursArray[6] + "\n"
+//                let center = NSMutableParagraphStyle()
+//                center.alignment = .center
+//                let attrs1 = [NSAttributedStringKey.foregroundColor : UIColor.darkGray, NSAttributedStringKey.paragraphStyle: center, NSAttributedStringKey.font : UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.regular)]
+//                let hourCenter = NSMutableAttributedString(string:hours, attributes:attrs1)
+//                mutableAttributedString.append(header)
+//                mutableAttributedString.append(hourCenter)
+//                cell.happyhours.attributedText = mutableAttributedString
+//                if expandedCells[1]{
+//                    cell.show.text = "Hide hours..."
+//                }else{
+//                    cell.show.text = "Show hours..."
+//                }
+//            }
             return cell
         }
         else if indexPath.row == 3{
@@ -328,6 +331,15 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
                 self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
                 self.redemptionTime = 0
+                //Call Firebase cloud functions to increment stripe counter
+                self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId]) { (result, error) in
+                    if let _ = error as NSError? {
+                        //error handle
+                    }
+                    if let text = (result?.data as? [String: Any])?["text"] as? String {
+                        print(text)
+                    }
+                }
                 self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 sender.setTitle("Loyalty Check-In", for: .normal)
                 self.restaurantTable.reloadData()
@@ -351,13 +363,13 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
             //Redundant following for user and rest
-            Database.database().reference().child("Vendors").child((self.thisVendor.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
-            Database.database().reference().child("Users").child(uID!).child("Following").child(self.thisVendor.id!).setValue(true)
+            Database.database().reference().child("Vendors").child((self.thisVendor.id)!).child("followers").child(uID!).setValue(status.subscriptionStatus.userId)
+            Database.database().reference().child("Users").child(uID!).child("following").child(self.thisVendor.id!).setValue(true)
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
             successAlert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {(_) in
                 OneSignal.sendTags([(self.thisVendor.id)! : "true"])
                 self.redemptionTime = Date().timeIntervalSince1970
-                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("Loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 self.followString = "Following"
                 self.restaurantTable.reloadData()
             }))
@@ -525,8 +537,8 @@ class buttonCell: UITableViewCell {
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
             //Redundant following for user and rest
-            Database.database().reference().child("Vendors").child(rID!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
-            Database.database().reference().child("Users").child(uID!).child("Following").child(rID!).setValue(true)
+            Database.database().reference().child("Vendors").child(rID!).child("followers").child(uID!).setValue(status.subscriptionStatus.userId)
+            Database.database().reference().child("Users").child(uID!).child("following").child(rID!).setValue(true)
             OneSignal.sendTags([(rID)! : "true"])
             self.mainView.followString = "Following"
             self.mainView.restaurantTable.reloadData()
@@ -555,8 +567,8 @@ class buttonCell: UITableViewCell {
     func unfollow(){
         let uID = Auth.auth().currentUser?.uid
         //Redundant unfollowing for user and rest
-        Database.database().reference().child("Vendors").child(rID!).child("Followers").child(uID!).removeValue()
-        Database.database().reference().child("Users").child(uID!).child("Following").child(rID!).removeValue()
+        Database.database().reference().child("Vendors").child(rID!).child("followers").child(uID!).removeValue()
+        Database.database().reference().child("Users").child(uID!).child("following").child(rID!).removeValue()
         OneSignal.sendTags([rID! : "false"])
         self.mainView.followString = "Follow"
         self.followButton.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
@@ -724,14 +736,14 @@ class CollectionDealCell: UICollectionViewCell{
         //If favorite star was hit, add or remove to favorites
         if deal.favorited!{
             deal.favorited = false
-            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.id!).removeValue()
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("favorites").child(deal.id!).removeValue()
             let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
             FavButton.setImage(image, for: .normal)
             FavButton.tintColor = UIColor.red
         }
         else{
             deal.favorited = true
-            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.id!).setValue(deal.id!)
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("favorites").child(deal.id!).setValue(deal.id!)
             let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
             FavButton.setImage(image, for: .normal)
             FavButton.tintColor = UIColor.red

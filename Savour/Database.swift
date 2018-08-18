@@ -40,7 +40,7 @@ class DealsData{
         var favLoaded = false
         self.ref.keepSynced(true)
         favGroup.enter()
-        self.ref.child("Users").child(self.userid!).child("Favorites").observe(.value, with: { (snapshot) in
+        self.ref.child("Users").child(self.userid!).child("favorites").observe(.value, with: { (snapshot) in
             if let dictionary = snapshot.children.allObjects as? [DataSnapshot] {
                 self.favoriteIDs.removeAll()
                 for fav in dictionary{
@@ -113,7 +113,7 @@ class DealsData{
                 }
                 for vendor in self.vendors {
                     dealGroup.enter()
-                    self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: vendor.key).observe(.value, with: { (snapshot) in
+                    self.ref.child("Deals").queryOrdered(byChild: "r_id").queryEqual(toValue: vendor.key).observe(.value, with: { (snapshot) in
                         for entry in snapshot.children {
                             let snap = entry as! DataSnapshot
                             if let _ = snap.value{
@@ -167,7 +167,7 @@ class DealsData{
     
     func queryDeals(forEnteredVendor vendor: VendorData){
         let expiredUnix = Date().timeIntervalSince1970
-        self.ref.child("Deals").queryOrdered(byChild: "rID").queryEqual(toValue: vendor.id).observe(.value, with: { (snapshot) in
+        self.ref.child("Deals").queryOrdered(byChild: "r_id").queryEqual(toValue: vendor.id).observe(.value, with: { (snapshot) in
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot
                 if let _ = snap.value{
@@ -424,13 +424,13 @@ class DealData{
         }
         else{
             let value = snap?.value as! NSDictionary
-            self.rID = value["rID"] as? String ?? ""
-            self.name = value["rName"] as? String ?? ""
-            self.dealDescription = value["dealDesc"] as? String ?? ""
+            self.rID = value["r_id"] as? String ?? ""
+            self.name = value["r_name"] as? String ?? ""
+            self.dealDescription = value["deal_description"] as? String ?? ""
             self.photo = value["photo"] as? String ?? ""
-            self.endTime = value["EndTime"] as? Double
-            self.startTime = value["StartTime"] as? Double
-            self.type = value["Filter"] as? String ?? ""
+            self.endTime = value["end_time"] as? Double
+            self.startTime = value["start_time"] as? Double
+            self.type = value["filter"] as? String ?? ""
             self.id = snap?.key
             self.code = value["code"] as? String ?? ""
             if let redeemValue = value["redeemed"] as? NSDictionary{
@@ -458,14 +458,14 @@ class DealData{
             //set distance from location
             self.distanceMiles = (vendors[self.rID!]?.location?.distance(from: locationManager.location!))!/1609
             //set days deal is active
-            let activeSnapshot = snap?.childSnapshot(forPath: "activeDays").value as? NSDictionary
-            self.activeDays.append(activeSnapshot?["Sun"] as? Bool ?? false)
-            self.activeDays.append(activeSnapshot?["Mon"] as? Bool ?? false)
-            self.activeDays.append(activeSnapshot?["Tues"] as? Bool ?? false)
-            self.activeDays.append(activeSnapshot?["Wed"] as? Bool ?? false)
-            self.activeDays.append(activeSnapshot?["Thurs"] as? Bool ?? false)
-            self.activeDays.append(activeSnapshot?["Fri"] as? Bool ?? false)
-            self.activeDays.append(activeSnapshot?["Sat"] as? Bool ?? false)
+            let activeSnapshot = snap?.childSnapshot(forPath: "active_days").value as? NSDictionary
+            self.activeDays.append(activeSnapshot?["sun"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["mon"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["tues"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["wed"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["thur"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["fri"] as? Bool ?? false)
+            self.activeDays.append(activeSnapshot?["sat"] as? Bool ?? false)
             let start = Date(timeIntervalSince1970: self.startTime!)
             let end = Date(timeIntervalSince1970: self.endTime!)
             let calendar = Calendar.current
@@ -662,8 +662,7 @@ class VendorData{
     var location: CLLocation?
     var distanceMiles: Double?
     var menu: String?
-    var followers: Int?
-    var hoursArray = [String]()
+    var subscriptionId: String?
     var dailyHours = [String]()
     struct loyaltyStruct{
         var loyaltyCode: String
@@ -676,13 +675,13 @@ class VendorData{
             self.loyaltyCode = code
             self.loyaltyDeal = deal
             if code != ""{
-                self.loyaltyPoints.append(dict["Sun"] as? Int ?? 0)
-                self.loyaltyPoints.append(dict["Mon"] as? Int ?? 0)
-                self.loyaltyPoints.append(dict["Tues"] as? Int ?? 0)
-                self.loyaltyPoints.append(dict["Wed"] as? Int ?? 0)
-                self.loyaltyPoints.append(dict["Thurs"] as? Int ?? 0)
-                self.loyaltyPoints.append(dict["Fri"] as? Int ?? 0)
-                self.loyaltyPoints.append(dict["Sat"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["sun"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["mon"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["tues"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["wed"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["thurs"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["fri"] as? Int ?? 0)
+                self.loyaltyPoints.append(dict["sat"] as? Int ?? 0)
             }
         }
     }
@@ -691,38 +690,28 @@ class VendorData{
     init(snap: DataSnapshot? = nil, ID: String, location: CLLocation? = nil, myLocation: CLLocation? = nil) {
         if let value = snap?.value as? NSDictionary{
             self.id = ID
-            self.name = value["Name"] as? String ?? ""
-            self.photo = value["Photo"] as? String ?? ""
-            self.description = value["Desc"] as? String ?? ""
-            self.address = value["Address"] as? String ?? ""
-            self.menu = value["Menu"] as? String ?? ""
-            
-            //        if (snap?.childSnapshot(forPath: "HappyHours").childrenCount)! > 0 {
-            //            let hoursSnapshot = snap?.childSnapshot(forPath: "HappyHours").value as? NSDictionary
-            //            self.hoursArray.append(hoursSnapshot?["Mon"] as? String ?? "No Happy Hour")
-            //            self.hoursArray.append(hoursSnapshot?["Tues"] as? String ?? "No Happy Hour")
-            //            self.hoursArray.append(hoursSnapshot?["Wed"] as? String ?? "No Happy Hour")
-            //            self.hoursArray.append(hoursSnapshot?["Thurs"] as? String ?? "No Happy Hour")
-            //            self.hoursArray.append(hoursSnapshot?["Fri"] as? String ?? "No Happy Hour")
-            //            self.hoursArray.append(hoursSnapshot?["Sat"] as? String ?? "No Happy Hour")
-            //            self.hoursArray.append(hoursSnapshot?["Sun"] as? String ?? "No Happy Hour")
-            //        }
-            if (snap?.childSnapshot(forPath: "DailyHours").childrenCount)! > 0 {
-                let hoursSnapshot = snap?.childSnapshot(forPath: "DailyHours").value as? NSDictionary
-                self.dailyHours.append(hoursSnapshot?["Sun"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["Mon"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["Tues"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["Wed"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["Thurs"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["Fri"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["Sat"] as? String ?? "")
+            self.name = value["name"] as? String ?? ""
+            self.photo = value["photo"] as? String ?? ""
+            self.description = value["description"] as? String ?? ""
+            self.address = value["address"] as? String ?? ""
+            self.menu = value["menu"] as? String ?? ""
+            self.subscriptionId = value["subscription_id"] as? String ?? ""
+            if (snap?.childSnapshot(forPath: "daily_hours").childrenCount)! > 0 {
+                let hoursSnapshot = snap?.childSnapshot(forPath: "daily_hours").value as? NSDictionary
+                self.dailyHours.append(hoursSnapshot?["sun"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["mon"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["tues"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["wed"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["thurs"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["fri"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["sat"] as? String ?? "")
             }
-            if (snap?.childSnapshot(forPath: "Loyalty/loyaltyDeal").exists())!{
-                let loyaltySnapshot = snap?.childSnapshot(forPath: "Loyalty").value as? NSDictionary
-                let code = loyaltySnapshot!["loyaltyCode"] as? String ?? ""
-                let deal = loyaltySnapshot!["loyaltyDeal"] as? String ?? ""
-                let count = loyaltySnapshot!["loyaltyCount"] as? Int ?? -1
-                let pointsDict = loyaltySnapshot!["loyaltyPoints"] as? NSDictionary
+            if (snap?.childSnapshot(forPath: "loyalty/loyalty_deal").exists())!{
+                let loyaltySnapshot = snap?.childSnapshot(forPath: "loyalty").value as? NSDictionary
+                let code = loyaltySnapshot!["loyalty_code"] as? String ?? ""
+                let deal = loyaltySnapshot!["loyalty_deal"] as? String ?? ""
+                let count = loyaltySnapshot!["loyalty_count"] as? Int ?? -1
+                let pointsDict = loyaltySnapshot!["loyalty_points"] as? NSDictionary
                 loyalty = loyaltyStruct(code: code, deal: deal, count: count, dict: pointsDict!)
             }else{
                 loyalty = loyaltyStruct()

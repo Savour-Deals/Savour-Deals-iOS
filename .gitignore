@@ -1,5 +1,5 @@
 Savour/info.plist
 Savour/GoogleService-info.plist
 Savour/location.gpx
-Savour/GoogleService-info-PROD.plist
-Savour/GoogleService-info-TEST.plist
+Savour/Debug/GoogleService-info.plist
+Savour/Release/GoogleService-info.plist
