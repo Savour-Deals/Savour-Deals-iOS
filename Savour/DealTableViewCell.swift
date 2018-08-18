@@ -116,14 +116,14 @@ class DealTableViewCell: UITableViewCell {
     @IBAction func likePressed(_ sender: Any) {
         if deal.favorited!{
             deal.favorited = false
-            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.id!).removeValue()
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("favories").child(deal.id!).removeValue()
             let image = #imageLiteral(resourceName: "icons8-like").withRenderingMode(.alwaysTemplate)
             likeButton.setImage(image, for: .normal)
             likeButton.tintColor = UIColor.red
         }
         else{
             deal.favorited = true
-            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Favorites").child(deal.id!).setValue(deal.id!)
+            Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("favorites").child(deal.id!).setValue(deal.id!)
             let image = #imageLiteral(resourceName: "icons8-like_filled.png").withRenderingMode(.alwaysTemplate)
             likeButton.setImage(image, for: .normal)
             likeButton.tintColor = UIColor.red

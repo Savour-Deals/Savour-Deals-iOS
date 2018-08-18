@@ -159,7 +159,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             if let indexPath = FavTable.indexPathForRow(at: point) {
                 let cell = FavTable.cellForRow(at: indexPath) as? DealTableViewCell
                 let user = Auth.auth().currentUser?.uid
-                Database.database().reference().child("Users").child(user!).child("Favorites").child((cell?.deal.id!)!).removeValue()
+                Database.database().reference().child("Users").child(user!).child("favorites").child((cell?.deal.id!)!).removeValue()
                 favDeals.remove(at: indexPath.item)
                 self.FavTable.reloadData()
                 if favDeals.count < 2 && favDeals.count > 0{

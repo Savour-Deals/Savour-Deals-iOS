@@ -452,9 +452,8 @@
                                             <action selector="infoPressed:" destination="U9a-dB-aq3" eventType="touchUpInside" id="cYl-b3-uIo"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
-                                        <rect key="frame" x="20" y="543.66666666666663" width="374" height="57.333333333333371"/>
-                                        <string key="text">For dine in and carry out only. This deal is only valid for one person. BOGO free items are for equal or lesser value. If the vendor does not accept this deal, please go to your account page and contact us to report them. </string>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For dine in and carry out only. This deal is only valid for one person. BOGO free items are for equal or lesser value." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
+                                        <rect key="frame" x="20" y="572.33333333333337" width="374" height="28.666666666666629"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>

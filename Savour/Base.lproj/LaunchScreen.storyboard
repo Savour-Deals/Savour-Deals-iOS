@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -8,6 +8,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -20,28 +21,28 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RNFetchBlobTmp_9go1vow2t212cuy0l9qof" translatesAutoresizingMaskIntoConstraints="NO" id="Wsh-xt-2Oo">
-                                <rect key="frame" x="-0.5" y="-0.5" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="-184" width="414" height="1104"/>
                             </imageView>
                             <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Savour_Deals_White" translatesAutoresizingMaskIntoConstraints="NO" id="Mgc-Mg-chJ">
-                                <rect key="frame" x="26" y="-40" width="323" height="418"/>
+                                <rect key="frame" x="30" y="139.33333333333334" width="354" height="457.33333333333326"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Mgc-Mg-chJ" secondAttribute="height" multiplier="17:22" id="Bci-p3-ild"/>
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="Mgc-Mg-chJ" secondAttribute="trailing" constant="10" id="Rv9-yd-so4"/>
                             <constraint firstItem="Mgc-Mg-chJ" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="10" id="SUL-xe-HyL"/>
-                            <constraint firstItem="Wsh-xt-2Oo" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height" id="h6U-au-F9U"/>
+                            <constraint firstItem="Mgc-Mg-chJ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="gyV-Qr-a7G"/>
+                            <constraint firstItem="Wsh-xt-2Oo" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height" multiplier="1.5" id="h6U-au-F9U"/>
                             <constraint firstItem="Wsh-xt-2Oo" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="lrG-lU-gwN"/>
                             <constraint firstItem="Wsh-xt-2Oo" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="nmA-Ja-QgS"/>
-                            <constraint firstItem="Mgc-Mg-chJ" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-60" id="s7d-Nd-Mwg"/>
                             <constraint firstItem="Wsh-xt-2Oo" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" id="z1z-xe-Jgc"/>
                         </constraints>
                     </view>

@@ -37,7 +37,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             tableView.contentInsetAdjustmentBehavior = .never
         }
         let user = Auth.auth().currentUser
-        let ref = Database.database().reference().child("Users").child((user?.uid)!).child("FacebookID")
+        let ref = Database.database().reference().child("Users").child((user?.uid)!).child("facebook_id")
         self.friendsText = "Click here to invite your friends to Savour Deals!"
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.exists(){
