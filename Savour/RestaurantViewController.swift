@@ -332,7 +332,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
                 self.redemptionTime = 0
                 //Call Firebase cloud functions to increment stripe counter
-                self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId]) { (result, error) in
+                self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId, "increment_count":"2"]) { (result, error) in
                     if let _ = error as NSError? {
                         //error handle
                     }

@@ -64,7 +64,7 @@ class VendorMapViewController: UIViewController{
         requestLocationAccess()
     }
 
-    func requestLocationAccess() {
+    @objc func requestLocationAccess() {
         let status = CLLocationManager.authorizationStatus()
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
@@ -74,7 +74,7 @@ class VendorMapViewController: UIViewController{
             DispatchQueue.global().sync {
                 tabBarController.dealSetup(completion: { (success) in
                     //Allow us to refresh when opened from background
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.locationEnabled), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
                     //Finish view setup
                     tabBarController.tabBar.isUserInteractionEnabled = true
                     UIViewController.removeSpinner(spinner: self.sv)
@@ -92,25 +92,32 @@ class VendorMapViewController: UIViewController{
         NotificationCenter.default.removeObserver(self)
     }
     
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        //callback to know when the user accepts or denies location services
+        if status == CLAuthorizationStatus.denied {
+            locationDisabled()
+        }else if status == .authorizedAlways || status == .authorizedWhenInUse  {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                if !tabBarController.finishedSetup{
+                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                }
+            }
+            DispatchQueue.global().sync {
+                tabBarController.dealSetup(completion: { (success) in
+                    self.locationEnabled()
+                })
+            }
+        }
+    }
+    
     func locationDisabled(){
         self.listVC.searchBar.isHidden = true
         listVC.listTable.isHidden = true
-        let label = UILabel()
-        label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
-        label.text = "To use this feature, you must turn on location in:\n\n Settings -> Savour -> Location"
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.numberOfLines = 0
-        label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.tag = 100
-        self.listView.addSubview(label)
-        var constraints = [NSLayoutConstraint]()
-        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
-        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
-        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
-        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
-        NSLayoutConstraint.activate(constraints)
+        self.listVC.locationText.isHidden = false
+        UIViewController.removeSpinner(spinner: self.sv)
+
     }
     
     @objc func locationEnabled(){
@@ -118,10 +125,13 @@ class VendorMapViewController: UIViewController{
             if let _ = self.listView.viewWithTag(100){
                 self.listView.viewWithTag(100)?.removeFromSuperview()
             }
+            self.listVC.locationText.isHidden = true
+            self.listVC.listTable.isHidden = false
             self.listVC.searchBar.isHidden = false
             self.getData()
         }
     }
+    
     
     func showList(){
         listView.isHidden = false
@@ -158,7 +168,7 @@ class VendorMapViewController: UIViewController{
         }
     }
     
-    @objc func refreshData() {
+    func refreshData() {
        getData()
     }
     
@@ -226,8 +236,10 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
     @IBAction func centerMap(_ sender: Any) {
-        let viewRegion = MKCoordinateRegionMakeWithDistance((locationManager.location?.coordinate)!, 1000, 1000)
-        mapView.setRegion(viewRegion, animated: true)
+        if let _ = locationManager.location?.coordinate{
+            let viewRegion = MKCoordinateRegionMakeWithDistance((locationManager.location?.coordinate)!, 1000, 1000)
+            mapView.setRegion(viewRegion, animated: true)
+        }
     }
     
     func makeAnnotations(){
@@ -305,11 +317,13 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     var statusBar: UIView!
     @IBOutlet weak var noRest: UILabel!
     private let refreshControl = UIRefreshControl()
+    @IBOutlet weak var locationText: UILabel!
     var parentView: VendorMapViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         storageRef = Storage.storage()
+        self.locationText.text = "To use this feature, you must turn on location in:\n\n Settings -> Savour -> Location"
         // Add Refresh Control to Table View
         if #available(iOS 10.0, *) {
             listTable.refreshControl = refreshControl

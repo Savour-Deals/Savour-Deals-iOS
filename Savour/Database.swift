@@ -113,7 +113,7 @@ class DealsData{
                 }
                 for vendor in self.vendors {
                     dealGroup.enter()
-                    self.ref.child("Deals").queryOrdered(byChild: "r_id").queryEqual(toValue: vendor.key).observe(.value, with: { (snapshot) in
+                    self.ref.child("Deals").queryOrdered(byChild: "vendor_id").queryEqual(toValue: vendor.key).observe(.value, with: { (snapshot) in
                         for entry in snapshot.children {
                             let snap = entry as! DataSnapshot
                             if let _ = snap.value{
@@ -167,7 +167,7 @@ class DealsData{
     
     func queryDeals(forEnteredVendor vendor: VendorData){
         let expiredUnix = Date().timeIntervalSince1970
-        self.ref.child("Deals").queryOrdered(byChild: "r_id").queryEqual(toValue: vendor.id).observe(.value, with: { (snapshot) in
+        self.ref.child("Deals").queryOrdered(byChild: "vendor_id").queryEqual(toValue: vendor.id).observe(.value, with: { (snapshot) in
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot
                 if let _ = snap.value{
@@ -395,6 +395,7 @@ class DealData{
     var type: String?
     var code: String?
     var activeHours: String?
+    var inactiveString: String?
     var activeDays = [Bool]()
     var active: Bool
     var countdown: String?
@@ -416,6 +417,7 @@ class DealData{
             self.redeemed = false
             self.redeemedTime = 0
             self.activeHours = ""
+            self.inactiveString = ""
             self.active = false
             self.distanceMiles = 0.0
             for _ in 0...6{
@@ -424,8 +426,8 @@ class DealData{
         }
         else{
             let value = snap?.value as! NSDictionary
-            self.rID = value["r_id"] as? String ?? ""
-            self.name = value["r_name"] as? String ?? ""
+            self.rID = value["vendor_id"] as? String ?? ""
+            self.name = value["vendor_name"] as? String ?? ""
             self.dealDescription = value["deal_description"] as? String ?? ""
             self.photo = value["photo"] as? String ?? ""
             self.endTime = value["end_time"] as? Double
@@ -468,7 +470,8 @@ class DealData{
             self.activeDays.append(activeSnapshot?["sat"] as? Bool ?? false)
             let start = Date(timeIntervalSince1970: self.startTime!)
             let end = Date(timeIntervalSince1970: self.endTime!)
-            let calendar = Calendar.current
+            var calendar = Calendar.current
+            calendar.timeZone = .current
             let startTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: start), minute: calendar.component(.minute, from: start))
             let endTimeComponent = DateComponents(calendar: calendar, hour: calendar.component(.hour, from: end), minute: calendar.component(.minute, from: end))
             let formatter = DateFormatter()
@@ -499,23 +502,23 @@ class DealData{
                     self.active = true
                 }else{
                     self.activeHours = ""//"valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
-                    self.code = "from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                    self.inactiveString = "from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
                     self.active = false
                 }
             }else{//Not Active today
-                self.code = ""
+                self.inactiveString = ""
                 for i in 1...6{
                     if self.activeDays[i]{
-                        if self.code != ""{
-                            self.code = self.code! + " "
+                        if self.inactiveString != ""{
+                            self.inactiveString = self.inactiveString! + " "
                         }
-                        self.code = self.code! + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][i]
+                        self.inactiveString = self.inactiveString! + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][i]
                     }
                 }
                 if self.activeDays[0]{
-                    self.code = self.code! + " " + "Sunday"
+                    self.inactiveString = self.inactiveString! + " " + "Sunday"
                 }
-                self.code = (self.code?.replacingOccurrences(of: " ", with: ", "))!
+                self.inactiveString = (self.inactiveString?.replacingOccurrences(of: " ", with: ", "))!
                 self.active = false
             }
             
@@ -593,23 +596,23 @@ class DealData{
                 self.active = true
             }else{
                 self.activeHours = "valid from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
-                self.code = " from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
+                self.inactiveString = " from " + formatter.string(from: startTime) + " to " + formatter.string(from: endTime)
                 self.active = false
             }
         }else{//Not Active today
-            self.code = ""
+            self.inactiveString = ""
             for i in 1...6{
                 if self.activeDays[i]{
-                    if self.code != ""{
-                        self.code = self.code! + " "
+                    if self.inactiveString != ""{
+                        self.inactiveString = self.inactiveString! + " "
                     }
-                    self.code = self.code! + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][i]
+                    self.inactiveString = self.inactiveString! + ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][i]
                 }
             }
             if self.activeDays[0]{
-                self.code = self.code! + " " + "Sunday"
+                self.inactiveString = self.inactiveString! + " " + "Sunday"
             }
-            self.code = (self.code?.replacingOccurrences(of: " ", with: ", "))!
+            self.inactiveString = (self.inactiveString?.replacingOccurrences(of: " ", with: ", "))!
             self.active = false
         }
         
@@ -647,8 +650,10 @@ class DealData{
     }
     
     func updateDistance(vendor: VendorData){
-        if let _ = vendor.location{
+        if let _ = vendor.location,let _ = locationManager.location{
             self.distanceMiles = (vendor.location?.distance(from: locationManager.location!))!/1609
+        }else{
+            print("Could not update distance. Vendor or location manager not present")
         }
     }
 }

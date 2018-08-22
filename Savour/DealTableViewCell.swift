@@ -84,7 +84,7 @@ class DealTableViewCell: UITableViewCell {
             label.center = view.center
             label.baselineAdjustment = .alignCenters
             label.lineBreakMode = NSLineBreakMode.byWordWrapping
-            label.text = "Deal is currently unavailable. This deal is valid " + deal.code! + "."
+            label.text = "Deal is currently unavailable. This deal is valid " + deal.inactiveString! + "."
             label.textColor = UIColor.white
             view.addSubview(label)
             rImg.addSubview(view)
