@@ -126,7 +126,14 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         moreBtn.setTitle("See More From " + (Deal?.name)!, for: .normal)
         imgbound.layer.insertSublayer(pulsator, below: imgbound.layer)
         pulsator.numPulse = 6
-        pulsator.radius = 230
+        if UIDevice().userInterfaceIdiom == .phone {
+            //if iPhone, make radius fit small screen
+            self.pulsator.radius = 230
+        }else if UIDevice().userInterfaceIdiom == .pad{
+            //if iPad, make large radius to cover screen and not be hidden behind image
+            self.pulsator.radius = 600
+        }
+        
         if (Deal?.redeemed)!{
             self.redeem.isEnabled = false
             self.redeem.setTitle("Already Redeemed!", for: .normal)

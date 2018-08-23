@@ -423,13 +423,14 @@
                                         <rect key="frame" x="10" y="471.66666666666669" width="394" height="141.33333333333331"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-v9-jhB">
-                                                <rect key="frame" x="0.0" y="36.333333333333314" width="394" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="49.666666666666686" width="394" height="0.0"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For dine in and carry out only. This deal is only valid for one person. BOGO free items are for equal or lesser value." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
-                                                <rect key="frame" x="0.0" y="4.9999999999999982" width="394" height="26.333333333333329"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
+                                                <rect key="frame" x="0.0" y="5" width="394" height="39.666666666666664"/>
+                                                <string key="text">For dine in and carry out only. This deal is only valid for one person. BOGO free items are for equal or lesser value. This deal has no cash value. You must be 21+ to redeem any alcohol deals</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -439,7 +440,6 @@
                                         <constraints>
                                             <constraint firstItem="9XN-zF-3A1" firstAttribute="top" secondItem="5Ub-Qj-Nfg" secondAttribute="top" constant="5" id="3B8-xL-O7e"/>
                                             <constraint firstItem="KvV-v9-jhB" firstAttribute="leading" secondItem="5Ub-Qj-Nfg" secondAttribute="leading" id="GhS-Bk-lDg"/>
-                                            <constraint firstItem="9XN-zF-3A1" firstAttribute="centerX" secondItem="5Ub-Qj-Nfg" secondAttribute="centerX" id="Kxb-oo-E2p"/>
                                             <constraint firstItem="KvV-v9-jhB" firstAttribute="top" secondItem="9XN-zF-3A1" secondAttribute="bottom" constant="5" id="dK9-T2-f7V"/>
                                             <constraint firstItem="9XN-zF-3A1" firstAttribute="leading" secondItem="5Ub-Qj-Nfg" secondAttribute="leading" id="gbg-mG-Ofm"/>
                                             <constraint firstAttribute="trailing" secondItem="KvV-v9-jhB" secondAttribute="trailing" id="h9s-mH-YI1"/>
