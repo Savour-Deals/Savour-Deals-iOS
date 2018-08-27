@@ -27,11 +27,11 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate,CLLoc
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let firstTab = self.viewControllers![0] as! UINavigationController
-        let firstView = firstTab.topViewController as! ViewController
+        let firstView = firstTab.viewControllers.first as! ViewController
         let secondTab = self.viewControllers![1] as! UINavigationController
-        let secondView = secondTab.topViewController as! FavoritesViewController
+        let secondView = secondTab.viewControllers.first as! FavoritesViewController
         let thirdTab = self.viewControllers![2] as! UINavigationController
-        let thirdView = thirdTab.topViewController as! VendorMapViewController
+        let thirdView = thirdTab.viewControllers.first as! VendorMapViewController
         if deals != nil{
             self.deals.updateLocation(location: locationManager.location!)
             firstView.dealsData = self.deals
