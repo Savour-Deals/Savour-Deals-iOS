@@ -20,6 +20,8 @@ target 'Savour' do
   pod 'AcknowList'
   pod 'GeoFire'
   pod "GTProgressBar"
+  pod 'Firebase/Functions'
+
 
 # pod 'Firebase/Firestore'
 

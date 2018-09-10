@@ -150,8 +150,8 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                 }
                 self.ref = Database.database().reference()
                 
-                self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
-                self.ref.child("Users").child(user!.uid).child("Email").setValue(email)
+                self.ref.child("Users").child(user!.uid).child("full_name").setValue(name)
+                self.ref.child("Users").child(user!.uid).child("email").setValue(email)
                 if let user = user {
                     let changeRequest = user.createProfileChangeRequest()
                     
@@ -236,9 +236,9 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                             print("Error: \(String(describing: error))")
                         }
                     })
-                    self.ref.child("Users").child(user!.uid).child("FullName").setValue(name)
-                    self.ref.child("Users").child(user!.uid).child("FacebookID").setValue(id)
-                    self.ref.child("Users").child(user!.uid).child("Birthday").setValue(birthday)
+                    self.ref.child("Users").child(user!.uid).child("full_name").setValue(name)
+                    self.ref.child("Users").child(user!.uid).child("facebook_id").setValue(id)
+                    self.ref.child("Users").child(user!.uid).child("birthday").setValue(birthday)
                 }
             })
             self.doneLoading()

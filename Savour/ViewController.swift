@@ -27,6 +27,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var dealsData: DealsData!
     var vendorsData: VendorsData!
         
+    @IBOutlet weak var locationText: UILabel!
     var activeDeals = [DealData]()
     var inactiveDeals = [DealData]()
     var locationManager: CLLocationManager!
@@ -51,6 +52,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.locationManager = CLLocationManager()
+        self.locationText.text = "To use this app, you must turn on location in:\n\n Settings -> Savour -> Location"
         sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
         if !isUserVerified(user: Auth.auth().currentUser){
             // User not verified or not signed in.
@@ -63,10 +66,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         ref.keepSynced(true)
         self.setup()
         if CLLocationManager.locationServicesEnabled() {
+            
             switch CLLocationManager.authorizationStatus() {
             case .notDetermined:
                 self.performSegue(withIdentifier: "tutorial", sender: self)
-            case .authorizedAlways, .authorizedWhenInUse, .restricted, .denied:
+            case .authorizedAlways, .authorizedWhenInUse:
                 //Setup Deal Data for entire app
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
@@ -78,12 +82,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 DispatchQueue.global().sync {
                     tabBarController.dealSetup(completion: { (success) in
                         self.finishLoad(tabBarController: tabBarController)
+                        self.locationEnabled()
                     })
                 }
+            case .restricted, .denied:
+                locationDisabled()
             }
+
         } else {
             self.performSegue(withIdentifier: "tutorial", sender: self)
         }
+        //Allow us to refresh when opened from background
+        NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.NotificationDealIsAvailable, object: nil)
     }
     
     deinit { //Remove background observer
@@ -97,12 +108,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func finishLoad(tabBarController: TabBarViewController){
-        //Allow us to refresh when opened from background
-        NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name:NSNotification.Name.NotificationDealIsAvailable, object: nil)
         //Finish view setup
         tabBarController.tabBar.isUserInteractionEnabled = true
-        self.locationManager = CLLocationManager()
         self.requestLocationAccess()
         self.initialLoaded = true
     }
@@ -111,37 +118,27 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewWillAppear(animated)
         let user = Auth.auth().currentUser
         if user != nil {
-            // User is signed in.
-            self.ref.child("Users").child((user?.uid)!).child("type").observeSingleEvent(of: .value, with: { (snapshot) in
-                // Get user value
-                let type = snapshot.value as? String ?? ""
-                if type == "Vendor"{
-                    self.navigationController?.navigationBar.isHidden = true
-                    self.tabBarController?.tabBar.isHidden = true
-                    self.performSegue(withIdentifier: "Vendor", sender: self)
-                }
-                else if self.initialLoaded{
-                    self.navigationController?.setNavigationBarHidden(false, animated: true)
-                    self.navigationController?.navigationBar.tintColor = UIColor.white
-                    self.navigationController?.view.backgroundColor = UIColor.white
-                    self.navigationController?.navigationItem.title = ""
-                    
-                    UIApplication.shared.statusBarStyle = .lightContent
-                    
-                    self.refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
-                    self.refreshControl.tintColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
-                    
-                    self.statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-                    self.statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-                    
-                    self.self.tabBarController?.tabBar.isHidden = false
-                    
-                    self.searchBar.endEditing(true)
-                    self.searchBar.showsCancelButton = false
-                    self.searchBar.text = ""
-                    self.refresh()
-                }
-            })
+            if self.initialLoaded{
+                self.navigationController?.setNavigationBarHidden(false, animated: true)
+                self.navigationController?.navigationBar.tintColor = UIColor.white
+                self.navigationController?.view.backgroundColor = UIColor.white
+                self.navigationController?.navigationItem.title = ""
+                
+                UIApplication.shared.statusBarStyle = .lightContent
+                
+                self.refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+                self.refreshControl.tintColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
+                
+                self.statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+                self.statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                
+                self.self.tabBarController?.tabBar.isHidden = false
+                
+                self.searchBar.endEditing(true)
+                self.searchBar.showsCancelButton = false
+                self.searchBar.text = ""
+                self.refresh()
+            }
         }
         else {
             // No user is signed in.
@@ -156,16 +153,40 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             locationDisabled()
         }else if status == .authorizedAlways || status == .authorizedWhenInUse  {
             userLocation = CLLocation(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
-            locationEnabled()
+            //Setup Deal Data for entire app
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                if !tabBarController.finishedSetup{
+                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                }
+            }
+            DispatchQueue.global().sync {
+                tabBarController.dealSetup(completion: { (success) in
+                    self.finishLoad(tabBarController: tabBarController)
+                    self.locationEnabled()
+                })
+            }
         }
     }
     
-    func requestLocationAccess() {
+    @objc func requestLocationAccess() {
         let status = CLLocationManager.authorizationStatus()
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
-            self.locationManager!.startUpdatingLocation()
-            locationEnabled()
+            //Setup Deal Data for entire app
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                if !tabBarController.finishedSetup{
+                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                }
+            }
+            DispatchQueue.global().sync {
+                tabBarController.dealSetup(completion: { (success) in
+                    self.locationEnabled()
+                })
+            }
         case .denied, .restricted:
             locationDisabled()
         default:
@@ -176,22 +197,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func locationDisabled(){
         self.searchBar.isUserInteractionEnabled = false
         buttonsView.isUserInteractionEnabled = false
-        let label = UILabel()
-        label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.heavy)
-        label.text = "To use this app, you must turn on location in:\n\n Settings -> Savour -> Location"
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.numberOfLines = 0
-        label.textColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.tag = 100
-        self.view.addSubview(label)
-        var constraints = [NSLayoutConstraint]()
-        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0.0))
-        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0))
-        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.leadingMargin, multiplier: 1.0, constant: 5.0))
-        constraints.append(NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.trailingMargin, multiplier: 1.0, constant: -5.0))
-        NSLayoutConstraint.activate(constraints)
+        self.locationText.isHidden = false
+        self.DealsTable.isHidden = true
         UIViewController.removeSpinner(spinner: sv)
     }
     
@@ -200,6 +207,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             if let _ = self.view.viewWithTag(100){
                 self.view.viewWithTag(100)?.removeFromSuperview()
             }
+            self.DealsTable.isHidden = false
+            self.locationText.isHidden = true
             self.searchBar.isUserInteractionEnabled = true
             self.buttonsView.isUserInteractionEnabled = true
             self.locationManager!.startUpdatingLocation()

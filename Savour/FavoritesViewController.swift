@@ -26,6 +26,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     @IBOutlet weak var FavTable: UITableView!
     var ref: DatabaseReference!
     var statusBar: UIView!
+    var locationManager: CLLocationManager!
+
     var count = 0
     let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
     
@@ -43,11 +45,13 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
+        locationManager = CLLocationManager()
         let sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
 
         let status = CLLocationManager.authorizationStatus()
         if status == CLAuthorizationStatus.denied {
-            self.setupUI()
+            self.locationDisabled()
+            UIViewController.removeSpinner(spinner: sv)
         } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
             //Setup Deal Data for entire app
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -60,27 +64,42 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             DispatchQueue.global().sync {
                 tabBarController.dealSetup(completion: { (success) in
                     //Allow us to refresh when opened from background
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.setupUI), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
                     //Finish view setup
                     tabBarController.tabBar.isUserInteractionEnabled = true
                     UIViewController.removeSpinner(spinner: sv)
-                    self.setupUI()
+                    self.locationEnabled()
                 })
             }
         }
     }
     
+    
     deinit { //Remove background observer
         NotificationCenter.default.removeObserver(self)
     }
     
-    @objc func setupUI(){
+    @objc func requestLocationAccess() {
+        let status = CLLocationManager.authorizationStatus()
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            self.locationManager!.startUpdatingLocation()
+            self.locationEnabled()
+        case .denied, .restricted:
+            locationDisabled()
+        default:
+            performSegue(withIdentifier: "tutorial", sender: self)
+        }
+    }
+    
+    func locationEnabled(){
         self.navigationController?.navigationItem.title = "Favorites"
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
         statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        FavTable.isHidden = false
         var activeFav = [DealData]()
         var inactiveFav = [DealData]()
         if dealsData != nil{
@@ -103,6 +122,21 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 self.favDeals.append(deal)
             }
         }
+        self.FavTable.reloadData()
+        FavTable.tableFooterView = UIView()
+    }
+    
+    func locationDisabled(){
+        FavTable.isHidden = true
+        self.navigationController?.navigationItem.title = "Favorites"
+        self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
+        heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
+        heartImg.tintColor = UIColor.red
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+
+        self.favDeals.removeAll()
+
         self.FavTable.reloadData()
         FavTable.tableFooterView = UIView()
     }
@@ -159,7 +193,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             if let indexPath = FavTable.indexPathForRow(at: point) {
                 let cell = FavTable.cellForRow(at: indexPath) as? DealTableViewCell
                 let user = Auth.auth().currentUser?.uid
-                Database.database().reference().child("Users").child(user!).child("Favorites").child((cell?.deal.id!)!).removeValue()
+                Database.database().reference().child("Users").child(user!).child("favorites").child((cell?.deal.id!)!).removeValue()
                 favDeals.remove(at: indexPath.item)
                 self.FavTable.reloadData()
                 if favDeals.count < 2 && favDeals.count > 0{

@@ -115,7 +115,7 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ref = Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Onboarded")
+        ref = Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("onboarded")
         let state = OneSignal.getPermissionSubscriptionState()
         if state?.permissionStatus.status == .authorized{
             self.notiButton.backgroundColor = UIColor.gray
@@ -240,7 +240,7 @@ class SwipeViewController: UIViewController{
     }
     
     @IBAction func dismiss(_ sender: Any) {
-        Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("Onboarded").setValue("true")
+        Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("onboarded").setValue("true")
         dismiss(animated: false, completion: nil)
     }
     

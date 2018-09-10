@@ -28,7 +28,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var canSendNoti = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
+        var filePath:String!
+        #if DEBUG
+        print("[FIREBASE] Development mode.")
+        filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist", inDirectory: "Debug")
+        #else
+        print("[FIREBASE] Production mode.")
+        filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist", inDirectory: "Release")
+        #endif
+        
+        let options = FirebaseOptions.init(contentsOfFile: filePath)!
+        FirebaseApp.configure(options: options)
         
         let notificationOpenedBlock: OSHandleNotificationActionBlock = { result in
             let payload: OSNotificationPayload = result!.notification.payload
@@ -153,12 +163,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         //App entered through Forcetouch quick action
         if isUserVerified(user: Auth.auth().currentUser){
             // User is signed in and verified.
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as! UITabBarController
+            var tabVC: UITabBarController?
+            if let _ = self.window!.rootViewController as? UITabBarController{
+                //Tabview already instantiated
+                tabVC = self.window!.rootViewController as? UITabBarController
+            }else{
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                tabVC = storyboard.instantiateViewController(withIdentifier: "tabMain") as? UITabBarController
+            }
+            
             switch (shortcutItem.localizedTitle){
             case "Favorites" :
                 //Favorites was selected
-                tabVC.selectedIndex = 1
+                tabVC?.selectedIndex = 1
                 self.window!.rootViewController = tabVC
             default:
                 break

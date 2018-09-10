@@ -13,6 +13,7 @@ import FirebaseStorage
 import FirebaseAuth
 import OneSignal
 import CoreLocation
+import FirebaseFunctions
 
 
 
@@ -35,6 +36,8 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
     var thisVendor: VendorData?
     var locationManager: CLLocationManager!
     var userLocation: CLLocation!
+    lazy var functions = Functions.functions()
+
     
     @IBOutlet weak var restaurantLabel: UILabel!
     @IBOutlet weak var code: UILabel!
@@ -73,6 +76,14 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         SetupUI()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        img.layer.cornerRadius = img.frame.width / 2
+        redeem.layer.cornerRadius = redeem.frame.height/2
+        moreBtn.layer.cornerRadius = moreBtn.frame.height/2
+        img.clipsToBounds = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         SetupUI()
     }
@@ -92,8 +103,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         imageView.frame = titleView.bounds
         titleView.addSubview(imageView)
         self.navigationItem.titleView = titleView
-        redeem.layer.cornerRadius = redeem.frame.height/2
-        moreBtn.layer.cornerRadius = moreBtn.frame.height/2
+
         infoView.layer.cornerRadius = 10
         textView.setContentOffset(CGPoint.zero, animated: false)
         
@@ -110,13 +120,20 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
             
             // Load the image using SDWebImage
             imageView.sd_setImage(with: URL(string:photo!), completed: { (img, err, typ, ref) in
-                self.img.layer.cornerRadius = self.img.frame.size.height/2
+                
             })
         }
         moreBtn.setTitle("See More From " + (Deal?.name)!, for: .normal)
         imgbound.layer.insertSublayer(pulsator, below: imgbound.layer)
         pulsator.numPulse = 6
-        pulsator.radius = 230
+        if UIDevice().userInterfaceIdiom == .phone {
+            //if iPhone, make radius fit small screen
+            self.pulsator.radius = 230
+        }else if UIDevice().userInterfaceIdiom == .pad{
+            //if iPad, make large radius to cover screen and not be hidden behind image
+            self.pulsator.radius = 600
+        }
+        
         if (Deal?.redeemed)!{
             self.redeem.isEnabled = false
             self.redeem.setTitle("Already Redeemed!", for: .normal)
@@ -139,7 +156,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         }else if !(Deal?.active)!{
             pulsator.backgroundColor = UIColor.red.cgColor
             self.redeem.setTitle("Deal Not Active", for: .normal)
-            self.code.text = "This deal is valid " + Deal.code! + "."
+            self.code.text = "This deal is valid " + Deal.inactiveString! + "."
             self.redeem.layer.backgroundColor = UIColor.red.cgColor
             self.redeem.isEnabled = false
             self.redeemIndicator(color: UIColor.red.cgColor)
@@ -179,8 +196,21 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                 let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
                     let currTime = Date().timeIntervalSince1970
                     let uID = Auth.auth().currentUser?.uid
+                    
+                    //Note redemption time
                     let ref = Database.database().reference().child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
                     ref.setValue(currTime)
+                    
+                    //Call Firebase cloud functions to increment stripe counter
+                    self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId, "increment_count":"1"]) { (result, error) in
+                        if let _ = error as NSError? {
+                            //error handle
+                        }
+                        if let text = (result?.data as? [String: Any])?["text"] as? String {
+                            print(text)
+                        }
+                    }
+                    
                     //set and draw checkmark
                     self.redeemIndicator(color: UIColor.green.cgColor)
                     
@@ -191,7 +221,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     self.self.Deal.redeemedTime = currTime
                     self.Deal?.redeemedTime = currTime
                     self.Deal?.redeemed = true
-                    ref.child("Users").child(uID!).child("Favorites").child(self.Deal.id!).removeValue()
+                    ref.child("Users").child(uID!).child("favorites").child(self.Deal.id!).removeValue()
                     if self.Deal?.code != ""{
                         self.code.textColor = UIColor.black
                         self.code.text = self.Deal?.code
@@ -200,8 +230,8 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
                     if status.subscriptionStatus.userId != " "{
                         //Redundant following for user and rest
-                        Database.database().reference().child("Vendors").child((self.thisVendor?.id)!).child("Followers").child(uID!).setValue(status.subscriptionStatus.userId)
-                        Database.database().reference().child("Users").child(uID!).child("Following").child((self.thisVendor?.id!)!).setValue(true)
+                        Database.database().reference().child("Vendors").child((self.thisVendor?.id)!).child("followers").child(uID!).setValue(status.subscriptionStatus.userId)
+                        Database.database().reference().child("Users").child(uID!).child("following").child((self.thisVendor?.id!)!).setValue(true)
                     }
                     StoreReviewHelper().requestReview()
                 }
@@ -218,7 +248,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         self.code.textColor = UIColor.black
         timerLabel.text = timeString(time: timeSince) //This will update the label
         if (timeSince) > 1800 {
-            code.text = ""
+            code.text = self.Deal.code
             timerLabel.text = "Reedeemed over half an hour ago"
             redeemIndicator(color: UIColor.red.cgColor)
             timer.invalidate()
