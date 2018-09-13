@@ -74,7 +74,7 @@ class VendorMapViewController: UIViewController{
             DispatchQueue.global().sync {
                 tabBarController.dealSetup(completion: { (success) in
                     //Allow us to refresh when opened from background
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
                     //Finish view setup
                     tabBarController.tabBar.isUserInteractionEnabled = true
                     UIViewController.removeSpinner(spinner: self.sv)
@@ -146,10 +146,10 @@ class VendorMapViewController: UIViewController{
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "list"{
-            listVC = segue.destination as! listViewController
+            listVC = segue.destination as? listViewController
         }
         if segue.identifier == "map"{
-            mapVC = segue.destination as! mapViewController
+            mapVC = segue.destination as? mapViewController
         }
         if segue.identifier == "vendor"{
             self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -216,7 +216,7 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let image = center.imageView?.image!.withRenderingMode(.alwaysTemplate)
         center.tintColor = UIColor.white
         center.imageView?.tintColor = UIColor.white
-        center.setImage(image, for: UIControlState.normal)
+        center.setImage(image, for: UIControl.State.normal)
         center.layer.shadowRadius = 2
         center.layer.shadowOpacity = 0.5
         center.layer.shadowOffset = CGSize(width: 6, height: 6)
@@ -227,7 +227,7 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         // set initial location
         let initialLocation = CLLocation(latitude: 44.977289, longitude: -93.229499)
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            let viewRegion = MKCoordinateRegionMakeWithDistance(initialLocation.coordinate, 1000, 1000)
+            let viewRegion = MKCoordinateRegion.init(center: initialLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
             mapView.setRegion(viewRegion, animated: false)
             DispatchQueue.main.async {
                 self.locationManager!.startUpdatingLocation()
@@ -237,7 +237,7 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     @IBAction func centerMap(_ sender: Any) {
         if let _ = locationManager.location?.coordinate{
-            let viewRegion = MKCoordinateRegionMakeWithDistance((locationManager.location?.coordinate)!, 1000, 1000)
+            let viewRegion = MKCoordinateRegion.init(center: (locationManager.location?.coordinate)!, latitudinalMeters: 1000, longitudinalMeters: 1000)
             mapView.setRegion(viewRegion, animated: true)
         }
     }
@@ -289,8 +289,8 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func centerMapOnLocation(location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
-                                                                  regionRadius, regionRadius)
+        let coordinateRegion = MKCoordinateRegion.init(center: location.coordinate,
+                                                                  latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 }
@@ -331,7 +331,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
             listTable.addSubview(refreshControl)
         }
         // Configure Refresh Control
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Vendors", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Vendors", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
         refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         refreshControl.addTarget(self, action: #selector(self.refreshingData(_:)), for: .valueChanged)
         setupSearchBar()
@@ -349,7 +349,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
     }
     
@@ -363,12 +363,12 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if velocity.y>0{
-            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+            UIView.animate(withDuration: 2.5, delay: 0,  options: UIView.AnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(true, animated: true)
             }, completion: nil)
         }
         else{
-            UIView.animate(withDuration: 2.5, delay: 0,  options: UIViewAnimationOptions(), animations: {
+            UIView.animate(withDuration: 2.5, delay: 0,  options: UIView.AnimationOptions(), animations: {
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
             }, completion: nil)
         }

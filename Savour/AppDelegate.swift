@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var vendorsData: VendorsData!
     var canSendNoti = true
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         var filePath:String!
         #if DEBUG
         print("[FIREBASE] Development mode.")
@@ -74,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             let center = UNUserNotificationCenter.current()
             center.delegate = self
         }//if not ios >=10, dont worry. just wont put user in vendors tab
-        if launchOptions?[UIApplicationLaunchOptionsKey.location] != nil {
+        if launchOptions?[UIApplication.LaunchOptionsKey.location] != nil {
             vendorsData = VendorsData(completion: { (success) in
                 if success{
                     self.vendors = self.vendorsData.getVendors()
@@ -154,8 +154,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     }
    
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String?, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String?, annotation: options[UIApplication.OpenURLOptionsKey.annotation])
         return handled
     }
     
@@ -197,7 +197,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             signalID = " "
             print("Subscribed for OneSignal push notifications!")
         }
-        print("SubscriptionStateChange: \n\(stateChanges)")
+        print("SubscriptionStateChange: \n\(String(describing: stateChanges))")
         
         //The player id is inside stateChanges. But be careful, this value can be nil if the user has not granted you permission to send notifications.
         if let playerId = stateChanges.to.userId {

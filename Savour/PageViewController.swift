@@ -54,15 +54,15 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
             frame.size = self.scrollView.frame.size
             let vc = arrayVC[index]
             vc.view.frame = frame
-            vc.willMove(toParentViewController: self)
-            self.addChildViewController(vc)
-            vc.didMove(toParentViewController: self)
+            vc.willMove(toParent: self)
+            self.addChild(vc)
+            vc.didMove(toParent: self)
             scrollView.addSubview(vc.view)
         }
         pageControl.numberOfPages = arrayVC.count
         
         self.scrollView.contentSize = CGSize(width: self.view.frame.size.width * CGFloat(arrayVC.count), height: self.scrollView.frame.size.height)
-        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
+        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {

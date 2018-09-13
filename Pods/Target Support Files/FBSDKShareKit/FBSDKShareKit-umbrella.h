@@ -52,6 +52,8 @@
 #import "FBSDKSharing.h"
 #import "FBSDKSharingButton.h"
 #import "FBSDKSharingContent.h"
+#import "FBSDKSharingScheme.h"
+#import "FBSDKSharingValidation.h"
 
 FOUNDATION_EXPORT double FBSDKShareKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char FBSDKShareKitVersionString[];

@@ -98,7 +98,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         self.thisVendor = updateDistance(location: self.userLocation, vendor: self.thisVendor!)
         self.navigationController?.navigationBar.tintColor = UIColor.white
         let imageView = UIImageView(image: UIImage(named: "Savour_White"))
-        imageView.contentMode = UIViewContentMode.scaleAspectFit
+        imageView.contentMode = UIView.ContentMode.scaleAspectFit
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
         imageView.frame = titleView.bounds
         titleView.addSubview(imageView)
@@ -175,18 +175,46 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         }
     }
     
+    func openInGoogleMaps(){
+        let baseUrl: String = "comgooglemaps://?saddr="
+        let encodedName: String = (self.thisVendor?.address?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+        let finalUrl = baseUrl + encodedName
+        if let url = URL(string: finalUrl){
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
+    func openInAppleMaps(){
+        let baseUrl: String = "http://maps.apple.com/?q="
+        let encodedName: String = (self.thisVendor?.address?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+        let finalUrl = baseUrl + encodedName
+        if let url = URL(string: finalUrl){
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
     @IBAction func authenticatePressed(_ sender: Any) {
         if self.redeem.title(for: .normal) == "Go to Location to Redeem"{
-            let baseUrl: String = "http://maps.apple.com/?q="
-            let encodedName = self.thisVendor?.address?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            let finalUrl = baseUrl + encodedName!
-            if let url = URL(string: finalUrl)
-            {
-                if #available(iOS 10.0, *) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                } else {
-                    UIApplication.shared.openURL(url)
-                }
+            if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
+                let optionMenu = UIAlertController(title: nil, message: "Open With", preferredStyle: .actionSheet)
+                let googleAction = UIAlertAction(title: "Google Maps", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    self.openInGoogleMaps()
+                })
+                let appleAction = UIAlertAction(title: "Apple Maps", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    self.openInAppleMaps()
+                })
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                })
+                optionMenu.addAction(googleAction)
+                optionMenu.addAction(appleAction)
+                optionMenu.addAction(cancelAction)
+                
+                self.present(optionMenu, animated: true, completion: nil)
+            }else{
+                self.openInAppleMaps()
             }
         }else{
             let alert = UIAlertController(title: "Vendor Approval", message: "This deal is intended for one person only. \n\nShow this message to the vendor to redeem your coupon. \n\nThe deal is not guaranteed if the vendor does not see this message.", preferredStyle: .alert)
@@ -277,8 +305,8 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         self.moreBtn.isEnabled = false
         self.infoView.isHidden = false
         self.blurView.isHidden = false
-        self.view.bringSubview(toFront: blurView)
-        self.view.bringSubview(toFront: infoView)
+        self.view.bringSubviewToFront(blurView)
+        self.view.bringSubviewToFront(infoView)
         var scaleTrans = CGAffineTransform(scaleX: 0.0, y: 0.0)
         self.blurView.transform = scaleTrans
         self.infoView.transform = scaleTrans

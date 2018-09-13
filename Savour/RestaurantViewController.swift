@@ -11,7 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import SDWebImage
-import FirebaseStorageUI
+import FirebaseStorage
 import OneSignal
 import AVFoundation
 import GTProgressBar
@@ -55,7 +55,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         storage = Storage.storage()
         loadData()
         
-        restaurantTable.rowHeight = UITableViewAutomaticDimension
+        restaurantTable.rowHeight = UITableView.automaticDimension
         restaurantTable.estimatedRowHeight = 45
         self.cachedImageViewSize = self.rImg.frame
         self.cachedTextPoint = self.rName.center
@@ -67,7 +67,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         
         self.navigationController?.navigationBar.tintColor = UIColor.white
         let imageView = UIImageView(image: UIImage(named: "Savour_White"))
-        imageView.contentMode = UIViewContentMode.scaleAspectFit
+        imageView.contentMode = UIView.ContentMode.scaleAspectFit
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
         imageView.frame = titleView.bounds
         titleView.addSubview(imageView)
@@ -155,7 +155,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
         if indexPath.row == 0{
             return 100
         }else if indexPath.row == 1{
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }else if indexPath.row == 2{
 //            if self.thisVendor.hoursArray.count > 0{
 //                if expandedCells[1]{
@@ -168,7 +168,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
 //            }
         }else if indexPath.row == 3{
             if self.thisVendor.loyalty.loyaltyCount > 0{
-                return UITableViewAutomaticDimension
+                return UITableView.automaticDimension
             }
             else{
                 return 0
@@ -182,7 +182,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 return 0
             }
         }
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -388,7 +388,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let y = scrollView.contentOffset.y
         if y < 0 {
-            var scale = 1.0 + fabs(scrollView.contentOffset.y)  / scrollView.frame.size.height
+            var scale = 1.0 + abs(scrollView.contentOffset.y)  / scrollView.frame.size.height
             
             //Cap the scaling between zero and 1
             scale = max(0.0, scale)
@@ -518,16 +518,45 @@ class buttonCell: UITableViewCell {
     }
     
     @IBAction func directionsPressed(_ sender: Any) {
+        if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
+            let optionMenu = UIAlertController(title: nil, message: "Open With", preferredStyle: .actionSheet)
+            let googleAction = UIAlertAction(title: "Google Maps", style: .default, handler: {
+                (alert: UIAlertAction!) -> Void in
+                self.openInGoogleMaps()
+            })
+            let appleAction = UIAlertAction(title: "Apple Maps", style: .default, handler: {
+                (alert: UIAlertAction!) -> Void in
+                self.openInAppleMaps()
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+            })
+            optionMenu.addAction(googleAction)
+            optionMenu.addAction(appleAction)
+            optionMenu.addAction(cancelAction)
+
+            self.parentViewController?.present(optionMenu, animated: true, completion: nil)
+        }else{
+            self.openInAppleMaps()
+        }
+    }
+    
+    func openInGoogleMaps(){
+        let baseUrl: String = "comgooglemaps://?saddr="
+        let encodedName = rAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let finalUrl = baseUrl + encodedName
+        if let url = URL(string: finalUrl){
+            UIApplication.shared.openURL(url)
+        }
+
+    }
+    
+    func openInAppleMaps(){
         let baseUrl: String = "http://maps.apple.com/?q="
         let encodedName = rAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let finalUrl = baseUrl + encodedName
-        if let url = URL(string: finalUrl)
-        {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                 UIApplication.shared.openURL(url)
-            }
+        if let url = URL(string: finalUrl){
+            UIApplication.shared.openURL(url)
         }
     }
 
@@ -812,7 +841,7 @@ extension RestaurantViewController: UICollectionViewDelegate,UICollectionViewDat
             label.textColor = UIColor.white
             view.addSubview(label)
             cell.insetView.addSubview(view)
-            cell.insetView.bringSubview(toFront: cell.FavButton)
+            cell.insetView.bringSubviewToFront(cell.FavButton)
         }
         return cell
     }
@@ -931,9 +960,9 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
             label.lineBreakMode = .byWordWrapping
             label.textAlignment = .center
             view.addSubview(label)
-            let centerX = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0)
-            let centerY = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
-            let height = NSLayoutConstraint(item: label, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 22)
+            let centerX = NSLayoutConstraint(item: label, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+            let centerY = NSLayoutConstraint(item: label, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
+            let height = NSLayoutConstraint(item: label, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 22)
             label.translatesAutoresizingMaskIntoConstraints = false
             self.view.addConstraints([centerX, centerY, height])
             return
@@ -972,8 +1001,8 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         
         // Move the message label and top bar to the front
         //view.bringSubview(toFront: messageLabel)
-        view.bringSubview(toFront: topbar)
-        view.bringSubview(toFront: textView)
+        view.bringSubviewToFront(topbar)
+        view.bringSubviewToFront(textView)
         // Initialize QR Code Frame to highlight the QR code
         qrCodeFrameView = UIView()
         
@@ -981,7 +1010,7 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
             qrCodeFrameView.layer.borderColor = UIColor.green.cgColor
             qrCodeFrameView.layer.borderWidth = 2
             view.addSubview(qrCodeFrameView)
-            view.bringSubview(toFront: qrCodeFrameView)
+            view.bringSubviewToFront(qrCodeFrameView)
         }
     }
     

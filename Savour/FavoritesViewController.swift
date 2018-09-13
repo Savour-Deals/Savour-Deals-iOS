@@ -11,7 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import SDWebImage
-import FirebaseStorageUI
+import FirebaseStorage
 import FirebaseAuth
 import CoreLocation
 
@@ -64,7 +64,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             DispatchQueue.global().sync {
                 tabBarController.dealSetup(completion: { (success) in
                     //Allow us to refresh when opened from background
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
                     //Finish view setup
                     tabBarController.tabBar.isUserInteractionEnabled = true
                     UIViewController.removeSpinner(spinner: sv)
@@ -97,7 +97,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         FavTable.isHidden = false
         var activeFav = [DealData]()
@@ -132,7 +132,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
 
         self.favDeals.removeAll()
@@ -181,7 +181,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 cell.tempImg.isHidden = true
             })
         }
-        cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControlEvents.touchUpInside)
+        cell.likeButton.addTarget(self,action: #selector(removePressed(sender:event:)),for:UIControl.Event.touchUpInside)
         cell.setupUI()
         return cell
     }
@@ -228,7 +228,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
 
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

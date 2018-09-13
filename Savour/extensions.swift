@@ -28,7 +28,7 @@ extension UIViewController {
     class func displaySpinner(onView : UIView, color: UIColor) -> UIView {
         let spinnerView = UIView.init(frame: onView.bounds)
 //        spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-        let ai = UIActivityIndicatorView.init(activityIndicatorStyle: .whiteLarge)
+        let ai = UIActivityIndicatorView.init(style: .whiteLarge)
         ai.color = color
         ai.startAnimating()
         ai.center = spinnerView.center
@@ -77,11 +77,11 @@ class Toast{
         basketTopFrame.origin.x = 0;
         
         UIView.animate(withDuration
-            :2.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: UIViewAnimationOptions.curveEaseOut, animations: { () -> Void in
+            :2.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: UIView.AnimationOptions.curveEaseOut, animations: { () -> Void in
                 label.frame = basketTopFrame
         },  completion: {
             (value: Bool) in
-            UIView.animate(withDuration:2.0, delay: 10.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: UIViewAnimationOptions.curveEaseIn, animations: { () -> Void in
+            UIView.animate(withDuration:2.0, delay: 10.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: UIView.AnimationOptions.curveEaseIn, animations: { () -> Void in
                 label.alpha = 0
             },  completion: {
                 (value: Bool) in

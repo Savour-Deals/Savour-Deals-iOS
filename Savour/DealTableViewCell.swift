@@ -11,7 +11,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 import SDWebImage
-import FirebaseStorageUI
+import FirebaseStorage
 
 class DealTableViewCell: UITableViewCell {
 
@@ -99,10 +99,10 @@ class DealTableViewCell: UITableViewCell {
         }
         let attributedDots = NSMutableAttributedString(
             string: dots,
-            attributes: [NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue) : UIFont.systemFont(ofSize: 33.0)])
+            attributes: [NSAttributedString.Key(rawValue: NSAttributedString.Key.font.rawValue) : UIFont.systemFont(ofSize: 33.0)])
         let attributedDays = NSMutableAttributedString(
             string: "Su. Mo. Tu. We. Th. Fr. Sa.\n",
-            attributes: [NSAttributedStringKey(rawValue: NSAttributedStringKey.font.rawValue) : UIFont.systemFont(ofSize: 11.0)])
+            attributes: [NSAttributedString.Key(rawValue: NSAttributedString.Key.font.rawValue) : UIFont.systemFont(ofSize: 11.0)])
         attributedDays.append(attributedDots)
         if let label = self.validDaysIndicator{
             label.attributedText = attributedDays
@@ -149,7 +149,7 @@ extension UILabel {
         }
         
         // Line spacing attribute
-        attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
+        attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
         
         self.attributedText = attributedString
     }

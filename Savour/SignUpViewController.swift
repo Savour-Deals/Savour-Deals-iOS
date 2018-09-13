@@ -60,8 +60,8 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
         gradientLayer.colors = [#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0).cgColor, #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 0.4).cgColor]
         self.view.layer.insertSublayer(gradientLayer, at: 0)
         SignupButton.layer.cornerRadius = rounded
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         NameField.layer.borderColor = UIColor.white.cgColor
         NameField.layer.borderWidth = 2
         EmailField.layer.borderColor = UIColor.white.cgColor
@@ -137,23 +137,23 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
             //let userDict = ["Username": username]
             Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
                 // [START_EXCLUDE]
-                user?.sendEmailVerification(completion: { (err) in
+                user?.user.sendEmailVerification(completion: { (err) in
                     if err != nil{
                         print(err!)
                     }
                 })
                 if let error = error {
-                    let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                     return
                 }
                 self.ref = Database.database().reference()
                 
-                self.ref.child("Users").child(user!.uid).child("full_name").setValue(name)
-                self.ref.child("Users").child(user!.uid).child("email").setValue(email)
+                self.ref.child("Users").child(user!.user.uid).child("full_name").setValue(name)
+                self.ref.child("Users").child(user!.user.uid).child("email").setValue(email)
                 if let user = user {
-                    let changeRequest = user.createProfileChangeRequest()
+                    let changeRequest = user.user.createProfileChangeRequest()
                     
                     changeRequest.displayName = name
                     //changeRequest.photoURL =
@@ -165,10 +165,10 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                         }
                     }
                 }
-                let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account.", preferredStyle: UIAlertControllerStyle.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertActionStyle.default, handler: { (alert: UIAlertAction!) in
-                    user?.sendEmailVerification(completion: { (err) in
+                let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account.", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
+                    user?.user.sendEmailVerification(completion: { (err) in
                         if err != nil{
                             print(err!)
                         }
@@ -180,8 +180,8 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
         }
         // [END create_user]
         else {
-            let alert = UIAlertController(title: "Alert", message: "Username or password can't be empty", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            let alert = UIAlertController(title: "Alert", message: "Username or password can't be empty", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
         self.doneLoading()
@@ -225,7 +225,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                 }
                 else
                 {
-                    data = result as! [String : AnyObject]
+                    data = result as? [String : AnyObject]
                     let name = data["name"] as! String
                     let id = data["id"] as! String
                     let email = data["email"] as! String
@@ -263,9 +263,9 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
         if !keyboardShowing{
             keyboardShowing = true
             img.isHidden = true
-            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 //if self.view.frame.origin.y == 0{
-                    let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+                    let keyboardRectValue = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
                     keyboardHeight = keyboardRectValue?.height
                     self.view.frame.origin.y -= keyboardHeight!
                // }
@@ -277,7 +277,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
            if keyboardShowing{
             keyboardShowing = false
             img.isHidden = false
-            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 if self.view.frame.origin.y != 0{
                     self.view.frame.origin.y += keyboardHeight!
                 }

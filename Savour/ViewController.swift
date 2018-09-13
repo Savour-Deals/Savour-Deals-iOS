@@ -93,7 +93,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.performSegue(withIdentifier: "tutorial", sender: self)
         }
         //Allow us to refresh when opened from background
-        NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.NotificationDealIsAvailable, object: nil)
     }
     
@@ -126,10 +126,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 UIApplication.shared.statusBarStyle = .lightContent
                 
-                self.refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+                self.refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
                 self.refreshControl.tintColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
                 
-                self.statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+                self.statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
                 self.statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
                 
                 self.self.tabBarController?.tabBar.isHidden = false
@@ -258,10 +258,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         UIApplication.shared.statusBarStyle = .lightContent
         
-        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedStringKey.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
+        refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
         refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
 
         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -274,7 +274,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 button.addTarget(self, action: #selector(filterWithButtons(button:)), for: .touchUpInside)
                 if button.title(for: .normal) == "All"{
                     button.backgroundColor = UIColor.white
-                    button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
+                    button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControl.State.normal)
                 }
             }
         }
@@ -399,9 +399,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             cell.tempImg.image = UIImage(named: placeholderImgs[count])
             
             // Load the image using SDWebImage
-            imageView.sd_setImage(with: URL(string:photo!), completed: { (img, err, typ, ref) in
-                cell.tempImg.isHidden = true
-            })
+            if let url = URL(string:(photo!)){
+                imageView.sd_setImage(with: url, completed: { (img, err, typ, ref) in
+                    cell.tempImg.isHidden = true
+                })
+            }
         }
         count = count + 1
         if count > 2{
@@ -447,7 +449,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView,heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
    
@@ -455,14 +457,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         for view in self.buttonsView.subviews as [UIView] {
             if let btn = view as? UIButton {
                 btn.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-                btn.setTitleColor(UIColor.white, for: UIControlState.normal)
+                btn.setTitleColor(UIColor.white, for: UIControl.State.normal)
             }
         }
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
         searchBar.text = ""
         button.backgroundColor = UIColor.white
-        button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
+        button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControl.State.normal)
         let Title = button.currentTitle
         (activeDeals, inactiveDeals) = dealsData.filter(byTitle: Title!)
         if activeDeals.count + inactiveDeals.count < 1 {
@@ -537,13 +539,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         for subview in self.buttonsView.subviews as [UIView] {
             if let button = subview as? UIButton {
                 button.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-                button.setTitleColor(UIColor.white, for: UIControlState.normal)
+                button.setTitleColor(UIColor.white, for: UIControl.State.normal)
                 if button.title(for: .normal) == "All"{
                     button.backgroundColor = UIColor.white
                     if activeDeals.count + inactiveDeals.count>0{
                         DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
                     }
-                    button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControlState.normal)
+                    button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControl.State.normal)
                 }
             }
         }

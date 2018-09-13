@@ -49,8 +49,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             FBSDKLoginManager().logOut()
             FBLoginButton.delegate = self
             FBLoginButton.readPermissions = ["public_profile", "email", "user_friends"]
-            NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         }
        
     }
@@ -143,21 +143,21 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     if error != nil {
                         self.loginIndicator.stopAnimating()
                         self.endLoggingin()
-                        let alert = UIAlertController(title: "Alert", message: "Username or password incorrect. Please try again.", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                        let alert = UIAlertController(title: "Alert", message: "Username or password incorrect. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                         return
                     }
-                    if (user?.isEmailVerified)!{
+                    if (user?.user.isEmailVerified)!{
                         //Were gucci. They verified
                         self.gotoMain()
                         self.endLoggingin()
                     }else{
                         //not verified. Remind the user
-                        let alert = UIAlertController(title: "Unverified Account!", message: "Please check your email to verify your account. Then come back and try again.", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
-                        alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertActionStyle.default, handler: { (alert: UIAlertAction!) in
-                            user?.sendEmailVerification(completion: { (err) in
+                        let alert = UIAlertController(title: "Unverified Account!", message: "Please check your email to verify your account. Then come back and try again.", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+                        alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
+                            user?.user.sendEmailVerification(completion: { (err) in
                                 if err != nil{
                                     print(err!)
                                 }
@@ -212,7 +212,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 else
                 {
                     
-                    data = result as! [String : AnyObject]
+                    data = result as? [String : AnyObject]
                     let name = data["name"] as! String
                     let id = data["id"] as! String
                     let email = data["email"] as! String
@@ -235,26 +235,26 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     @IBAction func sendResetEmail(_ sender: Any) {
         if LoginEmail.text == ""{
-            let alert = UIAlertController(title: "Alert", message: "Please enter your email in the field below.", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+            let alert = UIAlertController(title: "Alert", message: "Please enter your email in the field below.", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }else{
             let email = LoginEmail.text!
             Auth.auth().fetchProviders(forEmail: email, completion: { (provider, error) in
                 if provider == nil{
-                    let alert = UIAlertController(title: "Alert", message: "Account with the provided email was not found.", preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    let alert = UIAlertController(title: "Alert", message: "Account with the provided email was not found.", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }else if (provider?.contains("password"))!{
                     Auth.auth().sendPasswordReset(withEmail: email) { (error) in
-                        let alert = UIAlertController(title: "Success!", message: "An email has been sent to \(email) to reset your password.", preferredStyle: UIAlertControllerStyle.alert)
-                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                        let alert = UIAlertController(title: "Success!", message: "An email has been sent to \(email) to reset your password.", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                     }
                 }else{
                     //Change this if we ever add more authentication services
-                    let alert = UIAlertController(title: "Alert", message: "Account was created using Facebook. Reset your password there and try again.", preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertActionStyle.default, handler: nil))
+                    let alert = UIAlertController(title: "Alert", message: "Account was created using Facebook. Reset your password there and try again.", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
             })
@@ -275,9 +275,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         if !keyboardShowing{
             keyboardShowing = true
             img.isHidden = true
-            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 if self.view.frame.origin.y == 0{
-                    let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+                    let keyboardRectValue = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
                     keyboardHeight = keyboardRectValue?.height
                     self.view.frame.origin.y -= keyboardHeight!
                 }
@@ -288,7 +288,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         if keyboardShowing{
             keyboardShowing = false
             img.isHidden = false
-            if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
                 if self.view.frame.origin.y != 0{
                     self.view.frame.origin.y += keyboardHeight!
                 }

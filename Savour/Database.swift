@@ -437,8 +437,8 @@ class DealData{
             self.code = value["code"] as? String ?? ""
             if let redeemValue = value["redeemed"] as? NSDictionary{
                 if let time = redeemValue[ID] as? Double{
-                    if Date().timeIntervalSince1970 - time > 60*60*24*7*4 {
-                        //If redeemed 2 weeks ago, allow user to use deal again
+                    if Date().timeIntervalSince1970 - time > 60*60*24*7*2 {
+                        //If redeemed 2 weeks ago, allow user to use deal again - Should be changed in the future
                         let randStr = String.random(length: 10)
                         let ref = Database.database().reference().child("Deals").child(self.id!).child("redeemed")
                         ref.child(ID).removeValue()

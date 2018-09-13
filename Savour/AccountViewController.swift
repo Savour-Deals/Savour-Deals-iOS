@@ -49,22 +49,37 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             self.tableView.reloadData()
         })
+        
         let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"friends"])
         
         graphRequest.start(completionHandler: { (connection, result, error) -> Void in
             
-            if ((error) != nil){
+            if error != nil{
                 print("Error: \(String(describing: error))")
             }else{
-                var data = result as! [String : AnyObject]
-                data = data["friends"] as! [String : AnyObject]
-                let friends = data["data"] as! NSArray
-                if friends.count > 0{
-                     self.friendsText = "You have \(friends.count) friend using Savour!\nClick here to invite more!"
-                }else{
-                    self.friendsText = "Click here to invite your Facebook friends to Savour Deals!"
+//                var data = result as! [String : AnyObject]
+//                if let _ = data["friends"] {
+//                    data = data["friends"] as! [String : AnyObject]
+//                    let friends = data["data"] as! NSArray
+//                    if friends.count > 0{
+//                        self.friendsText = "You have \(friends.count) friend using Savour!\nClick here to invite more!"
+//                    }else{
+//                        self.friendsText = "Click here to invite your friends to Savour Deals!"
+//                    }
+//                    self.tableView.reloadData()
+//                }
+                if let data = result as? [String:Any] {
+                    if let friendData = data["friends"] as? [String : Any]{
+                        if let friends = friendData["data"] as? NSArray {
+                            if friends.count > 0{
+                                self.friendsText = "You have \(friends.count) friend using Savour!\nClick here to invite more!"
+                            }else{
+                                self.friendsText = "Click here to invite your friends to Savour Deals!"
+                            }
+                            self.tableView.reloadData()
+                        }
+                    }
                 }
-                self.tableView.reloadData()
             }
         })
         let footerView = UIView()
@@ -104,7 +119,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         var cell: UITableViewCell!
         if indexPath.row == 0 {
             var cell1: AccountCell!
-            cell1 = tableView.dequeueReusableCell(withIdentifier: "Welcome", for: indexPath) as! AccountCell
+            cell1 = tableView.dequeueReusableCell(withIdentifier: "Welcome", for: indexPath) as? AccountCell
             let user = Auth.auth().currentUser
             if self.imgURL != nil{
                 let imageView: UIImageView = cell1.Img
@@ -126,7 +141,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell1.Welcome.text = "My Account"
             }
             
-            cell1.selectionStyle = UITableViewCellSelectionStyle.none
+            cell1.selectionStyle = UITableViewCell.SelectionStyle.none
 
             return cell1
         }else if indexPath.row == 1{
@@ -195,7 +210,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
                 let objectsToShare = [myWebsite,textToShare] as [Any]
                 let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
                 //Excluded Activities
-                activityVC.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+                activityVC.excludedActivityTypes = [UIActivity.ActivityType.airDrop, UIActivity.ActivityType.addToReadingList]
                 self.present(activityVC, animated: true, completion: nil)
             }
         }else if indexPath.row == 4{
@@ -328,7 +343,7 @@ class settingsViewController: UITableViewController{
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -41,7 +41,7 @@
                value = "self.navigationController">
             </PersistentString>
             <PersistentString
-               value = "snap.value">
+               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
             </PersistentString>
             <PersistentString
                value = "button.backgroundColor">
@@ -56,7 +56,7 @@
                value = "UIColor.white">
             </PersistentString>
             <PersistentString
-               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
+               value = "snap.value">
             </PersistentString>
             <PersistentString
                value = "self.buttonsView.subviews">
@@ -241,6 +241,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #2 in AccountViewController.viewDidLoad():AccountViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "data[0][&apos;value&apos;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "DetailsViewController.openMenu(Any) -&gt; ():DetailsViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -367,6 +375,14 @@
       </ContextState>
       <ContextState
          contextName = "DetailsViewController.menu.getter:DetailsViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "DealViewController.authenticatePressed(_:):DealViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UIApplication.shared.canOpenURL(URL(string:&quot;comgooglemaps://&quot;)!)">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "closure #1 in closure #1 in VendorMapViewController.requestLocationAccess():VendorMapViewController.swift">
@@ -571,13 +587,13 @@
          contextName = "promptForLocation.locationManager(_:didChangeAuthorization:):VendorMapViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "FavoritesViewController.requestLocationAccess():FavoritesViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in closure #2 in DealsData.init(completion:):Database.swift">
       </ContextState>
       <ContextState
          contextName = "VendorData.loyaltyStruct.init(code:deal:count:dict:):Database.swift">
-      </ContextState>
-      <ContextState
-         contextName = "FavoritesViewController.requestLocationAccess():FavoritesViewController.swift">
       </ContextState>
       <ContextState
          contextName = "mach_msg_trap:(null)">
@@ -708,6 +724,9 @@
          <PersistentStrings>
             <PersistentString
                value = "indexPath.row-deals.filteredDeals.count">
+            </PersistentString>
+            <PersistentString
+               value = "URL(string:photo!)">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
