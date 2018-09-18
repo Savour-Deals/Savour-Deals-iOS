@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5E2B77275480E79A210575D7 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */; };
+		8312B9D8215177CF00D8F2AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */; };
+		8312B9DD215178B500D8F2AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312B9DC215178B400D8F2AF /* GoogleService-Info.plist */; };
 		8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
 		833756391F9E7F4E00336744 /* VendorMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833756381F9E7F4E00336744 /* VendorMapViewController.swift */; };
 		8337563B1F9E938C00336744 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337563A1F9E938C00336744 /* MapKit.framework */; };
@@ -54,8 +56,6 @@
 		836FAD9A2151413700160BB3 /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
 		836FAD9B2151413700160BB3 /* DealDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */; };
 		836FAD9F2151413700160BB3 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		836FADB12151450400160BB3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 836FADB02151450400160BB3 /* GoogleService-Info.plist */; };
-		836FADB32151451100160BB3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 836FADB22151451100160BB3 /* GoogleService-Info.plist */; };
 		836FADBB215146FD00160BB3 /* DealsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBA215146FD00160BB3 /* DealsData.swift */; };
 		836FADBC215146FD00160BB3 /* DealsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBA215146FD00160BB3 /* DealsData.swift */; };
 		836FADBE2151474100160BB3 /* Deal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBD2151474100160BB3 /* Deal.swift */; };
@@ -132,6 +132,8 @@
 		09AF41A9D1B4F9CB19534A88 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		11FC412B5DFD4025E307D473 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleAPI/Release/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8312B9DC215178B400D8F2AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleAPI/Debug/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RestaurantDetails.storyboard; sourceTree = "<group>"; };
 		833756381F9E7F4E00336744 /* VendorMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorMapViewController.swift; sourceTree = "<group>"; };
 		8337563A1F9E938C00336744 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -153,9 +155,6 @@
 		836AFD2720DDAF85002DA873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		836AFD3220DDB4AA002DA873 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		836FADA42151413700160BB3 /* Savour Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Savour Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		836FADA52151413800160BB3 /* Savour copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Savour copy-Info.plist"; path = "/Users/Chris/Documents/Savour Deals Project/Savour Deals iOS/Savour copy-Info.plist"; sourceTree = "<absolute>"; };
-		836FADB02151450400160BB3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Release/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
-		836FADB22151451100160BB3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Debug/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		836FADBA215146FD00160BB3 /* DealsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsData.swift; sourceTree = "<group>"; };
 		836FADBD2151474100160BB3 /* Deal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deal.swift; sourceTree = "<group>"; };
 		836FADC02151475100160BB3 /* Vendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vendor.swift; sourceTree = "<group>"; };
@@ -306,7 +305,6 @@
 				83802D6A1F2ED1FD00E315FB /* Products */,
 				9843D2A17469187CACDB6A4C /* Frameworks */,
 				E3369BFE56DB7D02F0FFA0FF /* Pods */,
-				836FADA52151413800160BB3 /* Savour copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -324,8 +322,8 @@
 		83802D6B1F2ED1FD00E315FB /* Savour */ = {
 			isa = PBXGroup;
 			children = (
-				836FADB02151450400160BB3 /* GoogleService-Info.plist */,
-				836FADB22151451100160BB3 /* GoogleService-Info.plist */,
+				8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */,
+				8312B9DC215178B400D8F2AF /* GoogleService-Info.plist */,
 				83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */,
 				83B0F94D1F32C64C00759C34 /* Savour.entitlements */,
 				83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */,
@@ -564,7 +562,7 @@
 				836FAD972151413700160BB3 /* Acknowledgements.plist in Resources */,
 				836FAD982151413700160BB3 /* Onboarding.storyboard in Resources */,
 				836FAD992151413700160BB3 /* tutorial.storyboard in Resources */,
-				836FADB32151451100160BB3 /* GoogleService-Info.plist in Resources */,
+				8312B9DD215178B500D8F2AF /* GoogleService-Info.plist in Resources */,
 				836FAD9A2151413700160BB3 /* RestaurantDetails.storyboard in Resources */,
 				836FAD9B2151413700160BB3 /* DealDetails.storyboard in Resources */,
 			);
@@ -581,7 +579,7 @@
 				83BA5CCD1FFB3E6F009C7880 /* Acknowledgements.plist in Resources */,
 				83802D721F2ED1FD00E315FB /* Onboarding.storyboard in Resources */,
 				83BC91E81F8C0FB30031C372 /* tutorial.storyboard in Resources */,
-				836FADB12151450400160BB3 /* GoogleService-Info.plist in Resources */,
+				8312B9D8215177CF00D8F2AF /* GoogleService-Info.plist in Resources */,
 				8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */,
 				83446AA91F3C06AB00CBE73E /* DealDetails.storyboard in Resources */,
 			);
