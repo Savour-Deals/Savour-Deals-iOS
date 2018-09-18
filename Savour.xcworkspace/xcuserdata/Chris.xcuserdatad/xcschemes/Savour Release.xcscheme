@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "83802D681F2ED1FD00E315FB"
-               BuildableName = "Savour.app"
-               BlueprintName = "Savour"
+               BuildableName = "Savour Prod.app"
+               BlueprintName = "Savour Prod"
                ReferencedContainer = "container:Savour.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83802D681F2ED1FD00E315FB"
-            BuildableName = "Savour.app"
-            BlueprintName = "Savour"
+            BuildableName = "Savour Prod.app"
+            BlueprintName = "Savour Prod"
             ReferencedContainer = "container:Savour.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83802D681F2ED1FD00E315FB"
-            BuildableName = "Savour.app"
-            BlueprintName = "Savour"
+            BuildableName = "Savour Prod.app"
+            BlueprintName = "Savour Prod"
             ReferencedContainer = "container:Savour.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83802D681F2ED1FD00E315FB"
-            BuildableName = "Savour.app"
-            BlueprintName = "Savour"
+            BuildableName = "Savour Prod.app"
+            BlueprintName = "Savour Prod"
             ReferencedContainer = "container:Savour.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

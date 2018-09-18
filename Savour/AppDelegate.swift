@@ -28,17 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var canSendNoti = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        var filePath:String!
-        #if DEBUG
-        print("[FIREBASE] Development mode.")
-        filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist", inDirectory: "Debug")
-        #else
-        print("[FIREBASE] Production mode.")
-        filePath = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist", inDirectory: "Release")
-        #endif
-        
-        let options = FirebaseOptions.init(contentsOfFile: filePath)!
-        FirebaseApp.configure(options: options)
+        FirebaseApp.configure()
         
         let notificationOpenedBlock: OSHandleNotificationActionBlock = { result in
             let payload: OSNotificationPayload = result!.notification.payload
@@ -67,7 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
         // OneSignal.syncHashedEmail(userEmail)
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         UINavigationBar.appearance().barStyle = .blackOpaque
-        UIApplication.shared.isStatusBarHidden = false
         UINavigationBar.appearance().barStyle = .blackOpaque
         
         if #available(iOS 10.0, *) {

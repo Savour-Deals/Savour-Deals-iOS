@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83802D681F2ED1FD00E315FB"
-               BuildableName = "Savour.app"
-               BlueprintName = "Savour"
+               BlueprintIdentifier = "836FAD772151413700160BB3"
+               BuildableName = "Savour Test.app"
+               BlueprintName = "Savour Test"
                ReferencedContainer = "container:Savour.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "83802D681F2ED1FD00E315FB"
-            BuildableName = "Savour.app"
-            BlueprintName = "Savour"
+            BuildableName = "Savour Prod.app"
+            BlueprintName = "Savour Prod"
             ReferencedContainer = "container:Savour.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83802D681F2ED1FD00E315FB"
-            BuildableName = "Savour.app"
-            BlueprintName = "Savour"
+            BlueprintIdentifier = "836FAD772151413700160BB3"
+            BuildableName = "Savour Test.app"
+            BlueprintName = "Savour Test"
             ReferencedContainer = "container:Savour.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,16 +74,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "83802D681F2ED1FD00E315FB"
-            BuildableName = "Savour.app"
-            BlueprintName = "Savour"
-            ReferencedContainer = "container:Savour.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

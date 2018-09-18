@@ -211,7 +211,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
         }
         print("Successfully logged in with facebook...")
         let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-        Auth.auth().signIn(with: credential) { (user, error) in
+        Auth.auth().signInAndRetrieveData(with: credential) { (userdata, error) in
             if error != nil {
                 print(error.debugDescription)
                 return
@@ -225,6 +225,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                 }
                 else
                 {
+                    let user = userdata?.user
                     data = result as? [String : AnyObject]
                     let name = data["name"] as! String
                     let id = data["id"] as! String

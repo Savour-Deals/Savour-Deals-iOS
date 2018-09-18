@@ -42,10 +42,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBOutlet weak var DealsTable: UITableView!
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -97,6 +93,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.NotificationDealIsAvailable, object: nil)
     }
     
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
+    }
+    
     deinit { //Remove background observer
         NotificationCenter.default.removeObserver(self)
     }
@@ -124,7 +124,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.navigationController?.view.backgroundColor = UIColor.white
                 self.navigationController?.navigationItem.title = ""
                 
-                UIApplication.shared.statusBarStyle = .lightContent
+//                UIApplication.shared.statusBarStyle = .lightContent
                 
                 self.refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
                 self.refreshControl.tintColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
@@ -256,7 +256,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.view.backgroundColor = UIColor.white
         self.navigationController?.navigationItem.title = ""
         
-        UIApplication.shared.statusBarStyle = .lightContent
+//        UIApplication.shared.statusBarStyle = .lightContent
         
         refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
         refreshControl.tintColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)

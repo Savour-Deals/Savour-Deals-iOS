@@ -14,12 +14,24 @@
 		<key>Savour Location.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>20</integer>
+			<integer>3</integer>
+		</dict>
+		<key>Savour copy.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>28</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>836AFD2220DDAF85002DA873</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>836FAD772151413700160BB3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

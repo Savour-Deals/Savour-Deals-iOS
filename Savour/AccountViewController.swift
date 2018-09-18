@@ -57,17 +57,7 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
             if error != nil{
                 print("Error: \(String(describing: error))")
             }else{
-//                var data = result as! [String : AnyObject]
-//                if let _ = data["friends"] {
-//                    data = data["friends"] as! [String : AnyObject]
-//                    let friends = data["data"] as! NSArray
-//                    if friends.count > 0{
-//                        self.friendsText = "You have \(friends.count) friend using Savour!\nClick here to invite more!"
-//                    }else{
-//                        self.friendsText = "Click here to invite your friends to Savour Deals!"
-//                    }
-//                    self.tableView.reloadData()
-//                }
+                //TODO: Find whats causing crashes with friendData["data"] being empty
                 if let data = result as? [String:Any] {
                     if let friendData = data["friends"] as? [String : Any]{
                         if let friends = friendData["data"] as? NSArray {
@@ -87,16 +77,26 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.tableFooterView = footerView
     }
     
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+
+        return UIStatusBarStyle.default
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
+        statusBar?.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1);
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
-        let statusBar = UIApplication.shared.value(forKey: "statusBar") as! UIView
-        statusBar.backgroundColor = UIColor.white
+        let statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
+        statusBar?.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1);
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
         }
 
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        UIApplication.shared.statusBarStyle = .lightContent
+//        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -223,16 +223,18 @@ class AccountViewController: UIViewController, UITableViewDataSource, UITableVie
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self
         
-        mailComposerVC.setToRecipients(["info@savourdeals.com"])
+        mailComposerVC.setToRecipients(["christopher.patterson@savourdeals.com","matthew.schalow@savourdeals.com"])
         mailComposerVC.setSubject("Savour Deals")
         return mailComposerVC
     }
+    
     func showMailError() {
         let sendMailErrorAlert = UIAlertController(title: "Could not send email", message: "Your device could not send email", preferredStyle: .alert)
         let dismiss = UIAlertAction(title: "Ok", style: .default, handler: nil)
         sendMailErrorAlert.addAction(dismiss)
         self.present(sendMailErrorAlert, animated: true, completion: nil)
     }
+    
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
     }
@@ -404,7 +406,7 @@ class BecomeVendorViewController: UIViewController{
         openURL(url: "https://www.savourdeals.com/vendorsinfo/")
     }
     @IBAction func signupPressed(_ sender: Any) {
-        openURL(url: "https://www.savourdeals.com/signup/")
+        openURL(url: "https://savour-deals.firebaseapp.com/")
     }
     
     func openURL(url: String){

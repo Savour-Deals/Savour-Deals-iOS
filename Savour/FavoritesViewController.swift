@@ -47,7 +47,8 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         super.viewWillAppear(false)
         locationManager = CLLocationManager()
         let sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
-
+        statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         let status = CLLocationManager.authorizationStatus()
         if status == CLAuthorizationStatus.denied {
             self.locationDisabled()
@@ -75,6 +76,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     
+    
     deinit { //Remove background observer
         NotificationCenter.default.removeObserver(self)
     }
@@ -97,8 +99,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
-        statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+
         FavTable.isHidden = false
         var activeFav = [DealData]()
         var inactiveFav = [DealData]()
