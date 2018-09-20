@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1000"
-   version = "1.3">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "836FAD772151413700160BB3"
+            BlueprintIdentifier = "8312B9DE2151A81900D8F2AF"
             BuildableName = "Savour Test.app"
             BlueprintName = "Savour Test"
             ReferencedContainer = "container:Savour.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "836FAD772151413700160BB3"
+            BlueprintIdentifier = "8312B9DE2151A81900D8F2AF"
             BuildableName = "Savour Test.app"
             BlueprintName = "Savour Test"
             ReferencedContainer = "container:Savour.xcodeproj">
@@ -63,6 +63,10 @@
       </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
+      <LocationScenarioReference
+         identifier = "../Savour/Location.gpx"
+         referenceType = "0">
+      </LocationScenarioReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -70,8 +74,7 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "836FAD772151413700160BB3"
@@ -79,7 +82,7 @@
             BlueprintName = "Savour Test"
             ReferencedContainer = "container:Savour.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

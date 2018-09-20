@@ -9,7 +9,39 @@
 /* Begin PBXBuildFile section */
 		5E2B77275480E79A210575D7 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */; };
 		8312B9D8215177CF00D8F2AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */; };
-		8312B9DD215178B500D8F2AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312B9DC215178B400D8F2AF /* GoogleService-Info.plist */; };
+		8312B9E32151A81900D8F2AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E131F3151A4002D7198 /* ViewController.swift */; };
+		8312B9E42151A81900D8F2AF /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */; };
+		8312B9E52151A81900D8F2AF /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AA11F3BDC6400CBE73E /* AccountViewController.swift */; };
+		8312B9E62151A81900D8F2AF /* VendorMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833756381F9E7F4E00336744 /* VendorMapViewController.swift */; };
+		8312B9E72151A81900D8F2AF /* DealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AAA1F3C130400CBE73E /* DealViewController.swift */; };
+		8312B9E82151A81900D8F2AF /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADC02151475100160BB3 /* Vendor.swift */; };
+		8312B9E92151A81900D8F2AF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6E1F2ED1FD00E315FB /* LoginViewController.swift */; };
+		8312B9EA2151A81900D8F2AF /* ratingsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836AFD0E20DCA5BA002DA873 /* ratingsHelper.swift */; };
+		8312B9EB2151A81900D8F2AF /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E151F315BA8002D7198 /* SignUpViewController.swift */; };
+		8312B9EC2151A81900D8F2AF /* VendorsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E191F3187AA002D7198 /* VendorsData.swift */; };
+		8312B9ED2151A81900D8F2AF /* Deal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBD2151474100160BB3 /* Deal.swift */; };
+		8312B9EE2151A81900D8F2AF /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D55E71FB6A91A00C66125 /* TabBarViewController.swift */; };
+		8312B9EF2151A81900D8F2AF /* OnboardingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BC91E91F8C12DC0031C372 /* OnboardingController.swift */; };
+		8312B9F02151A81900D8F2AF /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E4839420D0BF08009B4C3B /* extensions.swift */; };
+		8312B9F12151A81900D8F2AF /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
+		8312B9F22151A81900D8F2AF /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */; };
+		8312B9F32151A81900D8F2AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */; };
+		8312B9F42151A81900D8F2AF /* DealsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBA215146FD00160BB3 /* DealsData.swift */; };
+		8312B9F52151A81900D8F2AF /* RestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AAC1F3C1D4200CBE73E /* RestaurantViewController.swift */; };
+		8312B9F72151A81900D8F2AF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
+		8312B9F82151A81900D8F2AF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337563A1F9E938C00336744 /* MapKit.framework */; };
+		8312B9F92151A81900D8F2AF /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */; };
+		8312B9FB2151A81900D8F2AF /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 834F1A822045179E002AA6FD /* Location.gpx */; };
+		8312B9FC2151A81900D8F2AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D751F2ED1FD00E315FB /* LaunchScreen.storyboard */; };
+		8312B9FD2151A81900D8F2AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 834C1E111F31518F002D7198 /* Main.storyboard */; };
+		8312B9FE2151A81900D8F2AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83802D731F2ED1FD00E315FB /* Assets.xcassets */; };
+		8312B9FF2151A81900D8F2AF /* Acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */; };
+		8312BA002151A81900D8F2AF /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D701F2ED1FD00E315FB /* Onboarding.storyboard */; };
+		8312BA012151A81900D8F2AF /* tutorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83BC91E71F8C0FB20031C372 /* tutorial.storyboard */; };
+		8312BA032151A81900D8F2AF /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
+		8312BA042151A81900D8F2AF /* DealDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */; };
+		8312BA082151A81900D8F2AF /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8312BA102151A92100D8F2AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312BA0F2151A92100D8F2AF /* GoogleService-Info.plist */; };
 		8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
 		833756391F9E7F4E00336744 /* VendorMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833756381F9E7F4E00336744 /* VendorMapViewController.swift */; };
 		8337563B1F9E938C00336744 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337563A1F9E938C00336744 /* MapKit.framework */; };
@@ -27,41 +59,9 @@
 		836AFD0F20DCA5BA002DA873 /* ratingsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836AFD0E20DCA5BA002DA873 /* ratingsHelper.swift */; };
 		836AFD2620DDAF85002DA873 /* SavourDealsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836AFD2520DDAF85002DA873 /* SavourDealsUITests.swift */; };
 		836AFD3320DDB4AA002DA873 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836AFD3220DDB4AA002DA873 /* SnapshotHelper.swift */; };
-		836FAD7C2151413700160BB3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E131F3151A4002D7198 /* ViewController.swift */; };
-		836FAD7D2151413700160BB3 /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */; };
-		836FAD7E2151413700160BB3 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AA11F3BDC6400CBE73E /* AccountViewController.swift */; };
-		836FAD7F2151413700160BB3 /* VendorMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833756381F9E7F4E00336744 /* VendorMapViewController.swift */; };
-		836FAD802151413700160BB3 /* DealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AAA1F3C130400CBE73E /* DealViewController.swift */; };
-		836FAD812151413700160BB3 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6E1F2ED1FD00E315FB /* LoginViewController.swift */; };
-		836FAD822151413700160BB3 /* ratingsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836AFD0E20DCA5BA002DA873 /* ratingsHelper.swift */; };
-		836FAD832151413700160BB3 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E151F315BA8002D7198 /* SignUpViewController.swift */; };
-		836FAD842151413700160BB3 /* VendorsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E191F3187AA002D7198 /* VendorsData.swift */; };
-		836FAD852151413700160BB3 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D55E71FB6A91A00C66125 /* TabBarViewController.swift */; };
-		836FAD862151413700160BB3 /* OnboardingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BC91E91F8C12DC0031C372 /* OnboardingController.swift */; };
-		836FAD872151413700160BB3 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E4839420D0BF08009B4C3B /* extensions.swift */; };
-		836FAD882151413700160BB3 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
-		836FAD892151413700160BB3 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446A9F1F381BC500CBE73E /* FavoritesViewController.swift */; };
-		836FAD8A2151413700160BB3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */; };
-		836FAD8B2151413700160BB3 /* RestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83446AAC1F3C1D4200CBE73E /* RestaurantViewController.swift */; };
-		836FAD8D2151413700160BB3 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
-		836FAD8E2151413700160BB3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337563A1F9E938C00336744 /* MapKit.framework */; };
-		836FAD8F2151413700160BB3 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */; };
-		836FAD912151413700160BB3 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 834F1A822045179E002AA6FD /* Location.gpx */; };
-		836FAD932151413700160BB3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D751F2ED1FD00E315FB /* LaunchScreen.storyboard */; };
-		836FAD952151413700160BB3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 834C1E111F31518F002D7198 /* Main.storyboard */; };
-		836FAD962151413700160BB3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83802D731F2ED1FD00E315FB /* Assets.xcassets */; };
-		836FAD972151413700160BB3 /* Acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */; };
-		836FAD982151413700160BB3 /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83802D701F2ED1FD00E315FB /* Onboarding.storyboard */; };
-		836FAD992151413700160BB3 /* tutorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83BC91E71F8C0FB20031C372 /* tutorial.storyboard */; };
-		836FAD9A2151413700160BB3 /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
-		836FAD9B2151413700160BB3 /* DealDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */; };
-		836FAD9F2151413700160BB3 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		836FADBB215146FD00160BB3 /* DealsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBA215146FD00160BB3 /* DealsData.swift */; };
-		836FADBC215146FD00160BB3 /* DealsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBA215146FD00160BB3 /* DealsData.swift */; };
 		836FADBE2151474100160BB3 /* Deal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBD2151474100160BB3 /* Deal.swift */; };
-		836FADBF2151474100160BB3 /* Deal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADBD2151474100160BB3 /* Deal.swift */; };
 		836FADC12151475100160BB3 /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADC02151475100160BB3 /* Vendor.swift */; };
-		836FADC22151475100160BB3 /* Vendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836FADC02151475100160BB3 /* Vendor.swift */; };
 		836FE96F20AD3B0A00E08B31 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 834F1A822045179E002AA6FD /* Location.gpx */; };
 		83802D6D1F2ED1FD00E315FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */; };
 		83802D6F1F2ED1FD00E315FB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83802D6E1F2ED1FD00E315FB /* LoginViewController.swift */; };
@@ -80,19 +80,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8312B9E02151A81900D8F2AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83802D611F2ED1FD00E315FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8397B2C01F951D3400EC392C;
+			remoteInfo = OneSignalNotificationServiceExtension;
+		};
 		836AFD2820DDAF85002DA873 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83802D611F2ED1FD00E315FB /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 83802D681F2ED1FD00E315FB;
 			remoteInfo = Savour;
-		};
-		836FAD792151413700160BB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83802D611F2ED1FD00E315FB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8397B2C01F951D3400EC392C;
-			remoteInfo = OneSignalNotificationServiceExtension;
 		};
 		8397B2C61F951D3400EC392C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -104,13 +104,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		836FAD9E2151413700160BB3 /* Embed App Extensions */ = {
+		8312BA072151A81900D8F2AF /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				836FAD9F2151413700160BB3 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
+				8312BA082151A81900D8F2AF /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -133,7 +133,8 @@
 		11FC412B5DFD4025E307D473 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleAPI/Release/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		8312B9DC215178B400D8F2AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleAPI/Debug/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8312BA0D2151A81900D8F2AF /* Savour Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Savour Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8312BA0F2151A92100D8F2AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleAPI/Debug/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RestaurantDetails.storyboard; sourceTree = "<group>"; };
 		833756381F9E7F4E00336744 /* VendorMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendorMapViewController.swift; sourceTree = "<group>"; };
 		8337563A1F9E938C00336744 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -154,7 +155,6 @@
 		836AFD2520DDAF85002DA873 /* SavourDealsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavourDealsUITests.swift; sourceTree = "<group>"; };
 		836AFD2720DDAF85002DA873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		836AFD3220DDB4AA002DA873 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
-		836FADA42151413700160BB3 /* Savour Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Savour Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		836FADBA215146FD00160BB3 /* DealsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DealsData.swift; sourceTree = "<group>"; };
 		836FADBD2151474100160BB3 /* Deal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deal.swift; sourceTree = "<group>"; };
 		836FADC02151475100160BB3 /* Vendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vendor.swift; sourceTree = "<group>"; };
@@ -183,20 +183,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8312B9F62151A81900D8F2AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8312B9F72151A81900D8F2AF /* CoreData.framework in Frameworks */,
+				8312B9F82151A81900D8F2AF /* MapKit.framework in Frameworks */,
+				8312B9F92151A81900D8F2AF /* Pods_Savour.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		836AFD2020DDAF85002DA873 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		836FAD8C2151413700160BB3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				836FAD8D2151413700160BB3 /* CoreData.framework in Frameworks */,
-				836FAD8E2151413700160BB3 /* MapKit.framework in Frameworks */,
-				836FAD8F2151413700160BB3 /* Pods_Savour.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,7 +314,7 @@
 				83802D691F2ED1FD00E315FB /* Savour Prod.app */,
 				8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */,
 				836AFD2320DDAF85002DA873 /* SavourDealsUITests.xctest */,
-				836FADA42151413700160BB3 /* Savour Test.app */,
+				8312BA0D2151A81900D8F2AF /* Savour Test.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,7 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */,
-				8312B9DC215178B400D8F2AF /* GoogleService-Info.plist */,
+				8312BA0F2151A92100D8F2AF /* GoogleService-Info.plist */,
 				83BA5CCC1FFB3E6F009C7880 /* Acknowledgements.plist */,
 				83B0F94D1F32C64C00759C34 /* Savour.entitlements */,
 				83802D6C1F2ED1FD00E315FB /* AppDelegate.swift */,
@@ -385,6 +385,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8312B9DE2151A81900D8F2AF /* Savour Test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8312BA0A2151A81900D8F2AF /* Build configuration list for PBXNativeTarget "Savour Test" */;
+			buildPhases = (
+				8312B9E12151A81900D8F2AF /* [CP] Check Pods Manifest.lock */,
+				8312B9E22151A81900D8F2AF /* Sources */,
+				8312B9F62151A81900D8F2AF /* Frameworks */,
+				8312B9FA2151A81900D8F2AF /* Resources */,
+				8312BA052151A81900D8F2AF /* [CP] Embed Pods Frameworks */,
+				8312BA062151A81900D8F2AF /* [CP] Copy Pods Resources */,
+				8312BA072151A81900D8F2AF /* Embed App Extensions */,
+				8312BA092151A81900D8F2AF /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8312B9DF2151A81900D8F2AF /* PBXTargetDependency */,
+			);
+			name = "Savour Test";
+			productName = Savour;
+			productReference = 8312BA0D2151A81900D8F2AF /* Savour Test.app */;
+			productType = "com.apple.product-type.application";
+		};
 		836AFD2220DDAF85002DA873 /* SavourDealsUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 836AFD2A20DDAF85002DA873 /* Build configuration list for PBXNativeTarget "SavourDealsUITests" */;
@@ -402,29 +425,6 @@
 			productName = SavourDealsUITests;
 			productReference = 836AFD2320DDAF85002DA873 /* SavourDealsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		836FAD772151413700160BB3 /* Savour Test */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 836FADA12151413700160BB3 /* Build configuration list for PBXNativeTarget "Savour Test" */;
-			buildPhases = (
-				836FAD7A2151413700160BB3 /* [CP] Check Pods Manifest.lock */,
-				836FAD7B2151413700160BB3 /* Sources */,
-				836FAD8C2151413700160BB3 /* Frameworks */,
-				836FAD902151413700160BB3 /* Resources */,
-				836FAD9C2151413700160BB3 /* [CP] Embed Pods Frameworks */,
-				836FAD9D2151413700160BB3 /* [CP] Copy Pods Resources */,
-				836FAD9E2151413700160BB3 /* Embed App Extensions */,
-				836FADA02151413700160BB3 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				836FAD782151413700160BB3 /* PBXTargetDependency */,
-			);
-			name = "Savour Test";
-			productName = Savour;
-			productReference = 836FADA42151413700160BB3 /* Savour Test.app */;
-			productType = "com.apple.product-type.application";
 		};
 		83802D681F2ED1FD00E315FB /* Savour Prod */ = {
 			isa = PBXNativeTarget;
@@ -478,16 +478,16 @@
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Chris Patterson";
 				TargetAttributes = {
+					8312B9DE2151A81900D8F2AF = {
+						DevelopmentTeam = C5FUB5PT9S;
+						ProvisioningStyle = Automatic;
+					};
 					836AFD2220DDAF85002DA873 = {
 						CreatedOnToolsVersion = 9.4;
 						DevelopmentTeam = C5FUB5PT9S;
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 83802D681F2ED1FD00E315FB;
-					};
-					836FAD772151413700160BB3 = {
-						DevelopmentTeam = C5FUB5PT9S;
-						ProvisioningStyle = Automatic;
 					};
 					83802D681F2ED1FD00E315FB = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -536,7 +536,7 @@
 			projectRoot = "";
 			targets = (
 				83802D681F2ED1FD00E315FB /* Savour Prod */,
-				836FAD772151413700160BB3 /* Savour Test */,
+				8312B9DE2151A81900D8F2AF /* Savour Test */,
 				8397B2C01F951D3400EC392C /* OneSignalNotificationServiceExtension */,
 				836AFD2220DDAF85002DA873 /* SavourDealsUITests */,
 			);
@@ -544,27 +544,27 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8312B9FA2151A81900D8F2AF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8312B9FB2151A81900D8F2AF /* Location.gpx in Resources */,
+				8312B9FC2151A81900D8F2AF /* LaunchScreen.storyboard in Resources */,
+				8312B9FD2151A81900D8F2AF /* Main.storyboard in Resources */,
+				8312B9FE2151A81900D8F2AF /* Assets.xcassets in Resources */,
+				8312B9FF2151A81900D8F2AF /* Acknowledgements.plist in Resources */,
+				8312BA002151A81900D8F2AF /* Onboarding.storyboard in Resources */,
+				8312BA012151A81900D8F2AF /* tutorial.storyboard in Resources */,
+				8312BA102151A92100D8F2AF /* GoogleService-Info.plist in Resources */,
+				8312BA032151A81900D8F2AF /* RestaurantDetails.storyboard in Resources */,
+				8312BA042151A81900D8F2AF /* DealDetails.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		836AFD2120DDAF85002DA873 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		836FAD902151413700160BB3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				836FAD912151413700160BB3 /* Location.gpx in Resources */,
-				836FAD932151413700160BB3 /* LaunchScreen.storyboard in Resources */,
-				836FAD952151413700160BB3 /* Main.storyboard in Resources */,
-				836FAD962151413700160BB3 /* Assets.xcassets in Resources */,
-				836FAD972151413700160BB3 /* Acknowledgements.plist in Resources */,
-				836FAD982151413700160BB3 /* Onboarding.storyboard in Resources */,
-				836FAD992151413700160BB3 /* tutorial.storyboard in Resources */,
-				8312B9DD215178B500D8F2AF /* GoogleService-Info.plist in Resources */,
-				836FAD9A2151413700160BB3 /* RestaurantDetails.storyboard in Resources */,
-				836FAD9B2151413700160BB3 /* DealDetails.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,20 +625,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		834A45E420A2D33300A0A031 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n\n";
-		};
-		836FAD7A2151413700160BB3 /* [CP] Check Pods Manifest.lock */ = {
+		8312B9E12151A81900D8F2AF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -656,7 +643,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		836FAD9C2151413700160BB3 /* [CP] Embed Pods Frameworks */ = {
+		8312BA052151A81900D8F2AF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -700,7 +687,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		836FAD9D2151413700160BB3 /* [CP] Copy Pods Resources */ = {
+		8312BA062151A81900D8F2AF /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -715,7 +702,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		836FADA02151413700160BB3 /* ShellScript */ = {
+		8312BA092151A81900D8F2AF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -726,7 +713,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n\n";
+		};
+		834A45E420A2D33300A0A031 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n\n";
 		};
 		E86C244E482D842BC617C82B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -811,38 +811,38 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8312B9E22151A81900D8F2AF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8312B9E32151A81900D8F2AF /* ViewController.swift in Sources */,
+				8312B9E42151A81900D8F2AF /* DealTableViewCell.swift in Sources */,
+				8312B9E52151A81900D8F2AF /* AccountViewController.swift in Sources */,
+				8312B9E62151A81900D8F2AF /* VendorMapViewController.swift in Sources */,
+				8312B9E72151A81900D8F2AF /* DealViewController.swift in Sources */,
+				8312B9E82151A81900D8F2AF /* Vendor.swift in Sources */,
+				8312B9E92151A81900D8F2AF /* LoginViewController.swift in Sources */,
+				8312B9EA2151A81900D8F2AF /* ratingsHelper.swift in Sources */,
+				8312B9EB2151A81900D8F2AF /* SignUpViewController.swift in Sources */,
+				8312B9EC2151A81900D8F2AF /* VendorsData.swift in Sources */,
+				8312B9ED2151A81900D8F2AF /* Deal.swift in Sources */,
+				8312B9EE2151A81900D8F2AF /* TabBarViewController.swift in Sources */,
+				8312B9EF2151A81900D8F2AF /* OnboardingController.swift in Sources */,
+				8312B9F02151A81900D8F2AF /* extensions.swift in Sources */,
+				8312B9F12151A81900D8F2AF /* Globals.swift in Sources */,
+				8312B9F22151A81900D8F2AF /* FavoritesViewController.swift in Sources */,
+				8312B9F32151A81900D8F2AF /* AppDelegate.swift in Sources */,
+				8312B9F42151A81900D8F2AF /* DealsData.swift in Sources */,
+				8312B9F52151A81900D8F2AF /* RestaurantViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		836AFD1F20DDAF85002DA873 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				836AFD2620DDAF85002DA873 /* SavourDealsUITests.swift in Sources */,
 				836AFD3320DDB4AA002DA873 /* SnapshotHelper.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		836FAD7B2151413700160BB3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				836FAD7C2151413700160BB3 /* ViewController.swift in Sources */,
-				836FAD7D2151413700160BB3 /* DealTableViewCell.swift in Sources */,
-				836FAD7E2151413700160BB3 /* AccountViewController.swift in Sources */,
-				836FAD7F2151413700160BB3 /* VendorMapViewController.swift in Sources */,
-				836FAD802151413700160BB3 /* DealViewController.swift in Sources */,
-				836FADC22151475100160BB3 /* Vendor.swift in Sources */,
-				836FAD812151413700160BB3 /* LoginViewController.swift in Sources */,
-				836FAD822151413700160BB3 /* ratingsHelper.swift in Sources */,
-				836FAD832151413700160BB3 /* SignUpViewController.swift in Sources */,
-				836FAD842151413700160BB3 /* VendorsData.swift in Sources */,
-				836FADBF2151474100160BB3 /* Deal.swift in Sources */,
-				836FAD852151413700160BB3 /* TabBarViewController.swift in Sources */,
-				836FAD862151413700160BB3 /* OnboardingController.swift in Sources */,
-				836FAD872151413700160BB3 /* extensions.swift in Sources */,
-				836FAD882151413700160BB3 /* Globals.swift in Sources */,
-				836FAD892151413700160BB3 /* FavoritesViewController.swift in Sources */,
-				836FAD8A2151413700160BB3 /* AppDelegate.swift in Sources */,
-				836FADBC215146FD00160BB3 /* DealsData.swift in Sources */,
-				836FAD8B2151413700160BB3 /* RestaurantViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -883,15 +883,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		8312B9DF2151A81900D8F2AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8397B2C01F951D3400EC392C /* OneSignalNotificationServiceExtension */;
+			targetProxy = 8312B9E02151A81900D8F2AF /* PBXContainerItemProxy */;
+		};
 		836AFD2920DDAF85002DA873 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 83802D681F2ED1FD00E315FB /* Savour Prod */;
 			targetProxy = 836AFD2820DDAF85002DA873 /* PBXContainerItemProxy */;
-		};
-		836FAD782151413700160BB3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8397B2C01F951D3400EC392C /* OneSignalNotificationServiceExtension */;
-			targetProxy = 836FAD792151413700160BB3 /* PBXContainerItemProxy */;
 		};
 		8397B2C71F951D3400EC392C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -920,6 +920,68 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8312BA0B2151A81900D8F2AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Savour/Savour.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C5FUB5PT9S;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_OPTIMIZATION_LEVEL = 3;
+				INFOPLIST_FILE = Savour/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		8312BA0C2151A81900D8F2AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B71047018234E33720347934 /* Pods-Savour.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Savour/Savour.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C5FUB5PT9S;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = Savour/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		836AFD2C20DDAF85002DA873 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1069,68 +1131,6 @@
 			};
 			name = Debug;
 		};
-		836FADA22151413700160BB3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Savour/Savour.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = C5FUB5PT9S;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				GCC_OPTIMIZATION_LEVEL = 3;
-				INFOPLIST_FILE = "Savour copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		836FADA32151413700160BB3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B71047018234E33720347934 /* Pods-Savour.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Savour/Savour.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = C5FUB5PT9S;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				GCC_OPTIMIZATION_LEVEL = 0;
-				INFOPLIST_FILE = "Savour copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.CP.Savour;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		83802D7A1F2ED1FD00E315FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1238,20 +1238,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8312BA0A2151A81900D8F2AF /* Build configuration list for PBXNativeTarget "Savour Test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8312BA0B2151A81900D8F2AF /* Release */,
+				8312BA0C2151A81900D8F2AF /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		836AFD2A20DDAF85002DA873 /* Build configuration list for PBXNativeTarget "SavourDealsUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				836AFD2C20DDAF85002DA873 /* Release */,
 				836AFD3120DDB0E3002DA873 /* Debug */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		836FADA12151413700160BB3 /* Build configuration list for PBXNativeTarget "Savour Test" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				836FADA22151413700160BB3 /* Release */,
-				836FADA32151413700160BB3 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

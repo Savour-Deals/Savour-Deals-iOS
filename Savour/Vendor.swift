@@ -105,4 +105,12 @@ class VendorData{
         
     }
     
+    func updateDistance(){
+        if let _ = self.location,let _ = locationManager.location{
+            self.distanceMiles = (self.location?.distance(from: locationManager.location!))!/1609
+        }else{
+            print("Could not update distance. Vendor or location manager not present")
+        }
+    }
+    
 }

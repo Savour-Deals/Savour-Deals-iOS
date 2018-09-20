@@ -62,7 +62,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         ref.keepSynced(true)
         self.setup()
         if CLLocationManager.locationServicesEnabled() {
-            
             switch CLLocationManager.authorizationStatus() {
             case .notDetermined:
                 self.performSegue(withIdentifier: "tutorial", sender: self)
@@ -84,7 +83,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             case .restricted, .denied:
                 locationDisabled()
             }
-
         } else {
             self.performSegue(withIdentifier: "tutorial", sender: self)
         }

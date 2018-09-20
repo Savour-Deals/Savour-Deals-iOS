@@ -200,7 +200,7 @@ class VendorMapViewController: UIViewController{
 class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate{
     
     @IBOutlet weak var mapView: MKMapView!
-    var regionRadius: CLLocationDistance = 1000
+    var regionRadius: CLLocationDistance = 4000
     var locationManager: CLLocationManager!
     var flag = 1
     
@@ -226,8 +226,9 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // set initial location
         let initialLocation = CLLocation(latitude: 44.977289, longitude: -93.229499)
-        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            let viewRegion = MKCoordinateRegion.init(center: initialLocation.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        let status = CLLocationManager.authorizationStatus()
+        if  status == .authorizedWhenInUse || status == .authorizedAlways {
+            let viewRegion = MKCoordinateRegion.init(center: initialLocation.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
             mapView.setRegion(viewRegion, animated: false)
             DispatchQueue.main.async {
                 self.locationManager!.startUpdatingLocation()
@@ -235,9 +236,10 @@ class mapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.showsUserLocation = true
         }
     }
+    
     @IBAction func centerMap(_ sender: Any) {
         if let _ = locationManager.location?.coordinate{
-            let viewRegion = MKCoordinateRegion.init(center: (locationManager.location?.coordinate)!, latitudinalMeters: 1000, longitudinalMeters: 1000)
+            let viewRegion = MKCoordinateRegion.init(center: (locationManager.location?.coordinate)!, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
             mapView.setRegion(viewRegion, animated: true)
         }
     }
