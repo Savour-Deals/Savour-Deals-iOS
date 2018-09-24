@@ -184,7 +184,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!){
         isLoggingin()
-        var data:[String:AnyObject]!
         if error != nil {
             print(error)
             self.endLoggingin()
@@ -212,21 +211,25 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                 else
                 {
                     let user = userdata?.user
-                    data = result as? [String : AnyObject]
-                    let name = data["name"] as! String
-                    let id = data["id"] as! String
-                    let email = data["email"] as! String
-                    let birthday = data["birthday"]
-                    user?.updateEmail(to: email, completion: { (error) in
-                        if ((error) != nil)
-                        {
-                            print("Error: \(String(describing: error))")
+                    if let data = result as? [String : AnyObject]{
+                        if let name = data["name"] as? String{
+                            self.ref.child("Users").child(user!.uid).child("full_name").setValue(name)
                         }
-                    })
-                    self.ref.child("Users").child(user!.uid).child("full_name").setValue(name)
-                    self.ref.child("Users").child(user!.uid).child("facebook_id").setValue(id)
-                    self.ref.child("Users").child(user!.uid).child("birthday").setValue(birthday)
-
+                        if let id = data["id"] as? String{
+                            self.ref.child("Users").child(user!.uid).child("facebook_id").setValue(id)
+                        }
+                        if let email = data["email"] as? String{
+                            user?.updateEmail(to: email, completion: { (error) in
+                                if ((error) != nil)
+                                {
+                                    print("Error: \(String(describing: error))")
+                                }
+                            })
+                        }
+                        if let birthday = data["birthday"] {
+                            self.ref.child("Users").child(user!.uid).child("birthday").setValue(birthday)
+                        }
+                    }
                 }
             })
             self.gotoMain()

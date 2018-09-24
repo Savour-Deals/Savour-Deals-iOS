@@ -48,16 +48,24 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate,CLLoc
 
     
     func dealSetup(completion: @escaping (Bool) -> Void){
-        if deals == nil{
-            deals = DealsData(completion: { (success) in
+        let firstTab = self.viewControllers![0] as! UINavigationController
+        let firstView = firstTab.viewControllers.first  as! ViewController
+        let secondTab = self.viewControllers![1] as! UINavigationController
+        let secondView = secondTab.viewControllers.first  as! FavoritesViewController
+        let thirdTab = self.viewControllers![2] as! UINavigationController
+        let thirdView = thirdTab.viewControllers.first  as! VendorMapViewController
+        if deals != nil && vendors != nil{
+            firstView.dealsData = self.deals
+            secondView.dealsData = self.deals
+            thirdView.dealsData = self.deals
+            firstView.vendorsData = self.vendors
+            secondView.vendorsData = self.vendors
+            thirdView.vendorsData = self.vendors
+            self.finishedSetup = true
+            completion(true)
+        }else{
+            self.deals = DealsData(completion: { (success) in
                 self.vendors = VendorsData(completion: { (succ) in
-                    let firstTab = self.viewControllers![0] as! UINavigationController
-                    let firstView = firstTab.topViewController as! ViewController
-                    let secondTab = self.viewControllers![1] as! UINavigationController
-                    let secondView = secondTab.topViewController as! FavoritesViewController
-                    let thirdTab = self.viewControllers![2] as! UINavigationController
-                    let thirdView = thirdTab.topViewController as! VendorMapViewController
-                    
                     firstView.dealsData = self.deals
                     secondView.dealsData = self.deals
                     thirdView.dealsData = self.deals
@@ -68,9 +76,8 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate,CLLoc
                     completion(true)
                 })
             })
-        }else{
-            completion(true)
         }
+        
     }
     
     public func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool{

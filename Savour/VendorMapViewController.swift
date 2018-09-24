@@ -117,7 +117,6 @@ class VendorMapViewController: UIViewController{
         listVC.listTable.isHidden = true
         self.listVC.locationText.isHidden = false
         UIViewController.removeSpinner(spinner: self.sv)
-
     }
     
     @objc func locationEnabled(){
@@ -173,7 +172,9 @@ class VendorMapViewController: UIViewController{
     }
     
     func getData(){
-        vendorsData.updateDistances(location: locationManager.location!)
+        if let location = locationManager.location{
+            vendorsData.updateDistances(location: location)
+        }
         vendors = self.vendorsData.getVendors()
         for rest in vendors{
             self.vendorList[rest.id!] = rest

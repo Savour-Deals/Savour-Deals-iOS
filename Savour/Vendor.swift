@@ -61,13 +61,13 @@ class VendorData{
             self.subscriptionId = value["subscription_id"] as? String ?? ""
             if (snap?.childSnapshot(forPath: "daily_hours").childrenCount)! > 0 {
                 let hoursSnapshot = snap?.childSnapshot(forPath: "daily_hours").value as? NSDictionary
-                self.dailyHours.append(hoursSnapshot?["sun"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["mon"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["tues"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["sun"] as? String ?? "Not Available")
+                self.dailyHours.append(hoursSnapshot?["mon"] as? String ?? "Not Available")
+                self.dailyHours.append(hoursSnapshot?["tues"] as? String ?? "Not Available")
                 self.dailyHours.append(hoursSnapshot?["wed"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["thurs"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["fri"] as? String ?? "")
-                self.dailyHours.append(hoursSnapshot?["sat"] as? String ?? "")
+                self.dailyHours.append(hoursSnapshot?["thurs"] as? String ?? "Not Available")
+                self.dailyHours.append(hoursSnapshot?["fri"] as? String ?? "Not Available")
+                self.dailyHours.append(hoursSnapshot?["sat"] as? String ?? "Not Available")
             }
             if (snap?.childSnapshot(forPath: "loyalty/loyalty_deal").exists())!{
                 let loyaltySnapshot = snap?.childSnapshot(forPath: "loyalty").value as? NSDictionary
