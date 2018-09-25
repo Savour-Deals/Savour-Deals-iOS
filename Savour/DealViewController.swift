@@ -115,13 +115,17 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         }
         restaurantLabel.text = Deal?.name
         dealLbl.text = Deal?.dealDescription
-        if photo != ""{
-            let imageView: UIImageView = img
-            
-            // Load the image using SDWebImage
-            imageView.sd_setImage(with: URL(string:photo!), completed: { (img, err, typ, ref) in
+        if Deal.id != "SVR"{
+            if photo != ""{
+                let imageView: UIImageView = img
                 
-            })
+                // Load the image using SDWebImage
+                imageView.sd_setImage(with: URL(string:photo!), completed: { (img, err, typ, ref) in
+                    
+                })
+            }
+        }else{
+            img.image = UIImage(named: "icon")
         }
         moreBtn.setTitle("See More From " + (Deal?.name)!, for: .normal)
         imgbound.layer.insertSublayer(pulsator, below: imgbound.layer)
@@ -230,7 +234,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     ref.setValue(currTime)
                     
                     //Call Firebase cloud functions to increment stripe counter
-                    self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId, "increment_count":"1"]) { (result, error) in
+                    self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":0]) { (result, error) in
                         if let _ = error as NSError? {
                             //error handle
                         }

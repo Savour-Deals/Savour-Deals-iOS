@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Gjh-Kz-R8v">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.15" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Gjh-Kz-R8v">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.9"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -402,7 +402,7 @@
                                         <rect key="frame" x="0.0" y="729" width="414" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tsd-7G-EAC" id="O5o-cO-DbE">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="150"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="149.66666666666666"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yog-f6-2L1">
@@ -563,7 +563,7 @@
         <!--View Controller-->
         <scene sceneID="wzG-zo-PZi">
             <objects>
-                <viewController id="Bbv-JY-jcp" customClass="QRViewController" customModule="Savour" sceneMemberID="viewController">
+                <viewController id="Bbv-JY-jcp" customClass="QRViewController" customModule="Savour_Prod" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0ht-T7-jr6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -622,7 +622,7 @@
                         <viewLayoutGuide key="safeArea" id="o8P-x9-Xhb"/>
                     </view>
                     <connections>
-                        <outlet property="textView" destination="9xg-Zg-KBE" id="aHT-Uz-9t2"/>
+                        <outlet property="textView" destination="9xg-Zg-KBE" id="xsa-tY-LOT"/>
                         <outlet property="topbar" destination="Adl-T5-HzZ" id="VBo-KG-Sml"/>
                     </connections>
                 </viewController>

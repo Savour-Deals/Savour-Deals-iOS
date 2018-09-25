@@ -94,23 +94,35 @@ class VendorData{
                 }
             }
         }else{
-            self.id = ID
-            self.name = ""
-            self.photo = ""
-            self.description = ""
-            self.address = ""
-            self.menu = ""
+            self.name = "Savour Deals"
+            self.id = "SVRDEALS"
+            self.photo = "https://firebasestorage.googleapis.com/v0/b/savour-deals.appspot.com/o/Vendors%2FSVRFARGO%2FSVRFARGO?alt=media&token=ace82feb-656c-4622-ae4d-9b16464ca0df"
+            self.description = "Savour Deals is a daily deals and loyalty rewards app allowing local bars, cafes, and restaurants to create their own customized deals and deliver them right to you. You are able to follow your favorite vendors and you will receive alerts when the post a new deal. We will also alert you if you are near multiple deals!\n\nIf you have a knack for networking or have a relationship with eateries in your area, we would love to connect with you. Our sales members receive a portion of all revenue generated through referrals to the platform. Our sales team has a flexible schedule, only working when they want to. If you would like to get involved, go to your account tab and select 'contact us' and let us know you are interested in learning more about the sales positions!\n\nVisit our website for more information: www.savourdeals.com"
+            self.address = "300 Washington Ave SE, Minneapolis, MN 55455"
+            self.location = locationManager.location
+            self.distanceMiles = 2.0
+            self.menu = "https://www.savourdeals.com/"
+            self.subscriptionId = "1234567"
+            self.dailyHours.append("9:00 AM - 5:00 PM")
+            self.dailyHours.append("9:00 AM - 5:00 PM")
+            self.dailyHours.append("9:00 AM - 5:00 PM")
+            self.dailyHours.append("9:00 AM - 5:00 PM")
+            self.dailyHours.append("9:00 AM - 5:00 PM")
+            self.dailyHours.append("9:00 AM - 5:00 PM")
+            self.dailyHours.append("9:00 AM - 5:00 PM")
             self.loyalty = loyaltyStruct()
         }
-        
     }
     
     func updateDistance(){
-        if let _ = self.location,let _ = locationManager.location{
-            self.distanceMiles = (self.location?.distance(from: locationManager.location!))!/1609
-        }else{
-            print("Could not update distance. Vendor or location manager not present")
+        if self.id != "SVRDEALS"{
+            if let _ = self.location,let _ = locationManager.location{
+                self.distanceMiles = (self.location?.distance(from: locationManager.location!))!/1609
+            }else{
+                print("Could not update distance. Vendor or location manager not present")
+            }
         }
+
     }
     
 }

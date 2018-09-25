@@ -33,11 +33,7 @@ class DealsData{
     var loadingComplete = false
     
     init(completion: @escaping (Bool) -> Void){
-        let currentUnix = Date().timeIntervalSince1970
-        let comp: DateComponents = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-        let startOfToday = Calendar.current.date(from: comp)!.timeIntervalSince1970
         let favGroup = DispatchGroup()
-        let expiredUnix = currentUnix
         var favLoaded = false
         self.ref.keepSynced(true)
         favGroup.enter()
@@ -110,6 +106,7 @@ class DealsData{
                 var dealsLoaded = false
                 if self.vendors.count < 1 {
                     dealGroup.enter()
+                    self.activeDeals["SVR"] = DealData(snap: nil, ID: "SVR", vendors: self.vendors)
                     dealGroup.leave()//When we found no vendors, just leave
                 }
                 for vendor in self.vendors {
@@ -125,7 +122,7 @@ class DealsData{
                                     temp.favorited = false
                                 }
                                 //if the deal is not expired or redeemed less than half an hour ago, show it
-                                if (temp.endTime! > expiredUnix || temp.endTime == startOfToday) && !temp.redeemed!{
+                                if temp.isAvailable(){
                                     if temp.active{
                                         self.activeDeals[temp.id!] = temp
                                         self.inactiveDeals.removeValue(forKey: temp.id!)
@@ -167,7 +164,6 @@ class DealsData{
     }
     
     func queryDeals(forEnteredVendor vendor: VendorData){
-        let expiredUnix = Date().timeIntervalSince1970
         self.ref.child("Deals").queryOrdered(byChild: "vendor_id").queryEqual(toValue: vendor.id).observe(.value, with: { (snapshot) in
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot
@@ -179,7 +175,7 @@ class DealsData{
                         temp.favorited = false
                     }
                     //if the deal is not expired or redeemed less than half an hour ago, show it
-                    if temp.endTime! > expiredUnix && !temp.redeemed!{
+                    if temp.isAvailable(){
                         if temp.active{
                             self.activeDeals[temp.id!] = temp
                             self.inactiveDeals.removeValue(forKey: temp.id!)

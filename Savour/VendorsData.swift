@@ -47,6 +47,7 @@ class VendorsData{
             geoFire.observeReady {
                 if !self.initialLoaded{
                     print("No vendors found")
+                    
                     completion(true)
                 }
             }
@@ -64,10 +65,18 @@ class VendorsData{
     }
     
     func getVendors() -> [VendorData]{
-        return Array(vendors.values)
+        if vendors.count != 0 {
+            return Array(vendors.values)
+        }
+        let temp = VendorData(ID: "SVRDEALS")
+        return [temp]
     }
     
     func getVendorsByID(id: String) -> (VendorData?){
+        if id == "SVRDEALS"{
+            return VendorData(ID: "SVRDEALS")
+        }
+
         if let _ = vendors[id]{
             return vendors[id]!
         }
@@ -77,12 +86,17 @@ class VendorsData{
     
     func updateDistances(location: CLLocation){
         for vendor in vendors{
-            vendor.value.distanceMiles = (vendor.value.location?.distance(from: location))!/1609
+            if vendor.value.id != "SVRDEALS"{
+                vendor.value.distanceMiles = (vendor.value.location?.distance(from: location))!/1609
+            }
         }
     }
 }
 
 func updateDistance(location: CLLocation, vendor: VendorData) -> (VendorData){
-    vendor.distanceMiles = (vendor.location?.distance(from: location))!/1609
+    if vendor.id != "SVRDEALS"{
+        vendor.distanceMiles = (vendor.location?.distance(from: location))!/1609
+        return vendor
+    }
     return vendor
 }

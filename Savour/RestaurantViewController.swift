@@ -275,7 +275,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             if self.thisVendor.loyalty.loyaltyCount > 0 {
                 cell.checkin.layer.cornerRadius = cell.checkin.frame.height/2
                 cell.progressBar.isHidden = false
-                if thisVendor.loyalty.loyaltyCount < loyaltyRedemptions{
+                if thisVendor.loyalty.loyaltyCount <= loyaltyRedemptions{
                     cell.animate()
                     cell.checkin.setTitle("Reedeem", for: .normal)
                     cell.loyaltyLabel.text = "You're ready to redeem your \(thisVendor.loyalty.loyaltyDeal)!"
@@ -328,28 +328,35 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     }
   
     @objc func checkin(_ sender:UIButton!){
-        if self.loyaltyRedemptions >= self.thisVendor.loyalty.loyaltyCount{
+        if self.thisVendor.distanceMiles! < 0.2 {
             self.thisVendor.updateDistance()
-            if self.thisVendor.distanceMiles! < 0.2 {
-                let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
-                redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
-                    self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
-                    self.redemptionTime = 0
-                    //Call Firebase cloud functions to increment stripe counter
-                    self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId, "increment_count":"2"]) { (result, error) in
-                        if let _ = error as NSError? {
-                            //error handle
+            if self.loyaltyRedemptions >= self.thisVendor.loyalty.loyaltyCount{
+                if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
+                    let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
+                    redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
+                        self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
+                        self.redemptionTime = Date().timeIntervalSince1970
+                        //Call Firebase cloud functions to increment stripe counter
+                        self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":1]) { (result, error) in
+                            if let _ = error as NSError? {
+                                //error handle
+                            }
+                            if let text = (result?.data as? [String: Any])?["text"] as? String {
+                                print(text)
+                            }
+                            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                            sender.setTitle("Loyalty Check-In", for: .normal)
+                            self.restaurantTable.reloadData()
                         }
-                        if let text = (result?.data as? [String: Any])?["text"] as? String {
-                            print(text)
-                        }
-                    }
-                    self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
-                    sender.setTitle("Loyalty Check-In", for: .normal)
-                    self.restaurantTable.reloadData()
-                }))
-                redeemAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-                self.present(redeemAlert, animated: true)
+                    }))
+                    redeemAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+                    self.present(redeemAlert, animated: true)
+                }else{
+                    let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to redeem your points!", preferredStyle: .alert)
+                    erroralert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                    self.present(erroralert, animated: true)
+                }
+                
             }else{
                 if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
                     performSegue(withIdentifier: "QRsegue", sender: self)
