@@ -31,7 +31,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var activeDeals = [DealData]()
     var inactiveDeals = [DealData]()
     var locationManager: CLLocationManager!
-    var userLocation: CLLocation!
     var initialLoaded = false
     var sv: UIView!
     
@@ -150,7 +149,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if status == CLAuthorizationStatus.denied {
             locationDisabled()
         }else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            userLocation = CLLocation(latitude: manager.location!.coordinate.latitude, longitude: manager.location!.coordinate.longitude)
             //Setup Deal Data for entire app
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
@@ -167,7 +165,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
     }
-    
+
     @objc func requestLocationAccess() {
         let status = CLLocationManager.authorizationStatus()
         switch status {
@@ -192,6 +190,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    
+    
     func locationDisabled(){
         self.searchBar.isUserInteractionEnabled = false
         buttonsView.isUserInteractionEnabled = false
@@ -210,7 +210,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.searchBar.isUserInteractionEnabled = true
             self.buttonsView.isUserInteractionEnabled = true
             self.locationManager!.startUpdatingLocation()
-            self.userLocation = self.locationManager.location!
             //Filter by any buttons the user pressed.
             var title = ""
             for subview in self.buttonsView.subviews as [UIView] {

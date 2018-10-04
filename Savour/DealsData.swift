@@ -108,6 +108,8 @@ class DealsData{
                     dealGroup.enter()
                     self.activeDeals["SVR"] = DealData(snap: nil, ID: "SVR", vendors: self.vendors)
                     dealGroup.leave()//When we found no vendors, just leave
+                }else{
+                    self.activeDeals.removeValue(forKey: "SVR")
                 }
                 for vendor in self.vendors {
                     dealGroup.enter()
