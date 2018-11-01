@@ -230,8 +230,8 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     let uID = Auth.auth().currentUser?.uid
                     
                     //Note redemption time
-                    let ref = Database.database().reference().child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
-                    ref.setValue(currTime)
+                    let redeemRef = Database.database().reference().child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
+                    redeemRef.setValue(currTime)
                     
                     //Call Firebase cloud functions to increment stripe counter
                     self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":0]) { (result, error) in
@@ -249,11 +249,9 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     self.redeem.isEnabled = false
                     self.redeem.setTitle("Already Redeemed!", for: .normal)
                     self.redeem.layer.backgroundColor = UIColor.red.cgColor
-                    self.Deal.redeemed = true
-                    self.self.Deal.redeemedTime = currTime
                     self.Deal?.redeemedTime = currTime
                     self.Deal?.redeemed = true
-                    ref.child("Users").child(uID!).child("favorites").child(self.Deal.id!).removeValue()
+                    self.ref.child("Users").child(uID!).child("favorites").child(self.Deal.id!).removeValue()
                     if self.Deal?.code != ""{
                         self.code.textColor = UIColor.black
                         self.code.text = self.Deal?.code
@@ -262,6 +260,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
                     if status.subscriptionStatus.userId != " "{
                         //Redundant following for user and rest
+                        OneSignal.sendTags([(self.thisVendor?.id)! : "true"])
                         Database.database().reference().child("Vendors").child((self.thisVendor?.id)!).child("followers").child(uID!).setValue(status.subscriptionStatus.userId)
                         Database.database().reference().child("Users").child(uID!).child("following").child((self.thisVendor?.id!)!).setValue(true)
                     }

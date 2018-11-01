@@ -77,7 +77,6 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate,CLLoc
                 })
             })
         }
-        
     }
     
     public func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool{

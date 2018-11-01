@@ -10,9 +10,7 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 import CoreLocation
-
-
-
+import OneSignal
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate{
 
@@ -47,47 +45,71 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.locationManager = CLLocationManager()
-        self.locationText.text = "To use this app, you must turn on location in:\n\n Settings -> Savour -> Location"
-        sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
+        
+        // User not verified or not signed in. We want to send them back to the login page
         if !isUserVerified(user: Auth.auth().currentUser){
-            // User not verified or not signed in.
             let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
             let OnboardVC = storyboard.instantiateViewController(withIdentifier: "OnNav") as! UINavigationController
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window!.rootViewController = OnboardVC
         }
+        
+        //Setup loading deals
+        locationManager = CLLocationManager()
+
+        locationText.text = "To use this app, you must turn on location in:\n\n Settings -> Savour -> Location"
+        sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
+        
         ref = Database.database().reference()
         ref.keepSynced(true)
         self.setup()
+        
+        //Determine if user has allowed location
         if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-            case .notDetermined:
-                self.performSegue(withIdentifier: "tutorial", sender: self)
-            case .authorizedAlways, .authorizedWhenInUse:
-                //Setup Deal Data for entire app
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                    if !tabBarController.finishedSetup{
-                        Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
-                    }
-                }
-                DispatchQueue.global().sync {
-                    tabBarController.dealSetup(completion: { (success) in
-                        self.finishLoad(tabBarController: tabBarController)
-                        self.locationEnabled()
-                    })
-                }
-            case .restricted, .denied:
-                locationDisabled()
-            }
+            checkLocationStatus(status: CLLocationManager.authorizationStatus())
         } else {
-            self.performSegue(withIdentifier: "tutorial", sender: self)
+            //User has global location services turned off
+            locationDisabled()
         }
+        
         //Allow us to refresh when opened from background
         NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:NSNotification.Name.NotificationDealIsAvailable, object: nil)
+    }
+    
+    private func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        //callback to know when the user accepts or denies location services
+        checkLocationStatus(status: status)
+    }
+    
+    @objc func requestLocationAccess() {
+        checkLocationStatus(status: CLLocationManager.authorizationStatus())
+    }
+    
+    func checkLocationStatus(status: CLAuthorizationStatus){
+        switch status {
+        case .notDetermined:
+            //Not prompted, might as well send them to the onboarding page
+            performSegue(withIdentifier: "tutorial", sender: self)
+        case .authorizedAlways, .authorizedWhenInUse:
+            //Location approved. Setup Deal Data for entire app
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                if !tabBarController.finishedSetup{
+                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                }
+            }
+            DispatchQueue.global().sync {
+                tabBarController.dealSetup(completion: { (success) in
+                    self.finishLoad(tabBarController: tabBarController)
+                    self.locationEnabled()
+                })
+            }
+        case .restricted, .denied:
+            //Sadly user won't give us location. Tell them how to turn on
+            locationDisabled()
+        }
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
@@ -107,8 +129,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func finishLoad(tabBarController: TabBarViewController){
         //Finish view setup
         tabBarController.tabBar.isUserInteractionEnabled = true
-        self.requestLocationAccess()
-        self.initialLoaded = true
+        initialLoaded = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -116,12 +137,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let user = Auth.auth().currentUser
         if user != nil {
             if self.initialLoaded{
+                
+                //Ask for notification access to catch anyone we missed in onboarding
+                OneSignal.promptForPushNotifications { (userResponse) in }
+                
                 self.navigationController?.setNavigationBarHidden(false, animated: true)
                 self.navigationController?.navigationBar.tintColor = UIColor.white
                 self.navigationController?.view.backgroundColor = UIColor.white
                 self.navigationController?.navigationItem.title = ""
-                
-//                UIApplication.shared.statusBarStyle = .lightContent
                 
                 self.refreshControl.attributedTitle = NSAttributedString(string: "Fetching Deals", attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)])
                 self.refreshControl.tintColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
@@ -142,55 +165,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
     }
-
-    
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        //callback to know when the user accepts or denies location services
-        if status == CLAuthorizationStatus.denied {
-            locationDisabled()
-        }else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            //Setup Deal Data for entire app
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                if !tabBarController.finishedSetup{
-                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
-                }
-            }
-            DispatchQueue.global().sync {
-                tabBarController.dealSetup(completion: { (success) in
-                    self.finishLoad(tabBarController: tabBarController)
-                    self.locationEnabled()
-                })
-            }
-        }
-    }
-
-    @objc func requestLocationAccess() {
-        let status = CLLocationManager.authorizationStatus()
-        switch status {
-        case .authorizedAlways, .authorizedWhenInUse:
-            //Setup Deal Data for entire app
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                if !tabBarController.finishedSetup{
-                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
-                }
-            }
-            DispatchQueue.global().sync {
-                tabBarController.dealSetup(completion: { (success) in
-                    self.locationEnabled()
-                })
-            }
-        case .denied, .restricted:
-            locationDisabled()
-        default:
-            performSegue(withIdentifier: "tutorial", sender: self)
-        }
-    }
-    
-    
     
     func locationDisabled(){
         self.searchBar.isUserInteractionEnabled = false
@@ -482,7 +456,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Setup the Search Controller
         searchBar = UISearchBar()
         searchBar.showsCancelButton = false
-        searchBar.placeholder = "Search Vendors"
+        searchBar.placeholder = "Search Deals"
         searchBar.delegate = self
         self.navigationItem.titleView = searchBar
         if #available(iOS 11.0, *) {
@@ -491,7 +465,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        (self.activeDeals, self.inactiveDeals) = dealsData.filter(byName: searchBar.text!)
+        (self.activeDeals, self.inactiveDeals) = dealsData.filter(byText: searchBar.text!)
         if activeDeals.count + inactiveDeals.count < 1 {
             self.noDeals.isHidden = false
         }else{
@@ -506,7 +480,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
-        (activeDeals, inactiveDeals) = dealsData.filter(byName: searchBar.text!)
+        (activeDeals, inactiveDeals) = dealsData.filter(byText: searchBar.text!)
         if activeDeals.count + inactiveDeals.count < 1 {
             self.noDeals.isHidden = false
         }else{

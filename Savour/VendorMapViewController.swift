@@ -43,6 +43,7 @@ class VendorMapViewController: UIViewController{
         super.viewDidLoad()
         sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
 
+        //Setup what view we see
         listVC.parentView = self
         if segControl.selectedSegmentIndex == 0 {
             showList()
@@ -50,65 +51,53 @@ class VendorMapViewController: UIViewController{
         else if segControl.selectedSegmentIndex == 1 {
             showMap()
         }
+        
         locationManager = CLLocationManager()
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-            if !tabBarController.finishedSetup{
-                Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
-            }
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        requestLocationAccess()
-    }
+        
+        //Allow us to refresh when opened from background
+        NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
 
-    @objc func requestLocationAccess() {
-        let status = CLLocationManager.authorizationStatus()
-        switch status {
-        case .authorizedAlways, .authorizedWhenInUse:
-            //Setup Deal Data for entire app
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-            DispatchQueue.global().sync {
-                tabBarController.dealSetup(completion: { (success) in
-                    //Allow us to refresh when opened from background
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
-                    //Finish view setup
-                    tabBarController.tabBar.isUserInteractionEnabled = true
-                    UIViewController.removeSpinner(spinner: self.sv)
-                    self.locationEnabled()
-                })
-            }
-        case .denied, .restricted:
-            locationDisabled()
-        default:
-            performSegue(withIdentifier: "promptSegue", sender: "vendors")
-        }
     }
     
     deinit { //Remove background observer
         NotificationCenter.default.removeObserver(self)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        requestLocationAccess()
+    }
+
+    //Location status fucntions
+    @objc func requestLocationAccess() {
+        checkLocationStatus(status: CLLocationManager.authorizationStatus())
+    }
+    
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         //callback to know when the user accepts or denies location services
-        if status == CLAuthorizationStatus.denied {
-            locationDisabled()
-        }else if status == .authorizedAlways || status == .authorizedWhenInUse  {
+        checkLocationStatus(status: status)
+    }
+    
+    func checkLocationStatus(status: CLAuthorizationStatus){
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            //Setup Deal Data for entire app
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
                 if !tabBarController.finishedSetup{
-                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                    Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
                 }
             }
             DispatchQueue.global().sync {
                 tabBarController.dealSetup(completion: { (success) in
+                    //Finish view setup
+                    tabBarController.tabBar.isUserInteractionEnabled = true
+                    UIViewController.removeSpinner(spinner: self.sv)
                     self.locationEnabled()
                 })
             }
+        default:
+            locationDisabled()
         }
     }
     

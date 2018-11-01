@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U9a-dB-aq3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U9a-dB-aq3">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,7 +13,7 @@
         <!-- -->
         <scene sceneID="hsV-I9-dlR">
             <objects>
-                <viewController storyboardIdentifier="Deal" autoresizesArchivedViewToFullSize="NO" title=" " hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="U9a-dB-aq3" customClass="DealViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Deal" autoresizesArchivedViewToFullSize="NO" title=" " hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="U9a-dB-aq3" customClass="DealViewController" customModule="Savour_Prod" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="WcZ-Ck-nPH">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -391,13 +389,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7P5-kh-CeV" userLabel="imageView">
-                                        <rect key="frame" x="60.333333333333343" y="147.33333333333334" width="294.66666666666663" height="294.33333333333326"/>
+                                        <rect key="frame" x="59.666666666666657" y="147.33333333333334" width="294.66666666666674" height="294.33333333333326"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hub-RY-SRs">
-                                                <rect key="frame" x="148" y="146.99999999999994" width="147" height="147.33333333333331"/>
+                                                <rect key="frame" x="147.33333333333331" y="146.99999999999994" width="147.33333333333331" height="147.33333333333331"/>
                                             </imageView>
                                             <imageView autoresizesSubviews="NO" clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qlh-dk-vcz">
-                                                <rect key="frame" x="1" y="0.66666666666665719" width="294" height="294"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="294.66666666666669" height="294.33333333333331"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="qlh-dk-vcz" secondAttribute="height" multiplier="1:1" id="dLi-V5-lpJ"/>
@@ -423,14 +421,14 @@
                                         <rect key="frame" x="10" y="471.66666666666669" width="394" height="141.33333333333331"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="KvV-v9-jhB">
-                                                <rect key="frame" x="0.0" y="49.666666666666686" width="394" height="0.0"/>
+                                                <rect key="frame" x="0.0" y="62.666666666666686" width="394" height="0.0"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9XN-zF-3A1">
-                                                <rect key="frame" x="0.0" y="5" width="394" height="39.666666666666664"/>
-                                                <string key="text">For dine in and carry out only. This deal is only valid for one person. BOGO free items are for equal or lesser value. This deal has no cash value. You must be 21+ to redeem any alcohol deals</string>
+                                                <rect key="frame" x="0.0" y="5" width="394" height="52.666666666666664"/>
+                                                <string key="text">For dine in and carry out only. Not redeemable with any other promotions unless otherwise mentioned. This deal is only valid for one person. BOGO free items are for equal or lesser value. This deal has no cash value. You must be 21+ to redeem any alcohol deals</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -450,13 +448,13 @@
                                         <rect key="frame" x="10" y="0.0" width="394" height="147.33333333333334"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy One Get One Drink" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="dPP-Jv-J2f">
-                                                <rect key="frame" x="0.0" y="83.333333333333329" width="394" height="20.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="82.666666666666671" width="394" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The Longshed Grill and Bar" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="o7o-6Q-F0e">
-                                                <rect key="frame" x="0.0" y="55.333333333333343" width="394" height="18"/>
+                                                <rect key="frame" x="0.0" y="54.666666666666664" width="394" height="17.999999999999993"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -483,7 +481,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="YrQ-GR-Dun">
-                                        <rect key="frame" x="10" y="613" width="394" height="51.666666666666629"/>
+                                        <rect key="frame" x="10" y="613" width="394" height="51.333333333333371"/>
                                         <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                                         <state key="normal">
@@ -494,7 +492,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g2z-lR-J3D">
-                                        <rect key="frame" x="10" y="674.66666666666663" width="394" height="51.333333333333371"/>
+                                        <rect key="frame" x="10" y="674.33333333333337" width="394" height="51.666666666666629"/>
                                         <color key="backgroundColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                                         <state key="normal" title="Redeem">

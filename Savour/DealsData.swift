@@ -59,9 +59,13 @@ class DealsData{
         favGroup.notify(queue: .main){
             //Get Deals
             favLoaded = true
+            var first = true
             let vendorGroup = DispatchGroup()
             var vendorLoaded = false
             let geofireRef = Database.database().reference().child("Vendors_Location")
+            while (locationManager.location == nil){//wait until location is available
+//                print("waiting for location")
+            }//even if the location is old, dont worry, we will update later when tabbar location update is called
             self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: 80.5)
             vendorGroup.enter()
             self.geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
@@ -95,7 +99,9 @@ class DealsData{
                 }
             })
             self.geoFire.observeReady({
-                if !vendorLoaded{
+                if !vendorLoaded && first{ //check that we havent called leave from here yet
+                    //observeReady may happemn multiple times. Only care bout first one
+                    first = false
                     print("All initial vendor data has been loaded and events have been fired!")
                     vendorGroup.leave()
                 }
@@ -234,7 +240,7 @@ class DealsData{
     
     func getDeals(byName dealName: String?) -> ([DealData],[DealData]){
         UpdateDealsStatus()
-        var (active,inactive) = filter(byName: dealName!)
+        var (active,inactive) = filter(byText: dealName!)
         sortDeals(array: &active)
         sortDeals(array: &inactive)
         return (active,inactive)
@@ -278,16 +284,16 @@ class DealsData{
         return (active,inactive)
     }
     
-    func filter(byName name: String) -> ([DealData],[DealData]){
+    func filter(byText text: String) -> ([DealData],[DealData]){
         var inactive = [DealData]()
         var active = [DealData]()
-        if name == "" {
+        if text == "" {
             active = Array(activeDeals.values)
             inactive = Array(inactiveDeals.values)
         } else {
             // Filter the results
-            active = Array(activeDeals.values).filter { ($0.name?.lowercased().contains(name.lowercased()))! }
-            inactive = Array(inactiveDeals.values).filter { ($0.name?.lowercased().contains(name.lowercased()))! }
+            active = Array(activeDeals.values).filter { ($0.name?.lowercased().contains(text.lowercased()))! || ($0.dealDescription?.lowercased().contains(text.lowercased()))! }
+            inactive = Array(inactiveDeals.values).filter { ($0.name?.lowercased().contains(text.lowercased()))! || ($0.dealDescription?.lowercased().contains(text.lowercased()))! }
         }
         return (active,inactive)
     }

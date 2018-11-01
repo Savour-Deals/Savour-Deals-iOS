@@ -183,31 +183,14 @@ class DealData{
             }
             
             //Get countdown string and days left
-            var isInInterval = false
-            if #available(iOS 10.0, *) {
-                let interval  =  DateInterval(start: start as Date, end: end as Date)
-                isInInterval = interval.contains(now)
-            } else {
-                isInInterval = now.timeIntervalSince1970 > start.timeIntervalSince1970 && now.timeIntervalSince1970 < end.timeIntervalSince1970
-            }
             self.daysLeft = calendar.dateComponents([.day, .hour, .minute], from: Date().startOfDay, to: end).day
-            if startTimeComponent == endTimeComponent{
+            if (startTimeComponent == endTimeComponent) || (now < end && now > start){
                 if daysLeft! > 1{
                     self.countdown = "\(daysLeft!) days left"
                 }else if daysLeft! == 1{
                     self.countdown = "Deal expires tomorrow!"
                 }else{
                     self.countdown = "Deal expires today!"
-                }
-            }else if (isInInterval){
-                if (now < end && now > start){
-                    if daysLeft! > 1{
-                        self.countdown = "\(daysLeft!) days left"
-                    }else if daysLeft! == 1{
-                        self.countdown = "Deal expires tomorrow!"
-                    }else{
-                        self.countdown = "Deal expires today!"
-                    }
                 }
             }else{
                 self.countdown = "Deal expires today!"

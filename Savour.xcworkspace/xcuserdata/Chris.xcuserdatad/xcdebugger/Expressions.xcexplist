@@ -56,10 +56,10 @@
                value = "UIColor.white">
             </PersistentString>
             <PersistentString
-               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
+               value = "snap.value">
             </PersistentString>
             <PersistentString
-               value = "snap.value">
+               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -244,7 +244,7 @@
          contextName = "closure #2 in AccountViewController.viewDidLoad():AccountViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "data[0][&apos;value&apos;]">
+               value = "friendData">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -602,6 +602,14 @@
       </ContextState>
       <ContextState
          contextName = "VendorData.loyaltyStruct.init(code:deal:count:dict:):Database.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.requestLocationAccess() [inlined]:ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "CLLocationManager.authorizationStatus()">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "mach_msg_trap:(null)">

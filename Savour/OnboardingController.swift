@@ -102,8 +102,9 @@ class OnboardingViewController: UIViewController, UIScrollViewDelegate {
 
 class PermissionViewController: UIViewController, CLLocationManagerDelegate{
     var locationManager: CLLocationManager!
-    var ref: DatabaseReference!
     var sender = ""
+    
+    var locationPrompted, notificationPrompted : Bool!
     @IBOutlet weak var continueButton: UIButton!
     
     @IBOutlet weak var privacyButton: UIButton!
@@ -115,43 +116,59 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ref = Database.database().reference().child("Users").child((Auth.auth().currentUser?.uid)!).child("onboarded")
-        let state = OneSignal.getPermissionSubscriptionState()
-        if state?.permissionStatus.status == .authorized{
-            self.notiButton.backgroundColor = UIColor.gray
-            self.notiButton.isEnabled = false
-        }
+        
+        //setup look of buttons
         continueButton.layer.cornerRadius = continueButton.frame.height/2
         notiButton.layer.cornerRadius = notiButton.frame.height/2
         locbutton.layer.cornerRadius = locbutton.frame.height/2
-        self.locationManager = CLLocationManager()
-
-        locationManager.delegate = self
-        let status = CLLocationManager.authorizationStatus()
-        switch status {
-        case .authorizedAlways, .authorizedWhenInUse:
-            self.locationEnabled()
-        case .denied:
-            self.locText.text = "To use Savour, turn on location for your device and go to:\n Settings → Savour Deals → Location."
-            self.locbutton.backgroundColor = UIColor.gray
-            self.locbutton.isUserInteractionEnabled = false
-        default:
-            locationManager.requestAlwaysAuthorization()
+        
+        //Check if notifications already prompted
+        if OneSignal.getPermissionSubscriptionState().permissionStatus.hasPrompted{
+            self.notiButton.backgroundColor = UIColor.gray
+            self.notiButton.isEnabled = false
+            notificationPrompted = true
+        }else{
+            notificationPrompted = false
         }
+
+        //Setup location prompt checking
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        //User was prompted and they selected an option
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
-            self.locationEnabled()
-        case .denied, .restricted, .notDetermined:
-            self.locText.text = "To use Savour, turn on location for your device and go to:\n Settings → Savour Deals → Location."
+            locbutton.isUserInteractionEnabled = false
+            locbutton.backgroundColor = UIColor.gray
+            locationPrompted = true
+            locationManager!.startUpdatingLocation()
+            let parent = self.parent as! OnboardingViewController
+            //Setup Deal Data for entire app
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
+            DispatchQueue.global().sync {
+                tabBarController.dealSetup(completion: { (success) in
+                    parent.sender.finishLoad(tabBarController: tabBarController)
+                    parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                    parent.navigationController?.navigationBar.shadowImage = UIImage()
+                    parent.navigationController?.navigationBar.isTranslucent = true
+                })
+            }
+        case .denied:
+            locText.text = "To use Savour, turn on location for your device and go to:\n Settings → Savour Deals → Location."
+            locbutton.backgroundColor = UIColor.gray
+            locbutton.isUserInteractionEnabled = false
+            locationPrompted = true
+        default:
+            locationPrompted = false
         }
-        self.locbutton.backgroundColor = UIColor.gray
-        self.locbutton.isUserInteractionEnabled = false
+        continueEnable()
     }
     
     @IBAction func notiPress(_ sender: Any) {
+        //Prompt user for notifications
         OneSignal.promptForPushNotifications(userResponse: { accepted in
             self.notiButton.backgroundColor = UIColor.gray
             self.notiButton.isEnabled = false
@@ -159,56 +176,41 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
                 self.notiText.text = "To turn on notifications later, go to:\n Settings → Savour Deals → Notifications."
             }
             self.notiButton.isUserInteractionEnabled = false
+            self.notificationPrompted = true
+            self.continueEnable()
         })
     }
     @IBAction func locPress(_ sender: Any) {
-        let status = CLLocationManager.authorizationStatus()
-        switch status {
-        case .authorizedAlways, .authorizedWhenInUse:
-            self.locationEnabled()
-        default:
-            locationManager.requestAlwaysAuthorization()
-        }
+        locationManager.requestAlwaysAuthorization()
     }
     @IBAction func openWeb(_ sender: Any) {
+        //Show user our terms if they want
         if let sender = sender as? UIButton {
             sender.isEnabled = false
             let title = sender.title(for: .normal)
             var url = "https://www.savourdeals.com"
             if title == "Privacy Policy"{
-                url = "https://www.savourdeals.com/terms-of-use/"
-            } else if title == "Terms of Use"{
                 url = "https://www.savourdeals.com/privacy-policy/"
+            } else if title == "Terms of Use"{
+                url = "https://www.savourdeals.com/terms-of-use/"
             }
             let svc = SFSafariViewController(url: URL(string:url)!)
             svc.modalTransitionStyle = UIModalTransitionStyle.coverVertical
-            self.present(svc, animated: true, completion: nil)
+            present(svc, animated: true, completion: nil)
             sender.isEnabled = true
         }
-        
     }
     
-    func locationEnabled(){
-        self.locbutton.isUserInteractionEnabled = false
-        self.locbutton.backgroundColor = UIColor.gray
-        self.locationManager!.startUpdatingLocation()
-        let parent = self.parent as! OnboardingViewController
-        //Setup Deal Data for entire app
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-        DispatchQueue.global().sync {
-            tabBarController.dealSetup(completion: { (success) in
-                parent.sender.finishLoad(tabBarController: tabBarController)
-                parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                parent.navigationController?.navigationBar.shadowImage = UIImage()
-                parent.navigationController?.navigationBar.isTranslucent = true
-                self.continueButton.isEnabled = true
-                self.continueButton.alpha = 1.0
-            })
+    func continueEnable(){
+        //Check if both location and notifications have been prompted
+        if locationPrompted && notificationPrompted{
+            continueButton.isEnabled = true
+            continueButton.alpha = 1.0
         }
     }
     
     @IBAction func next(_ sender: Any) {
+        //move to tutorial page
         let parent = self.parent as! OnboardingViewController
         parent.pageControl.currentPage = parent.pageControl.currentPage + 1
         parent.changePage(sender: self)
