@@ -1,13 +1,13 @@
 # Savour Deals iOS
 
-<span align="center" style="display: inline-block;">
+<span span style="display:block;text-align:center">
   <img src="https://firebasestorage.googleapis.com/v0/b/savour-deals.appspot.com/o/Savour_Deals_FullColor.png?alt=media&token=8b67f1ae-cbc5-4709-becd-844ea51b7574" width="60%">
 </span>
 
 Savour Deals is an iOS app which connects users, free of charge, to exclusive deals at restaurants, bars, and coffee shops. We allow vendors to have a loyalty program on their page and you can check-in and earn points with a click of a button. Our deals use location services to organize them by how close they are to you, making it easy to decide where to grab lunch or pick up a morning coffee. We are currently serving Minneapolis/St.Paul, MN and Fargo/Moorhead ND areas!
 <br>
 <br>
-<span align="center" style="display: inline-block;">
+<span span style="display:block;text-align:center">
   <img style="padding:10px" src="https://firebasestorage.googleapis.com/v0/b/savour-deals.appspot.com/o/Assets%2FappPhotos%2FSimulator%20Screen%20Shot%20-%20iPhone%20X%20-%202018-08-21%20at%2021.20.29.png?alt=media&token=596e79df-56c0-42cf-b6cf-5447b0d9ad11" width="15%">
   <img style="padding:10px" src="https://firebasestorage.googleapis.com/v0/b/savour-deals.appspot.com/o/Assets%2FappPhotos%2FSimulator%20Screen%20Shot%20-%20iPhone%20X%20-%202018-08-21%20at%2021.39.47.png?alt=media&token=eb3a091f-c91c-4e4b-ade8-36b2253ce8f4" width="15%">
   <img style="padding:10px" src="https://firebasestorage.googleapis.com/v0/b/savour-deals.appspot.com/o/Assets%2FappPhotos%2FSimulator%20Screen%20Shot%20-%20iPhone%20X%20-%202018-08-21%20at%2021.39.53.png?alt=media&token=dea6d0bf-465b-4f40-b63a-b8cf90ff5eae" width="15%">
