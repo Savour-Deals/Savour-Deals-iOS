@@ -558,7 +558,7 @@ class buttonCell: UITableViewCell {
     }
     
     func openInGoogleMaps(){
-        let baseUrl: String = "comgooglemaps://?saddr="
+        let baseUrl: String = "comgooglemaps://?daddr="
         let encodedName = rAddress.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let finalUrl = baseUrl + encodedName
         if let url = URL(string: finalUrl){

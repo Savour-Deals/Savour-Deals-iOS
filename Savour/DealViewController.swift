@@ -73,6 +73,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
             // activate the constraint
             NSLayoutConstraint.activate([verticalSpace])
         }
+        ref = Database.database().reference()
         SetupUI()
     }
     
@@ -180,7 +181,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
     }
     
     func openInGoogleMaps(){
-        let baseUrl: String = "comgooglemaps://?saddr="
+        let baseUrl: String = "comgooglemaps://?daddr="
         let encodedName: String = (self.thisVendor?.address?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
         let finalUrl = baseUrl + encodedName
         if let url = URL(string: finalUrl){
@@ -230,7 +231,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     let uID = Auth.auth().currentUser?.uid
                     
                     //Note redemption time
-                    let redeemRef = Database.database().reference().child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
+                    let redeemRef = self.ref.child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
                     redeemRef.setValue(currTime)
                     
                     //Call Firebase cloud functions to increment stripe counter
@@ -261,8 +262,8 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     if status.subscriptionStatus.userId != " "{
                         //Redundant following for user and rest
                         OneSignal.sendTags([(self.thisVendor?.id)! : "true"])
-                        Database.database().reference().child("Vendors").child((self.thisVendor?.id)!).child("followers").child(uID!).setValue(status.subscriptionStatus.userId)
-                        Database.database().reference().child("Users").child(uID!).child("following").child((self.thisVendor?.id!)!).setValue(true)
+                        self.ref.child("Vendors").child((self.thisVendor?.id)!).child("followers").child(uID!).setValue(status.subscriptionStatus.userId)
+                        self.ref.child("Users").child(uID!).child("following").child((self.thisVendor?.id!)!).setValue(true)
                     }
                     StoreReviewHelper().requestReview()
                 }
