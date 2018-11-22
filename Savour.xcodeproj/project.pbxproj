@@ -41,7 +41,6 @@
 		8312BA032151A81900D8F2AF /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
 		8312BA042151A81900D8F2AF /* DealDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83446AA81F3C06AB00CBE73E /* DealDetails.storyboard */; };
 		8312BA082151A81900D8F2AF /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8397B2C11F951D3400EC392C /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8312BA102151A92100D8F2AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312BA0F2151A92100D8F2AF /* GoogleService-Info.plist */; };
 		8320E97F1F3E1ED700D6A0DF /* RestaurantDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8320E97E1F3E1ED700D6A0DF /* RestaurantDetails.storyboard */; };
 		833756391F9E7F4E00336744 /* VendorMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833756381F9E7F4E00336744 /* VendorMapViewController.swift */; };
 		8337563B1F9E938C00336744 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8337563A1F9E938C00336744 /* MapKit.framework */; };
@@ -76,6 +75,7 @@
 		83DDDBB51F4157EC00B14FEB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DDDBB41F4157EC00B14FEB /* Globals.swift */; };
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
 		83E4839520D0BF08009B4C3B /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E4839420D0BF08009B4C3B /* extensions.swift */; };
+		83FA1CCA219B5F4500CAA5E7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312BA0F2151A92100D8F2AF /* GoogleService-Info.plist */; };
 		D8BA1170FEDB0BD1FDC4147D /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93783548216AAF666D4844DD /* Pods_OneSignalNotificationServiceExtension.framework */; };
 /* End PBXBuildFile section */
 
@@ -548,6 +548,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83FA1CCA219B5F4500CAA5E7 /* GoogleService-Info.plist in Resources */,
 				8312B9FB2151A81900D8F2AF /* Location.gpx in Resources */,
 				8312B9FC2151A81900D8F2AF /* LaunchScreen.storyboard in Resources */,
 				8312B9FD2151A81900D8F2AF /* Main.storyboard in Resources */,
@@ -555,7 +556,6 @@
 				8312B9FF2151A81900D8F2AF /* Acknowledgements.plist in Resources */,
 				8312BA002151A81900D8F2AF /* Onboarding.storyboard in Resources */,
 				8312BA012151A81900D8F2AF /* tutorial.storyboard in Resources */,
-				8312BA102151A92100D8F2AF /* GoogleService-Info.plist in Resources */,
 				8312BA032151A81900D8F2AF /* RestaurantDetails.storyboard in Resources */,
 				8312BA042151A81900D8F2AF /* DealDetails.storyboard in Resources */,
 			);

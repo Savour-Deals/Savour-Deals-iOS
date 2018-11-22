@@ -337,17 +337,17 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                         self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
                         self.redemptionTime = Date().timeIntervalSince1970
                         //Call Firebase cloud functions to increment stripe counter
-                        self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":1]) { (result, error) in
-                            if let _ = error as NSError? {
-                                //error handle
-                            }
-                            if let text = (result?.data as? [String: Any])?["text"] as? String {
-                                print(text)
-                            }
-                            self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
-                            sender.setTitle("Loyalty Check-In", for: .normal)
-                            self.restaurantTable.reloadData()
-                        }
+//                        self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":1]) { (result, error) in
+//                            if let _ = error as NSError? {
+//                                //error handle
+//                            }
+//                            if let text = (result?.data as? [String: Any])?["text"] as? String {
+//                                print(text)
+//                            }
+                        self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
+                        sender.setTitle("Loyalty Check-In", for: .normal)
+                        self.restaurantTable.reloadData()
+//                        }
                     }))
                     redeemAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
                     self.present(redeemAlert, animated: true)

@@ -56,22 +56,24 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
             //Setup Deal Data for entire app
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                if !tabBarController.finishedSetup{
-                    Toast.showNegativeMessage(message: "Favorites seem to be taking a while to load. Check your internet connection to make sure you're online.")
+            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                    if !tabBarController.finishedSetup{
+                        Toast.showNegativeMessage(message: "Favorites seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                    }
+                }
+                DispatchQueue.global().sync {
+                    tabBarController.dealSetup(completion: { (success) in
+                        //Allow us to refresh when opened from background
+                        NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
+                        //Finish view setup
+                        tabBarController.tabBar.isUserInteractionEnabled = true
+                        UIViewController.removeSpinner(spinner: sv)
+                        self.locationEnabled()
+                    })
                 }
             }
-            DispatchQueue.global().sync {
-                tabBarController.dealSetup(completion: { (success) in
-                    //Allow us to refresh when opened from background
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
-                    //Finish view setup
-                    tabBarController.tabBar.isUserInteractionEnabled = true
-                    UIViewController.removeSpinner(spinner: sv)
-                    self.locationEnabled()
-                })
-            }
+
         }
     }
     

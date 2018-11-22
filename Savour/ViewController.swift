@@ -94,17 +94,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         case .authorizedAlways, .authorizedWhenInUse:
             //Location approved. Setup Deal Data for entire app
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                if !tabBarController.finishedSetup{
-                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                    if !tabBarController.finishedSetup{
+                        Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                    }
                 }
-            }
-            DispatchQueue.global().sync {
-                tabBarController.dealSetup(completion: { (success) in
-                    self.finishLoad(tabBarController: tabBarController)
-                    self.locationEnabled()
-                })
+                DispatchQueue.global().sync {
+                    tabBarController.dealSetup(completion: { (success) in
+                        self.finishLoad(tabBarController: tabBarController)
+                    })
+                }
             }
         case .restricted, .denied:
             //Sadly user won't give us location. Tell them how to turn on
@@ -130,6 +130,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //Finish view setup
         tabBarController.tabBar.isUserInteractionEnabled = true
         initialLoaded = true
+        self.locationEnabled()
     }
     
     override func viewWillAppear(_ animated: Bool) {

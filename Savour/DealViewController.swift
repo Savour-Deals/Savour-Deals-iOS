@@ -235,14 +235,14 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     redeemRef.setValue(currTime)
                     
                     //Call Firebase cloud functions to increment stripe counter
-                    self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":0]) { (result, error) in
-                        if let _ = error as NSError? {
-                            //error handle
-                        }
-                        if let text = (result?.data as? [String: Any])?["text"] as? String {
-                            print(text)
-                        }
-                    }
+//                    self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":0]) { (result, error) in
+//                        if let _ = error as NSError? {
+//                            //error handle
+//                        }
+//                        if let text = (result?.data as? [String: Any])?["text"] as? String {
+//                            print(text)
+//                        }
+//                    }
                     
                     //set and draw checkmark
                     self.redeemIndicator(color: UIColor.green.cgColor)

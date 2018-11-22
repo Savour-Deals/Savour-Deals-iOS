@@ -116,49 +116,51 @@ class DealsData{
                     dealGroup.leave()//When we found no vendors, just leave
                 }else{
                     self.activeDeals.removeValue(forKey: "SVR")
-                }
-                for vendor in self.vendors {
-                    dealGroup.enter()
-                    self.ref.child("Deals").queryOrdered(byChild: "vendor_id").queryEqual(toValue: vendor.key).observe(.value, with: { (snapshot) in
-                        for entry in snapshot.children {
-                            let snap = entry as! DataSnapshot
-                            if let _ = snap.value{
-                                let temp = DealData(snap: snap, ID: self.userid!, vendors: self.vendors)
-                                if self.favoriteIDs[temp.id!] != nil{
-                                    temp.favorited = true
-                                }else{
-                                    temp.favorited = false
-                                }
-                                //if the deal is not expired or redeemed less than half an hour ago, show it
-                                if temp.isAvailable(){
-                                    if temp.active{
-                                        self.activeDeals[temp.id!] = temp
-                                        self.inactiveDeals.removeValue(forKey: temp.id!)
-                                    }else{
-                                        self.inactiveDeals[temp.id!] = temp
-                                        self.activeDeals.removeValue(forKey: temp.id!)
-                                    }
-                                }else if let time = temp.redeemedTime{
-                                    if (Date().timeIntervalSince1970 - time) < 1800{
-                                        self.activeDeals[temp.id!] = temp
-                                        self.inactiveDeals.removeValue(forKey: temp.id!)
-                                    }
-                                }
-                            }else{
-                                let snap = entry as! DataSnapshot
-                                let key = snap.key
-                                self.activeDeals.removeValue(forKey: key)
-                                self.inactiveDeals.removeValue(forKey: key)
-                            }
-                        }
+                    for vendor in self.vendors {
                         if !dealsLoaded{
-                            dealGroup.leave()
+                            dealGroup.enter()
                         }
-                    })
+                        self.ref.child("Deals").queryOrdered(byChild: "vendor_id").queryEqual(toValue: vendor.key).observe(.value, with: { (snapshot) in
+                            for entry in snapshot.children {
+                                let snap = entry as! DataSnapshot
+                                if let _ = snap.value{
+                                    let temp = DealData(snap: snap, ID: self.userid!, vendors: self.vendors)
+                                    if self.favoriteIDs[temp.id!] != nil{
+                                        temp.favorited = true
+                                    }else{
+                                        temp.favorited = false
+                                    }
+                                    //if the deal is not expired or redeemed less than half an hour ago, show it
+                                    if temp.isAvailable(){
+                                        if temp.active{
+                                            self.activeDeals[temp.id!] = temp
+                                            self.inactiveDeals.removeValue(forKey: temp.id!)
+                                        }else{
+                                            self.inactiveDeals[temp.id!] = temp
+                                            self.activeDeals.removeValue(forKey: temp.id!)
+                                        }
+                                    }else if let time = temp.redeemedTime{
+                                        if (Date().timeIntervalSince1970 - time) < 1800{
+                                            self.activeDeals[temp.id!] = temp
+                                            self.inactiveDeals.removeValue(forKey: temp.id!)
+                                        }
+                                    }
+                                }else{
+                                    let snap = entry as! DataSnapshot
+                                    let key = snap.key
+                                    self.activeDeals.removeValue(forKey: key)
+                                    self.inactiveDeals.removeValue(forKey: key)
+                                }
+                            }
+                            if !dealsLoaded{
+                                dealGroup.leave()
+                            }
+                        })
+                    }
                 }
                 dealGroup.notify(queue: .main){
-                    print("Finished gathering deals.")
                     dealsLoaded = true
+                    print("Finished gathering deals.")
                     completion(true)
                 }
             }

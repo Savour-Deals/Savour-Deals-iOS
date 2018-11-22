@@ -234,8 +234,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                         }
                         if let email = data["email"] as? String{
                             user?.updateEmail(to: email, completion: { (error) in
-                                if ((error) != nil)
-                                {
+                                if ((error) != nil){
                                     print("Error: \(String(describing: error))")
                                 }
                             })

@@ -82,19 +82,20 @@ class VendorMapViewController: UIViewController{
         case .authorizedAlways, .authorizedWhenInUse:
             //Setup Deal Data for entire app
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
-            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                if !tabBarController.finishedSetup{
-                    Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
+            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                    if !tabBarController.finishedSetup{
+                        Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                    }
                 }
-            }
-            DispatchQueue.global().sync {
-                tabBarController.dealSetup(completion: { (success) in
-                    //Finish view setup
-                    tabBarController.tabBar.isUserInteractionEnabled = true
-                    UIViewController.removeSpinner(spinner: self.sv)
-                    self.locationEnabled()
-                })
+                DispatchQueue.global().sync {
+                    tabBarController.dealSetup(completion: { (success) in
+                        //Finish view setup
+                        tabBarController.tabBar.isUserInteractionEnabled = true
+                        UIViewController.removeSpinner(spinner: self.sv)
+                        self.locationEnabled()
+                    })
+                }
             }
         default:
             locationDisabled()
