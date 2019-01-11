@@ -165,7 +165,7 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
                         }
                     }
                 }
-                let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account.", preferredStyle: UIAlertController.Style.alert)
+                let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account. Then come back to login!", preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
                     user?.user.sendEmailVerification(completion: { (err) in

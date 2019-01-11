@@ -31,6 +31,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var locationManager: CLLocationManager!
     var initialLoaded = false
     var sv: UIView!
+    var onboardCallbackFlag = false
     
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var scrollFilter: UIScrollView!
@@ -86,6 +87,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         checkLocationStatus(status: CLLocationManager.authorizationStatus())
     }
     
+    func onboardCallback(){
+        onboardCallbackFlag = true
+        checkLocationStatus(status: CLLocationManager.authorizationStatus())
+    }
+    
     func checkLocationStatus(status: CLAuthorizationStatus){
         switch status {
         case .notDetermined:
@@ -93,6 +99,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             performSegue(withIdentifier: "tutorial", sender: self)
         case .authorizedAlways, .authorizedWhenInUse:
             //Location approved. Setup Deal Data for entire app
+            if !onboardCallbackFlag{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) { // Display message if loading is slow
+                    OneSignal.promptForPushNotifications { (accepted) in
+                        if accepted{
+                            print("accepted")
+                        }else{
+                            print("Not accepted")
+                        }
+                    }
+                }
+            }
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
                 DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow

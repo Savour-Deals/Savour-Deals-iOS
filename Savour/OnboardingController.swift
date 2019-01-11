@@ -122,6 +122,9 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
         notiButton.layer.cornerRadius = notiButton.frame.height/2
         locbutton.layer.cornerRadius = locbutton.frame.height/2
         
+        continueButton.setTitle("Tap both Prompts to continue", for: .normal)
+        continueButton.backgroundColor = UIColor.red
+        
         //Check if notifications already prompted
         if OneSignal.getPermissionSubscriptionState().permissionStatus.hasPrompted{
             self.notiButton.backgroundColor = UIColor.gray
@@ -145,6 +148,7 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
             locationPrompted = true
             locationManager!.startUpdatingLocation()
             let parent = self.parent as! OnboardingViewController
+            parent.sender.onboardCallback()
             //Setup Deal Data for entire app
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
@@ -206,6 +210,8 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
         if locationPrompted && notificationPrompted{
             continueButton.isEnabled = true
             continueButton.alpha = 1.0
+            continueButton.setTitle("Continue", for: .normal)
+            continueButton.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         }
     }
     

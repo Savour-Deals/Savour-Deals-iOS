@@ -328,26 +328,19 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     }
   
     @objc func checkin(_ sender:UIButton!){
-        if self.thisVendor.distanceMiles! < 0.2 {
-            self.thisVendor.updateDistance()
-            if self.loyaltyRedemptions >= self.thisVendor.loyalty.loyaltyCount{
-                if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
+        self.thisVendor.updateDistance()
+        //Check if the deal is within range?
+        if self.thisVendor.distanceMiles! < 0.2 {//close enough to continue
+            //Now check their points count
+            if self.loyaltyRedemptions >= self.thisVendor.loyalty.loyaltyCount{//user has enough points to redeem!
+                if (redemptionTime + 10800) < Date().timeIntervalSince1970 {//We are ready to redeem! Prompt user with next steps
                     let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
                     redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
                         self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
                         self.redemptionTime = Date().timeIntervalSince1970
-                        //Call Firebase cloud functions to increment stripe counter
-//                        self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":1]) { (result, error) in
-//                            if let _ = error as NSError? {
-//                                //error handle
-//                            }
-//                            if let text = (result?.data as? [String: Any])?["text"] as? String {
-//                                print(text)
-//                            }
                         self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                         sender.setTitle("Loyalty Check-In", for: .normal)
                         self.restaurantTable.reloadData()
-//                        }
                     }))
                     redeemAlert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
                     self.present(redeemAlert, animated: true)
@@ -357,8 +350,8 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                     self.present(erroralert, animated: true)
                 }
                 
-            }else{
-                if (redemptionTime + 10800) < Date().timeIntervalSince1970 {
+            }else{//user needs more points, let them check-in
+                if (redemptionTime + 10800) < Date().timeIntervalSince1970 {//Ready to checkin!
                     performSegue(withIdentifier: "QRsegue", sender: self)
                 }else{
                     let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to get another loyalty visit!", preferredStyle: .alert)
@@ -366,7 +359,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                     self.present(erroralert, animated: true)
                 }
             }
-        }else{
+        }else{//vendor too far away
             let erroralert = UIAlertController(title: "Too far away!", message: "Go to location to use their loyalty program!", preferredStyle: .alert)
             erroralert.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
             self.present(erroralert, animated: true)

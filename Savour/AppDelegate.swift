@@ -285,7 +285,6 @@ extension AppDelegate: CLLocationManagerDelegate {
 
 @available(iOS 10.0, *)
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void){
         if let info = response.notification.request.content.userInfo["info"]{
             switch info as! Int{

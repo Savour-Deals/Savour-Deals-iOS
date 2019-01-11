@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06622494493A317551042AED /* Pods_Savour_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 403B10AF85137CD1215E6F0E /* Pods_Savour_Prod.framework */; };
 		5E2B77275480E79A210575D7 /* Pods_Savour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */; };
+		7B70E3A0BAC7C040EE8155F8 /* Pods_Savour_Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B1C7F0A0B83904D2F70B44 /* Pods_Savour_Test.framework */; };
 		8312B9D8215177CF00D8F2AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */; };
 		8312B9E32151A81900D8F2AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E131F3151A4002D7198 /* ViewController.swift */; };
 		8312B9E42151A81900D8F2AF /* DealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E1B1F3194B6002D7198 /* DealTableViewCell.swift */; };
@@ -131,6 +133,10 @@
 /* Begin PBXFileReference section */
 		09AF41A9D1B4F9CB19534A88 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		11FC412B5DFD4025E307D473 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		194776F26199540FB8FD74DE /* Pods-Savour Prod.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour Prod.release.xcconfig"; path = "Pods/Target Support Files/Pods-Savour Prod/Pods-Savour Prod.release.xcconfig"; sourceTree = "<group>"; };
+		1EF3E024BAC9DDA21EDF1A3F /* Pods-Savour Test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour Test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Savour Test/Pods-Savour Test.debug.xcconfig"; sourceTree = "<group>"; };
+		403B10AF85137CD1215E6F0E /* Pods_Savour_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		460C9A11014841B6AE20469A /* Pods-Savour Prod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour Prod.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Savour Prod/Pods-Savour Prod.debug.xcconfig"; sourceTree = "<group>"; };
 		6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleAPI/Release/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8312BA0D2151A81900D8F2AF /* Savour Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Savour Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,6 +186,8 @@
 		93783548216AAF666D4844DD /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B71047018234E33720347934 /* Pods-Savour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.debug.xcconfig"; sourceTree = "<group>"; };
 		B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour.release.xcconfig"; path = "Pods/Target Support Files/Pods-Savour/Pods-Savour.release.xcconfig"; sourceTree = "<group>"; };
+		B9B1C7F0A0B83904D2F70B44 /* Pods_Savour_Test.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour_Test.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F27CE4C13BAB73E1B279D267 /* Pods-Savour Test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour Test.release.xcconfig"; path = "Pods/Target Support Files/Pods-Savour Test/Pods-Savour Test.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +198,7 @@
 				8312B9F72151A81900D8F2AF /* CoreData.framework in Frameworks */,
 				8312B9F82151A81900D8F2AF /* MapKit.framework in Frameworks */,
 				8312B9F92151A81900D8F2AF /* Pods_Savour.framework in Frameworks */,
+				7B70E3A0BAC7C040EE8155F8 /* Pods_Savour_Test.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +216,7 @@
 				83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */,
 				8337563B1F9E938C00336744 /* MapKit.framework in Frameworks */,
 				5E2B77275480E79A210575D7 /* Pods_Savour.framework in Frameworks */,
+				06622494493A317551042AED /* Pods_Savour_Prod.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +377,8 @@
 				83DDDBB91F428CB100B14FEB /* CoreData.framework */,
 				6F980AE6E64BD897759D3C16 /* Pods_Savour.framework */,
 				93783548216AAF666D4844DD /* Pods_OneSignalNotificationServiceExtension.framework */,
+				403B10AF85137CD1215E6F0E /* Pods_Savour_Prod.framework */,
+				B9B1C7F0A0B83904D2F70B44 /* Pods_Savour_Test.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -378,6 +390,10 @@
 				B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */,
 				11FC412B5DFD4025E307D473 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
 				09AF41A9D1B4F9CB19534A88 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				194776F26199540FB8FD74DE /* Pods-Savour Prod.release.xcconfig */,
+				460C9A11014841B6AE20469A /* Pods-Savour Prod.debug.xcconfig */,
+				F27CE4C13BAB73E1B279D267 /* Pods-Savour Test.release.xcconfig */,
+				1EF3E024BAC9DDA21EDF1A3F /* Pods-Savour Test.debug.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -394,7 +410,6 @@
 				8312B9F62151A81900D8F2AF /* Frameworks */,
 				8312B9FA2151A81900D8F2AF /* Resources */,
 				8312BA052151A81900D8F2AF /* [CP] Embed Pods Frameworks */,
-				8312BA062151A81900D8F2AF /* [CP] Copy Pods Resources */,
 				8312BA072151A81900D8F2AF /* Embed App Extensions */,
 				8312BA092151A81900D8F2AF /* ShellScript */,
 			);
@@ -435,7 +450,6 @@
 				83802D661F2ED1FD00E315FB /* Frameworks */,
 				83802D671F2ED1FD00E315FB /* Resources */,
 				E86C244E482D842BC617C82B /* [CP] Embed Pods Frameworks */,
-				5F6D7E9D62B0C52D1A65114D /* [CP] Copy Pods Resources */,
 				8397B2CC1F951D3400EC392C /* Embed App Extensions */,
 				834A45E420A2D33300A0A031 /* ShellScript */,
 			);
@@ -457,7 +471,6 @@
 				8397B2BD1F951D3400EC392C /* Sources */,
 				8397B2BE1F951D3400EC392C /* Frameworks */,
 				8397B2BF1F951D3400EC392C /* Resources */,
-				51F691A61046BD055EB096F9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -595,36 +608,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		51F691A61046BD055EB096F9 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5F6D7E9D62B0C52D1A65114D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8312B9E12151A81900D8F2AF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -636,7 +619,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Savour-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Savour Test-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -649,11 +632,13 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Savour Test/Pods-Savour Test-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AcknowList/AcknowList.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKMessengerShareKit/FBSDKMessengerShareKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKPlacesKit/FBSDKPlacesKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GTProgressBar/GTProgressBar.framework",
@@ -671,6 +656,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKMessengerShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKPlacesKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTProgressBar.framework",
@@ -684,22 +671,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8312BA062151A81900D8F2AF /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Savour Test/Pods-Savour Test-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8312BA092151A81900D8F2AF /* ShellScript */ = {
@@ -734,11 +706,13 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Savour Prod/Pods-Savour Prod-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AcknowList/AcknowList.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKMessengerShareKit/FBSDKMessengerShareKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKPlacesKit/FBSDKPlacesKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GTProgressBar/GTProgressBar.framework",
@@ -756,6 +730,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKMessengerShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKPlacesKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTProgressBar.framework",
@@ -769,7 +745,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Savour/Pods-Savour-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Savour Prod/Pods-Savour Prod-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F58B04EE3AC9DA34A8A54CC7 /* [CP] Check Pods Manifest.lock */ = {
@@ -783,7 +759,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Savour-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Savour Prod-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -922,7 +898,7 @@
 /* Begin XCBuildConfiguration section */
 		8312BA0B2151A81900D8F2AF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */;
+			baseConfigurationReference = F27CE4C13BAB73E1B279D267 /* Pods-Savour Test.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -953,7 +929,7 @@
 		};
 		8312BA0C2151A81900D8F2AF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B71047018234E33720347934 /* Pods-Savour.debug.xcconfig */;
+			baseConfigurationReference = 1EF3E024BAC9DDA21EDF1A3F /* Pods-Savour Test.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1060,7 +1036,7 @@
 		};
 		836AFD2E20DDB0E3002DA873 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B71047018234E33720347934 /* Pods-Savour.debug.xcconfig */;
+			baseConfigurationReference = 460C9A11014841B6AE20469A /* Pods-Savour Prod.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1185,7 +1161,7 @@
 		};
 		83802D7D1F2ED1FD00E315FB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */;
+			baseConfigurationReference = 194776F26199540FB8FD74DE /* Pods-Savour Prod.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;

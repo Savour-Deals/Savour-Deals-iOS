@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="phe-QJ-Ogt">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.15" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="phe-QJ-Ogt">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.9"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -14,7 +13,7 @@
         <!--Onboarding View Controller-->
         <scene sceneID="JQ9-4C-khB">
             <objects>
-                <viewController storyboardIdentifier="page" modalPresentationStyle="overFullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="phe-QJ-Ogt" customClass="OnboardingViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="page" modalPresentationStyle="overFullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="phe-QJ-Ogt" customClass="OnboardingViewController" customModule="Savour_Prod" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jQh-Qd-7j4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -61,7 +60,7 @@
         <!--SwipeViewController-->
         <scene sceneID="MPQ-45-Ci7">
             <objects>
-                <viewController storyboardIdentifier="SwipeViewController" title="SwipeViewController" modalPresentationStyle="overCurrentContext" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6k0-zm-k9X" customClass="SwipeViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SwipeViewController" title="SwipeViewController" modalPresentationStyle="overCurrentContext" useStoryboardIdentifierAsRestorationIdentifier="YES" id="6k0-zm-k9X" customClass="SwipeViewController" customModule="Savour_Prod" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OIh-zH-thj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -137,7 +136,7 @@
         <!--NotificationViewController-->
         <scene sceneID="Mbu-Uh-XNO">
             <objects>
-                <viewController storyboardIdentifier="PermissionViewController" title="NotificationViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nse-cs-P2r" customClass="PermissionViewController" customModule="Savour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PermissionViewController" title="NotificationViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nse-cs-P2r" customClass="PermissionViewController" customModule="Savour_Prod" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="esC-ya-xU0">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -301,6 +300,6 @@
     </scenes>
     <resources>
         <image name="neonbrand-357917" width="4583" height="3189"/>
-        <image name="swipe" width="37" height="37"/>
+        <image name="swipe" width="75" height="75"/>
     </resources>
 </document>
