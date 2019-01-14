@@ -1,8 +1,6 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, 9.0
 
-inhibit_all_warnings!
-
 target 'Savour Prod' do
   pod 'Firebase'
   pod 'Firebase/Auth'
@@ -11,11 +9,9 @@ target 'Savour Prod' do
   pod 'SDWebImage/WebP'
   pod 'Firebase/Storage'
   pod 'FirebaseUI/Storage'
-pod 'FacebookSDK'
-pod 'FacebookSDK/LoginKit'
-pod 'FacebookSDK/ShareKit'
-pod 'FacebookSDK/PlacesKit'
-pod 'FBSDKMessengerShareKit'
+  pod 'FacebookSDK'
+  pod 'FacebookSDK/LoginKit'
+  pod 'FacebookSDK/ShareKit'
   pod 'Pulsator'
   pod 'Firebase/Messaging'
   pod 'OneSignal'
@@ -23,19 +19,17 @@ pod 'FBSDKMessengerShareKit'
   pod 'GeoFire'
   pod "GTProgressBar"
   pod 'Firebase/Functions'
+  pod 'Fabric', '~> 1.7.6'
+  pod 'Crashlytics', '~> 3.10.1'
 
 
-# pod 'Firebase/Firestore'
+  # pod 'Firebase/Firestore'
 
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  # Comment the next line if you're not using Swift and don't want to use dynamic 		frameworks
   use_frameworks!
 
-  # Pods for Savour
-# Pods for PodTest
-pod 'Fabric', '~> 1.7.6'
-pod 'Crashlytics', '~> 3.10.1'
-
 end
+
 target 'Savour Test' do
   pod 'Firebase'
   pod 'Firebase/Auth'
@@ -44,11 +38,9 @@ target 'Savour Test' do
   pod 'SDWebImage/WebP'
   pod 'Firebase/Storage'
   pod 'FirebaseUI/Storage'
-pod 'FacebookSDK'
-pod 'FacebookSDK/LoginKit'
-pod 'FacebookSDK/ShareKit'
-pod 'FacebookSDK/PlacesKit'
-pod 'FBSDKMessengerShareKit'
+  pod 'FacebookSDK'
+  pod 'FacebookSDK/LoginKit'
+  pod 'FacebookSDK/ShareKit'
   pod 'Pulsator'
   pod 'Firebase/Messaging'
   pod 'OneSignal'
@@ -56,17 +48,13 @@ pod 'FBSDKMessengerShareKit'
   pod 'GeoFire'
   pod "GTProgressBar"
   pod 'Firebase/Functions'
+  pod 'Fabric', '~> 1.7.6'
+  pod 'Crashlytics', '~> 3.10.1'
 
+  # pod 'Firebase/Firestore'
 
-# pod 'Firebase/Firestore'
-
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  # Comment the next line if you're not using Swift and don't want to use dynamic 		frameworks
   use_frameworks!
-
-  # Pods for Savour
-# Pods for PodTest
-pod 'Fabric', '~> 1.7.6'
-pod 'Crashlytics', '~> 3.10.1'
 
 end
 

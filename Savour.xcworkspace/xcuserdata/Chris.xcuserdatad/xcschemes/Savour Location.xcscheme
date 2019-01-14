@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1000"
+   LastUpgradeVersion = "1010"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "836FAD772151413700160BB3"
+               BlueprintIdentifier = "8312B9DE2151A81900D8F2AF"
                BuildableName = "Savour Test.app"
                BlueprintName = "Savour Test"
                ReferencedContainer = "container:Savour.xcodeproj">
@@ -77,7 +77,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "836FAD772151413700160BB3"
+            BlueprintIdentifier = "8312B9DE2151A81900D8F2AF"
             BuildableName = "Savour Test.app"
             BlueprintName = "Savour Test"
             ReferencedContainer = "container:Savour.xcodeproj">
