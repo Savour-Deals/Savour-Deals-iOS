@@ -15,7 +15,7 @@ internal extension UILabel {
         #if swift(>=4.2)
         let textSize = text.size(withAttributes: [NSAttributedString.Key.font : font])
         #else
-        let textSize = text.size(withAttributes: [NSAttributedStringKey.font : font])
+        let textSize = text.size(withAttributes: [NSAttributedString.Key.font : font])
         #endif
       
         return CGSize(width: ceil(textSize.width), height: ceil(textSize.height))

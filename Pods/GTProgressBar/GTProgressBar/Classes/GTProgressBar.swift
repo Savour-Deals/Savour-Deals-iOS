@@ -316,7 +316,7 @@ public class GTProgressBar: UIView {
             #if swift(>=4.2)
             let animationOptions = UIView.AnimationOptions.curveEaseInOut
             #else
-            let animationOptions = UIViewAnimationOptions.curveEaseInOut
+            let animationOptions = UIView.AnimationOptions.curveEaseInOut
             #endif
 
             UIView.animate(withDuration: 0.8,
