@@ -24,17 +24,11 @@ PODS:
     - Bolts (~> 1.9)
     - FacebookSDK/CoreKit
     - FBSDKMarketingKit
-  - FacebookSDK/ShareKit (4.38.0):
-    - Bolts (~> 1.9)
-    - FacebookSDK/CoreKit
-    - FBSDKShareKit
   - FBSDKCoreKit (4.39.1):
     - Bolts (~> 1.9)
   - FBSDKLoginKit (4.39.1):
     - FBSDKCoreKit
   - FBSDKMarketingKit (4.38.0):
-    - FBSDKCoreKit
-  - FBSDKShareKit (4.39.1):
     - FBSDKCoreKit
   - Firebase (5.15.0):
     - Firebase/Core (= 5.15.0)
@@ -176,7 +170,6 @@ DEPENDENCIES:
   - Fabric (~> 1.7.6)
   - FacebookSDK
   - FacebookSDK/LoginKit
-  - FacebookSDK/ShareKit
   - Firebase
   - Firebase/Auth
   - Firebase/Core
@@ -201,7 +194,6 @@ SPEC REPOS:
     - FBSDKCoreKit
     - FBSDKLoginKit
     - FBSDKMarketingKit
-    - FBSDKShareKit
     - Firebase
     - FirebaseAnalytics
     - FirebaseAnalyticsInterop
@@ -236,7 +228,6 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
   FBSDKLoginKit: c3079d9a4db27c492287b1eed7a4272b28cf8a59
   FBSDKMarketingKit: e609f39d74ab273cf52e2f8b7e8829ed412b2827
-  FBSDKShareKit: 27d7b982e7b1f4638da2f2b1ab6eba5afc6b5888
   Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
   FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
   FirebaseAnalyticsInterop: e5f21be9af6548372e2f0815834ff909bff395a2
@@ -262,6 +253,6 @@ SPEC CHECKSUMS:
   Pulsator: f465ca37212d826523fe8c79b07c1a4c1a941f5e
   SDWebImage: c5594f1a19c48d526d321e548902b56b479cd508
 
-PODFILE CHECKSUM: 3d3d6b3b4f48b16266eee798435601d2e7ab7b49
+PODFILE CHECKSUM: 3ab1b7f83ea324d191a8a0c9ada58d51b5c7f26b
 
 COCOAPODS: 1.6.0.beta.2
