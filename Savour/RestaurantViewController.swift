@@ -330,10 +330,11 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     @objc func checkin(_ sender:UIButton!){
         self.thisVendor.updateDistance()
         //Check if the deal is within range?
-        if true{//self.thisVendor.distanceMiles! < 0.2 {//close enough to continue
+        if self.thisVendor.distanceMiles! < 0.2 {//close enough to continue
             //Now check their points count
+            let now = Int(Date().timeIntervalSince1970)
             if self.loyaltyRedemptions >= self.thisVendor.loyalty.loyaltyCount{//user has enough points to redeem!
-                if (redemptionTime + 10800) < Int(Date().timeIntervalSince1970){//We are ready to redeem! Prompt user with next steps
+                if (redemptionTime + 10800) < now {//We are ready to redeem! Prompt user with next steps
                     let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
                     redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
                         self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
@@ -351,7 +352,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 }
                 
             }else{//user needs more points, let them check-in
-                if true{//(redemptionTime + 10800) < Date().timeIntervalSince1970 {//Ready to checkin!
+                if (redemptionTime + 10800) < now {//Ready to checkin!
                     performSegue(withIdentifier: "QRsegue", sender: self)
                 }else{
                     let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to get another loyalty visit!", preferredStyle: .alert)
@@ -367,7 +368,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func checkCode(code: String){
-        if true{//code == self.thisVendor.loyalty.loyaltyCode{
+        if code == self.thisVendor.loyalty.loyaltyCode{
             self.loyaltyRedemptions = self.loyaltyRedemptions + self.thisVendor.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
