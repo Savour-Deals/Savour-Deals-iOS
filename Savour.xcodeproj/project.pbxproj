@@ -76,7 +76,7 @@
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
 		83E4839520D0BF08009B4C3B /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E4839420D0BF08009B4C3B /* extensions.swift */; };
 		83FA1CCA219B5F4500CAA5E7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312BA0F2151A92100D8F2AF /* GoogleService-Info.plist */; };
-		D8BA1170FEDB0BD1FDC4147D /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93783548216AAF666D4844DD /* Pods_OneSignalNotificationServiceExtension.framework */; };
+		F8BBF84130EC040D82113AAE /* Pods_Savour_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EBA99F39CB500CF9E3EB86B /* Pods_Savour_Prod.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -218,7 +218,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8BA1170FEDB0BD1FDC4147D /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */,
+				63444A3026C8E41A8DFEB84C /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,7 +308,7 @@
 				836AFD2420DDAF85002DA873 /* SavourDealsUITests */,
 				83802D6A1F2ED1FD00E315FB /* Products */,
 				9843D2A17469187CACDB6A4C /* Frameworks */,
-				E3369BFE56DB7D02F0FFA0FF /* Pods */,
+				C91D8E6FA381F240BD0D4C2A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -375,19 +375,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E3369BFE56DB7D02F0FFA0FF /* Pods */ = {
+		C91D8E6FA381F240BD0D4C2A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B71047018234E33720347934 /* Pods-Savour.debug.xcconfig */,
-				B75C9FD65B2C6096EF260051 /* Pods-Savour.release.xcconfig */,
-				11FC412B5DFD4025E307D473 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
-				09AF41A9D1B4F9CB19534A88 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
-				194776F26199540FB8FD74DE /* Pods-Savour Prod.release.xcconfig */,
-				460C9A11014841B6AE20469A /* Pods-Savour Prod.debug.xcconfig */,
-				F27CE4C13BAB73E1B279D267 /* Pods-Savour Test.release.xcconfig */,
-				1EF3E024BAC9DDA21EDF1A3F /* Pods-Savour Test.debug.xcconfig */,
+				95013C58140429B9FA2072F8 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				28759ACB55A018BCB0198554 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				E4EAB9AB2121A38DB7CF4085 /* Pods-Savour Prod.release.xcconfig */,
+				DDF8ADED3F79F01B725AAFE8 /* Pods-Savour Prod.debug.xcconfig */,
+				A5E84367E1DCD33F2A118D95 /* Pods-Savour Test.release.xcconfig */,
+				4CC1A7BFBF73418D651C1E2F /* Pods-Savour Test.debug.xcconfig */,
 			);
-			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -397,13 +395,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8312BA0A2151A81900D8F2AF /* Build configuration list for PBXNativeTarget "Savour Test" */;
 			buildPhases = (
-				8312B9E12151A81900D8F2AF /* [CP] Check Pods Manifest.lock */,
+				BD5136B7E1E85F6ED20E6B24 /* [CP] Check Pods Manifest.lock */,
 				8312B9E22151A81900D8F2AF /* Sources */,
 				8312B9F62151A81900D8F2AF /* Frameworks */,
 				8312B9FA2151A81900D8F2AF /* Resources */,
-				8312BA052151A81900D8F2AF /* [CP] Embed Pods Frameworks */,
 				8312BA072151A81900D8F2AF /* Embed App Extensions */,
 				8312BA092151A81900D8F2AF /* ShellScript */,
+				D795F7A0F3ECADCD3BC4ECDE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -437,13 +435,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83802D7B1F2ED1FD00E315FB /* Build configuration list for PBXNativeTarget "Savour Prod" */;
 			buildPhases = (
-				F58B04EE3AC9DA34A8A54CC7 /* [CP] Check Pods Manifest.lock */,
+				D0ADDD52B5C4386A8D873378 /* [CP] Check Pods Manifest.lock */,
 				83802D651F2ED1FD00E315FB /* Sources */,
 				83802D661F2ED1FD00E315FB /* Frameworks */,
 				83802D671F2ED1FD00E315FB /* Resources */,
-				E86C244E482D842BC617C82B /* [CP] Embed Pods Frameworks */,
 				8397B2CC1F951D3400EC392C /* Embed App Extensions */,
 				834A45E420A2D33300A0A031 /* ShellScript */,
+				70B377C572C025341644724C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -459,7 +457,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8397B2C91F951D3400EC392C /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
 			buildPhases = (
-				FA32F170A98F2948B26B6CB2 /* [CP] Check Pods Manifest.lock */,
+				E5F428367D3E9B1E592D0DF9 /* [CP] Check Pods Manifest.lock */,
 				8397B2BD1F951D3400EC392C /* Sources */,
 				8397B2BE1F951D3400EC392C /* Frameworks */,
 				8397B2BF1F951D3400EC392C /* Resources */,
@@ -600,37 +598,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8312B9E12151A81900D8F2AF /* [CP] Check Pods Manifest.lock */ = {
+		70B377C572C025341644724C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Savour Test-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8312BA052151A81900D8F2AF /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Savour Test/Pods-Savour Test-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Savour Prod/Pods-Savour Prod-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AcknowList/AcknowList.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKMessengerShareKit/FBSDKMessengerShareKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKPlacesKit/FBSDKPlacesKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GTProgressBar/GTProgressBar.framework",
@@ -643,13 +623,13 @@
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AcknowList.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKMessengerShareKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKPlacesKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTProgressBar.framework",
@@ -663,7 +643,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Savour Test/Pods-Savour Test-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Savour Prod/Pods-Savour Prod-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8312BA092151A81900D8F2AF /* ShellScript */ = {
@@ -692,19 +672,63 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n\n";
 		};
-		E86C244E482D842BC617C82B /* [CP] Embed Pods Frameworks */ = {
+		BD5136B7E1E85F6ED20E6B24 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputFileListPaths = (
+			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Savour Prod/Pods-Savour Prod-frameworks.sh",
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Savour Test-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D0ADDD52B5C4386A8D873378 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Savour Prod-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D795F7A0F3ECADCD3BC4ECDE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Savour Test/Pods-Savour Test-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AcknowList/AcknowList.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKMessengerShareKit/FBSDKMessengerShareKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKPlacesKit/FBSDKPlacesKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GTProgressBar/GTProgressBar.framework",
@@ -717,13 +741,13 @@
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AcknowList.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKMessengerShareKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKPlacesKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTProgressBar.framework",
@@ -737,37 +761,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Savour Prod/Pods-Savour Prod-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Savour Test/Pods-Savour Test-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F58B04EE3AC9DA34A8A54CC7 /* [CP] Check Pods Manifest.lock */ = {
+		E5F428367D3E9B1E592D0DF9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Savour Prod-checkManifestLockResult.txt",
+			outputFileListPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FA32F170A98F2948B26B6CB2 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-OneSignalNotificationServiceExtension-checkManifestLockResult.txt",
 			);
@@ -890,9 +900,9 @@
 /* Begin XCBuildConfiguration section */
 		8312BA0B2151A81900D8F2AF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F27CE4C13BAB73E1B279D267 /* Pods-Savour Test.release.xcconfig */;
+			baseConfigurationReference = A5E84367E1DCD33F2A118D95 /* Pods-Savour Test.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -900,6 +910,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -921,9 +932,9 @@
 		};
 		8312BA0C2151A81900D8F2AF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1EF3E024BAC9DDA21EDF1A3F /* Pods-Savour Test.debug.xcconfig */;
+			baseConfigurationReference = 4CC1A7BFBF73418D651C1E2F /* Pods-Savour Test.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -931,6 +942,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1028,9 +1040,9 @@
 		};
 		836AFD2E20DDB0E3002DA873 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 460C9A11014841B6AE20469A /* Pods-Savour Prod.debug.xcconfig */;
+			baseConfigurationReference = DDF8ADED3F79F01B725AAFE8 /* Pods-Savour Prod.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1038,6 +1050,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEPLOYMENT_POSTPROCESSING = NO;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1059,8 +1072,9 @@
 		};
 		836AFD2F20DDB0E3002DA873 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 11FC412B5DFD4025E307D473 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			baseConfigurationReference = 28759ACB55A018BCB0198554 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1153,9 +1167,9 @@
 		};
 		83802D7D1F2ED1FD00E315FB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 194776F26199540FB8FD74DE /* Pods-Savour Prod.release.xcconfig */;
+			baseConfigurationReference = E4EAB9AB2121A38DB7CF4085 /* Pods-Savour Prod.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1163,6 +1177,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEPLOYMENT_POSTPROCESSING = NO;
 				DEVELOPMENT_TEAM = C5FUB5PT9S;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1184,8 +1199,9 @@
 		};
 		8397B2CB1F951D3400EC392C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 09AF41A9D1B4F9CB19534A88 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			baseConfigurationReference = 95013C58140429B9FA2072F8 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
