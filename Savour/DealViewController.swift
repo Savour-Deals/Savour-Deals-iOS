@@ -227,22 +227,12 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
                     
                 }
                 let approveAction = UIAlertAction(title: "Approve", style: .default) { (alert: UIAlertAction!) -> Void in
-                    let currTime = Date().timeIntervalSince1970
+                    let currTime = Int(Date().timeIntervalSince1970)
                     let uID = Auth.auth().currentUser?.uid
                     
                     //Note redemption time
                     let redeemRef = self.ref.child("Deals").child((self.Deal?.id)!).child("redeemed").child(uID!)
                     redeemRef.setValue(currTime)
-                    
-                    //Call Firebase cloud functions to increment stripe counter
-//                    self.functions.httpsCallable("incrementStripe").call(["subscription_id":self.thisVendor!.subscriptionId ?? "", "vendor_id":self.thisVendor?.id ?? "", "deal_type":0]) { (result, error) in
-//                        if let _ = error as NSError? {
-//                            //error handle
-//                        }
-//                        if let text = (result?.data as? [String: Any])?["text"] as? String {
-//                            print(text)
-//                        }
-//                    }
                     
                     //set and draw checkmark
                     self.redeemIndicator(color: UIColor.green.cgColor)
@@ -276,7 +266,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
     //Timer functions
     func runTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
-        let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
+        let timeSince = Int(Date().timeIntervalSince1970) - (Deal?.redeemedTime)!
         self.code.textColor = UIColor.black
         timerLabel.text = timeString(time: timeSince) //This will update the label
         if (timeSince) > 1800 {
@@ -295,7 +285,7 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
 
     
     @objc func updateTimer() {
-        let timeSince = Date().timeIntervalSince1970 - (Deal?.redeemedTime)!
+        let timeSince = Int(Date().timeIntervalSince1970) - (Deal?.redeemedTime)!
         timerLabel.text = timeString(time: timeSince) //This will update the label.
         if (timeSince) > 1800 {
             code.text = ""
@@ -337,9 +327,9 @@ class DealViewController: UIViewController,CLLocationManagerDelegate {
         
 
     }
-    func timeString(time:TimeInterval)->String{
-        let minutes = Int(time) / 60 % 60
-        let seconds = Int(time) % 60
+    func timeString(time:Int)->String{
+        let minutes = time / 60 % 60
+        let seconds = time % 60
         return String(format:"Redeemed %02i minutes %02i seconds ago", minutes, seconds)
     }
 }

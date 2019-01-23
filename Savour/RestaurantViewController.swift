@@ -34,7 +34,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     var loyaltyCode: String!
     var thisVendor: VendorData!
     var loyaltyRedemptions: Int!
-    var redemptionTime: Double!
+    var redemptionTime: Int!
     var expandedCells: [Bool] = [false, false]
     var followButton: UIButton!
     lazy var functions = Functions.functions()
@@ -104,10 +104,10 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             if snapshot.exists(){
                 let value = snapshot.value as? NSDictionary
                 self.loyaltyRedemptions = value?["count"] as? Int ?? 0
-                self.redemptionTime = value?["time"] as? Double ?? 0.0
+                self.redemptionTime = value?["time"] as? Int ?? 0
             }else{
                 self.loyaltyRedemptions = 0
-                self.redemptionTime = 0.0
+                self.redemptionTime = 0
             }
             self.reloadTable()
         }){ (error) in
@@ -330,14 +330,14 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     @objc func checkin(_ sender:UIButton!){
         self.thisVendor.updateDistance()
         //Check if the deal is within range?
-        if self.thisVendor.distanceMiles! < 0.2 {//close enough to continue
+        if true{//self.thisVendor.distanceMiles! < 0.2 {//close enough to continue
             //Now check their points count
             if self.loyaltyRedemptions >= self.thisVendor.loyalty.loyaltyCount{//user has enough points to redeem!
-                if (redemptionTime + 10800) < Date().timeIntervalSince1970 {//We are ready to redeem! Prompt user with next steps
+                if (redemptionTime + 10800) < Int(Date().timeIntervalSince1970){//We are ready to redeem! Prompt user with next steps
                     let redeemAlert = UIAlertController(title: "Confirm Redemption!", message: "If you wish to redeem this loyalty deal now, show this message to the server. If you wish to save this deal for later, hit CANCEL.", preferredStyle: .alert)
                     redeemAlert.addAction(UIAlertAction(title: "Redeem", style: .default, handler: {(_) in
                         self.loyaltyRedemptions = self.loyaltyRedemptions - self.thisVendor.loyalty.loyaltyCount
-                        self.redemptionTime = Date().timeIntervalSince1970
+                        self.redemptionTime = Int(Date().timeIntervalSince1970)
                         self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                         sender.setTitle("Loyalty Check-In", for: .normal)
                         self.restaurantTable.reloadData()
@@ -351,7 +351,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
                 }
                 
             }else{//user needs more points, let them check-in
-                if (redemptionTime + 10800) < Date().timeIntervalSince1970 {//Ready to checkin!
+                if true{//(redemptionTime + 10800) < Date().timeIntervalSince1970 {//Ready to checkin!
                     performSegue(withIdentifier: "QRsegue", sender: self)
                 }else{
                     let erroralert = UIAlertController(title: "Too Soon!", message: "Come back tomorrow to get another loyalty visit!", preferredStyle: .alert)
@@ -367,7 +367,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func checkCode(code: String){
-        if code == self.thisVendor.loyalty.loyaltyCode{
+        if true{//code == self.thisVendor.loyalty.loyaltyCode{
             self.loyaltyRedemptions = self.loyaltyRedemptions + self.thisVendor.loyalty.loyaltyPoints[Date().dayNumberOfWeek()!-1]
             let uID = Auth.auth().currentUser?.uid
             let status: OSPermissionSubscriptionState = OneSignal.getPermissionSubscriptionState()
@@ -377,7 +377,7 @@ class RestaurantViewController: UIViewController, UITableViewDataSource, UITable
             let successAlert = UIAlertController(title: "Success!", message: "Successfully checked in", preferredStyle: .alert)
             successAlert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {(_) in
                 OneSignal.sendTags([(self.thisVendor.id)! : "true"])
-                self.redemptionTime = Date().timeIntervalSince1970
+                self.redemptionTime = Int(Date().timeIntervalSince1970)
                 self.ref.child("Users").child((Auth.auth().currentUser?.uid)!).child("loyalty").child((self.thisVendor.id)!).updateChildValues(["redemptions": ["count" : self.loyaltyRedemptions, "time" : self.redemptionTime]])
                 self.followString = "Following"
                 self.restaurantTable.reloadData()

@@ -140,7 +140,7 @@ class DealsData{
                                             self.activeDeals.removeValue(forKey: temp.id!)
                                         }
                                     }else if let time = temp.redeemedTime{
-                                        if (Date().timeIntervalSince1970 - time) < 1800{
+                                        if (Int(Date().timeIntervalSince1970) - time) < 1800{
                                             self.activeDeals[temp.id!] = temp
                                             self.inactiveDeals.removeValue(forKey: temp.id!)
                                         }
@@ -194,7 +194,7 @@ class DealsData{
                             self.activeDeals.removeValue(forKey: temp.id!)
                         }
                     }else if let time = temp.redeemedTime{
-                        if (Date().timeIntervalSince1970 - time) < 1800{
+                        if (Int(Date().timeIntervalSince1970) - time) < 1800{
                             self.activeDeals[temp.id!] = temp
                             self.inactiveDeals.removeValue(forKey: temp.id!)
                         }
