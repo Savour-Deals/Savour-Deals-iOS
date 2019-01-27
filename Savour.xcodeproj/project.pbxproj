@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E09B2D73A1F06612F7687EB /* Pods_Savour_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 761B52074A0992127E0BBE3A /* Pods_Savour_Prod.framework */; };
 		1A3093625F2DDB793B4A9F90 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 296F537B894F7071F7E3B59E /* Pods_OneSignalNotificationServiceExtension.framework */; };
 		8312B9D8215177CF00D8F2AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */; };
 		8312B9E32151A81900D8F2AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834C1E131F3151A4002D7198 /* ViewController.swift */; };
@@ -75,7 +76,6 @@
 		83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83DDDBB91F428CB100B14FEB /* CoreData.framework */; };
 		83E4839520D0BF08009B4C3B /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E4839420D0BF08009B4C3B /* extensions.swift */; };
 		83FA1CCA219B5F4500CAA5E7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8312BA0F2151A92100D8F2AF /* GoogleService-Info.plist */; };
-		9B23DDDD9A18F9797A855D03 /* Pods_Savour_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 304334E2C50E0E35EF7B651A /* Pods_Savour_Prod.framework */; };
 		B5408957453E0A81E79A9D06 /* Pods_Savour_Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1539886178989B553E9AF4F3 /* Pods_Savour_Test.framework */; };
 /* End PBXBuildFile section */
 
@@ -126,6 +126,16 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		83B8A4C421FD00CB00E66CAD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -134,9 +144,9 @@
 		255C7F9FFD90A199D19115B3 /* Pods-Savour Test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour Test.release.xcconfig"; path = "Target Support Files/Pods-Savour Test/Pods-Savour Test.release.xcconfig"; sourceTree = "<group>"; };
 		296F537B894F7071F7E3B59E /* Pods_OneSignalNotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneSignalNotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A9EE30EE7C711EB720836D4 /* Pods-Savour Test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour Test.debug.xcconfig"; path = "Target Support Files/Pods-Savour Test/Pods-Savour Test.debug.xcconfig"; sourceTree = "<group>"; };
-		304334E2C50E0E35EF7B651A /* Pods_Savour_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C823BBB4E346F623A389803 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		66ED53C12209AA7ED91A1C49 /* Pods-Savour Prod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Savour Prod.debug.xcconfig"; path = "Target Support Files/Pods-Savour Prod/Pods-Savour Prod.debug.xcconfig"; sourceTree = "<group>"; };
+		761B52074A0992127E0BBE3A /* Pods_Savour_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Savour_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8312B9D7215177CF00D8F2AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleAPI/Release/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8312BA0D2151A81900D8F2AF /* Savour Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Savour Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8312BA0F2151A92100D8F2AF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleAPI/Debug/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -208,7 +218,7 @@
 			files = (
 				83DDDBBA1F428CB100B14FEB /* CoreData.framework in Frameworks */,
 				8337563B1F9E938C00336744 /* MapKit.framework in Frameworks */,
-				9B23DDDD9A18F9797A855D03 /* Pods_Savour_Prod.framework in Frameworks */,
+				0E09B2D73A1F06612F7687EB /* Pods_Savour_Prod.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,8 +377,8 @@
 				8337563A1F9E938C00336744 /* MapKit.framework */,
 				83DDDBB91F428CB100B14FEB /* CoreData.framework */,
 				296F537B894F7071F7E3B59E /* Pods_OneSignalNotificationServiceExtension.framework */,
-				304334E2C50E0E35EF7B651A /* Pods_Savour_Prod.framework */,
 				1539886178989B553E9AF4F3 /* Pods_Savour_Test.framework */,
+				761B52074A0992127E0BBE3A /* Pods_Savour_Prod.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -440,6 +450,7 @@
 				8397B2CC1F951D3400EC392C /* Embed App Extensions */,
 				834A45E420A2D33300A0A031 /* ShellScript */,
 				CFA3B67AC5A44717922C838D /* [CP] Embed Pods Frameworks */,
+				83B8A4C421FD00CB00E66CAD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -704,6 +715,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GTProgressBar/GTProgressBar.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/LCUIComponents/LCUIComponents.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/Pulsator/Pulsator.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
@@ -722,6 +734,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTProgressBar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LCUIComponents.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pulsator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
@@ -750,6 +763,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GTProgressBar/GTProgressBar.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/LCUIComponents/LCUIComponents.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/Pulsator/Pulsator.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
@@ -768,6 +782,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTProgressBar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LCUIComponents.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pulsator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",

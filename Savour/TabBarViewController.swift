@@ -15,6 +15,7 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate,CLLoc
     var vendors: VendorsData!
     var finishedSetup = false
     var locationManager: CLLocationManager!
+    var radius = 80.5 //50 miles
 
     override func viewDidLoad() {
         super.viewDidLoad()

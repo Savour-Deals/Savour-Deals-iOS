@@ -41,7 +41,7 @@
                value = "self.navigationController">
             </PersistentString>
             <PersistentString
-               value = "self.buttonsView.subviews">
+               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
             </PersistentString>
             <PersistentString
                value = "button.backgroundColor">
@@ -59,7 +59,7 @@
                value = "snap.value">
             </PersistentString>
             <PersistentString
-               value = "UnfilteredDeals[i].dealID == self.notificationDeal  &amp;&amp; !self.alreadyGoing">
+               value = "self.buttonsView.subviews">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -70,6 +70,9 @@
                value = "indexPath.row">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in VendorMapViewController.locationEnabled():VendorMapViewController.swift">
       </ContextState>
       <ContextState
          contextName = "specialized closure #1 in closure #1 in ViewController.loadData(sender:):ViewController.swift">
@@ -178,10 +181,10 @@
                value = "self.textBox.frame.height">
             </PersistentString>
             <PersistentString
-               value = "textBox.frame.height">
+               value = "UIScreen.main.nativeBounds.height">
             </PersistentString>
             <PersistentString
-               value = "UIScreen.main.nativeBounds.height">
+               value = "textBox.frame.height">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -300,6 +303,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #2 in VendorsData.init(completion:):VendorsData.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "idx">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "RestaurantViewController.checkin(_:):RestaurantViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -361,6 +372,9 @@
                value = "favorites">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #2 in DealsData.init(completion:):DealsData.swift">
       </ContextState>
       <ContextState
          contextName = "ViewController.(loadData() -&gt; ()).(closure #1).(closure #1):ViewController.swift">
@@ -515,13 +529,13 @@
          contextName = "DealData.init(snap:ID:vendors:):Database.swift">
          <PersistentStrings>
             <PersistentString
-               value = "startOfToday.timeIntervalSince1970">
+               value = "Date().timeIntervalSince1970 - time">
             </PersistentString>
             <PersistentString
                value = "DateComponents.value(for: endTimeComponent)">
             </PersistentString>
             <PersistentString
-               value = "Date().timeIntervalSince1970 - time">
+               value = "startOfToday.timeIntervalSince1970">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -632,6 +646,9 @@
          contextName = "closure #6 in closure #1 in DealsData.init(completion:):Database.swift">
       </ContextState>
       <ContextState
+         contextName = "VendorsData.getVendors():VendorsData.swift">
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in AppDelegate.application(_:didFinishLaunchingWithOptions:):AppDelegate.swift">
          <PersistentStrings>
             <PersistentString
@@ -660,13 +677,13 @@
          contextName = "closure #1 in DealViewController.SetupUI():DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.img.frame.size.height/2">
+               value = "self.img.frame.size.width/2">
             </PersistentString>
             <PersistentString
                value = "self.img.frame.size.height">
             </PersistentString>
             <PersistentString
-               value = "self.img.frame.size.width/2">
+               value = "self.img.frame.size.height/2">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -753,10 +770,10 @@
          contextName = "DealViewController.(authenticatePressed(Any) -&gt; ()).(closure #2):DealViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "mainVC">
+               value = "(self.Deal?.dealID)!">
             </PersistentString>
             <PersistentString
-               value = "(self.Deal?.dealID)!">
+               value = "mainVC">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -831,10 +848,10 @@
          contextName = "specialized DealData.init(snap:ID:):Classes.swift">
          <PersistentStrings>
             <PersistentString
-               value = "redeemValue[ID]">
+               value = "value[&quot;redeemed&quot;] as? NSDictionary">
             </PersistentString>
             <PersistentString
-               value = "value[&quot;redeemed&quot;] as? NSDictionary">
+               value = "redeemValue[ID]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -842,13 +859,13 @@
          contextName = "ViewController.tableView(_:numberOfRowsInSection:):ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "filteredDeals.count">
+               value = "notificationDeal">
             </PersistentString>
             <PersistentString
                value = "filteredDeals">
             </PersistentString>
             <PersistentString
-               value = "notificationDeal">
+               value = "filteredDeals.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -932,6 +949,9 @@
                value = "shortcutItem.localizedTitle">
             </PersistentString>
          </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in closure #2 in DealsData.init(completion:):DealsData.swift">
       </ContextState>
       <ContextState
          contextName = "DetailsViewController.tableView(_:heightForRowAt:):DetailsViewController.swift">

@@ -21,16 +21,17 @@ class DealsData{
     private var geoFire: GFCircleQuery!
     
     
-    private var activeDeals = Dictionary<String,DealData>()
-    private var inactiveDeals = Dictionary<String,DealData>()
+    private var activeDeals : Dictionary<String,DealData> = [:]
+    private var inactiveDeals : Dictionary<String,DealData>  = [:]
     
     
-    private var vendors = Dictionary<String,VendorData>()
-    private var favoriteIDs = Dictionary<String, String>()
+    private var vendors : Dictionary<String,VendorData> = [:]
+    private var favoriteIDs : Dictionary<String, String> = [:]
     
     private var favoritesLoaded = false
     private var dealsLoaded = false
     var loadingComplete = false
+    private var radius = 80.5 //50 miles
     
     init(completion: @escaping (Bool) -> Void){
         let favGroup = DispatchGroup()
@@ -60,33 +61,28 @@ class DealsData{
             //Get Deals
             favLoaded = true
             var first = true
-            let vendorGroup = DispatchGroup()
-            var vendorLoaded = false
             let geofireRef = Database.database().reference().child("Vendors_Location")
             while (locationManager.location == nil){//wait until location is available
 //                print("waiting for location")
             }//even if the location is old, dont worry, we will update later when tabbar location update is called
-            self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: 80.5)
-            vendorGroup.enter()
+            self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: self.radius)
             self.geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
-                if !vendorLoaded{
-                    vendorGroup.enter()
-                }
                 Database.database().reference().child("Vendors").queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
                     for child in snapshot.children{
                         let snap = child as! DataSnapshot
                         self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: locationManager.location)
-                    }
-                    if !vendorLoaded{
-                        vendorGroup.leave()
-                    }else{
-                        self.queryDeals(forEnteredVendor: self.vendors[key]!)
+                        if let vendor = self.vendors[key] {
+                            self.queryDeals(forEnteredVendor: vendor, completion: { (success) in
+                                completion(true)
+                            })
+                        }
                     }
                 })
             })
             self.geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in //50 miles
                 //remove vendor and all deals for vendor
                 self.vendors.removeValue(forKey: key)
+
                 for deal in self.activeDeals{
                     if deal.value.rID == key{
                         self.activeDeals.removeValue(forKey: deal.key)
@@ -97,73 +93,15 @@ class DealsData{
                         self.inactiveDeals.removeValue(forKey: deal.key)
                     }
                 }
+                completion(true)
             })
             self.geoFire.observeReady({
-                if !vendorLoaded && first{ //check that we havent called leave from here yet
+                if first{ //check that we havent called leave from here yet
                     //observeReady may happemn multiple times. Only care bout first one
                     first = false
                     print("All initial vendor data has been loaded and events have been fired!")
-                    vendorGroup.leave()
                 }
             })
-            vendorGroup.notify(queue: .main){
-                vendorLoaded = true
-                let dealGroup = DispatchGroup()
-                var dealsLoaded = false
-                if self.vendors.count < 1 {
-                    dealGroup.enter()
-                    self.activeDeals["SVR"] = DealData(snap: nil, ID: "SVR", vendors: self.vendors)
-                    dealGroup.leave()//When we found no vendors, just leave
-                }else{
-                    self.activeDeals.removeValue(forKey: "SVR")
-                    for vendor in self.vendors {
-                        if !dealsLoaded{
-                            dealGroup.enter()
-                        }
-                        self.ref.child("Deals").queryOrdered(byChild: "vendor_id").queryEqual(toValue: vendor.key).observe(.value, with: { (snapshot) in
-                            for entry in snapshot.children {
-                                let snap = entry as! DataSnapshot
-                                if let _ = snap.value{
-                                    let temp = DealData(snap: snap, ID: self.userid!, vendors: self.vendors)
-                                    if self.favoriteIDs[temp.id!] != nil{
-                                        temp.favorited = true
-                                    }else{
-                                        temp.favorited = false
-                                    }
-                                    //if the deal is not expired or redeemed less than half an hour ago, show it
-                                    if temp.isAvailable(){
-                                        if temp.active{
-                                            self.activeDeals[temp.id!] = temp
-                                            self.inactiveDeals.removeValue(forKey: temp.id!)
-                                        }else{
-                                            self.inactiveDeals[temp.id!] = temp
-                                            self.activeDeals.removeValue(forKey: temp.id!)
-                                        }
-                                    }else if let time = temp.redeemedTime{
-                                        if (Int(Date().timeIntervalSince1970) - time) < 1800{
-                                            self.activeDeals[temp.id!] = temp
-                                            self.inactiveDeals.removeValue(forKey: temp.id!)
-                                        }
-                                    }
-                                }else{
-                                    let snap = entry as! DataSnapshot
-                                    let key = snap.key
-                                    self.activeDeals.removeValue(forKey: key)
-                                    self.inactiveDeals.removeValue(forKey: key)
-                                }
-                            }
-                            if !dealsLoaded{
-                                dealGroup.leave()
-                            }
-                        })
-                    }
-                }
-                dealGroup.notify(queue: .main){
-                    dealsLoaded = true
-                    print("Finished gathering deals.")
-                    completion(true)
-                }
-            }
         }
     }
     
@@ -173,7 +111,14 @@ class DealsData{
         }
     }
     
-    func queryDeals(forEnteredVendor vendor: VendorData){
+    func updateRadius(rad: Double){
+        radius = rad*1.60934//to km
+        if let _ = geoFire{
+            self.geoFire.radius = self.radius
+        }
+    }
+    
+    func queryDeals(forEnteredVendor vendor: VendorData,completion: @escaping (Bool) -> Void){
         self.ref.child("Deals").queryOrdered(byChild: "vendor_id").queryEqual(toValue: vendor.id).observe(.value, with: { (snapshot) in
             for entry in snapshot.children {
                 let snap = entry as! DataSnapshot
@@ -205,6 +150,7 @@ class DealsData{
                     self.activeDeals.removeValue(forKey: key)
                     self.inactiveDeals.removeValue(forKey: key)
                 }
+                completion(true)
             }
         })
     }

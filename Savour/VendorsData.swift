@@ -15,41 +15,36 @@ import GeoFire
 fileprivate let locationManager = CLLocationManager()
 
 class VendorsData{
-    var vendors = Dictionary<String,VendorData>()
+    var vendors : Dictionary<String,VendorData> = [:]
     private var geoFire: GFCircleQuery!
     private var initialLoaded = false
+    private var radius = 80.5 //50 miles
     
     init(completion: @escaping (Bool) -> Void){
         locationManager.startUpdatingLocation()
         let ref = Database.database().reference().child("Vendors")
         let geofireRef = Database.database().reference().child("Vendors_Location")
-        var count = 0
         if let location = locationManager.location{
-            geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: 80.5)
-            geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in //50 miles
-                count = count + 1
+            geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: radius)
+            geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
                 ref.queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
                     for child in snapshot.children{
                         let snap = child as! DataSnapshot
                         self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: location)
-                    }
-                    count = count - 1
-                    if count == 0 && !self.initialLoaded{
-                        self.initialLoaded = true
-                        print("Vendors Loaded")
                         completion(true)
                     }
+                    self.initialLoaded = true
                 })
             })
-            geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in //50 miles
+            geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in
                 self.vendors.removeValue(forKey: key)
+                completion(true)
             })
             geoFire.observeReady {
-                if !self.initialLoaded{
-                    print("No vendors found")
-                    
-                    completion(true)
-                }
+//                if !self.initialLoaded{
+//                    print("No vendors found")
+//                    completion(true)
+//                }
             }
         }else{
             //could not get location!!
@@ -64,8 +59,15 @@ class VendorsData{
         }
     }
     
+    func updateRadius(rad: Double){
+        radius = rad*1.60934//to km
+        if let _ = geoFire{
+            self.geoFire.radius = self.radius
+        }
+    }
+    
     func getVendors() -> [VendorData]{
-        if vendors.count != 0 {
+        if self.vendors.count != 0 {
             return Array(vendors.values)
         }
         let temp = VendorData(ID: "SVRDEALS")

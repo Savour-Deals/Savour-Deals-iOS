@@ -1,0 +1,6 @@
+framework module LCUIComponents {
+  umbrella header "LCUIComponents-umbrella.h"
+
+  export *
+  module * { export * }
+}

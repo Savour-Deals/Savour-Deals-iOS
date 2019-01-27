@@ -227,7 +227,7 @@ extension AppDelegate: CLLocationManagerDelegate {
                 if self.monitoredRegions.count < 20 && !self.monitoredRegions.contains(where: { $0 === place }){
                     //monitor nearest 20 places
                     let geofenceRegionCenter = place.location?.coordinate
-                    
+
                     /* Create a region centered on desired location,
                      choose a radius for the region (in meters)
                      choose a unique identifier for that region */
@@ -265,7 +265,7 @@ extension AppDelegate: CLLocationManagerDelegate {
     
     //called when user exits a monitored region
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        nearbyCount = nearbyCount - 1 //decrement if left range of location
+//        nearbyCount = nearbyCount - 1 //decrement if left range of location
     }
     
     func handleEvent() {

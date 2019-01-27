@@ -20,6 +20,8 @@ target 'Savour Prod' do
   pod 'Firebase/Functions'
   pod 'Fabric', '~> 1.7.6'
   pod 'Crashlytics', '~> 3.10.1'
+  pod 'LCUIComponents'
+
 
 
   # pod 'Firebase/Firestore'
@@ -48,6 +50,8 @@ target 'Savour Test' do
   pod 'Firebase/Functions'
   pod 'Fabric', '~> 1.7.6'
   pod 'Crashlytics', '~> 3.10.1'
+  pod 'LCUIComponents'
+
 
   # pod 'Firebase/Firestore'
 

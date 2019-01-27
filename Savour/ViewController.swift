@@ -11,6 +11,7 @@ import FirebaseDatabase
 import FirebaseAuth
 import CoreLocation
 import OneSignal
+import LCUIComponents
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate{
 
@@ -24,7 +25,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
     var dealsData: DealsData!
     var vendorsData: VendorsData!
-        
+    var searchbarData: [LCTuple<Double>] = []
+
+    
     @IBOutlet weak var locationText: UILabel!
     var activeDeals = [DealData]()
     var inactiveDeals = [DealData]()
@@ -53,6 +56,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let OnboardVC = storyboard.instantiateViewController(withIdentifier: "OnNav") as! UINavigationController
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window!.rootViewController = OnboardVC
+        }
+        
+        for i in 1...10 {
+            searchbarData.append((key: Double(i*5), value: "\(i*5) miles"))
+        }
+        for i in 1...10 {
+            searchbarData.append((key: Double(i*100), value: "\(i*100) miles"))
         }
         
         //Setup loading deals
@@ -119,6 +129,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
                 DispatchQueue.global().sync {
                     tabBarController.dealSetup(completion: { (success) in
+                        self.vendorsData.updateRadius(rad: tabBarController.radius)
+                        self.dealsData.updateRadius(rad: tabBarController.radius)
                         self.finishLoad(tabBarController: tabBarController)
                     })
                 }
@@ -476,13 +488,46 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBar.showsCancelButton = false
         searchBar.placeholder = "Search Deals"
         searchBar.delegate = self
+        searchBar.showsBookmarkButton = true
+        searchBar.setImage(UIImage(named: "distance"), for: .bookmark, state: .normal)
+        
+        searchBar.setPositionAdjustment(UIOffset(horizontal: 0, vertical: 0), for: .bookmark)
+        
+
         self.navigationItem.titleView = searchBar
         if #available(iOS 11.0, *) {
             searchBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
         }
     }
     
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        let popover = LCPopover<Double>(for: searchBar, title: "Search Radius") { tuple in
+            // Use of the selected tuple
+            guard let value = tuple?.key else { return }
+            print(value)
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
+                tabBarController.radius = value
+                tabBarController.deals.updateRadius(rad: value)
+                tabBarController.vendors.updateRadius(rad: value)
+                self.DealsTable.reloadData()
+            }
+        }
+        // Assign data to the dataList
+        popover.dataList = searchbarData
+        
+        popover.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        popover.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        popover.borderWidth = 2
+        popover.titleColor = .white
+        popover.textColor = .black
+        // Present the popover
+        present(popover, animated: true, completion: nil)
+    }
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchBar.showsBookmarkButton = false
+
         (self.activeDeals, self.inactiveDeals) = dealsData.filter(byText: searchBar.text!)
         if activeDeals.count + inactiveDeals.count < 1 {
             self.noDeals.isHidden = false
@@ -497,6 +542,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+        searchBar.showsBookmarkButton = true
         searchBar.showsCancelButton = false
         (activeDeals, inactiveDeals) = dealsData.filter(byText: searchBar.text!)
         if activeDeals.count + inactiveDeals.count < 1 {
@@ -511,6 +557,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsBookmarkButton = true
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
         (activeDeals,inactiveDeals) = self.dealsData.getDeals(byName: searchBar.text)

@@ -12,6 +12,7 @@ import CoreLocation
 import FirebaseDatabase
 import FirebaseStorage
 import GeoFire
+import LCUIComponents
 
 fileprivate var vendors = [VendorData]()
 
@@ -20,14 +21,15 @@ class VendorMapViewController: UIViewController{
     @IBOutlet weak var segControl: UISegmentedControl!
     @IBOutlet weak var mapView: UIView!
     @IBOutlet weak var listView: UIView!
+    var searchbarData: [LCTuple<Double>] = []
     
     var vendorList = Dictionary<String,VendorData>()
 
+    @IBOutlet weak var distanceFilterBtn: UIButton!
     var listVC: listViewController!
     var mapVC: mapViewController!
     var ref: DatabaseReference!
     var locationManager: CLLocationManager!
-    var distanceFilter = 50.0
     var dealsData: DealsData!
     var vendorsData: VendorsData!
     var sv: UIView!
@@ -43,6 +45,16 @@ class VendorMapViewController: UIViewController{
         super.viewDidLoad()
         sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
 
+        let image = UIImage(named:"distance")?.withRenderingMode(.alwaysTemplate)
+        distanceFilterBtn.setImage(image, for: .normal)
+        distanceFilterBtn.tintColor = UIColor.white
+        
+        for i in 1...10 {
+            searchbarData.append((key: Double(i*5), value: "\(i*5) miles"))
+        }
+        for i in 1...10 {
+            searchbarData.append((key: Double(i*100), value: "\(i*100) miles"))
+        }
         //Setup what view we see
         listVC.parentView = self
         if segControl.selectedSegmentIndex == 0 {
@@ -76,6 +88,31 @@ class VendorMapViewController: UIViewController{
         //callback to know when the user accepts or denies location services
         checkLocationStatus(status: status)
     }
+
+    
+    @IBAction func distanceFilterClicked(_ sender: Any) {
+        let popover = LCPopover<Double>(for: distanceFilterBtn, title: "Search Radius") { tuple in
+            // Use of the selected tuple
+            guard let value = tuple?.key else { return }
+            print(value)
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
+                tabBarController.radius = value
+                tabBarController.deals.updateRadius(rad: value)
+                tabBarController.vendors.updateRadius(rad: value)
+                self.checkLocationStatus(status: CLLocationManager.authorizationStatus())
+            }
+        }
+        // Assign data to the dataList
+        popover.dataList = searchbarData
+        popover.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        popover.borderColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        popover.borderWidth = 2
+        popover.titleColor = .white
+        popover.textColor = .black
+        // Present the popover
+        present(popover, animated: true, completion: nil)
+    }
     
     func checkLocationStatus(status: CLAuthorizationStatus){
         switch status {
@@ -93,6 +130,8 @@ class VendorMapViewController: UIViewController{
                         //Finish view setup
                         tabBarController.tabBar.isUserInteractionEnabled = true
                         UIViewController.removeSpinner(spinner: self.sv)
+                        self.vendorsData.updateRadius(rad: tabBarController.radius)
+                        self.dealsData.updateRadius(rad: tabBarController.radius)
                         self.locationEnabled()
                     })
                 }
