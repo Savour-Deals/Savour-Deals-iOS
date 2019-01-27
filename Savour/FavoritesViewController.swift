@@ -67,7 +67,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 self.locationEnabled()
             })
             self.vendorsData.startVendorUpdates(completion: { (success) in
-                UIViewController.removeSpinner(spinner: self.sv)
             })
         }
     }
@@ -75,9 +74,11 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         super.viewWillAppear(false)
         statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
         if dealsData != nil && vendorsData != nil{
-            dealsData.updateRadius(rad: geoFireRadius)
-            vendorsData.updateRadius(rad: geoFireRadius)
-            locationEnabled()
+            if dealsData.isComplete() && vendorsData.isComplete(){
+                dealsData.updateRadius(rad: geoFireRadius)
+                vendorsData.updateRadius(rad: geoFireRadius)
+                locationEnabled()
+            }
         }
     }
     
@@ -114,6 +115,13 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         dealsData.sortDeals(array: &inactiveFav)
 
         favDeals = activeFav + inactiveFav
+        
+        if favDeals.isEmpty{
+            emptyView.isHidden = false
+        }else{
+            emptyView.isHidden = true
+        }
+        
         self.FavTable.reloadData()
         FavTable.tableFooterView = UIView()
     }
@@ -134,11 +142,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if favDeals.isEmpty{
-            emptyView.isHidden = false
-        }else{
-            emptyView.isHidden = true
-        }
         return favDeals.count
     }
     

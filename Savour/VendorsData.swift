@@ -25,37 +25,39 @@ class VendorsData{
     init(radiusMiles: Double = 80.5){
         self.radius = radiusMiles*1.60934//to km
         locationManager.startUpdatingLocation()
-        while (locationManager.location == nil){//wait until location is available
-        }//even if the location is old, dont worry, we will update later when tabbar location update is called
+//        while (locationManager.location == nil){//wait until location is available
+//        }//even if the location is old, dont worry, we will update later when tabbar location update is called
         if let location = locationManager.location {
             self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: radius)
         }
     }
     
     func startVendorUpdates(completion: @escaping (Bool) -> Void){
-        geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
-            self.vendorRef.queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
-                for child in snapshot.children{
-                    let snap = child as! DataSnapshot
-                    if let location = locationManager.location{
-                        self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: location)
+        if let location = locationManager.location {
+            self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: radius)
+            geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
+                self.vendorRef.queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
+                    for child in snapshot.children{
+                        let snap = child as! DataSnapshot
+                        if let location = locationManager.location{
+                            self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: location)
+                        }
+                        self.initialLoaded = true
+                        completion(true)
+                        
                     }
                     self.initialLoaded = true
-                    completion(true)
-                    
-                }
-                self.initialLoaded = true
+                })
             })
-        })
-        geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in
-            self.vendors.removeValue(forKey: key)
-            completion(true)
-        })
-        geoFire.observeReady {
-//            if !self.initialLoaded{
-//                print("No vendors found")
-//                completion(true)
-//            }
+            geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in
+                self.vendors.removeValue(forKey: key)
+                completion(true)
+            })
+            geoFire.observeReady {
+            }
+        }else{
+            //no location yet
+            completion(false)
         }
     }
 

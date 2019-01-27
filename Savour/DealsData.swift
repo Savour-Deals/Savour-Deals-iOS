@@ -38,64 +38,66 @@ class DealsData{
     init(radiusMiles: Double = 50){
         self.radius = radiusMiles*1.60934//to km
         locationManager.startUpdatingLocation()
-        while (locationManager.location == nil){//wait until location is available
-        }//even if the location is old, dont worry, we will update later when tabbar location update is called
         favoritesRef.keepSynced(true)
-        self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: self.radius)
+        if let location = locationManager.location {
+            self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: self.radius)
+        }
     }
     
     func startDealUpdates(completion: @escaping (Bool) -> Void){
-        //Get the key list of favorite deals
-        self.favoritesRef.observe(.value, with: { (snapshot) in
-            if let dictionary = snapshot.children.allObjects as? [DataSnapshot] {
-                self.favoriteIDs.removeAll()
-                for deal in self.activeDeals {
-                    deal.value.favorited = false
-                }
-                for deal in self.inactiveDeals {
-                    deal.value.favorited = false
-                }
-                for fav in dictionary{
-                    if let _ = fav.value{
-                        //Get Favorites
-                        self.favoriteIDs[fav.key] = fav.key
-                        if let _ = self.activeDeals[fav.key]{
-                            self.activeDeals[fav.key]?.favorited = true
-                        }else if let _ = self.inactiveDeals[fav.key] {
-                            self.inactiveDeals[fav.key]?.favorited = true
+        if let location = locationManager.location {
+            self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: self.radius)
+            //Get the key list of favorite deals
+            self.favoritesRef.observe(.value, with: { (snapshot) in
+                if let dictionary = snapshot.children.allObjects as? [DataSnapshot] {
+                    self.favoriteIDs.removeAll()
+                    for deal in self.activeDeals {
+                        deal.value.favorited = false
+                    }
+                    for deal in self.inactiveDeals {
+                        deal.value.favorited = false
+                    }
+                    for fav in dictionary{
+                        if let _ = fav.value{
+                            //Get Favorites
+                            self.favoriteIDs[fav.key] = fav.key
+                            if let _ = self.activeDeals[fav.key]{
+                                self.activeDeals[fav.key]?.favorited = true
+                            }else if let _ = self.inactiveDeals[fav.key] {
+                                self.inactiveDeals[fav.key]?.favorited = true
+                            }
                         }
                     }
-                }
-                completion(true)
-            }else{
-                self.favoriteIDs.removeAll()
-                for deal in self.activeDeals {
-                    deal.value.favorited = false
-                }
-                for deal in self.inactiveDeals {
-                    deal.value.favorited = false
-                }
-                completion(true)
-            }
-        })
-
-        //Start geoFire callbacks for vendors entering and exiting radius
-        self.geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
-            Database.database().reference().child("Vendors").queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
-                for child in snapshot.children{
-                    let snap = child as! DataSnapshot
-                    self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: locationManager.location)
-                    if let vendor = self.vendors[key] {
-                        self.queryDeals(forEnteredVendor: vendor, completion: { (success) in
-                            //we have at least one deal, this is done. callback will handle more deals
-                            self.loadingComplete = true
-                            completion(true)
-                        })
+                    completion(true)
+                }else{
+                    self.favoriteIDs.removeAll()
+                    for deal in self.activeDeals {
+                        deal.value.favorited = false
                     }
+                    for deal in self.inactiveDeals {
+                        deal.value.favorited = false
+                    }
+                    completion(true)
                 }
             })
-        })
-        self.geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in //50 miles
+            
+            //Start geoFire callbacks for vendors entering and exiting radius
+            self.geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
+                Database.database().reference().child("Vendors").queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
+                    for child in snapshot.children{
+                        let snap = child as! DataSnapshot
+                        self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: locationManager.location)
+                        if let vendor = self.vendors[key] {
+                            self.queryDeals(forEnteredVendor: vendor, completion: { (success) in
+                                //we have at least one deal, this is done. callback will handle more deals
+                                self.loadingComplete = true
+                                completion(true)
+                            })
+                        }
+                    }
+                })
+            })
+            self.geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in //50 miles
                 //remove vendor and all deals for vendor
                 self.vendors.removeValue(forKey: key)
                 
@@ -110,11 +112,15 @@ class DealsData{
                     }
                 }
                 completion(true)
-            
-        })
-        self.geoFire.observeReady({
-
-        })
+                
+            })
+            self.geoFire.observeReady({
+                
+            })
+        }else{
+            completion(false)
+        }
+        
     }
     
     

@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     var entered = [CLCircularRegion]()
     var vendorsData: VendorsData!
     var canSendNoti = true
+    var locationUpdatesActive = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
@@ -79,9 +80,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             vendorsData = VendorsData(radiusMiles: 20)
             vendorsData.startVendorUpdates(completion: { (success) in
                 if success{
+                    self.locationUpdatesActive = true
                     self.vendors = self.vendorsData.getVendors()
                 }else{
-                    //error getting vendors
+                    //we could not get user's location to start up geoFire. Can try again later
+                    self.locationUpdatesActive = false
                 }
             })
             self.locationManager = CLLocationManager()
@@ -202,6 +205,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
 extension AppDelegate: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if locationUpdatesActive{
+            updateNearbyVendors()
+        }else{
+            vendorsData.startVendorUpdates(completion: { (success) in
+                self.locationUpdatesActive = true
+                self.updateNearbyVendors()
+            })
+        }
+        
+    }
+    
+    func updateNearbyVendors(){
         vendorsData.updateLocation(location: (locationManager?.location)!)
         vendors = self.vendorsData.getVendors()
         if vendors.count > 0{
@@ -230,7 +245,7 @@ extension AppDelegate: CLLocationManagerDelegate {
                 if self.monitoredRegions.count < 20 && !self.monitoredRegions.contains(where: { $0 === place }){
                     //monitor nearest 20 places
                     let geofenceRegionCenter = place.location?.coordinate
-
+                    
                     /* Create a region centered on desired location,
                      choose a radius for the region (in meters)
                      choose a unique identifier for that region */
@@ -243,7 +258,6 @@ extension AppDelegate: CLLocationManagerDelegate {
             }
         }
     }
-    
     
     // called when user Enters a monitored region
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
