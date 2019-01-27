@@ -9,27 +9,28 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
-import FirebaseStorage
 import SDWebImage
-import FirebaseStorage
 import FirebaseAuth
 import CoreLocation
 
 class FavoritesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
-    var storage: Storage!
+    private var user: String!
+    @IBOutlet weak var FavTable: UITableView!
+
+    private var locationManager: CLLocationManager!
+
+    private var sv: UIView!
+    private var statusBar: UIView!
     @IBOutlet weak var heartImg: UIImageView!
     @IBOutlet weak var emptyView: UIView!
-    var dealsData: DealsData!
-    var vendorsData: VendorsData!
-    var favDeals =  [DealData]()
-    var user: String!
-    @IBOutlet weak var FavTable: UITableView!
-    var ref: DatabaseReference!
-    var statusBar: UIView!
-    var locationManager: CLLocationManager!
-
-    var count = 0
-    let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
+    
+    private var ref: DatabaseReference!
+    private var dealsData: DealsData!
+    private var vendorsData: VendorsData!
+    private var favDeals =  [DealData]()
+    
+    private var count = 0
+    private let placeholderImgs = ["Savour_Cup", "Savour_Fork", "Savour_Spoon"]
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -42,42 +43,43 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         } else {
             print("3D Touch Not Available")
         }
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(false)
+        
         locationManager = CLLocationManager()
-        let sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
+        sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
         statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        
+        dealsData = DealsData(radiusMiles: geoFireRadius)
+        vendorsData = VendorsData(radiusMiles: geoFireRadius)
+        
         let status = CLLocationManager.authorizationStatus()
         if status == CLAuthorizationStatus.denied {
             self.locationDisabled()
             UIViewController.removeSpinner(spinner: sv)
         } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            //Setup Deal Data for entire app
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                    if !tabBarController.finishedSetup{
-                        Toast.showNegativeMessage(message: "Favorites seem to be taking a while to load. Check your internet connection to make sure you're online.")
-                    }
-                }
-                DispatchQueue.global().sync {
-                    tabBarController.dealSetup(completion: { (success) in
-                        //Allow us to refresh when opened from background
-                        NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
-                        //Finish view setup
-                        tabBarController.tabBar.isUserInteractionEnabled = true
-                        UIViewController.removeSpinner(spinner: sv)
-                        self.locationEnabled()
-                    })
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                if !self.dealsData.isComplete(){
+                    Toast.showNegativeMessage(message: "Favorites seem to be taking a while to load. Check your internet connection to make sure you're online.")
                 }
             }
-
+            self.dealsData.startDealUpdates(completion: { (success) in
+                UIViewController.removeSpinner(spinner: self.sv)
+                self.locationEnabled()
+            })
+            self.vendorsData.startVendorUpdates(completion: { (success) in
+                UIViewController.removeSpinner(spinner: self.sv)
+            })
         }
     }
-    
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        if dealsData != nil && vendorsData != nil{
+            dealsData.updateRadius(rad: geoFireRadius)
+            vendorsData.updateRadius(rad: geoFireRadius)
+            locationEnabled()
+        }
+    }
     
     deinit { //Remove background observer
         NotificationCenter.default.removeObserver(self)
@@ -105,26 +107,13 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         FavTable.isHidden = false
         var activeFav = [DealData]()
         var inactiveFav = [DealData]()
-        if dealsData != nil{
-            (activeFav,inactiveFav) = dealsData.getFavorites()
-            for deal in activeFav{
-                deal.updateDistance(vendor: self.vendorsData.getVendorsByID(id: deal.rID!)!)
-            }
-            for deal in inactiveFav{
-                deal.updateDistance(vendor: self.vendorsData.getVendorsByID(id: deal.rID!)!)
-            }
-        }
-        self.favDeals.removeAll()
-        for deal in activeFav{
-            if !self.favDeals.contains(where: { $0.id == deal.id }){
-                self.favDeals.append(deal)
-            }
-        }
-        for deal in inactiveFav{
-            if !self.favDeals.contains(where: { $0.id == deal.id }){
-                self.favDeals.append(deal)
-            }
-        }
+
+        dealsData.updateDistances()
+        (activeFav,inactiveFav) = dealsData.getFavorites()
+        dealsData.sortDeals(array: &activeFav)
+        dealsData.sortDeals(array: &inactiveFav)
+
+        favDeals = activeFav + inactiveFav
         self.FavTable.reloadData()
         FavTable.tableFooterView = UIView()
     }

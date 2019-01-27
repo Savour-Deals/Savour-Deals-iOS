@@ -150,15 +150,11 @@ class PermissionViewController: UIViewController, CLLocationManagerDelegate{
             let parent = self.parent as! OnboardingViewController
             parent.sender.onboardCallback()
             //Setup Deal Data for entire app
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let tabBarController = (appDelegate.window?.rootViewController as? TabBarViewController)!
             DispatchQueue.global().sync {
-                tabBarController.dealSetup(completion: { (success) in
-                    parent.sender.finishLoad(tabBarController: tabBarController)
-                    parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                    parent.navigationController?.navigationBar.shadowImage = UIImage()
-                    parent.navigationController?.navigationBar.isTranslucent = true
-                })
+                parent.sender.requestLocationAccess()
+                parent.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                parent.navigationController?.navigationBar.shadowImage = UIImage()
+                parent.navigationController?.navigationBar.isTranslucent = true
             }
         case .denied:
             locText.text = "To use Savour, turn on location for your device and go to:\n Settings → Savour Deals → Location."

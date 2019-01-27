@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4DB1344FD742626623410C79927833E9"
+               BlueprintIdentifier = "B2AC7BB6C4AE0AC95715D362FFB7F202"
                BlueprintName = "LCUIComponents"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "LCUIComponents.framework">

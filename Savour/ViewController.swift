@@ -65,6 +65,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             searchbarData.append((key: Double(i*100), value: "\(i*100) miles"))
         }
         
+        dealsData = DealsData(radiusMiles: geoFireRadius)
+        vendorsData = VendorsData(radiusMiles: geoFireRadius)
+        
         //Setup loading deals
         locationManager = CLLocationManager()
 
@@ -110,7 +113,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         case .authorizedAlways, .authorizedWhenInUse:
             //Location approved. Setup Deal Data for entire app
             if !onboardCallbackFlag{
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) { // Display message if loading is slow
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) { // Prompt for notifications if we never have
                     OneSignal.promptForPushNotifications { (accepted) in
                         if accepted{
                             print("accepted")
@@ -120,20 +123,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
             }
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                    if !tabBarController.finishedSetup{
-                        Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
-                    }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                if !self.dealsData.isComplete(){
+                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
                 }
-                DispatchQueue.global().sync {
-                    tabBarController.dealSetup(completion: { (success) in
-                        self.vendorsData.updateRadius(rad: tabBarController.radius)
-                        self.dealsData.updateRadius(rad: tabBarController.radius)
-                        self.finishLoad(tabBarController: tabBarController)
-                    })
-                }
+            }
+            
+            DispatchQueue.global(qos: .background).async {
+                self.dealsData.startDealUpdates(completion: { (success) in
+                    self.dealsData.updateRadius(rad: geoFireRadius)
+//                        DispatchQueue.main.async { () -> Void in
+                        self.finishLoad()
+//                        }
+                })
+                self.vendorsData.startVendorUpdates(completion: { (success) in
+                    self.vendorsData.updateRadius(rad: geoFireRadius)
+//                        DispatchQueue.main.async { () -> Void in
+                        self.finishLoad()
+//                        }
+                })
             }
         case .restricted, .denied:
             //Sadly user won't give us location. Tell them how to turn on
@@ -155,9 +163,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    func finishLoad(tabBarController: TabBarViewController){
+    func finishLoad(){
         //Finish view setup
-        tabBarController.tabBar.isUserInteractionEnabled = true
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
+            tabBarController.tabBar.isUserInteractionEnabled = true
+        }
         initialLoaded = true
         self.locationEnabled()
     }
@@ -167,7 +178,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let user = Auth.auth().currentUser
         if user != nil {
             if self.initialLoaded{
-                
                 //Ask for notification access to catch anyone we missed in onboarding
                 OneSignal.promptForPushNotifications { (userResponse) in }
                 
@@ -189,12 +199,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 self.searchBar.text = ""
                 self.refresh()
             }
-        }
-        else {
+        }else {
             // No user is signed in.
             self.performSegue(withIdentifier: "Onboarding", sender: self)
         }
     }
+    
     
     func locationDisabled(){
         self.searchBar.isUserInteractionEnabled = false
@@ -227,10 +237,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(byType: title)
             if self.activeDeals.isEmpty && self.inactiveDeals.isEmpty{
                 self.noDeals.isHidden = false
-                
             }else{
                 self.noDeals.isHidden = true
-                
             }
             self.DealsTable.reloadData()
             UIViewController.removeSpinner(spinner: self.sv)
@@ -296,6 +304,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @objc func refresh(){
         hasRefreshed = true
+        self.dealsData.updateRadius(rad: geoFireRadius)
+        self.vendorsData.updateRadius(rad: geoFireRadius)
         //dont call requestlocation or the user can get into a loop here
         let status = CLLocationManager.authorizationStatus()
         if status == CLAuthorizationStatus.denied {
@@ -334,12 +344,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }else{
             (self.activeDeals, self.inactiveDeals) = self.dealsData.getDeals(byType: title)
         }
-        for deal in self.activeDeals{
-            deal.updateDistance(vendor: self.vendorsData.getVendorsByID(id: deal.rID!)!)
-        }
-        for deal in self.inactiveDeals{
-            deal.updateDistance(vendor: self.vendorsData.getVendorsByID(id: deal.rID!)!)
-        }
+        dealsData.updateDistances()
         dealsData.sortDeals(array: &self.activeDeals)
         dealsData.sortDeals(array: &self.inactiveDeals)
         //take care of any loading animations
@@ -505,13 +510,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             // Use of the selected tuple
             guard let value = tuple?.key else { return }
             print(value)
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
-                tabBarController.radius = value
-                tabBarController.deals.updateRadius(rad: value)
-                tabBarController.vendors.updateRadius(rad: value)
-                self.DealsTable.reloadData()
-            }
+            geoFireRadius = value
+            self.dealsData.updateRadius(rad: value)
+            self.vendorsData.updateRadius(rad: value)
+            self.DealsTable.reloadData()
+            
         }
         // Assign data to the dataList
         popover.dataList = searchbarData

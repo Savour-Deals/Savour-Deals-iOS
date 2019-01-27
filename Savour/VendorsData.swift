@@ -15,42 +15,55 @@ import GeoFire
 fileprivate let locationManager = CLLocationManager()
 
 class VendorsData{
-    var vendors : Dictionary<String,VendorData> = [:]
+    private var vendors : Dictionary<String,VendorData> = [:]
+    private let geofireRef = Database.database().reference().child("Vendors_Location")
+    private let vendorRef = Database.database().reference().child("Vendors")
     private var geoFire: GFCircleQuery!
     private var initialLoaded = false
-    private var radius = 80.5 //50 miles
+    private var radius: Double
     
-    init(completion: @escaping (Bool) -> Void){
+    init(radiusMiles: Double = 80.5){
+        self.radius = radiusMiles*1.60934//to km
         locationManager.startUpdatingLocation()
-        let ref = Database.database().reference().child("Vendors")
-        let geofireRef = Database.database().reference().child("Vendors_Location")
-        if let location = locationManager.location{
-            geoFire = GeoFire(firebaseRef: geofireRef).query(at: locationManager.location!, withRadius: radius)
-            geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
-                ref.queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
-                    for child in snapshot.children{
-                        let snap = child as! DataSnapshot
+        while (locationManager.location == nil){//wait until location is available
+        }//even if the location is old, dont worry, we will update later when tabbar location update is called
+        if let location = locationManager.location {
+            self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: radius)
+        }
+    }
+    
+    func startVendorUpdates(completion: @escaping (Bool) -> Void){
+        geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
+            self.vendorRef.queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
+                for child in snapshot.children{
+                    let snap = child as! DataSnapshot
+                    if let location = locationManager.location{
                         self.vendors[key] = VendorData(snap: snap, ID: key, location: thislocation, myLocation: location)
-                        completion(true)
                     }
                     self.initialLoaded = true
-                })
+                    completion(true)
+                    
+                }
+                self.initialLoaded = true
             })
-            geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in
-                self.vendors.removeValue(forKey: key)
-                completion(true)
-            })
-            geoFire.observeReady {
-//                if !self.initialLoaded{
-//                    print("No vendors found")
-//                    completion(true)
-//                }
-            }
-        }else{
-            //could not get location!!
-            print("Vendors Failed to load. Location error!")
-            completion(false)
+        })
+        geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in
+            self.vendors.removeValue(forKey: key)
+            completion(true)
+        })
+        geoFire.observeReady {
+//            if !self.initialLoaded{
+//                print("No vendors found")
+//                completion(true)
+//            }
         }
+    }
+
+    func isComplete() -> Bool{
+        if initialLoaded{
+            return true
+        }
+        return false
     }
     
     func updateLocation(location: CLLocation){

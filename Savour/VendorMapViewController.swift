@@ -55,6 +55,7 @@ class VendorMapViewController: UIViewController{
         for i in 1...10 {
             searchbarData.append((key: Double(i*100), value: "\(i*100) miles"))
         }
+
         //Setup what view we see
         listVC.parentView = self
         if segControl.selectedSegmentIndex == 0 {
@@ -76,7 +77,11 @@ class VendorMapViewController: UIViewController{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        requestLocationAccess()
+        if dealsData != nil && vendorsData != nil{
+            locationEnabled()
+        }else{
+            requestLocationAccess()
+        }
     }
 
     //Location status fucntions
@@ -94,14 +99,10 @@ class VendorMapViewController: UIViewController{
         let popover = LCPopover<Double>(for: distanceFilterBtn, title: "Search Radius") { tuple in
             // Use of the selected tuple
             guard let value = tuple?.key else { return }
-            print(value)
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
-                tabBarController.radius = value
-                tabBarController.deals.updateRadius(rad: value)
-                tabBarController.vendors.updateRadius(rad: value)
-                self.checkLocationStatus(status: CLLocationManager.authorizationStatus())
-            }
+            geoFireRadius = value
+            self.dealsData.updateRadius(rad: value)
+            self.vendorsData.updateRadius(rad: value)
+            self.getData()
         }
         // Assign data to the dataList
         popover.dataList = searchbarData
@@ -117,24 +118,26 @@ class VendorMapViewController: UIViewController{
     func checkLocationStatus(status: CLAuthorizationStatus){
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
-            //Setup Deal Data for entire app
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            if let tabBarController = appDelegate.window?.rootViewController as? TabBarViewController{
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                    if !tabBarController.finishedSetup{
-                        Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
-                    }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
+                if !self.vendorsData.isComplete(){
+                    Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
                 }
-                DispatchQueue.global().sync {
-                    tabBarController.dealSetup(completion: { (success) in
-                        //Finish view setup
-                        tabBarController.tabBar.isUserInteractionEnabled = true
-                        UIViewController.removeSpinner(spinner: self.sv)
-                        self.vendorsData.updateRadius(rad: tabBarController.radius)
-                        self.dealsData.updateRadius(rad: tabBarController.radius)
+            }
+            dealsData = DealsData(radiusMiles: geoFireRadius)
+            vendorsData = VendorsData(radiusMiles: geoFireRadius)
+            DispatchQueue.global(qos: .background).async {
+                self.dealsData.startDealUpdates(completion: { (success) in
+                    if self.vendorsData.isComplete() && self.dealsData.isComplete(){
                         self.locationEnabled()
-                    })
-                }
+                    }
+                })
+            }
+            DispatchQueue.global(qos: .background).async {
+                self.vendorsData.startVendorUpdates(completion: { (success) in
+                    if self.vendorsData.isComplete() && self.dealsData.isComplete(){
+                        self.locationEnabled()
+                    }
+                })
             }
         default:
             locationDisabled()
@@ -149,6 +152,9 @@ class VendorMapViewController: UIViewController{
     }
     
     @objc func locationEnabled(){
+        UIViewController.removeSpinner(spinner: self.sv)
+        self.dealsData.updateRadius(rad: geoFireRadius)
+        self.vendorsData.updateRadius(rad: geoFireRadius)
         DispatchQueue.main.async {
             if let _ = self.listView.viewWithTag(100){
                 self.listView.viewWithTag(100)?.removeFromSuperview()
@@ -202,7 +208,9 @@ class VendorMapViewController: UIViewController{
     
     func getData(){
         if let location = locationManager.location{
-            vendorsData.updateDistances(location: location)
+            if vendorsData != nil{
+                vendorsData.updateDistances(location: location)
+            }
         }
         vendors = self.vendorsData.getVendors()
         for rest in vendors{

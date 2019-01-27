@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1AFEE86C6DBFF52DCED4DD0E72ECE2D6"
+               BlueprintIdentifier = "CD9B280B558F367E23638352C6E99D15"
                BlueprintName = "GTProgressBar"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "GTProgressBar.framework">

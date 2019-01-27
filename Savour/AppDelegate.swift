@@ -63,8 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             let center = UNUserNotificationCenter.current()
             center.delegate = self
         }//if not ios >=10, dont worry. just wont put user in vendors tab
+        
         if launchOptions?[UIApplication.LaunchOptionsKey.location] != nil {
-            vendorsData = VendorsData(completion: { (success) in
+            vendorsData = VendorsData(radiusMiles: 20)
+            vendorsData.startVendorUpdates(completion: { (success) in
                 if success{
                     self.vendors = self.vendorsData.getVendors()
                 }else{
@@ -74,7 +76,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
             self.locationManager?.delegate = self
             locationManager?.startUpdatingLocation()
         } else {
-            vendorsData = VendorsData(completion: { (success) in
+            vendorsData = VendorsData(radiusMiles: 20)
+            vendorsData.startVendorUpdates(completion: { (success) in
                 if success{
                     self.vendors = self.vendorsData.getVendors()
                 }else{
