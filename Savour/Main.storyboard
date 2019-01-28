@@ -88,7 +88,7 @@
                                                         </view>
                                                         <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gAo-IR-MPr">
                                                             <rect key="frame" x="10" y="213.00000000000003" width="295" height="0.0"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                             <color key="textColor" red="0.43529412150000002" green="0.4431372583" blue="0.47450980539999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -281,7 +281,7 @@
                                 <action selector="segmentChanged:" destination="UEO-yD-C05" eventType="valueChanged" id="zeF-ZC-4gb"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" image="distance" style="plain" id="Fwt-MJ-ic8">
+                        <barButtonItem key="rightBarButtonItem" image="distance" id="Fwt-MJ-ic8">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tdA-tf-lhe">
                                 <rect key="frame" x="319" y="0.0" width="75" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1416,6 +1416,6 @@
         <image name="vendor" width="64" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="het-DN-Jp4"/>
+        <segue reference="wXP-pv-GBh"/>
     </inferredMetricsTieBreakers>
 </document>

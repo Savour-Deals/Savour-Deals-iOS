@@ -128,19 +128,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
                 }
             }
-            
             DispatchQueue.global(qos: .background).async {
                 self.dealsData.startDealUpdates(completion: { (success) in
-                    self.dealsData.updateRadius(rad: geoFireRadius)
-//                        DispatchQueue.main.async { () -> Void in
+                    if self.dealsData.isComplete(){
                         self.finishLoad()
-//                        }
+                    }
                 })
                 self.vendorsData.startVendorUpdates(completion: { (success) in
-                    self.vendorsData.updateRadius(rad: geoFireRadius)
-//                        DispatchQueue.main.async { () -> Void in
-                        self.finishLoad()
-//                        }
                 })
             }
         case .restricted, .denied:

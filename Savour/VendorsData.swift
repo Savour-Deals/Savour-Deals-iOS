@@ -21,6 +21,9 @@ class VendorsData{
     private var geoFire: GFCircleQuery!
     private var initialLoaded = false
     private var radius: Double
+    private var vendorsCount = 0
+    private var firstObserveReady = true
+
     
     init(radiusMiles: Double = 80.5){
         self.radius = radiusMiles*1.60934//to km
@@ -36,6 +39,7 @@ class VendorsData{
         if let location = locationManager.location {
             self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: radius)
             geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
+                self.vendorsCount += 1
                 self.vendorRef.queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
                     for child in snapshot.children{
                         let snap = child as! DataSnapshot
@@ -46,17 +50,22 @@ class VendorsData{
                         completion(true)
                         
                     }
-                    self.initialLoaded = true
                 })
             })
             geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in
+                self.vendorsCount -= 1
                 self.vendors.removeValue(forKey: key)
                 completion(true)
             })
             geoFire.observeReady {
+                if self.vendorsCount < 1 && self.firstObserveReady{
+                    self.initialLoaded = true
+                    self.firstObserveReady = false
+                    completion(true)
+                }
             }
         }else{
-            //no location yet
+            //no location permissions yet
             completion(false)
         }
     }

@@ -125,20 +125,20 @@ class VendorMapViewController: UIViewController{
             }
             dealsData = DealsData(radiusMiles: geoFireRadius)
             vendorsData = VendorsData(radiusMiles: geoFireRadius)
-            DispatchQueue.global(qos: .background).async {
+//            DispatchQueue.global(qos: .background).async {
                 self.dealsData.startDealUpdates(completion: { (success) in
                     if self.vendorsData.isComplete() && self.dealsData.isComplete(){
                         self.locationEnabled()
                     }
                 })
-            }
-            DispatchQueue.global(qos: .background).async {
+//            }
+//            DispatchQueue.global(qos: .background).async {
                 self.vendorsData.startVendorUpdates(completion: { (success) in
                     if self.vendorsData.isComplete() && self.dealsData.isComplete(){
                         self.locationEnabled()
                     }
                 })
-            }
+//            }
         default:
             locationDisabled()
         }

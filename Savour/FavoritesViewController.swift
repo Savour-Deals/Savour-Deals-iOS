@@ -63,8 +63,10 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
                 }
             }
             self.dealsData.startDealUpdates(completion: { (success) in
-                UIViewController.removeSpinner(spinner: self.sv)
-                self.locationEnabled()
+                if self.dealsData.isComplete(){
+                    UIViewController.removeSpinner(spinner: self.sv)
+                    self.locationEnabled()
+                }
             })
             self.vendorsData.startVendorUpdates(completion: { (success) in
             })

@@ -9903,6 +9903,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Target Support Files/LCUIComponents/LCUIComponents-prefix.pch";
+				GCC_WARN_PEDANTIC = NO;
 				INFOPLIST_FILE = "Target Support Files/LCUIComponents/LCUIComponents-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -10152,6 +10153,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREFIX_HEADER = "Target Support Files/LCUIComponents/LCUIComponents-prefix.pch";
+				GCC_WARN_PEDANTIC = NO;
 				INFOPLIST_FILE = "Target Support Files/LCUIComponents/LCUIComponents-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

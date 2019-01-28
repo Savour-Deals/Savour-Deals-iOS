@@ -14,7 +14,7 @@ import Firebase
 var signalID = ""
 var notificationDeal = ""
 
-var geoFireRadius = 50.0
+var geoFireRadius = 50.0 //miles
 
 func isUserVerified(user: User?) -> Bool{
     if let user = user,let firUser = Auth.auth().currentUser{

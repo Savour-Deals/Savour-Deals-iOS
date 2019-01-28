@@ -33,6 +33,8 @@ class DealsData{
     private var dealsLoaded = false
     private var loadingComplete = false
     private var radius : Double
+    private var vendorCount = 0
+    private var firstObserveReady = true
 
     
     init(radiusMiles: Double = 50){
@@ -83,6 +85,7 @@ class DealsData{
             
             //Start geoFire callbacks for vendors entering and exiting radius
             self.geoFire.observe(.keyEntered, with: { (key: String!, thislocation: CLLocation!) in
+                self.vendorCount += 1
                 Database.database().reference().child("Vendors").queryOrderedByKey().queryEqual(toValue: key).observe(.value, with: { (snapshot) in
                     for child in snapshot.children{
                         let snap = child as! DataSnapshot
@@ -98,9 +101,9 @@ class DealsData{
                 })
             })
             self.geoFire.observe(.keyExited, with: { (key: String!, thislocation: CLLocation!) in //50 miles
+                self.vendorCount -= 1
                 //remove vendor and all deals for vendor
                 self.vendors.removeValue(forKey: key)
-                
                 for deal in self.activeDeals{
                     if deal.value.rID == key{
                         self.activeDeals.removeValue(forKey: deal.key)
@@ -112,10 +115,13 @@ class DealsData{
                     }
                 }
                 completion(true)
-                
             })
             self.geoFire.observeReady({
-                
+                if self.vendorCount < 1 && self.firstObserveReady{
+                    self.loadingComplete = true
+                    self.firstObserveReady = false
+                    completion(true)
+                }
             })
         }else{
             completion(false)
