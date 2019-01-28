@@ -456,7 +456,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @objc func filterWithButtons(button: UIButton){
         for view in self.buttonsView.subviews as [UIView] {
             if let btn = view as? UIButton {
-                btn.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                btn.backgroundColor = #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1)
                 btn.setTitleColor(UIColor.white, for: UIControl.State.normal)
             }
         }
@@ -488,11 +488,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBar.placeholder = "Search Deals"
         searchBar.delegate = self
         searchBar.showsBookmarkButton = true
-        searchBar.setImage(UIImage(named: "distance"), for: .bookmark, state: .normal)
+        
+        searchBar.setImage(UIImage(named: "distance")?.withRenderingMode(.alwaysOriginal), for: .bookmark, state: .normal)
         
         searchBar.setPositionAdjustment(UIOffset(horizontal: 0, vertical: 0), for: .bookmark)
-        
-
         self.navigationItem.titleView = searchBar
         if #available(iOS 11.0, *) {
             searchBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
