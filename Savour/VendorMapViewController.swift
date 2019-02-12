@@ -100,9 +100,12 @@ class VendorMapViewController: UIViewController{
             // Use of the selected tuple
             guard let value = tuple?.key else { return }
             geoFireRadius = value
-            self.dealsData.updateRadius(rad: value)
-            self.vendorsData.updateRadius(rad: value)
-            self.getData()
+            if let _ = self.dealsData, let _ = self.vendorsData{
+                self.dealsData.updateRadius(rad: value)
+                self.vendorsData.updateRadius(rad: value)
+                self.getData()
+            }
+       
         }
         // Assign data to the dataList
         popover.dataList = searchbarData
@@ -119,8 +122,10 @@ class VendorMapViewController: UIViewController{
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                if !self.vendorsData.isComplete(){
-                    Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                if let _ = self.vendorsData{
+                    if !self.vendorsData.isComplete(){
+                        Toast.showNegativeMessage(message: "Vendors seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                    }
                 }
             }
             dealsData = DealsData(radiusMiles: geoFireRadius)
@@ -147,6 +152,8 @@ class VendorMapViewController: UIViewController{
     func locationDisabled(){
         self.listVC.searchBar.isHidden = true
         listVC.listTable.isHidden = true
+        self.dealsData = nil
+        self.vendorsData = nil
         self.listVC.locationText.isHidden = false
         UIViewController.removeSpinner(spinner: self.sv)
     }

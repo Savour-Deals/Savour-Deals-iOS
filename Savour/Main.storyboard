@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KlB-Ro-HJC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.59" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KlB-Ro-HJC">
     <device id="retina6_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.45"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -203,9 +203,18 @@
                                     <constraint firstAttribute="trailing" secondItem="DcR-21-Xya" secondAttribute="trailing" constant="30" id="dBY-Is-2bJ"/>
                                 </constraints>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use this feature, you must turn on location in:   Settings -&gt; Savour -&gt; Location" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x7K-e9-9hL">
+                                <rect key="frame" x="10" y="356.33333333333331" width="394" height="95.666666666666686"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="x7K-e9-9hL" firstAttribute="centerY" secondItem="5ql-L2-qcK" secondAttribute="centerY" id="0Gk-5H-fOe"/>
+                            <constraint firstItem="x7K-e9-9hL" firstAttribute="centerX" secondItem="5ql-L2-qcK" secondAttribute="centerX" id="0uW-q2-BSj"/>
+                            <constraint firstAttribute="trailing" secondItem="x7K-e9-9hL" secondAttribute="trailing" constant="10" id="7D1-3F-QDM"/>
                             <constraint firstItem="Db4-Fv-50S" firstAttribute="leading" secondItem="Y7B-kV-Qmh" secondAttribute="leading" id="HIE-MH-vNy"/>
                             <constraint firstItem="ySv-nY-HY2" firstAttribute="leading" secondItem="5ql-L2-qcK" secondAttribute="leading" id="JZQ-a0-6SL"/>
                             <constraint firstAttribute="bottom" secondItem="Db4-Fv-50S" secondAttribute="bottom" constant="47" id="Ro8-Kz-9PC"/>
@@ -213,6 +222,7 @@
                             <constraint firstAttribute="trailing" secondItem="ySv-nY-HY2" secondAttribute="trailing" id="YMM-HS-mxV"/>
                             <constraint firstAttribute="bottom" secondItem="ySv-nY-HY2" secondAttribute="bottom" id="erv-TX-H2k"/>
                             <constraint firstItem="ySv-nY-HY2" firstAttribute="top" secondItem="5ql-L2-qcK" secondAttribute="top" id="oIG-qk-ANo"/>
+                            <constraint firstItem="x7K-e9-9hL" firstAttribute="leading" secondItem="5ql-L2-qcK" secondAttribute="leading" constant="10" id="tSy-nz-ATl"/>
                             <constraint firstItem="Db4-Fv-50S" firstAttribute="top" secondItem="Y7B-kV-Qmh" secondAttribute="top" id="wIv-LE-ZnV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Y7B-kV-Qmh"/>
@@ -225,6 +235,7 @@
                         <outlet property="FavTable" destination="Db4-Fv-50S" id="oWE-be-jha"/>
                         <outlet property="emptyView" destination="ySv-nY-HY2" id="beA-hw-eaD"/>
                         <outlet property="heartImg" destination="srd-X5-DW4" id="fZX-8V-H9a"/>
+                        <outlet property="locationText" destination="x7K-e9-9hL" id="4Wk-Qy-vkv"/>
                         <segue destination="Fle-Ct-C9b" kind="show" identifier="DealDetails" id="wXP-pv-GBh"/>
                     </connections>
                 </viewController>
@@ -1313,8 +1324,8 @@
                                 <color key="textColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use this feature, you must turn on location in:\n\n Settings -&gt; Savour -&gt; Location" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iaw-dT-fYK">
-                                <rect key="frame" x="10" y="326.66666666666669" width="394" height="71.666666666666686"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use this feature, you must turn on location in:   Settings -&gt; Savour -&gt; Location" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iaw-dT-fYK">
+                                <rect key="frame" x="10" y="314.66666666666669" width="394" height="95.666666666666686"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <color key="textColor" red="0.28488636020000002" green="0.66983324290000001" blue="0.66569471359999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1397,25 +1408,25 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Business" width="75" height="75"/>
-        <image name="BusinessFilled" width="75" height="75"/>
+        <image name="Business" width="25" height="25"/>
+        <image name="BusinessFilled" width="25" height="25"/>
         <image name="Savour_Cup" width="612" height="792"/>
         <image name="Savour_FullColor" width="612" height="792"/>
-        <image name="distance" width="75" height="75"/>
-        <image name="friends_color" width="96" height="96"/>
+        <image name="distance" width="25" height="25"/>
+        <image name="friends_color" width="32" height="32"/>
         <image name="icons8-applause" width="96" height="96"/>
         <image name="icons8-filled_message" width="96" height="96"/>
-        <image name="icons8-like" width="75" height="75"/>
-        <image name="icons8-like_filled" width="75" height="75"/>
-        <image name="icons8-price_tag" width="75" height="75"/>
-        <image name="icons8-price_tag_filled" width="75" height="75"/>
+        <image name="icons8-like" width="25" height="25"/>
+        <image name="icons8-like_filled" width="25" height="25"/>
+        <image name="icons8-price_tag" width="25" height="25"/>
+        <image name="icons8-price_tag_filled" width="25" height="25"/>
         <image name="icons8-settings" width="96" height="96"/>
-        <image name="icons8-user_location" width="100" height="100"/>
-        <image name="icons8-user_male_circle" width="75" height="75"/>
-        <image name="icons8-user_male_circle_filled" width="75" height="75"/>
+        <image name="icons8-user_location" width="33.333332061767578" height="33.333332061767578"/>
+        <image name="icons8-user_male_circle" width="25" height="25"/>
+        <image name="icons8-user_male_circle_filled" width="25" height="25"/>
         <image name="vendor" width="64" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="wXP-pv-GBh"/>
+        <segue reference="het-DN-Jp4"/>
     </inferredMetricsTieBreakers>
 </document>

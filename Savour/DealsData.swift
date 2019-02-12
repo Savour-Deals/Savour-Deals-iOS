@@ -41,9 +41,6 @@ class DealsData{
         self.radius = radiusMiles*1.60934//to km
         locationManager.startUpdatingLocation()
         favoritesRef.keepSynced(true)
-        if let location = locationManager.location {
-            self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: self.radius)
-        }
     }
     
     func startDealUpdates(completion: @escaping (Bool) -> Void){

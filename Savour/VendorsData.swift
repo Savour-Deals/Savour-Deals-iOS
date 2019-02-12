@@ -25,14 +25,9 @@ class VendorsData{
     private var firstObserveReady = true
 
     
-    init(radiusMiles: Double = 80.5){
+    init(radiusMiles: Double = 50){
         self.radius = radiusMiles*1.60934//to km
         locationManager.startUpdatingLocation()
-//        while (locationManager.location == nil){//wait until location is available
-//        }//even if the location is old, dont worry, we will update later when tabbar location update is called
-        if let location = locationManager.location {
-            self.geoFire = GeoFire(firebaseRef: geofireRef).query(at: location, withRadius: radius)
-        }
     }
     
     func startVendorUpdates(completion: @escaping (Bool) -> Void){

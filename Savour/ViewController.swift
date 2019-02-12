@@ -65,8 +65,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             searchbarData.append((key: Double(i*100), value: "\(i*100) miles"))
         }
         
-        dealsData = DealsData(radiusMiles: geoFireRadius)
-        vendorsData = VendorsData(radiusMiles: geoFireRadius)
+//        dealsData = DealsData(radiusMiles: geoFireRadius)
+//        vendorsData = VendorsData(radiusMiles: geoFireRadius)
+    
         
         //Setup loading deals
         locationManager = CLLocationManager()
@@ -79,12 +80,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.setup()
         
         //Determine if user has allowed location
-        if CLLocationManager.locationServicesEnabled() {
-            checkLocationStatus(status: CLLocationManager.authorizationStatus())
-        } else {
-            //User has global location services turned off
-            locationDisabled()
-        }
+        self.requestLocationAccess()
         
         //Allow us to refresh when opened from background
         NotificationCenter.default.addObserver(self, selector: #selector(self.requestLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
@@ -123,9 +119,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
             }
+            if dealsData == nil{
+                dealsData = DealsData(radiusMiles: geoFireRadius)
+            }
+            if vendorsData == nil{
+                vendorsData = VendorsData(radiusMiles: geoFireRadius)
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                if !self.dealsData.isComplete(){
-                    Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                if let _ = self.dealsData{
+                    if !self.dealsData.isComplete(){
+                        Toast.showNegativeMessage(message: "Deals seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                    }
                 }
             }
             DispatchQueue.global(qos: .background).async {
@@ -201,10 +205,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     func locationDisabled(){
-        self.searchBar.isUserInteractionEnabled = false
+        self.searchBar.isUserInteractionEnabled = true
         buttonsView.isUserInteractionEnabled = false
         self.locationText.isHidden = false
         self.DealsTable.isHidden = true
+        self.dealsData = nil
+        self.vendorsData = nil
         UIViewController.removeSpinner(spinner: sv)
     }
     
@@ -298,27 +304,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @objc func refresh(){
         hasRefreshed = true
-        self.dealsData.updateRadius(rad: geoFireRadius)
-        self.vendorsData.updateRadius(rad: geoFireRadius)
         //dont call requestlocation or the user can get into a loop here
-        let status = CLLocationManager.authorizationStatus()
-        if status == CLAuthorizationStatus.denied {
-            locationDisabled()
-        } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            if self.activeDeals.count + inactiveDeals.count<1{
-                locationEnabled()
-            }
-        }
-        refreshData(self)
-        if initialLoaded{
-            handle = Auth.auth().addStateDidChangeListener { (auth, user) in}
-            if self.activeDeals.isEmpty && self.inactiveDeals.isEmpty{
-                self.noDeals.isHidden = false
-            }else{
-                self.noDeals.isHidden = true
-                self.DealsTable.reloadData()
-            }
-        }
+        requestLocationAccess()
     }
     
     @objc private func refreshData(_ sender: Any) {
@@ -504,9 +491,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             guard let value = tuple?.key else { return }
             print(value)
             geoFireRadius = value
-            self.dealsData.updateRadius(rad: value)
-            self.vendorsData.updateRadius(rad: value)
-            self.DealsTable.reloadData()
+            if let _ = self.dealsData, let _ = self.vendorsData{
+                self.dealsData.updateRadius(rad: value)
+                self.vendorsData.updateRadius(rad: value)
+                self.DealsTable.reloadData()
+            }
             
         }
         // Assign data to the dataList
@@ -523,16 +512,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBar.showsBookmarkButton = false
-
-        (self.activeDeals, self.inactiveDeals) = dealsData.filter(byText: searchBar.text!)
-        if activeDeals.count + inactiveDeals.count < 1 {
-            self.noDeals.isHidden = false
-        }else{
-            self.noDeals.isHidden = true
-        }
-        DealsTable.reloadData()
-        if activeDeals.count + inactiveDeals.count>0{
-            DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        if let _ = dealsData{
+            (self.activeDeals, self.inactiveDeals) = dealsData.filter(byText: searchBar.text!)
+            if activeDeals.count + inactiveDeals.count < 1 {
+                self.noDeals.isHidden = false
+            }else{
+                self.noDeals.isHidden = true
+            }
+            DealsTable.reloadData()
+            if activeDeals.count + inactiveDeals.count>0{
+                DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+            }
         }
     }
     
@@ -540,15 +530,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBar.resignFirstResponder()
         searchBar.showsBookmarkButton = true
         searchBar.showsCancelButton = false
-        (activeDeals, inactiveDeals) = dealsData.filter(byText: searchBar.text!)
-        if activeDeals.count + inactiveDeals.count < 1 {
-            self.noDeals.isHidden = false
-        }else{
-            self.noDeals.isHidden = true
-        }
-        DealsTable.reloadData()
-        if activeDeals.count + inactiveDeals.count>0{
-            DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        if let _ = dealsData{
+            (activeDeals, inactiveDeals) = dealsData.filter(byText: searchBar.text!)
+            if activeDeals.count + inactiveDeals.count < 1 {
+                self.noDeals.isHidden = false
+            }else{
+                self.noDeals.isHidden = true
+            }
+            DealsTable.reloadData()
+            if activeDeals.count + inactiveDeals.count>0{
+                DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+            }
         }
     }
     
@@ -556,28 +548,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         searchBar.showsBookmarkButton = true
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
-        (activeDeals,inactiveDeals) = self.dealsData.getDeals(byName: searchBar.text)
-        DealsTable.reloadData()
+        if let _ = dealsData{
+            (activeDeals,inactiveDeals) = self.dealsData.getDeals(byName: searchBar.text)
+            DealsTable.reloadData()
+        }
     }
     
     func selectAllButton(){
-        (activeDeals,inactiveDeals) = self.dealsData.getDeals()
-        if activeDeals.count + inactiveDeals.count < 1 {
-            self.noDeals.isHidden = false
-        }else{
-            self.noDeals.isHidden = true
-        }
-        DealsTable.reloadData()
-        for subview in self.buttonsView.subviews as [UIView] {
-            if let button = subview as? UIButton {
-                button.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-                button.setTitleColor(UIColor.white, for: UIControl.State.normal)
-                if button.title(for: .normal) == "All"{
-                    button.backgroundColor = UIColor.white
-                    if activeDeals.count + inactiveDeals.count>0{
-                        DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+        if let _ = dealsData{
+            (activeDeals,inactiveDeals) = self.dealsData.getDeals()
+            if activeDeals.count + inactiveDeals.count < 1 {
+                self.noDeals.isHidden = false
+            }else{
+                self.noDeals.isHidden = true
+            }
+            DealsTable.reloadData()
+            for subview in self.buttonsView.subviews as [UIView] {
+                if let button = subview as? UIButton {
+                    button.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+                    button.setTitleColor(UIColor.white, for: UIControl.State.normal)
+                    if button.title(for: .normal) == "All"{
+                        button.backgroundColor = UIColor.white
+                        if activeDeals.count + inactiveDeals.count>0{
+                            DealsTable.scrollToRow(at: IndexPath(row:0,section:0), at: .top, animated: false)
+                        }
+                        button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControl.State.normal)
                     }
-                    button.setTitleColor(#colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1), for: UIControl.State.normal)
                 }
             }
         }

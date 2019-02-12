@@ -19,6 +19,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
 
     private var locationManager: CLLocationManager!
 
+    @IBOutlet weak var locationText: UILabel!
     private var sv: UIView!
     private var statusBar: UIView!
     @IBOutlet weak var heartImg: UIImageView!
@@ -48,19 +49,35 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
         statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
         
-        dealsData = DealsData(radiusMiles: geoFireRadius)
-        vendorsData = VendorsData(radiusMiles: geoFireRadius)
-        
+        //Allow us to refresh when opened from background
+        NotificationCenter.default.addObserver(self, selector: #selector(self.checkLocationAccess), name:UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.checkLocationAccess), name:NSNotification.Name.NotificationDealIsAvailable, object: nil)
+        checkLocationAccess()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
+        checkLocationAccess()
+        self.navigationController?.navigationItem.title = "Favorites"
+        self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
+    }
+    
+    @objc func checkLocationAccess(){
         let status = CLLocationManager.authorizationStatus()
-        if status == CLAuthorizationStatus.denied {
-            self.locationDisabled()
-            UIViewController.removeSpinner(spinner: sv)
-        } else if status == .authorizedAlways || status == .authorizedWhenInUse  {
-            
+        if status == .authorizedAlways || status == .authorizedWhenInUse  {
             DispatchQueue.main.asyncAfter(deadline: .now() + 10) { // Display message if loading is slow
-                if !self.dealsData.isComplete(){
-                    Toast.showNegativeMessage(message: "Favorites seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                if let _ = self.dealsData{
+                    if !self.dealsData.isComplete(){
+                        Toast.showNegativeMessage(message: "Favorites seem to be taking a while to load. Check your internet connection to make sure you're online.")
+                    }
                 }
+            }
+            if dealsData == nil{
+                dealsData = DealsData(radiusMiles: geoFireRadius)
+            }
+            if vendorsData == nil{
+                vendorsData = VendorsData(radiusMiles: geoFireRadius)
             }
             self.dealsData.startDealUpdates(completion: { (success) in
                 if self.dealsData.isComplete(){
@@ -70,17 +87,9 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
             })
             self.vendorsData.startVendorUpdates(completion: { (success) in
             })
-        }
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(false)
-        statusBar.backgroundColor = #colorLiteral(red: 0.2848863602, green: 0.6698332429, blue: 0.6656947136, alpha: 1)
-        if dealsData != nil && vendorsData != nil{
-            if dealsData.isComplete() && vendorsData.isComplete(){
-                dealsData.updateRadius(rad: geoFireRadius)
-                vendorsData.updateRadius(rad: geoFireRadius)
-                locationEnabled()
-            }
+        }else{
+            self.locationDisabled()
+            UIViewController.removeSpinner(spinner: sv)
         }
     }
     
@@ -102,8 +111,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func locationEnabled(){
-        self.navigationController?.navigationItem.title = "Favorites"
-        self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
+        locationText.isHidden = true
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
 
@@ -130,8 +138,9 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     
     func locationDisabled(){
         FavTable.isHidden = true
-        self.navigationController?.navigationItem.title = "Favorites"
-        self.navigationController?.navigationBar.tintColor = UIColor(red: 73/255, green: 171/255, blue: 170/255, alpha: 1.0)
+        locationText.isHidden = false
+        dealsData = nil
+        vendorsData = nil
         heartImg.image = self.heartImg.image?.withRenderingMode(.alwaysTemplate)
         heartImg.tintColor = UIColor.red
         statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView
