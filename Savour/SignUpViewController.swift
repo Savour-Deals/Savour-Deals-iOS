@@ -135,48 +135,57 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
         if let password = PasswordField.text, let email = EmailField.text, let name = NameField.text {//let username = UsernameField.text {
             // [START create_user]
             //let userDict = ["Username": username]
-            Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
-                // [START_EXCLUDE]
-                user?.user.sendEmailVerification(completion: { (err) in
-                    if err != nil{
-                        print(err!)
-                    }
-                })
-                if let error = error {
-                    let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    return
+            let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+            if let user = Auth.auth().currentUser {//anonymous user present from deep link
+                user.linkAndRetrieveData(with: credential) { (user, error) in
+                    // Complete any post sign-up tasks here.
                 }
-                self.ref = Database.database().reference()
-                
-                self.ref.child("Users").child(user!.user.uid).child("full_name").setValue(name)
-                self.ref.child("Users").child(user!.user.uid).child("email").setValue(email)
-                if let user = user {
-                    let changeRequest = user.user.createProfileChangeRequest()
-                    
-                    changeRequest.displayName = name
-                    //changeRequest.photoURL =
-                    changeRequest.commitChanges { error in
-                        if error != nil {
-                            // An error happened.
-                        } else {
-                            // Profile updated.
-                        }
-                    }
-                }
-                let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account. Then come back to login!", preferredStyle: UIAlertController.Style.alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
-                alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
+            }else{
+                Auth.auth().signInAndRetrieveData(with: credential){ (user, error) in
+                    // [START_EXCLUDE]
                     user?.user.sendEmailVerification(completion: { (err) in
                         if err != nil{
                             print(err!)
                         }
                     })
-                }))
-                self.present(alert, animated: true, completion: nil)
+                    if let error = error {
+                        let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }
+                    self.ref = Database.database().reference()
+                    
+                    self.ref.child("Users").child(user!.user.uid).child("full_name").setValue(name)
+                    self.ref.child("Users").child(user!.user.uid).child("email").setValue(email)
+                    if let user = user {
+                        let changeRequest = user.user.createProfileChangeRequest()
+                        
+                        changeRequest.displayName = name
+                        //changeRequest.photoURL =
+                        changeRequest.commitChanges { error in
+                            if error != nil {
+                                // An error happened.
+                            } else {
+                                // Profile updated.
+                            }
+                        }
+                    }
+                    let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account. Then come back to login!", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
+                        user?.user.sendEmailVerification(completion: { (err) in
+                            if err != nil{
+                                print(err!)
+                            }
+                        })
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+                // [END_EXCLUDE]
             }
-            // [END_EXCLUDE]
+            
+          
         }
         // [END create_user]
         else {

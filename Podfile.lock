@@ -43,6 +43,9 @@ PODS:
   - Firebase/Database (5.16.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (= 5.1.0)
+  - Firebase/DynamicLinks (5.16.0):
+    - Firebase/CoreOnly
+    - FirebaseDynamicLinks (= 3.4.0)
   - Firebase/Functions (5.16.0):
     - Firebase/CoreOnly
     - FirebaseFunctions (= 2.2.0)
@@ -74,6 +77,10 @@ PODS:
     - FirebaseAuthInterop (~> 1.0)
     - FirebaseCore (~> 5.2)
     - leveldb-library (~> 1.18)
+  - FirebaseDynamicLinks (3.4.0):
+    - FirebaseAnalytics (~> 5.1)
+    - FirebaseAnalyticsInterop (~> 1.0)
+    - FirebaseCore (~> 5.2)
   - FirebaseFunctions (2.2.0):
     - FirebaseAuthInterop (~> 1.0)
     - FirebaseCore (~> 5.2)
@@ -175,6 +182,7 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
+  - Firebase/DynamicLinks
   - Firebase/Functions
   - Firebase/Messaging
   - Firebase/Storage
@@ -203,6 +211,7 @@ SPEC REPOS:
     - FirebaseAuthInterop
     - FirebaseCore
     - FirebaseDatabase
+    - FirebaseDynamicLinks
     - FirebaseFunctions
     - FirebaseInstanceID
     - FirebaseMessaging
@@ -238,6 +247,7 @@ SPEC CHECKSUMS:
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
   FirebaseCore: ea2d1816723ef21492b8e9113303e1350db5e08c
   FirebaseDatabase: 23acb0c53cd4d4070a427b60100b2e4aaa97c45d
+  FirebaseDynamicLinks: 83a0071c95ad715bc324fcb8f51028d5b6a58af0
   FirebaseFunctions: f35dd01ba4cfd036c1c521b3ed99851d7ec08c70
   FirebaseInstanceID: 97ea7a5dca9afd72c79bfcdddb7a44aa1cbb42a1
   FirebaseMessaging: acbd51fe1a172bf29abaaa6e93a60f98bbf8e4f9
@@ -257,6 +267,6 @@ SPEC CHECKSUMS:
   Pulsator: f465ca37212d826523fe8c79b07c1a4c1a941f5e
   SDWebImage: c00ec18ab25d10e5ffac109b0f78d1b4341c9691
 
-PODFILE CHECKSUM: ae8a20377360c6cc670453e572d9508fc40c67ff
+PODFILE CHECKSUM: 0cc50a7c485646ecd814a30c35fdc246e263d4a6
 
 COCOAPODS: 1.6.0.rc.1

@@ -149,9 +149,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate, OSSubscriptionObserver {
     }
    
     
+    //dynamic links
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        let isDynamicLink = DynamicLinks.dynamicLinks().shouldHandleDynamicLink(fromCustomSchemeURL: url)
+        if isDynamicLink {
+            let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url)
+            return handleDynamicLink(dynamicLink)
+        }
         let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String?, annotation: options[UIApplication.OpenURLOptionsKey.annotation])
         return handled
+    }
+    
+    @available(iOS 8.0, *)
+    private func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        let dynamicLinks = DynamicLinks.dynamicLinks()
+        let handled = dynamicLinks.handleUniversalLink(userActivity.webpageURL!) { (dynamicLink, error) in
+            if (dynamicLink != nil) && !(error != nil) {
+                _ = self.handleDynamicLink(dynamicLink)
+            }
+        }
+        return handled
+    }
+    
+    func handleDynamicLink(_ dynamicLink: DynamicLink?) -> Bool {
+        guard let dynamicLink = dynamicLink else { return false }
+        guard let deepLink = dynamicLink.url else { return false }
+        let queryItems = URLComponents(url: deepLink, resolvingAgainstBaseURL: true)?.queryItems
+        let invitedBy = queryItems?.filter({(item) in item.name == "invitedby"}).first?.value
+        let user = Auth.auth().currentUser
+        // If the user isn't signed in and the app was opened via an invitation
+        // link, sign in the user anonymously and record the referrer UID in the
+        // user's RTDB record.
+        if user == nil && invitedBy != nil {
+            Auth.auth().signInAnonymously() { (user, error) in
+                if let user = user {
+                    let userRecord = Database.database().reference().child("users").child(user.user.uid)
+                    userRecord.child("referred_by").setValue(invitedBy) // set the referrer for this user.
+                    //referral count for referrer will be incremented when this user signs up
+                }
+            }
+        }
+        return true
     }
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
