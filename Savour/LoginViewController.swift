@@ -89,16 +89,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         LoginEmail.layer.cornerRadius = rounded
         LoginButton.layer.cornerRadius = rounded
         LoginView.layer.cornerRadius = rounded
-        // Obtain all constraints for the button:
-//        let layoutConstraintsArr = FBLoginButton.constraints
-//        // Iterate over array and test constraints until we find the correct one:
-//        for lc in layoutConstraintsArr { // or attribute is NSLayoutAttributeHeight etc.
-//            if ( lc.constant == 28 ){
-//                // Then disable it...
-//                lc.isActive = false
-//                break
-//            }
-//        }
     }
     
     func isLoggingin(){
@@ -137,41 +127,20 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         isLoggingin()
         
         if let email = self.LoginEmail.text, let password = self.LoginPassword.text {
-                // [START headless_email_auth]
-                Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-                    // [START_EXCLUDE]
-                    if error != nil {
-                        self.loginIndicator.stopAnimating()
-                        self.endLoggingin()
-                        let alert = UIAlertController(title: "Alert", message: "Username or password incorrect. Please try again.", preferredStyle: UIAlertController.Style.alert)
-                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                        return
-                    }
-                    if (user?.user.isEmailVerified)!{
-                        //Were gucci. They verified
-                        self.gotoMain()
-                        self.endLoggingin()
-                    }else{
-                        //not verified. Remind the user
-                        let alert = UIAlertController(title: "Unverified Account!", message: "Please check your email to verify your account. Then come back and try again.", preferredStyle: UIAlertController.Style.alert)
-                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
-                        alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
-                            user?.user.sendEmailVerification(completion: { (err) in
-                                if err != nil{
-                                    print(err!)
-                                }
-                            })
-                        }))
-                        self.present(alert, animated: true, completion: nil)
-                        self.endLoggingin()
-                    }
-
+            Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+                if error != nil {
+                    self.loginIndicator.stopAnimating()
+                    self.endLoggingin()
+                    let alert = UIAlertController(title: "Alert", message: "Username or password incorrect. Please try again.", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    return
                 }
-            // [END_EXCLUDE]
+                if let userData = user{
+                    self.successfulEmailLogin(userData: userData)
+                }
             }
-                // [END headless_email_auth]
-       
+        }
     }
 
     @IBAction func FBLoginPressed(_ sender: Any) {
@@ -181,6 +150,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         print("Did log out of facebook")
     }
+    
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!){
         isLoggingin()
@@ -195,47 +165,83 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         }
         print("Successfully logged in with facebook...")
         let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-        Auth.auth().signInAndRetrieveData(with: credential) { (userdata, error) in
+        Auth.auth().signInAndRetrieveData(with: credential) { (user, error) in
             if error != nil {
                 print(error.debugDescription)
                 return
             }
-            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large), birthday"])
+            if let userData = user{
+                self.successfulFBLogin(userData: userData)
+            }
+        }
+    }
+    
+    func successfulEmailLogin(userData: AuthDataResult){
+        let user = userData.user
+        if (user.isEmailVerified){
+            //Were gucci. They verified
+            //set time stamp for login. First time will trigger firebase referral trigger
+            let userRecord = Database.database().reference().child("users").child(user.uid)
+            userRecord.child("last_signin_at").setValue(ServerValue.timestamp())
             
-            graphRequest.start(completionHandler: { (connection, result, error) -> Void in
-                
-                if ((error) != nil)
-                {
-                    print("Error: \(String(describing: error))")
-                }
-                else
-                {
-                    let user = userdata?.user
-                    if let data = result as? [String : AnyObject]{
-                        if let name = data["name"] as? String{
-                            self.ref.child("Users").child(user!.uid).child("full_name").setValue(name)
-                        }
-                        if let id = data["id"] as? String{
-                            self.ref.child("Users").child(user!.uid).child("facebook_id").setValue(id)
-                        }
-                        if let email = data["email"] as? String{
-                            user?.updateEmail(to: email, completion: { (error) in
-                                if ((error) != nil)
-                                {
-                                    print("Error: \(String(describing: error))")
-                                }
-                            })
-                        }
-                        if let birthday = data["birthday"] {
-                            self.ref.child("Users").child(user!.uid).child("birthday").setValue(birthday)
-                        }
-                    }
-                }
-            })
             self.gotoMain()
+            self.endLoggingin()
+        }else{
+            //not verified. Remind the user
+            let alert = UIAlertController(title: "Unverified Account!", message: "Please check your email to verify your account. Then come back and try again.", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
+                user.sendEmailVerification(completion: { (err) in
+                    if err != nil{
+                        print(err!)
+                    }
+                })
+            }))
+            self.present(alert, animated: true, completion: nil)
             self.endLoggingin()
         }
     }
+    
+    func successfulFBLogin(userData: AuthDataResult){
+        let user = userData.user
+
+        //fb login with firebase successful, graph request some data
+        let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large), birthday"])
+        graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+            if ((error) != nil){
+                print("Error: \(String(describing: error))")
+            }else{
+                //get graph result from fb and update user data
+                if let data = result as? [String : AnyObject]{
+                    if let name = data["name"] as? String{
+                        self.ref.child("Users").child(user.uid).child("full_name").setValue(name)
+                    }
+                    if let id = data["id"] as? String{
+                        self.ref.child("Users").child(user.uid).child("facebook_id").setValue(id)
+                    }
+                    if let email = data["email"] as? String{
+                        user.updateEmail(to: email, completion: { (error) in
+                            if ((error) != nil)
+                            {
+                                print("Error: \(String(describing: error))")
+                            }
+                        })
+                    }
+                    if let birthday = data["birthday"] {
+                        self.ref.child("Users").child(user.uid).child("birthday").setValue(birthday)
+                    }
+                }
+            }
+        })
+        
+        //set time stamp for login. First time will trigger firebase referral trigger
+        let userRecord = Database.database().reference().child("users").child(user.uid)
+        userRecord.child("last_signin_at").setValue(ServerValue.timestamp())
+        
+        self.gotoMain()
+        self.endLoggingin()
+    }
+    
     @IBAction func sendResetEmail(_ sender: Any) {
         if LoginEmail.text == ""{
             let alert = UIAlertController(title: "Alert", message: "Please enter your email in the field below.", preferredStyle: UIAlertController.Style.alert)

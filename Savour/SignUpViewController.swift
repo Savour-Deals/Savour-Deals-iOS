@@ -130,64 +130,39 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
     
     @objc func SignupPressed(_ sender: Any) {
         loadingText.text = "Signing Up"
-
         isLoading()
         if let password = PasswordField.text, let email = EmailField.text, let name = NameField.text {//let username = UsernameField.text {
-            // [START create_user]
-            //let userDict = ["Username": username]
             let credential = EmailAuthProvider.credential(withEmail: email, password: password)
-            if let user = Auth.auth().currentUser {//anonymous user present from deep link
+            if let user = Auth.auth().currentUser {
+                //anonymous user present from deep link
                 user.linkAndRetrieveData(with: credential) { (user, error) in
-                    // Complete any post sign-up tasks here.
-                }
-            }else{
-                Auth.auth().signInAndRetrieveData(with: credential){ (user, error) in
-                    // [START_EXCLUDE]
-                    user?.user.sendEmailVerification(completion: { (err) in
-                        if err != nil{
-                            print(err!)
-                        }
-                    })
-                    if let error = error {
+                    if let error = error {//something bad happened
                         let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
                         alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                         return
                     }
-                    self.ref = Database.database().reference()
-                    
-                    self.ref.child("Users").child(user!.user.uid).child("full_name").setValue(name)
-                    self.ref.child("Users").child(user!.user.uid).child("email").setValue(email)
-                    if let user = user {
-                        let changeRequest = user.user.createProfileChangeRequest()
-                        
-                        changeRequest.displayName = name
-                        //changeRequest.photoURL =
-                        changeRequest.commitChanges { error in
-                            if error != nil {
-                                // An error happened.
-                            } else {
-                                // Profile updated.
-                            }
-                        }
+                    if let userData = user {
+                        self.successfulEmailLogin(userData: userData, name: name, email: email )
                     }
-                    let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account. Then come back to login!", preferredStyle: UIAlertController.Style.alert)
-                    alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
-                    alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
-                        user?.user.sendEmailVerification(completion: { (err) in
-                            if err != nil{
-                                print(err!)
-                            }
-                        })
-                    }))
-                    self.present(alert, animated: true, completion: nil)
                 }
-                // [END_EXCLUDE]
+            }else{
+                //user does not have an anonymous account
+                Auth.auth().signInAndRetrieveData(with: credential){ (user, error) in
+                    if let error = error {//something bad happened
+                        let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        return
+                    }
+                    if let userData = user {
+                        self.successfulEmailLogin(userData: userData, name: name, email: email )
+                    }
+                }
             }
             
           
         }
-        // [END create_user]
         else {
             let alert = UIAlertController(title: "Alert", message: "Username or password can't be empty", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
@@ -219,45 +194,94 @@ class SignUpViewController: UIViewController, FBSDKLoginButtonDelegate{
         }
         print("Successfully logged in with facebook...")
         let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-        Auth.auth().signInAndRetrieveData(with: credential) { (userdata, error) in
+        Auth.auth().signInAndRetrieveData(with: credential) { (user, error) in
             if error != nil {
                 print(error.debugDescription)
                 return
             }
-            let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large), birthday"])
-            
-            graphRequest.start(completionHandler: { (connection, result, error) -> Void in
-                if ((error) != nil)
-                {
-                    print("Error: \(String(describing: error))")
-                }
-                else
-                {
-                    let user = userdata?.user
-                    if let data = result as? [String : AnyObject]{
-                        if let name = data["name"] as? String{
-                            self.ref.child("Users").child(user!.uid).child("full_name").setValue(name)
-                        }
-                        if let id = data["id"] as? String{
-                            self.ref.child("Users").child(user!.uid).child("facebook_id").setValue(id)
-                        }
-                        if let email = data["email"] as? String{
-                            user?.updateEmail(to: email, completion: { (error) in
-                                if ((error) != nil){
-                                    print("Error: \(String(describing: error))")
-                                }
-                            })
-                        }
-                        if let birthday = data["birthday"] {
-                            self.ref.child("Users").child(user!.uid).child("birthday").setValue(birthday)
-                        }
-                    }
-                }
-            })
-            self.doneLoading()
-            self.gotoMain()
+            if let userData = user{
+                self.successfulFBLogin(userData: userData)
+            }
         }
     }
+    
+    func successfulEmailLogin(userData: AuthDataResult, name: String, email: String){
+        let user = userData.user
+        
+        //send a verification email to user
+        sendVerificationEmail(user: user)
+        
+        //update data for user info
+        self.ref = Database.database().reference()
+        self.ref.child("Users").child(user.uid).child("full_name").setValue(name)
+        self.ref.child("Users").child(user.uid).child("email").setValue(email)
+        let changeRequest = user.createProfileChangeRequest()
+        changeRequest.displayName = name
+        changeRequest.commitChanges { error in
+            if error != nil {
+                // could not commit changes to user account
+            } else {
+                // Profile updated.
+            }
+        }
+        
+        //tell user to verify account
+        let alert = UIAlertController(title: "Verify Email", message: "Please check your email to verify your account. Then come back to login!", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Okay", style: UIAlertAction.Style.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Resend Email", style: UIAlertAction.Style.default, handler: { (alert: UIAlertAction!) in
+            self.sendVerificationEmail(user: user)
+        }))
+        self.present(alert, animated: true, completion: nil)
+        //user is NOT logged in yet. They must verify 
+    }
+    
+    func successfulFBLogin(userData: AuthDataResult){
+        let user = userData.user
+        
+        //fb login with firebase successful, graph request some data
+        let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"name,email, picture.type(large), birthday"])
+        graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+            if ((error) != nil){
+                print("Error: \(String(describing: error))")
+            }else{
+                //get some data from facebook if we can
+                if let data = result as? [String : AnyObject]{
+                    if let name = data["name"] as? String{
+                        self.ref.child("Users").child(user.uid).child("full_name").setValue(name)
+                    }
+                    if let id = data["id"] as? String{
+                        self.ref.child("Users").child(user.uid).child("facebook_id").setValue(id)
+                    }
+                    if let email = data["email"] as? String{
+                        user.updateEmail(to: email, completion: { (error) in
+                            if ((error) != nil){
+                                print("Error: \(String(describing: error))")
+                            }
+                        })
+                    }
+                    if let birthday = data["birthday"] {
+                        self.ref.child("Users").child(user.uid).child("birthday").setValue(birthday)
+                    }
+                }
+                
+            }
+        })
+        //set time stamp for login. First time will trigger firebase referral trigger
+        let userRecord = Database.database().reference().child("users").child(user.uid)
+        userRecord.child("last_signin_at").setValue(ServerValue.timestamp())
+        
+        self.doneLoading()
+        self.gotoMain()
+    }
+    
+    func sendVerificationEmail(user: User){
+        user.sendEmailVerification(completion: { (err) in
+            if err != nil{
+                print(err!)
+            }
+        })
+    }
+    
     @IBAction func toLogin(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }

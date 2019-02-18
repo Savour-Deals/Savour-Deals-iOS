@@ -295,6 +295,10 @@ class DealsData{
     func sortDeals(array: inout [DealData]){
         array = array.sorted(by:{ (d1, d2) -> Bool in
             //TODO: make robust with selection on how to filter!!
+            if d1.distanceMiles! == d2.distanceMiles! || (d1.distanceMiles! < (d2.distanceMiles! + 0.1) && d1.distanceMiles! > (d2.distanceMiles! - 0.1)){ //if the two distances are really close, do this to avoid loading jitter
+                    return d1.id! < d2.id! //last sorting measure is by id which is unique
+            }
+            //distance is not equal, return result
             return CGFloat(d1.distanceMiles!) < CGFloat(d2.distanceMiles!)
         })
     }

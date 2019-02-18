@@ -116,6 +116,7 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
         heartImg.tintColor = UIColor.red
 
         FavTable.isHidden = false
+        
         var activeFav = [DealData]()
         var inactiveFav = [DealData]()
 

@@ -43,6 +43,7 @@ class VendorMapViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         sv = UIViewController.displaySpinner(onView: self.view, color: #colorLiteral(red: 0.2862745098, green: 0.6705882353, blue: 0.6666666667, alpha: 1))
 
         let image = UIImage(named:"distance")?.withRenderingMode(.alwaysTemplate)
@@ -369,6 +370,7 @@ class listViewController: UIViewController, UITableViewDelegate,UITableViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         storageRef = Storage.storage()
         self.locationText.text = "To use this feature, you must turn on location in:\n\n Settings -> Savour -> Location"
         // Add Refresh Control to Table View
